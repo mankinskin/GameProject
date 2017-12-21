@@ -88,17 +88,17 @@ void app::Input::setupControls()
 	WindowWidget win1 = window_init;
 
 	win1.pos.set(glm::vec2(-0.5f, 0.5f));
-	//win1.get<2>().pos.set(glm::vec2(0.05f, -0.1f));
+	//win1.element<2>().pos.set(glm::vec2(0.05f, -0.1f));
 	
 	WindowColors winColors(
 		WidgetColors<ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor>(ConstColor("white"), ConstColor("white"), ConstColor("white"), ConstColor("white"), ConstColor("grey"), ConstColor("white"), ConstColor("white"), ConstColor("white"), ConstColor("white")),
 		WidgetColors<ConstColor>(ConstColor("nocolor")));
 	win1.color(winColors);
 	
-	size_t header = win1.get<1>().get<0>().index;
-	size_t right_border = win1.get<0>().get<5>().index;
-	size_t bottom_border = win1.get<0>().get<7>().index;
-	size_t bottom_right_corner = win1.get<0>().get<8>().index;
+	size_t header = win1.element<1>().element<0>().index;
+	size_t right_border = win1.element<0>().element<5>().index;
+	size_t bottom_border = win1.element<0>().element<7>().index;
+	size_t bottom_right_corner = win1.element<0>().element<8>().index;
 	
 	size_t header_hover = createSignal(1);
 	createEvent(QuadEvent(header, 1), header_hover, 1);
@@ -137,30 +137,30 @@ void app::Input::setupControls()
 	
 	
 	
-	//win1.get<2>().color(sldColors);
+	//win1.element<2>().color(sldColors);
 	//
 	//size_t slider_box_hover = createSignal(1);
-	//createEvent(QuadEvent(win1.get<2>().get<0>().get(), 1), slider_box_hover, 1);
-	//createEvent(QuadEvent(win1.get<2>().get<0>().get(), 0), slider_box_hover, 0);
+	//createEvent(QuadEvent(win1.element<2>().element<0>().element(), 1), slider_box_hover, 1);
+	//createEvent(QuadEvent(win1.element<2>().element<0>().element(), 0), slider_box_hover, 0);
 	//
 	//size_t slider_slide_hover = createSignal(1);
-	//createEvent(QuadEvent(win1.get<2>().get<1>().get(), 1), slider_slide_hover, 1);
-	//createEvent(QuadEvent(win1.get<2>().get<1>().get(), 0), slider_slide_hover, 0);
+	//createEvent(QuadEvent(win1.element<2>().element<1>().element(), 1), slider_slide_hover, 1);
+	//createEvent(QuadEvent(win1.element<2>().element<1>().element(), 0), slider_slide_hover, 0);
 	//
-	//Functor<SliderWidget, float&, float> move_slide_func(move_widget_element<SliderWidget, 1, float&, float>, win1.get<2>(), cursorFrameDelta.x, 0.0f);
+	//Functor<SliderWidget, float&, float> move_slide_func(move_widget_element<SliderWidget, 1, float&, float>, win1.element<2>(), cursorFrameDelta.x, 0.0f);
 	//
 	//Functor<size_t, float&> set_slide_pos_func(
 	//	[](size_t tar, float& pPos) {
 	//	allQuads[tar - 1].x = pPos - allQuads[tar - 1].z/2.0f;
 	//}
-	//, win1.get<2>().get<1>().get<0>().get(), relativeCursorPosition.x);
+	//, win1.element<2>().element<1>().element<0>().element(), relativeCursorPosition.x);
 	//
 	//Functor<size_t, size_t> limit_slide_func(
 	//	[](size_t tar, size_t bound) {
 	//
 	//	allQuads[tar - 1].x += std::max(allQuads[bound-1].x - allQuads[tar - 1].x, 0.0f)+std::min((allQuads[bound - 1].x + allQuads[bound - 1].z) - (allQuads[tar - 1].x + allQuads[tar - 1].z), 0.0f);
 	//}
-	//, win1.get<2>().get<1>().get<0>().get(), win1.get<2>().get<0>().get<0>().get());
+	//, win1.element<2>().element<1>().element<0>().element(), win1.element<2>().element<0>().element<0>().element());
 	//
 	//
 	//
@@ -175,14 +175,14 @@ void app::Input::setupControls()
 	using ButtonQuad = Widget<Quad, Quad>;
 	using ButtonColor = WidgetColors<ConstColor, ConstColor >;
 	
-	Initializer<ButtonQuad, initMargin> button_initializer(0.0f, 0.0f, 0.2f, 0.07f, 0.005f);
+	Initializer<ButtonQuad, initMargin> button_initializer(0.0f, 0.0f, 0.15f, 0.03f, 0.005f);
 	ButtonColor buttonColor = ButtonColor(ConstColor(6), ConstColor(7));
 
 	ButtonQuad playButton(button_initializer);
 	playButton.move(glm::vec2(-0.99f, -0.75f));
 
 	ButtonQuad quitButton(button_initializer);
-	quitButton.move(glm::vec2(-0.99f, -0.87f));
+	quitButton.move(glm::vec2(-0.99f, -0.85f));
 
 	playButton.color(buttonColor);
 	quitButton.color(buttonColor);
@@ -191,9 +191,9 @@ void app::Input::setupControls()
 	Initializer<Widget<Quad>, initSimple> fps_box_init(0.0f, 0.0f, 0.05f, 0.05f);
 	Widget<Quad> fps_box(fps_box_init);
 	gui::text::createTextboxMetrics(0, 1.0, 1.0, 1.0, 1.0);
-	size_t pl_tb = gui::text::createTextbox(playButton.get<0>().get(), 0, TEXT_LAYOUT_CENTER_Y);
-	size_t qu_tb = gui::text::createTextbox(quitButton.get<0>().get(), 0, TEXT_LAYOUT_CENTER_Y);
-	size_t fps_tb = gui::text::createTextbox(fps_box.get<0>().get(), 0, TEXT_LAYOUT_CENTER_Y);
+	size_t pl_tb = gui::text::createTextbox(playButton.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y);
+	size_t qu_tb = gui::text::createTextbox(quitButton.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y);
+	size_t fps_tb = gui::text::createTextbox(fps_box.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y);
 
 	gui::text::setTextboxString(qu_tb, " QUIT");
 	gui::text::setTextboxString(pl_tb, " Play");
@@ -223,14 +223,25 @@ void app::Input::setupControls()
 	KeySignal key_l(GLFW_KEY_L);
 
 	size_t quit_button_hover = createSignal(1);
-	createEvent(QuadEvent(quitButton.get<1>().get(), 1), quit_button_hover, 1);
-	createEvent(QuadEvent(quitButton.get<1>().get(), 0), quit_button_hover, 0);
-	createEvent(QuadEvent(quitButton.get<0>().get(), 1), quit_button_hover, 1);
-	createEvent(QuadEvent(quitButton.get<0>().get(), 0), quit_button_hover, 0);
+	createEvent(QuadEvent(quitButton.element<1>().element(), 1), quit_button_hover, 1);
+	createEvent(QuadEvent(quitButton.element<1>().element(), 0), quit_button_hover, 0);
+	createEvent(QuadEvent(quitButton.element<0>().element(), 1), quit_button_hover, 1);
+	createEvent(QuadEvent(quitButton.element<0>().element(), 0), quit_button_hover, 0);
+
+	size_t play_button_hover = createSignal(1);
+	createEvent(QuadEvent(playButton.element<1>().element(), 1), play_button_hover, 1);
+	createEvent(QuadEvent(playButton.element<1>().element(), 0), play_button_hover, 0);
+	createEvent(QuadEvent(playButton.element<0>().element(), 1), play_button_hover, 1);
+	createEvent(QuadEvent(playButton.element<0>().element(), 0), play_button_hover, 0);
+
 	//general functions
 	Functor<> quit_func(quit);
 	FunctorTrigger<SequenceGate>(quit_func, { quit_button_hover, lmb_click });
 	FunctorTrigger<AnyGate>(quit_func, { key_esc.press });
+
+	Functor<> run_func(run);
+	FunctorTrigger<SequenceGate>(run_func, { play_button_hover, lmb_click });
+
 
 	Functor<> toggle_cull_func(mesh::toggleCullFace);
 	FunctorTrigger<AnyGate>(toggle_cull_func, { key_f.press });

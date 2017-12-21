@@ -29,9 +29,9 @@ void gui::initColors()
 	createConstColor(glm::vec4(1.0, 0.0, 0.0, 1.0), "red");
 	createConstColor(glm::vec4(0.0, 1.0, 0.0, 1.0), "green");
 	createConstColor(glm::vec4(0.0, 0.0, 1.0, 1.0), "blue");
-	createConstColor(glm::vec4(0.5, 0.5, 0.5, 1.0), "grey");
-	createConstColor(glm::vec4(0.2, 0.2, 0.2, 1.0), "darkgrey");
-	createConstColor(glm::vec4(0.7, 0.7, 0.7, 1.0), "lightgrey");
+	createConstColor(glm::vec4(0.5, 0.5, 0.5, 0.5), "grey");
+	createConstColor(glm::vec4(0.2, 0.2, 0.2, 0.5), "darkgrey");
+	createConstColor(glm::vec4(0.7, 0.7, 0.7, 0.5), "lightgrey");
 	uploadConstColors();
 }
 

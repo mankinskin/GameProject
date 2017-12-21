@@ -32,10 +32,10 @@ namespace gui {
 		}
 		quad_pos pos;
 		template<size_t N>
-		size_t get() {
+		size_t element() {
 			return index;
 		}
-		size_t get() {
+		size_t element() {
 			return index;
 		}
 		template<class ColorType>

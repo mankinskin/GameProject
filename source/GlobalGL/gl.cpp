@@ -37,7 +37,7 @@ int gl::EXTENSIONS_SUPPORTED_NUM = 0;
 int gl::OPENGL_VERSION[2] = {};
 std::string gl::GLSL_VERSION = "";
 std::string gl::SYSTEM_RENDERER = "";
-float gl::resolution = 1.0f;
+float gl::resolution = 0.3f;
 int gl::MAX_TEXTURE_UNIT_COUNT;
 size_t gl::screenWidth = 0;
 size_t gl::screenHeight = 0;
@@ -50,6 +50,7 @@ void gl::init()
 {
 	initGLEW();
 	getOpenGLInitValues();
+	setViewport(app::mainWindow);
 	glDebug::init();
 	camera::main_camera.init();
 	initGeneralUniformBuffer();
@@ -115,7 +116,7 @@ void gl::bindUniformBufferLocations()
 void gl::setViewport(app::ContextWindow::Window& pViewport) {
 	screenWidth = pViewport.width;
 	screenHeight = pViewport.height;
-	glViewport(0, 0, screenWidth, screenHeight);
+	glViewport(0, 0, screenWidth/gl::resolution, screenHeight/gl::resolution);
 }
 
 void gl::getOpenGLInitValues()
@@ -141,7 +142,7 @@ void gl::getOpenGLInitValues()
 	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &MAX_TEXTURE_UNIT_COUNT);
 	glGetIntegerv(GL_MIN_MAP_BUFFER_ALIGNMENT, &vao::MIN_MAP_BUFFER_ALIGNMENT);
 
-	setViewport(app::mainWindow);
+
 	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);

@@ -13,7 +13,7 @@ namespace app {
     extern State state;
     void init();
     void initGLFW();
-    //void frameLoop();
+    void gameloop();
     void mainMenuLoop();
     void fetchInput();
     void run();

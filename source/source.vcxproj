@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Linus\source\repos\GameProject\deps\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Linus\source\repos\GameProject\deps\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\deps\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\deps\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

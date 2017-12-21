@@ -2,6 +2,7 @@
 #include "ContextWindow.h"
 #include "../Global\Debug.h"
 #include "../Global\app.h"
+#include "../GlobalGL/gl.h"
 int app::ContextWindow::monitorCount = 0;
 GLFWmonitor** app::ContextWindow::allMonitors = nullptr;
 app::ContextWindow::Monitor app::ContextWindow::primaryMonitor;

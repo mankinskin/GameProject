@@ -48,7 +48,7 @@ namespace gui {
 		}
 		static const size_t ELEMENT_COUNT = sizeof...(Elements);
 		template<size_t N>
-		auto get() {
+		auto element() {
 			return std::get<N>(elements());
 		}
 	};
@@ -202,10 +202,10 @@ namespace gui {
 			template<>
 			struct color_elements<0> {
 				static void func(std::tuple<Elements...>& pElems, WidgetColors<Colors...>& pColors) {
-					
+
 				}
 			};
-			
+
 		};
 		template<class... Colors>
 		void operator()(WidgetColors<Colors...> pColors) {
@@ -224,7 +224,7 @@ namespace gui {
 		{	}
 
 		Widget(Elements... pElements)
-			:stretch(elements_index), move(elements_index), pos(elements_index), color(elements_index),WidgetElements<Elements...>(pElements...)
+			:stretch(elements_index), move(elements_index), pos(elements_index), color(elements_index), WidgetElements<Elements...>(pElements...)
 		{	}
 
 		widget_pos<Elements...> pos;
@@ -274,7 +274,7 @@ gui::initMargin<gui::Widget<gui::Quad, gui::Quad>>::operator gui::Widget<gui::Qu
 gui::initMargin<gui::Widget<gui::Quad, gui::Quad, gui::Quad, gui::Quad, gui::Quad, gui::Quad, gui::Quad, gui::Quad, gui::Quad>>::operator gui::Widget<gui::Quad, gui::Quad, gui::Quad, gui::Quad, gui::Quad, gui::Quad, gui::Quad, gui::Quad, gui::Quad>() const {
 	return Widget<Quad, Quad, Quad, Quad, Quad, Quad, Quad, Quad, Quad>(
 		std::tuple<Quad, Quad, Quad, Quad, Quad, Quad, Quad, Quad, Quad>({
-		createQuad(posX, posY, margin*aspect_ratio, margin*aspect_ratio),
+		createQuad(posX, posY, margin, margin*aspect_ratio),
 		createQuad(posX + margin, posY, width - margin * 2.0f, margin*aspect_ratio),
 		createQuad(posX + width - margin, posY, margin, margin*aspect_ratio),
 		createQuad(posX, posY - margin * aspect_ratio, margin, height - margin * 2.0f*aspect_ratio),

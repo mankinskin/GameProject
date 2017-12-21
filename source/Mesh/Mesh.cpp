@@ -109,6 +109,7 @@ void mesh::renderMeshes()
 void mesh::renderMeshNormals()
 {
 	if (draw_normals) {
+		mesh::updateMeshBuffers();//TODO: make work without this
 		glBindVertexArray(meshVAO);
 		shader::use(meshNormalShader);
 		glDebug::getGLError("render(MeshNormals)1");

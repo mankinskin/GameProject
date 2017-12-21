@@ -71,13 +71,41 @@ void app::initGLFW()
 
 void app::mainMenuLoop()
 {
-	lighting::createLight(glm::vec4(1.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 10.0f));
-	lighting::createLight(glm::vec4(0.0f, 3.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.4f, 0.5f, 10.0f));
 	Input::setupControls();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, gl::screenWidth, gl::screenHeight);
 	debug::printErrors();
 	while (state == app::MainMenu) {
+
+		gui::text::updateCharStorage();
+		gui::updateQuadBuffer();
+		gui::updateColorings();
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+		
+		gui::renderColorings();
+		gui::text::renderGlyphs();
+		fetchInput();
+		glfwSwapBuffers(mainWindow.window);
+		debug::printErrors();
+		updateTime();
+		updateTimeFactor();
+		//limitFPS();
+
+		debug::printInfo();
+	}
+	gui::text::clearCharStorage();
+	gui::clearQuads();
+}
+
+void app::gameloop()
+{
+	lighting::createLight(glm::vec4(1.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 10.0f));
+	lighting::createLight(glm::vec4(0.0f, 3.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.4f, 0.5f, 10.0f));
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	debug::printErrors();
+	while (state == app::Running) {
 
 		node::translate(0, node_mov * 0.01f);
 		camera::main_camera.look(Input::cursorFrameDelta);
@@ -91,28 +119,29 @@ void app::mainMenuLoop()
 		node::updateNodeBuffers();
 		mesh::updateMeshBuffers();
 
-		glBindFramebuffer(GL_FRAMEBUFFER, texture::gBuffer);
-		glViewport(0, 0, size_t(gl::screenWidth*gl::resolution), size_t(gl::screenHeight*gl::resolution));
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		mesh::renderMeshes();
-		mesh::updateMeshBuffers();
 		gui::updateQuadBuffer();
 		gui::updateColorings();
 		gui::text::updateCharStorage();
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		lighting::renderLights();
-		gui::renderColorings();
-		gui::text::renderGlyphs();
-		glDebug::drawGrid();
-		mesh::renderMeshNormals();
 		glBindFramebuffer(GL_FRAMEBUFFER, texture::guiFBO);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		gui::rasterQuadIndices();
 		gui::readQuadIndexBuffer();
 		fetchInput();
+		glBindFramebuffer(GL_FRAMEBUFFER, texture::gBuffer);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glViewport(0, 0, gl::screenWidth*gl::resolution, gl::screenHeight*gl::resolution);
+		mesh::renderMeshes();
+		
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glViewport(0, 0, gl::screenWidth, gl::screenHeight);
+		lighting::renderLights();
+		glDebug::drawGrid();
+		mesh::renderMeshNormals();
+		gui::renderColorings();
+		gui::text::renderGlyphs();
+
+
 		glfwSwapBuffers(mainWindow.window);
 		debug::printErrors();
 		updateTime();
@@ -130,6 +159,11 @@ void app::mainMenuLoop()
 
 void app::fetchInput()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, texture::guiFBO);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	gui::rasterQuadIndices();
+	gui::readQuadIndexBuffer();
 
 	Input::updateMouse();
 	Input::fetchGLFWEvents();
@@ -139,6 +173,7 @@ void app::fetchInput()
 	Input::callFunctors();
 	Input::resetSignals();
 	Input::end();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 //--Global Time--

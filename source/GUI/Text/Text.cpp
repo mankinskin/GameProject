@@ -196,13 +196,13 @@ void loadTextboxGlyphs(Textbox& pTextbox, TextboxMetrics& pTextMetrics, gui::tex
 
 	size_t str_nonCharCount = 0;
 	//iterate string chars
-	for (size_t c = 0; c < pTextbox.chars.count;) {
+	for (size_t c = 0; c < pTextbox.chars.count; ++c) {
 		//get glyph metrics
 		unsigned charCode = gui::text::allChars[pTextbox.chars.offset + c];
 		size_t glyphIndex = std::max((size_t)0, std::min(charCode - font_inst.startCode, font_inst.glyphCount - 1));
 		gui::text::GlyphMetrics& met = gui::text::allMetrics[pFont.metricOffset + glyphIndex];
 
-		if (charCode != '\n' && (cursor + met.advanceX * pTextMetrics.advanceScale) < (allTextboxSizes[pTextbox.size].x - pTextbox.marging*2.0f)) {
+		if (charCode != '\n') {
 			//append char to all chars
 			gui::text::CharQuad qd(cursor + met.bearingX* pTextMetrics.glyphScale.x, met.bearingY* pTextMetrics.glyphScale.y, met.width * pTextMetrics.glyphScale.x, met.height * pTextMetrics.glyphScale.y);
 			thisLineGreatestAscend = std::max(thisLineGreatestAscend, met.bearingY);
@@ -212,15 +212,10 @@ void loadTextboxGlyphs(Textbox& pTextbox, TextboxMetrics& pTextMetrics, gui::tex
 
 			cursor += met.advanceX * pTextMetrics.advanceScale;
 			++lineCharCount;
-			++c;
+			
 		}
 		else {
-			//end line and start new line
-			if (charCode == '\n') {
-				++str_nonCharCount;
-				++c;
-			}
-
+			++str_nonCharCount;
 			thisLineSize.y = std::max(thisLineSize.y, thisLineGreatestAscend + thisLineGreatestDescend);
 			thisLineSize.x = cursor;
 			pGlyphs.line_sizes.push_back(thisLineSize);

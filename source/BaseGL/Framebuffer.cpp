@@ -30,11 +30,11 @@ void texture::initGBuffer()
 	glCreateFramebuffers(1, &gBuffer);
 	glCreateRenderbuffers(1, &gDepthRenderbuffer);
 
-	gAmbientTexture = get2DTextureID(createTexture2D(gl::screenWidth * gl::resolution, gl::screenHeight * gl::resolution, GL_RGBA16F, GL_RGBA, GL_FLOAT, 0));
-	gDiffuseTexture = get2DTextureID(createTexture2D(gl::screenWidth * gl::resolution, gl::screenHeight * gl::resolution, GL_RGBA16F, GL_RGBA, GL_FLOAT, 0));
-	gSpecularTexture = get2DTextureID(createTexture2D(gl::screenWidth * gl::resolution, gl::screenHeight * gl::resolution, GL_RGBA16F, GL_RGBA, GL_FLOAT, 0));
-	gPosTexture = get2DTextureID(createTexture2D(gl::screenWidth * gl::resolution, gl::screenHeight * gl::resolution, GL_RGB32F, GL_RGB, GL_FLOAT, 0));
-	gNormalTexture = get2DTextureID(createTexture2D(gl::screenWidth * gl::resolution, gl::screenHeight * gl::resolution, GL_RGB32F, GL_RGB, GL_FLOAT, 0));
+	gAmbientTexture = get2DTextureID(createTexture2D(gl::screenWidth *gl::resolution, gl::screenHeight *gl::resolution, GL_RGBA16F, GL_RGBA, GL_FLOAT, 0));
+	gDiffuseTexture = get2DTextureID(createTexture2D(gl::screenWidth *gl::resolution, gl::screenHeight *gl::resolution, GL_RGBA16F, GL_RGBA, GL_FLOAT, 0));
+	gSpecularTexture = get2DTextureID(createTexture2D(gl::screenWidth *gl::resolution, gl::screenHeight *gl::resolution, GL_RGBA16F, GL_RGBA, GL_FLOAT, 0));
+	gPosTexture = get2DTextureID(createTexture2D(gl::screenWidth *gl::resolution, gl::screenHeight *gl::resolution, GL_RGB32F, GL_RGB, GL_FLOAT, 0));
+	gNormalTexture = get2DTextureID(createTexture2D(gl::screenWidth *gl::resolution, gl::screenHeight *gl::resolution, GL_RGB32F, GL_RGB, GL_FLOAT, 0));
 
 	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gAmbientTexture, 0);
@@ -44,7 +44,7 @@ void texture::initGBuffer()
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, gNormalTexture, 0);
 
 	glBindRenderbuffer(GL_RENDERBUFFER, gDepthRenderbuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, gl::screenWidth * gl::resolution, gl::screenHeight * gl::resolution);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, gl::screenWidth *gl::resolution, gl::screenHeight *gl::resolution);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, gDepthRenderbuffer);
 
 	size_t attachments[5] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4};

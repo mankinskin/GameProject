@@ -21,7 +21,7 @@ void camera::Camera::init()
 	cross = glm::cross(lookAt, normal);
 
 	viewMatrix = glm::lookAt(pos, lookAt, normal);
-	projectionMatrix = glm::perspective(mode.frustum.fov, (float)(app::mainWindow.width) / (float)(app::mainWindow.height), mode.frustum.nearPlane, mode.frustum.farPlane);
+	projectionMatrix = glm::perspective(mode.frustum.fov, (float)(app::mainWindow.width * gl::resolution) / (float)(app::mainWindow.height * gl::resolution), mode.frustum.nearPlane, mode.frustum.farPlane);
 	infiniteProjectionMatrix = projectionMatrix;
 	infiniteProjectionMatrix[2][2] = eulerian - 1.0f;
 	infiniteProjectionMatrix[3][2] = mode.frustum.nearPlane*(eulerian - 2.0f);

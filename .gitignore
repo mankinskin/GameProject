@@ -4,3 +4,4 @@ assets/
 deps/
 Debug/
 *.sln
+.vs
