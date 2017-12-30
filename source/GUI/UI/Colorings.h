@@ -45,13 +45,13 @@ namespace gui {
 	void setupColoringShaders();
 	void updateColorings();
 	void renderColorings();
+
 	void uploadUVRanges();
 	size_t createAtlasUVRange(glm::vec4 pUVRange);
 
 	ConstColor createConstColor(glm::vec4 pColor, std::string pColorName);
 	template<class ColorType>
 	void colorQuad(size_t pQuad, ColorType pColor);
-
 }
 
 template<class ColorType>

@@ -134,7 +134,7 @@
     <ClCompile Include="GUI\Text\Font_Loader.cpp" />
     <ClCompile Include="GUI\Text\Text.cpp" />
     <ClCompile Include="GUI\UI\Colorings.cpp" />
-    <ClCompile Include="GUI\UI\Element.cpp" />
+    <ClCompile Include="GUI\UI\QuadLayout.cpp" />
     <ClCompile Include="GUI\UI\GUI.cpp" />
     <ClCompile Include="GUI\UI\Line.cpp" />
     <ClCompile Include="GUI\UI\Quad.cpp" />
@@ -144,6 +144,7 @@
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Input\Keys.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
+    <ClCompile Include="Input\Signal.cpp" />
     <ClCompile Include="Lighting\Lights.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh\Material.cpp" />
@@ -174,7 +175,7 @@
     <ClInclude Include="GUI\Text\stdafx.h" />
     <ClInclude Include="GUI\Text\Text.h" />
     <ClInclude Include="GUI\UI\Colorings.h" />
-    <ClInclude Include="GUI\UI\Element.h" />
+    <ClInclude Include="GUI\UI\QuadLayout.h" />
     <ClInclude Include="GUI\UI\GUI.h" />
     <ClInclude Include="GUI\UI\Line.h" />
     <ClInclude Include="GUI\UI\Quad.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\Keys.h" />
     <ClInclude Include="Input\Mouse.h" />
+    <ClInclude Include="Input\Signal.h" />
     <ClInclude Include="Input\stdafx.h" />
     <ClInclude Include="Lighting\Lights.h" />
     <ClInclude Include="Lighting\stdafx.h" />

@@ -5,6 +5,7 @@
 #include <functional>
 #include <algorithm>
 #include <tuple>
+#include "Signal.h"
 /*
 Each functor holds a function pointer and a tuple for the arguments.
 when a functor class is first instantited from the template, its static call(size_t) function is given to the functorInvokers.
@@ -27,17 +28,17 @@ namespace app {
 		};
 		struct SequenceGate {
 			bool func(std::vector<size_t>& pSet, bool(*check)(size_t)) {
-				for (size_t s = 0 + (pSet.size() - 1)*passed; s < pSet.size(); ++s) {
-					if (!check(pSet[s])) {//if 
-						passed = 0;
+				for (size_t s = 0; s < pSet.size(); ++s) {
+					if (!check(pSet[s]) && s >= dropped) {
+						dropped = s;
 						return false;
 					}
 				}
-				passed = 1;
+				dropped = 0;
 				return true;
 			}
 		private:
-			int passed = 0;
+			int dropped = 0;
 		};
 		struct AlwaysGate {
 			bool func(std::vector<size_t>& pSet, bool(*check)(size_t)) {
@@ -69,11 +70,9 @@ namespace app {
 		template<typename... Args>
 		class Functor {
 		public:
-			Functor(void(*pF)(Args...), Args... pArgs)
-				:func(pF), args(std::forward_as_tuple<Args...>(std::forward<Args>(pArgs)...)), slot_index(slots.size())
-			{
-				slots.emplace_back(*this);
-			}
+			Functor(size_t pIndex, void(*pF)(Args...), Args... pArgs)
+				:func(pF), args(std::forward_as_tuple<Args...>(std::forward<Args>(pArgs)...)), slot_index(pIndex)
+			{}
 			static void clear() {
 				slots.clear();
 			}
@@ -83,69 +82,59 @@ namespace app {
 			void invoke() const {
 				function_caller(func, args);
 			}
-
+			static void call(size_t pFunc) {
+				if(slots[pFunc].check()) {
+					slots[pFunc].invoke();
+				}
+			}
+			bool check() {
+				return std::any_of(signalSet.begin(), signalSet.end(), [](size_t s)->bool {return allSignals[s]; });
+			}
+			void setTriggers(std::initializer_list<size_t> pSet) {
+				signalSet = pSet;
+			}
+			static size_t invoker_index;
 			static std::vector<Functor<Args...>> slots;
 			size_t slot_index;
 		private:
 			struct initializer {
 				initializer() {
 					functorDestructors.push_back(clear);
-				}
-			};
-			const initializer ini = initializer();
-
-			void(*func)(Args...);
-			std::tuple<Args...> args;
-		};
-		bool is_on(size_t pSignalIndex);
-
-		template<class Gate, typename... Args>
-		class FunctorTrigger {
-		public:
-			FunctorTrigger(Functor<Args...> pFunctor, std::vector<size_t> pTriggerSignals)
-				:signalSet(pTriggerSignals), slot_index(pFunctor.slot_index)
-			{
-				functorOrder.emplace_back(invoker_index, triggers.size());
-				triggers.emplace_back(*this);
-			}
-			static void call(size_t pTrigger) {
-				if (triggers[pTrigger].check(is_on)) {
-					Functor<Args...>::slots[triggers[pTrigger].slot_index].invoke();
-				}
-			}
-			bool check(bool(*check)(size_t)) {
-				return gate.func(signalSet, check);
-			}
-
-		private:
-			struct initializer {
-				initializer() {
 					invoker_index = functorInvokers.size();
 					functorInvokers.push_back(call);
 				}
 			};
 			const initializer ini = initializer();
-			size_t slot_index;
-			static std::vector<FunctorTrigger<Gate, Args...>> triggers;
-			static size_t invoker_index;
 			std::vector<size_t> signalSet;
-			Gate gate;
+			void(*func)(Args...);
+			std::tuple<Args...> args;
+			
 		};
-		template<class Gate, typename... Args>
-		size_t FunctorTrigger<Gate, Args...>::invoker_index = 0;
-
-		template<class Gate, typename... Args>
-		std::vector<FunctorTrigger<Gate, Args...>> FunctorTrigger<Gate, Args...>::triggers = std::vector<FunctorTrigger<Gate, Args...>>();
 
 		template<typename... Args>
 		std::vector<Functor<Args...>> Functor<Args...>::slots = std::vector<Functor<Args...>>();
+		template<typename... Args>
+		size_t Functor<Args...>::invoker_index = 0;
 
 		extern std::vector<void(*)(size_t)> functorInvokers;//invokes all functor templates
 		extern std::vector<void(*)()> functorDestructors;//destroys all functor templates
 		extern std::vector<std::pair<size_t, size_t>> functorOrder;
 
-
-
+		template<class...Args>
+		struct FunctorRef {
+			FunctorRef(size_t pIndex):index(pIndex){}
+			size_t index;
+			void setTriggers(std::initializer_list<size_t> pSet) {
+				Functor<Args...>::slots[index].setTriggers(pSet);
+			}
+		};
+		template<class...Args>
+		FunctorRef<Args...> createFunctor(void(*pF)(Args...), Args... pArgs) {
+			size_t ind = Functor<Args...>::slots.size();
+			functorOrder.emplace_back(Functor<Args...>::invoker_index, ind);
+			Functor<Args...>::slots.emplace_back(ind, pF, pArgs...);
+			return ind;
+		}
 		void callFunctors();
 		void clearFunctors();
 
@@ -155,125 +144,3 @@ namespace app {
 		}
 	}//end Input
 }//end app
-
-
-//ANOTHER APPROACH
-// EXPRESSION FUNCTORS
-//
-//template<typename T>
-//struct Min {
-//	Min(T& LHS, T& RHS)
-//		 :lhs(LHS), rhs(RHS) {}
-//	
-//		T& lhs;
-//	T& rhs;
-//	inline T& operator()() {
-//		return lhs < rhs ? lhs : rhs;
-//		
-//	}
-//	template<typename L, typename R>
-//		static L func(L&& pLhs, R&& pRhs) {
-//		return pLhs < pRhs ? pLhs : pRhs;
-//		
-//	}
-//	
-//		
-//};
-//template<typename T>
-//struct Max {
-//	Max(T& LHS, T& RHS)
-//		:lhs(LHS), rhs(RHS) {}
-//	
-//		
-//		T& lhs;
-//	T& rhs;
-//	inline T& operator()() {
-//		return lhs > rhs ? lhs : rhs;
-//		
-//	}
-//	template<typename L, typename R>
-//		static L func(L&& pLhs, R&& pRhs) {
-//		return pLhs > pRhs ? pLhs : pRhs;
-//		
-//	}
-//};
-//template<typename T>
-//struct Add {
-//	Add(T& LHS, T& RHS)
-//		 :lhs(LHS), rhs(RHS) {}
-//	
-//		T& lhs;
-//	T& rhs;
-//	inline T operator()() {
-//		return lhs + rhs;
-//		
-//	}
-//	template<typename L, typename R>
-//		static L func(L&& pLhs, R&& pRhs) {
-//		return pLhs + pRhs;
-//		
-//	}
-//
-//};
-//template<typename T>
-//struct Substract {
-//	Substract(T& LHS, T& RHS)
-//		 :lhs(LHS), rhs(RHS) {}
-//	
-//		T& lhs;
-//	T& rhs;
-//	inline T operator()() {
-//		return lhs - rhs;
-//		
-//	}
-//	template<typename L, typename R>
-//		static L func(L&& pLhs, R&& pRhs) {
-//		return pLhs - pRhs;
-//		
-//	}
-//};
-//template<typename T>
-//struct Pass {
-//		Pass(T& VAL)
-//		 :lhs(VAL) {}
-//	
-//		T& lhs;
-//	inline T& operator()() {
-//		return lhs;
-//		
-//	}
-//	template<typename L, typename R>
-//		static L func(L&& pLhs, R&& pDummy) {
-//		return pLhs;
-//		
-//	}
-//};
-//template<typename T>
-//struct Set {
-//	Set(T& LHS, T& RHS)
-//		 :lhs(LHS), rhs(RHS) {}
-//	
-//		T& lhs;
-//	T& rhs;
-//	inline T& operator()() {
-//		lhs = rhs;
-//		return lhs;
-//		
-//	}
-//	template<typename L, typename R>
-//		static L func(L&& pTarget, R&& pSource) {
-//			pTarget = pSource;
-//			return pTarget;
-//	}
-//};
-//template<typename T, template<typename> class FuncPolicy, class LhsSource, class RhsSource>
-//struct Operation {
-//	Operation(LhsSource pLhsSource, RhsSource pRhsSource)
-//		 :lhs(pLhsSource), rhs(pRhsSource) {
-//		}
-//	T operator()() {
-//		return FuncPolicy<T>::func(lhs(), rhs());
-//	}
-//	LhsSource lhs;
-//	RhsSource rhs;
-//};

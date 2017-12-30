@@ -16,9 +16,8 @@ void model::initModels()
 	//model::Loader::includeModel("sphere.3DS");
 	//model::Loader::includeModel("cube.obj");
 	//model::Loader::includeModel("astroBoy_walk.dae");
-	//model::Loader::includeModel("test/models-nonbsd/3DS/mp5_sil.3ds");
 	model::Loader::includeModel("deer.3ds");
-	model::Loader::includeModel("test/models-nonbsd/3DS/mar_rifle.3ds");
+	model::Loader::includeModel("test/models-nonbsd/3DS/mp5_sil.3ds");
 	model::Loader::loadModels();
 
 }

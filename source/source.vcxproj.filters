@@ -111,10 +111,13 @@
     <ClCompile Include="GUI\Text\Text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\UI\Element.cpp">
+    <ClCompile Include="GUI\UI\Colorings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\UI\Colorings.cpp">
+    <ClCompile Include="GUI\UI\QuadLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\Signal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -215,9 +218,6 @@
     <ClInclude Include="Model\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\UI\Element.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GUI\UI\GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -246,6 +246,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\UI\Colorings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\UI\QuadLayout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Signal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

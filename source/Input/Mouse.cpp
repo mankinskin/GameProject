@@ -67,7 +67,7 @@ void app::Input::getMouseEvents()
 	last_hovered_quad = hovered_quad;
 	hovered_quad = gui::readQuadIndexMap(absoluteCursorPosition.x, absoluteCursorPosition.y);
 	float quad_depth = gui::readQuadDepthMap(absoluteCursorPosition.x, absoluteCursorPosition.y);
-	printf("%i\t%f\n", hovered_quad, quad_depth);
+	//printf("%i\t%f\n", hovered_quad, quad_depth);
 
 	if(last_hovered_quad != hovered_quad){
 		//quad change

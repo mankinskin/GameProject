@@ -6,6 +6,7 @@
 #include "..\Input\Functor.h"
 #include "..\Input\Mouse.h"
 #include "..\Input\Event.h"
+#include "..\Input\Signal.h"
 #include <conio.h>
 #include <thread>
 #include <chrono>
@@ -21,8 +22,6 @@
 #include "../gui/UI/Colorings.h"
 #include "../BaseGL/Framebuffer.h"
 #include "../gui\UI\Quad.h"
-#include "../gui\UI\Element.h"
-#include "../gui\UI\Widget.h"
 #include <functional>
 #include <algorithm>
 #include "../Model/Node.h"
@@ -53,25 +52,15 @@ void app::init()
 	Input::init();
 	gl::init();
 	gui::text::initStyleBuffer();
-
+	Input::setupControls();
 	debug::printErrors();
 }
 
-void app::initGLFW()
-{
-	std::puts("Initializing GLFW...\n");
-	size_t glfw = glfwInit();
-	if (glfw != GLFW_TRUE) {
-		debug::pushError(("\napp::init() - Unable to initialize GLFW (glfwInit() return code: %i)\n" + glfw), debug::Error::Severity::Fatal);
-		while (!_getch()) {}
-		exit(glfw);
-	}
-}
 
 
 void app::mainMenuLoop()
 {
-	Input::setupControls();
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, gl::screenWidth, gl::screenHeight);
 	debug::printErrors();
@@ -85,8 +74,9 @@ void app::mainMenuLoop()
 		
 		gui::renderColorings();
 		gui::text::renderGlyphs();
-		fetchInput();
+
 		glfwSwapBuffers(mainWindow.window);
+		fetchInput();
 		debug::printErrors();
 		updateTime();
 		updateTimeFactor();
@@ -94,8 +84,6 @@ void app::mainMenuLoop()
 
 		debug::printInfo();
 	}
-	gui::text::clearCharStorage();
-	gui::clearQuads();
 }
 
 void app::gameloop()
@@ -106,7 +94,7 @@ void app::gameloop()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	debug::printErrors();
 	while (state == app::Running) {
-
+		fetchInput();
 		node::translate(0, node_mov * 0.01f);
 		camera::main_camera.look(Input::cursorFrameDelta);
 		node_mov = glm::vec3();
@@ -122,11 +110,7 @@ void app::gameloop()
 		gui::updateQuadBuffer();
 		gui::updateColorings();
 		gui::text::updateCharStorage();
-		glBindFramebuffer(GL_FRAMEBUFFER, texture::guiFBO);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		gui::rasterQuadIndices();
-		gui::readQuadIndexBuffer();
-		fetchInput();
+
 		glBindFramebuffer(GL_FRAMEBUFFER, texture::gBuffer);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, gl::screenWidth*gl::resolution, gl::screenHeight*gl::resolution);
@@ -143,6 +127,7 @@ void app::gameloop()
 
 
 		glfwSwapBuffers(mainWindow.window);
+	
 		debug::printErrors();
 		updateTime();
 		updateTimeFactor();
@@ -151,6 +136,7 @@ void app::gameloop()
 		debug::printInfo();
 	}
 	gui::text::clearCharStorage();
+
 
 	gui::clearQuads();
 	Input::clearFunctors();
@@ -170,12 +156,24 @@ void app::fetchInput()
 
 	Input::getMouseEvents();
 	Input::checkEvents();
+	Input::checkSignals();
 	Input::callFunctors();
 	Input::resetSignals();
+	Input::resetEvents();
 	Input::end();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void app::initGLFW()
+{
+	std::puts("Initializing GLFW...\n");
+	size_t glfw = glfwInit();
+	if (glfw != GLFW_TRUE) {
+		debug::pushError(("\napp::init() - Unable to initialize GLFW (glfwInit() return code: %i)\n" + glfw), debug::Error::Severity::Fatal);
+		while (!_getch()) {}
+		exit(glfw);
+	}
+}
 //--Global Time--
 void app::updateTime()
 {

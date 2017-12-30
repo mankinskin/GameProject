@@ -24,6 +24,7 @@ namespace gui {
 		Quad operator=(size_t i) { return Quad(i); }
 
 		size_t index;
+		//--
 		void move(glm::vec2 dir) {
 			allQuads[index-1] += glm::vec4(dir, 0.0f, 0.0f);
 		}
@@ -31,6 +32,11 @@ namespace gui {
 			allQuads[index-1] += glm::vec4(0.0f, 0.0f, dir.x, -dir.y);
 		}
 		quad_pos pos;
+		template<class ColorType>
+		void color(ColorType pColor) {
+			colorQuad(index, pColor);
+		}
+		//--
 		template<size_t N>
 		size_t element() {
 			return index;
@@ -38,11 +44,11 @@ namespace gui {
 		size_t element() {
 			return index;
 		}
-		template<class ColorType>
-		void color(ColorType pColor) {
-			colorQuad(index, pColor);
-		}
+
 	};
+
+	
+
 	Quad createQuad(float pPosX, float pPosY, float pWidth, float pHeight);
 	Quad createQuad(glm::vec4 pQuad);
 

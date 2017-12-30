@@ -12,11 +12,13 @@
 #include "Event.h"
 #include "Functor.h"
 #include "../Mesh/Mesh.h"
-
+#include <array>
 #include "../GUI/Text/Text.h"
 #include "../Lighting/Lights.h"
-#include "../GUI/UI/Widget.h"
 
+#include "../GUI/UI/GUI.h"
+#include "../GUI/UI/Widget.h"
+#include "../GUI/UI/QuadLayout.h"
 /*
 button-pipeline
 to set up
@@ -45,161 +47,20 @@ void app::Input::init()
     glfwSetCursorEnterCallback(app::mainWindow.window, cursorEnter_Callback);
     glfwSetMouseButtonCallback(app::mainWindow.window, mouseKey_Callback);
     glfwSetScrollCallback(app::mainWindow.window, scroll_Callback);
+
 }
 
 void app::Input::setupControls()
 {
 	using namespace gui;
 
-	EventSignal<MouseKeyEvent>::reserve(4);
-	size_t lmb_hold = createSignal(1);
-	createEvent(MouseKeyEvent(0, 1, 0), lmb_hold, 1);
-	createEvent(MouseKeyEvent(0, 0, 0), lmb_hold, 0);
-	size_t lmb_click = createEvent(MouseKeyEvent(0, 1, 0));
-	size_t rmb_press = EventSignal<MouseKeyEvent>(MouseKeyEvent(1, KeyCondition(1, 0))).index();
-	size_t rmb_release = EventSignal<MouseKeyEvent>(MouseKeyEvent(1, KeyCondition(0, 0))).index();
-	size_t lmb_press = EventSignal<MouseKeyEvent>(MouseKeyEvent(0, KeyCondition(1, 0))).index();
-	size_t lmb_release = EventSignal<MouseKeyEvent>(MouseKeyEvent(0, KeyCondition(0, 0))).index();
+	size_t lmb_press = createEvent(MouseKeyEvent(0, 1, 0));
+	size_t lmb_press_sig = createSignal(EventSource(lmb_press));
+	size_t lmb_release = createEvent(MouseKeyEvent(0, 0, 0));
+	size_t lmb_release_sig = createSignal(EventSource(lmb_release));
 
-
+	size_t lmb_hold = createSignal(toggle_gate<or_gate<EventSource, EventSource>>(or_gate<EventSource, EventSource>(EventSource(createEvent(MouseKeyEvent(0, 1, 0))), EventSource(createEvent(MouseKeyEvent(0, 0, 0))))));
 	
-	using WindowBodyWidget = Widget<Quad, Quad, Quad, Quad, Quad, Quad, Quad, Quad, Quad>;
-	using WindowBodyInitializer = Initializer<WindowBodyWidget, initMargin>;
-
-	using WindowHeaderWidget = Widget<Quad>;
-	using WindowHeaderInitializer = Initializer<WindowHeaderWidget, initSimple>;
-
-	using SliderWidget = Widget<Quad, Quad>;
-	using SliderInitializer = Initializer<SliderWidget, initMargin>;
-
-	using WindowWidget = Widget<WindowBodyWidget, WindowHeaderWidget>;
-	using WindowInitializer = Initializer<WindowWidget, initJoined, WindowBodyInitializer, WindowHeaderInitializer>;
-	
-	
-	using WindowColors = WidgetColors<WidgetColors<ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor>, WidgetColors<ConstColor>>;
-	
-	
-	WindowBodyInitializer body_init(0.0f, 0.0f, 0.3f, 1.0f, 0.01f);
-	WindowHeaderInitializer head_init(0.0f, 0.0f, 0.3f, 0.02f);
-	
-	
-	WindowInitializer window_init(body_init, head_init);
-	
-	WindowWidget win1 = window_init;
-
-	win1.pos.set(glm::vec2(-0.5f, 0.5f));
-	//win1.element<2>().pos.set(glm::vec2(0.05f, -0.1f));
-	
-	WindowColors winColors(
-		WidgetColors<ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor, ConstColor>(ConstColor("white"), ConstColor("white"), ConstColor("white"), ConstColor("white"), ConstColor("grey"), ConstColor("white"), ConstColor("white"), ConstColor("white"), ConstColor("white")),
-		WidgetColors<ConstColor>(ConstColor("nocolor")));
-	win1.color(winColors);
-	
-	size_t header = win1.element<1>().element<0>().index;
-	size_t right_border = win1.element<0>().element<5>().index;
-	size_t bottom_border = win1.element<0>().element<7>().index;
-	size_t bottom_right_corner = win1.element<0>().element<8>().index;
-	
-	size_t header_hover = createSignal(1);
-	createEvent(QuadEvent(header, 1), header_hover, 1);
-	createEvent(QuadEvent(header, 0), header_hover, 0);
-	
-	size_t right_border_hover = createSignal(1);
-	createEvent(QuadEvent(right_border, 1), right_border_hover, 1);
-	createEvent(QuadEvent(right_border, 0), right_border_hover, 0);
-	
-	size_t bottom_border_hover = createSignal(1);
-	createEvent(QuadEvent(bottom_border, 1), bottom_border_hover, 1);
-	createEvent(QuadEvent(bottom_border, 0), bottom_border_hover, 0);
-	
-	size_t bottom_right_corner_hover = createSignal(1);
-	createEvent(QuadEvent(bottom_right_corner, 1), bottom_right_corner_hover, 1);
-	createEvent(QuadEvent(bottom_right_corner, 0), bottom_right_corner_hover, 0);
-	
-	Functor<WindowWidget, glm::vec2&> move_widget_func(move_widget<WindowWidget>, win1, cursorFrameDelta);
-	
-	Functor<WindowWidget, float&, float> stretch_bodyx_func(stretch_widget_element<WindowWidget, 0, float&, float>, win1, cursorFrameDelta.x, 0.0f);
-	Functor<WindowWidget, float, float&>stretch_bodyy_func(stretch_widget_element<WindowWidget, 0, float, float&>, win1, 0.0f, cursorFrameDelta.y);
-	
-	Functor<WindowWidget, float&, float> stretch_headerx_func(stretch_widget_element<WindowWidget, 1, float&, float>, win1, cursorFrameDelta.x, 0.0f);
-	
-	
-	FunctorTrigger<SequenceGate, WindowWidget, glm::vec2&>(move_widget_func, { header_hover, lmb_click, lmb_hold });
-	FunctorTrigger<SequenceGate, WindowWidget, float&, float>(stretch_bodyx_func, { right_border_hover, lmb_click, lmb_hold });
-	FunctorTrigger<SequenceGate, WindowWidget, float&, float>(stretch_headerx_func, { right_border_hover, lmb_click, lmb_hold });
-	FunctorTrigger<SequenceGate, WindowWidget, float, float&>(stretch_bodyy_func, { bottom_border_hover, lmb_click, lmb_hold });
-	
-	FunctorTrigger<SequenceGate, WindowWidget, float&, float>(stretch_bodyx_func, { bottom_right_corner_hover, lmb_click, lmb_hold });
-	FunctorTrigger<SequenceGate, WindowWidget, float, float&>(stretch_bodyy_func, { bottom_right_corner_hover, lmb_click, lmb_hold });
-	FunctorTrigger<SequenceGate, WindowWidget, float&, float>(stretch_headerx_func, { bottom_right_corner_hover, lmb_click, lmb_hold });
-	
-	
-	
-	
-	
-	//win1.element<2>().color(sldColors);
-	//
-	//size_t slider_box_hover = createSignal(1);
-	//createEvent(QuadEvent(win1.element<2>().element<0>().element(), 1), slider_box_hover, 1);
-	//createEvent(QuadEvent(win1.element<2>().element<0>().element(), 0), slider_box_hover, 0);
-	//
-	//size_t slider_slide_hover = createSignal(1);
-	//createEvent(QuadEvent(win1.element<2>().element<1>().element(), 1), slider_slide_hover, 1);
-	//createEvent(QuadEvent(win1.element<2>().element<1>().element(), 0), slider_slide_hover, 0);
-	//
-	//Functor<SliderWidget, float&, float> move_slide_func(move_widget_element<SliderWidget, 1, float&, float>, win1.element<2>(), cursorFrameDelta.x, 0.0f);
-	//
-	//Functor<size_t, float&> set_slide_pos_func(
-	//	[](size_t tar, float& pPos) {
-	//	allQuads[tar - 1].x = pPos - allQuads[tar - 1].z/2.0f;
-	//}
-	//, win1.element<2>().element<1>().element<0>().element(), relativeCursorPosition.x);
-	//
-	//Functor<size_t, size_t> limit_slide_func(
-	//	[](size_t tar, size_t bound) {
-	//
-	//	allQuads[tar - 1].x += std::max(allQuads[bound-1].x - allQuads[tar - 1].x, 0.0f)+std::min((allQuads[bound - 1].x + allQuads[bound - 1].z) - (allQuads[tar - 1].x + allQuads[tar - 1].z), 0.0f);
-	//}
-	//, win1.element<2>().element<1>().element<0>().element(), win1.element<2>().element<0>().element<0>().element());
-	//
-	//
-	//
-	//FunctorTrigger<SequenceGate, SliderWidget, float&, float>(move_slide_func, { slider_slide_hover, lmb_click,lmb_hold });
-	//FunctorTrigger<SequenceGate, size_t, float&>(set_slide_pos_func, { slider_slide_hover, lmb_click, lmb_hold });
-	//FunctorTrigger<SequenceGate, size_t, float&>(set_slide_pos_func, { slider_box_hover, lmb_click, lmb_hold });
-	//FunctorTrigger<AlwaysGate, size_t, size_t>(limit_slide_func, {});
-
-
-
-
-	using ButtonQuad = Widget<Quad, Quad>;
-	using ButtonColor = WidgetColors<ConstColor, ConstColor >;
-	
-	Initializer<ButtonQuad, initMargin> button_initializer(0.0f, 0.0f, 0.15f, 0.03f, 0.005f);
-	ButtonColor buttonColor = ButtonColor(ConstColor(6), ConstColor(7));
-
-	ButtonQuad playButton(button_initializer);
-	playButton.move(glm::vec2(-0.99f, -0.75f));
-
-	ButtonQuad quitButton(button_initializer);
-	quitButton.move(glm::vec2(-0.99f, -0.85f));
-
-	playButton.color(buttonColor);
-	quitButton.color(buttonColor);
-			
-	//text
-	Initializer<Widget<Quad>, initSimple> fps_box_init(0.0f, 0.0f, 0.05f, 0.05f);
-	Widget<Quad> fps_box(fps_box_init);
-	gui::text::createTextboxMetrics(0, 1.0, 1.0, 1.0, 1.0);
-	size_t pl_tb = gui::text::createTextbox(playButton.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y);
-	size_t qu_tb = gui::text::createTextbox(quitButton.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y);
-	size_t fps_tb = gui::text::createTextbox(fps_box.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y);
-
-	gui::text::setTextboxString(qu_tb, " QUIT");
-	gui::text::setTextboxString(pl_tb, " Play");
-	gui::text::setTextboxString(fps_tb, "FPS");
-	gui::text::loadTextboxes();
-
 	reserveKeySignals(11);
 	KeySignal key_esc(GLFW_KEY_ESCAPE);
 	KeySignal key_c(GLFW_KEY_C);
@@ -221,69 +82,100 @@ void app::Input::setupControls()
 	KeySignal key_right(GLFW_KEY_RIGHT);
 	KeySignal key_o(GLFW_KEY_O);
 	KeySignal key_l(GLFW_KEY_L);
+	
 
-	size_t quit_button_hover = createSignal(1);
-	createEvent(QuadEvent(quitButton.element<1>().element(), 1), quit_button_hover, 1);
-	createEvent(QuadEvent(quitButton.element<1>().element(), 0), quit_button_hover, 0);
-	createEvent(QuadEvent(quitButton.element<0>().element(), 1), quit_button_hover, 1);
-	createEvent(QuadEvent(quitButton.element<0>().element(), 0), quit_button_hover, 0);
+	using Button = QuadGroup<2>;
+	using ButtonColors = WidgetColors<ConstColor, ConstColor >;
 
-	size_t play_button_hover = createSignal(1);
-	createEvent(QuadEvent(playButton.element<1>().element(), 1), play_button_hover, 1);
-	createEvent(QuadEvent(playButton.element<1>().element(), 0), play_button_hover, 0);
-	createEvent(QuadEvent(playButton.element<0>().element(), 1), play_button_hover, 1);
-	createEvent(QuadEvent(playButton.element<0>().element(), 0), play_button_hover, 0);
+	QuadLayout<2, 6> button_layout({ 0.0f, 0.0f, gui::pixel_size.x*100, gui::pixel_size.y*25, gui::pixel_size.x*2, gui::pixel_size.y*2 });
 
+	button_layout.setQuadInitialization<0>({
+		1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 2.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 2.0f });
+	button_layout.setQuadInitialization<1>({
+		1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f });
+
+	ButtonColors buttonColors = ButtonColors(ConstColor("nocolor"), ConstColor("darkgrey"));
+	
+	Button playButton = button_layout.create();
+	playButton.move(gui::pixel_round(glm::vec2(-0.9f, -0.5f)));
+	
+	Button quitButton = button_layout.create();
+	quitButton.move(gui::pixel_round(glm::vec2(-0.9f, -0.6f)));
+	
+	playButton.color(buttonColors);
+	quitButton.color(buttonColors);
+
+	size_t enter_quit_button_border = createEvent(QuadEvent(quitButton.element<0>().index, 1));
+	size_t leave_quit_button_border = createEvent(QuadEvent(quitButton.element<0>().index, 0));
+
+	size_t enter_quit_button_center = createEvent(QuadEvent(quitButton.element<1>().index, 1));
+	size_t leave_quit_button_center = createEvent(QuadEvent(quitButton.element<1>().index, 0));
+	
+	size_t quit_button_press = 
+		createSignal(and_gate<toggle_gate<or_gate<EventSource, EventSource>>, EventSource>(toggle_gate<or_gate<EventSource, EventSource>>(or_gate<EventSource, EventSource>(enter_quit_button_border, enter_quit_button_center)), lmb_press));
+
+	{
+		FunctorRef<size_t, ConstColor> light_button = createFunctor(gui::colorQuad<ConstColor>, playButton.element<1>().index, ConstColor("white"));
+		FunctorRef<size_t, ConstColor> unlight_button = createFunctor(gui::colorQuad<ConstColor>, playButton.element<1>().index, ConstColor("darkgrey"));
+		light_button.setTriggers({ lmb_press_sig });
+		unlight_button.setTriggers({ lmb_release_sig });
+	}
+	{
+		FunctorRef<size_t, ConstColor> light_button = createFunctor(gui::colorQuad<ConstColor>, quitButton.element<1>().index, ConstColor("white"));
+		FunctorRef<size_t, ConstColor> unlight_button = createFunctor(gui::colorQuad<ConstColor>, quitButton.element<1>().index, ConstColor("darkgrey"));
+		light_button.setTriggers({ lmb_press_sig });
+		unlight_button.setTriggers({ lmb_release_sig });
+	}
 	//general functions
-	Functor<> quit_func(quit);
-	FunctorTrigger<SequenceGate>(quit_func, { quit_button_hover, lmb_click });
-	FunctorTrigger<AnyGate>(quit_func, { key_esc.press });
 
-	Functor<> run_func(run);
-	FunctorTrigger<SequenceGate>(run_func, { play_button_hover, lmb_click });
-
-
-	Functor<> toggle_cull_func(mesh::toggleCullFace);
-	FunctorTrigger<AnyGate>(toggle_cull_func, { key_f.press });
-
-	Functor<> toggle_cursor_func(app::Input::toggleCursor);
-	FunctorTrigger<AnyGate>(toggle_cursor_func, { key_c.press, rmb_press, rmb_release });
-
-	Functor<camera::Camera&> toggle_look_func(camera::toggleLook, camera::main_camera);
-	FunctorTrigger<AnyGate, camera::Camera&>(toggle_look_func, { key_c.press, rmb_press, rmb_release });
-
-	Functor<> toggle_grid_func(glDebug::toggleGrid);
-	FunctorTrigger<AnyGate>(toggle_grid_func, { key_g.press });
-
-	Functor<> toggle_coord_func(glDebug::toggleCoord);
-	FunctorTrigger<AnyGate>(toggle_coord_func, { key_h.press });
-
-	Functor<> toggle_info_func(debug::togglePrintInfo);
-	FunctorTrigger<AnyGate>(toggle_info_func, { key_i.press });
-
-	Functor<> toggle_normals_func(mesh::toggleNormals);
-	FunctorTrigger<AnyGate>(toggle_normals_func, { key_n.press });
-
-	Functor<camera::Camera&> cycle_modes_func(camera::cycleModes, camera::main_camera);
-	FunctorTrigger<AnyGate, camera::Camera&>(cycle_modes_func, { key_j.press });
+	FunctorRef<> toggle_cull_func = createFunctor(mesh::toggleCullFace);
+	FunctorRef<> toggle_cursor_func = createFunctor(app::Input::toggleCursor);
+	FunctorRef<camera::Camera&> toggle_look_func = createFunctor<camera::Camera&>(camera::toggleLook, camera::main_camera);
+	FunctorRef<> toggle_grid_func = createFunctor(glDebug::toggleGrid);
+	FunctorRef<> toggle_coord_func = createFunctor(glDebug::toggleCoord);
+	FunctorRef<> toggle_info_func = createFunctor(debug::togglePrintInfo);
+	FunctorRef<> toggle_normals_func = createFunctor(mesh::toggleNormals);
+	FunctorRef<camera::Camera&> cycle_modes_func = createFunctor<camera::Camera&>(camera::cycleModes, camera::main_camera);
+	
+	FunctorRef<> quit_func = createFunctor(quit);
+	quit_func.setTriggers({ key_esc.press, quit_button_press });
 
 	{//camera
-		Functor<camera::Camera&> forward_func(camera::forward, camera::main_camera);
-		Functor<camera::Camera&> backward_func(camera::back, camera::main_camera);
-		Functor<camera::Camera&> left_func(camera::left, camera::main_camera);
-		Functor<camera::Camera&> right_func(camera::right, camera::main_camera);
-		Functor<camera::Camera&> up_func(camera::up, camera::main_camera);
-		Functor<camera::Camera&> down_func(camera::down, camera::main_camera);
+		FunctorRef<camera::Camera&> forward_func = createFunctor<camera::Camera&>(camera::forward, camera::main_camera);
+		FunctorRef<camera::Camera&> backward_func = createFunctor<camera::Camera&>(camera::back, camera::main_camera);
+		FunctorRef<camera::Camera&> left_func = createFunctor<camera::Camera&>(camera::left, camera::main_camera);
+		FunctorRef<camera::Camera&> right_func = createFunctor<camera::Camera&>(camera::right, camera::main_camera);
+		FunctorRef<camera::Camera&> up_func = createFunctor<camera::Camera&>(camera::up, camera::main_camera);
+		FunctorRef<camera::Camera&> down_func = createFunctor<camera::Camera&>(camera::down, camera::main_camera);
 		
 
-		FunctorTrigger<AnyGate, camera::Camera&>(forward_func, { key_w.held });
-		FunctorTrigger<AnyGate, camera::Camera&>(backward_func, { key_s.held });
-		FunctorTrigger<AnyGate, camera::Camera&>(left_func, { key_a.held });
-		FunctorTrigger<AnyGate, camera::Camera&>(right_func, { key_d.held });
-		FunctorTrigger<AnyGate, camera::Camera&>(up_func, { key_space.held });
-		FunctorTrigger<AnyGate, camera::Camera&>(down_func, { key_z.held });
+		forward_func.setTriggers({ key_w.hold });
+		backward_func.setTriggers({ key_s.hold });
+		left_func.setTriggers({ key_a.hold });
+		right_func.setTriggers({ key_d.hold });
+		up_func.setTriggers({ key_space.hold });
+		down_func.setTriggers({ key_z.hold });
 
 	}
+
+	//text
+	//Initializer<Widget<Quad>, initSimple> fps_box_init(0.0f, 0.0f, 0.05f, 0.05f);
+	//Widget<Quad> fps_box(fps_box_init);
+	gui::text::createTextboxMetrics(0, 1.0, 1.0, 1.0, 1.0);
+	//size_t pl_tb = gui::text::createTextbox(playButton.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y);
+	//size_t qu_tb = gui::text::createTextbox(quitButton.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y);
+	//size_t fps_tb = gui::text::createTextbox(fps_box.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y);
+
+	//gui::text::setTextboxString(qu_tb, " QUIT");
+	//gui::text::setTextboxString(pl_tb, " Play");
+	//gui::text::setTextboxString(fps_tb, "FPS");
+	gui::text::loadTextboxes();
 }
 
 void app::Input::fetchGLFWEvents()

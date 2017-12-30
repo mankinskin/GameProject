@@ -41,12 +41,12 @@ namespace app {
 		}
 		struct KeySignal {
 			KeySignal(int pKey);
-			size_t held;
+			size_t hold;
 			size_t press;
 			size_t release;
 		};
-		void reserveKeySignals(size_t pCount);
 
+		void reserveKeySignals(size_t pCount);
 		void key_Callback(GLFWwindow* window, int pKey, int pScancode, int pAction, int pMods);
 		void char_Callback(GLFWwindow* window, size_t pCodepoint);
 	}
