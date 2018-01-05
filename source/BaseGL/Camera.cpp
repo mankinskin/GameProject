@@ -8,6 +8,7 @@
 #include <math.h>
 #include "../GlobalGL/glDebug.h"
 #include <algorithm>
+#include "../Input/Mouse.h"
 
 const float yRestrictionAngle = 3.0f;
 const float eulerian = 0.0001f;
@@ -121,6 +122,7 @@ void camera::Camera::move(glm::vec3 pDir) {
 
 void camera::Camera::toggleLook()
 {
+	app::Input::toggleCursor();
 	followCursor = !followCursor;
 }
 

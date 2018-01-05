@@ -26,15 +26,19 @@ void gui::init()
 
 void gui::initColors()
 {
-	createConstColor(glm::vec4(0.0, 0.0, 0.0, 0.0), "nocolor");
-	createConstColor(glm::vec4(0.0, 0.0, 0.0, 1.0), "black");
-	createConstColor(glm::vec4(1.0, 1.0, 1.0, 1.0), "white");
-	createConstColor(glm::vec4(1.0, 0.0, 0.0, 1.0), "red");
-	createConstColor(glm::vec4(0.0, 1.0, 0.0, 1.0), "green");
-	createConstColor(glm::vec4(0.0, 0.0, 1.0, 1.0), "blue");
-	createConstColor(glm::vec4(0.5, 0.5, 0.5, 1.0), "grey");
-	createConstColor(glm::vec4(0.2, 0.2, 0.2, 1.0), "darkgrey");
-	createConstColor(glm::vec4(0.7, 0.7, 0.7, 1.0), "lightgrey");
+	createConstColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "nocolor");
+	createConstColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), "black");
+	createConstColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), "white");
+	createConstColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "red");
+	createConstColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), "green");
+	createConstColor(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), "blue");
+	createConstColor(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), "yellow");
+	createConstColor(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), "cyan");
+	createConstColor(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), "magenta");
+	createConstColor(glm::vec4(0.5f, 0.0f, 0.5f, 1.0f), "purple");
+	createConstColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f), "grey");
+	createConstColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f), "darkgrey");
+	createConstColor(glm::vec4(0.7f, 0.7f, 0.7f, 1.0f), "lightgrey");
 	uploadConstColors();
 }
 glm::vec2 gui::pixel_round(glm::vec2 pIn) {

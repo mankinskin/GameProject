@@ -128,7 +128,6 @@ void mesh::renderBlendMeshes()
 {
 	glBindVertexArray(meshVAO);
 	shader::use(blendMeshShader);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glDepthMask(0);
 	glDisable(GL_CULL_FACE);
 	for (size_t m = 0; m < allMeshes.size(); ++m) {
@@ -146,7 +145,6 @@ void mesh::renderBlendMeshes()
 	shader::unuse();
 	glBindVertexArray(0);
 	//glDepthMask(1);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_CULL_FACE);
 	glDebug::getGLError("render(Meshes)");
 }

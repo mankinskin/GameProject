@@ -2,11 +2,15 @@
 #include "stdafx.h"
 #include "Keys.h"
 #include "Signal.h"
+#include "Event.h"
 app::Input::KeySignal::KeySignal(int pKey)
 {
-	press = createSignal(EventSource(createEvent(KeyEvent(pKey, KeyCondition(1, 0)))));
-	release = createSignal(EventSource(createEvent(KeyEvent(pKey, KeyCondition(0, 0)))));
-	hold = createSignal(toggle_gate<or_gate<EventSource, EventSource>>(or_gate<EventSource, EventSource>(EventSource(createEvent(KeyEvent(pKey, KeyCondition(1, 0)))), EventSource(createEvent(KeyEvent(pKey, KeyCondition(0, 0)))))));
+	Event press_evt = createEvent(KeyEvent(pKey, KeyCondition(1, 0)));
+	Event release_evt = createEvent(KeyEvent(pKey, KeyCondition(0, 0)));
+	press = createSignal(Event(press_evt));
+	release = createSignal(Event(release_evt));
+	auto togglers = xor_gate<Event, Event>(Event(press_evt), Event(release_evt));
+	hold = createSignal(toggle_gate<decltype(togglers)>(togglers));
 }
 
 void app::Input::reserveKeySignals(size_t pCount) {

@@ -41,7 +41,7 @@ glm::vec3 app::node_mov = glm::vec3();
 
 void app::init()
 {
-	state = MainMenu;
+	state = Running;
 	initGLFW();
 	//Windows and gl Context
 	ContextWindow::initMonitors();
@@ -52,7 +52,9 @@ void app::init()
 	Input::init();
 	gl::init();
 	gui::text::initStyleBuffer();
+	Input::initSignals();
 	Input::setupControls();
+	
 	debug::printErrors();
 }
 
@@ -91,7 +93,6 @@ void app::gameloop()
 	lighting::createLight(glm::vec4(1.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 10.0f));
 	lighting::createLight(glm::vec4(0.0f, 3.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.4f, 0.5f, 10.0f));
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	debug::printErrors();
 	while (state == app::Running) {
 		fetchInput();
@@ -106,7 +107,7 @@ void app::gameloop()
 		node::updateNodeMatrices();
 		node::updateNodeBuffers();
 		mesh::updateMeshBuffers();
-
+		
 		gui::updateQuadBuffer();
 		gui::updateColorings();
 		gui::text::updateCharStorage();
@@ -120,18 +121,17 @@ void app::gameloop()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, gl::screenWidth, gl::screenHeight);
 		lighting::renderLights();
-		glDebug::drawGrid();
 		mesh::renderMeshNormals();
 		gui::renderColorings();
 		gui::text::renderGlyphs();
-
+		glDebug::drawGrid();
 
 		glfwSwapBuffers(mainWindow.window);
 	
 		debug::printErrors();
 		updateTime();
 		updateTimeFactor();
-		//limitFPS();
+		limitFPS();
 
 		debug::printInfo();
 	}
@@ -158,8 +158,9 @@ void app::fetchInput()
 	Input::checkEvents();
 	Input::checkSignals();
 	Input::callFunctors();
-	Input::resetSignals();
+
 	Input::resetEvents();
+	Input::resetSignals();
 	Input::end();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

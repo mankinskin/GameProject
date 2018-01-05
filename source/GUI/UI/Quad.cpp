@@ -51,15 +51,15 @@ void gui::setupQuadIndexShader()
 	shader::bindUniformBufferToShader(quadIndexShader, quadBuffer, "QuadBuffer");
 }
 
-gui::Quad gui::createQuad(float pPosX, float pPosY, float pWidth, float pHeight)
+size_t gui::createQuad(float pPosX, float pPosY, float pWidth, float pHeight)
 {
 	allQuads.emplace_back(pPosX, pPosY, pWidth, pHeight);
-	return Quad(allQuads.size());
+	return allQuads.size();
 }
-gui::Quad gui::createQuad(glm::vec4 pQuad)
+size_t gui::createQuad(glm::vec4 pQuad)
 {
 	allQuads.push_back(pQuad);
-	return Quad(allQuads.size());
+	return allQuads.size();
 }
 void gui::reserveQuads(size_t pCount)
 {

@@ -254,5 +254,8 @@
     <ClInclude Include="Input\Signal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\UI\Initializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

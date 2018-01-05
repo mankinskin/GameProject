@@ -1,37 +1,34 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <vector>
+#include "../../Input/Event.h"
+#include <tuple>
 namespace gui {
-
+	typedef typename glm::vec4 QuadData;
 	extern std::vector<glm::vec4> allQuads;
+	size_t createQuad(float pPosX, float pPosY, float pWidth, float pHeight);
+	size_t createQuad(glm::vec4 pQuad);
 
-	struct quad_pos {
-		quad_pos(size_t pIndex) :quad(pIndex) {}
-		glm::vec2 pos = glm::vec2();
-		size_t quad;
-
-		void set(glm::vec2 pPos) {
-			std::memcpy(&allQuads[quad - 1], &pPos, sizeof(glm::vec2));
-		}
-		glm::vec2 get() {
-			return glm::vec2(allQuads[quad - 1]);
-		}
-	};
 	struct Quad {
-		Quad() :pos(index), index(-1) {}
-		Quad(size_t pIndex) :pos(index), index(pIndex) {}
-		
+		typedef typename QuadData initer_t;
+		Quad() :index(-1) {}
+		Quad(size_t pIndex) :index(pIndex) {}
+		Quad(initer_t pIniter) :index(createQuad(pIniter)) {}
 		Quad operator=(size_t i) { return Quad(i); }
 
+		
 		size_t index;
 		//--
 		void move(glm::vec2 dir) {
 			allQuads[index-1] += glm::vec4(dir, 0.0f, 0.0f);
 		}
-		void stretch(glm::vec2 dir) {
+		void resize(glm::vec2 dir) {
 			allQuads[index-1] += glm::vec4(0.0f, 0.0f, dir.x, -dir.y);
 		}
-		quad_pos pos;
+		glm::vec2 get_pos() {
+			return glm::vec2(allQuads[index - 1].x, allQuads[index - 1].y);
+		}
+
 		template<class ColorType>
 		void color(ColorType pColor) {
 			colorQuad(index, pColor);
@@ -49,8 +46,6 @@ namespace gui {
 
 	
 
-	Quad createQuad(float pPosX, float pPosY, float pWidth, float pHeight);
-	Quad createQuad(glm::vec4 pQuad);
 
 	void rasterQuadIndices();
 
@@ -71,4 +66,40 @@ namespace gui {
 
 	const size_t MAX_QUAD_COUNT = 10000;
 	extern size_t quadBuffer;
+
+
+	namespace experimental{
+		//template<typename ...Elements>
+		//struct Widget {
+		//	Widget() {}
+		//	typedef typename std::tuple<Elements::initer_t...> initer_t;//recursive construction of initializer type
+		//
+		//	Widget(initer_t pIniter) :elements(pIniter) {}
+		//	template<size_t N>
+		//	size_t element() {
+		//		return std::get<N>(elements);
+		//	}
+		//	std::tuple<Elements...> elements;
+		//};
+		//
+		//template<>//actually a Quad
+		//struct Widget<float, float, float, float> {
+		//
+		//	typedef typename std::tuple<float, float, float, float> initer_t;
+		//	Widget() {}
+		//	Widget(float pX, float pY, float pWidth, float pHeight) :index(createQuad(pX, pY, pWidth, pHeight)) {}
+		//	Widget(std::tuple<float, float, float, float> pIniter) :index(createQuad(pIniter)) {}
+		//
+		//
+		//	size_t index;
+		//
+		//	template<size_t N>
+		//	size_t element() {
+		//		return index;
+		//	}
+		//	size_t element() {
+		//		return index;
+		//	}
+		//};
+	}
 }

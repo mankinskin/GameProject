@@ -9,6 +9,7 @@ namespace camera {
 			size_t pYRotatorOffset, size_t pYRotationAxisOffset, float pYRotationFactor, size_t pCrossUpOffset)
 			:x_rotator_off(pXRotatorOffset), x_rotation_axis_off(pXRotationAxisOffset), x_rotation_factor(pXRotationFactor),
 			y_rotator_off(pYRotatorOffset), y_rotation_axis_off(pYRotationAxisOffset), y_rotation_factor(pYRotationFactor), cross_up_off(pCrossUpOffset){}
+		
 		void apply(Camera* pCam) {
 			x_rotator_off += (size_t)pCam;
 			x_rotation_axis_off += (size_t)pCam;
@@ -24,6 +25,7 @@ namespace camera {
 		float y_rotation_factor;
 		size_t cross_up_off;
 	};
+
 	struct MovementPolicy {
 		MovementPolicy(
 			size_t pForwardOffset, float pForwardFactor, 
@@ -93,7 +95,7 @@ namespace camera {
 		glm::vec3 mov;
 		bool followCursor = false;
 		glm::vec3 pos = glm::vec3();
-		glm::vec3 lookAt;
+		glm::vec3 lookAt = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 normal;
 		glm::vec3 cross;
 		glm::mat4 viewMatrix = {};
@@ -111,7 +113,7 @@ namespace camera {
 	const LookPolicy TOP_DOWN_LOOK = LookPolicy(offsetof(Camera, normal), offsetof(Camera, lookAt), -1.0f, offsetof(Camera, normal), offsetof(Camera, lookAt), 0.0f, offsetof(Camera, normal));
 
 	const MovementPolicy FIRST_PERSON_MOVEMENT = MovementPolicy(offsetof(Camera, lookAt), 1.0f, offsetof(Camera, cross), 1.0f, offsetof(Camera, normal), 1.0f);
-	const Frustum FIRST_PERSON_FRUSTUM = Frustum(glm::vec3(0.0, 1.0, 0.0), glm::vec3(1.0, 0.0, 0.0), 70.0f, 1.0f, 1000.0f);
+	const Frustum FIRST_PERSON_FRUSTUM = Frustum(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, -1.0), 70.0f, 1.0f, 1000.0f);
 	const LookPolicy FIRST_PERSON_LOOK = LookPolicy(offsetof(Camera, lookAt), offsetof(Camera, mode) + offsetof(CameraMode, frustum) + offsetof(Frustum, up), 1.0f, offsetof(Camera, lookAt), offsetof(Camera, cross), 1.0f, offsetof(Camera, mode) + offsetof(CameraMode, frustum) + offsetof(Frustum, up));
 	const size_t CAMERA_MODE_COUNT = 2;
 	const CameraMode CAMERA_MODES[CAMERA_MODE_COUNT] = { CameraMode(0, FIRST_PERSON_FRUSTUM, FIRST_PERSON_MOVEMENT, FIRST_PERSON_LOOK) , CameraMode(1, TOP_DOWN_FRUSTUM, TOP_DOWN_MOVEMENT, TOP_DOWN_LOOK) };

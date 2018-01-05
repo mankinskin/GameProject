@@ -6,7 +6,7 @@ namespace app {
 		
 		struct MouseKeyEvent {//events thrown when a mouse key changes
 			MouseKeyEvent()
-				:key(-1), change(KeyCondition()) {}
+				:key(-1) {}
 			MouseKeyEvent(int pKey, KeyCondition pChange)
 				:key(pKey), change(pChange) {}
 			MouseKeyEvent(int pKey, int pAction, int pMods)

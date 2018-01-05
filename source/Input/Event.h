@@ -1,4 +1,7 @@
 #pragma once
+#include <vector>
+#include "Signal.h"
+#include "../Input/Mouse.h"
 namespace app {
 	namespace Input {
 
@@ -6,13 +9,17 @@ namespace app {
 		void clearEvents();
 
 		void resetEvents();
+		extern std::vector<bool> allEventStates;//shows the events which occurred each frame
+		extern std::vector<void(*)()> eventCheckers;//checks all EventSlot templates
+		extern std::vector<void(*)()> eventDestructors;//destroys all EventSlot templates
+		extern std::vector<void(*)()> eventResetters;//clears all Event buffers
 
 		template<class EventType>
 		class EventSlot {
 		public:
-			EventSlot(size_t pStateIndex, EventType pEvent)
+			EventSlot(size_t pStateIndex, EventType&& pEvent)
 				:event_signature(pEvent), stateIndex(pStateIndex)
-			{}
+			{		}
 			static void reserve_slots(size_t pCount) {
 				allEventStates.reserve(allEventStates.size() + pCount);
 				slots.reserve(slots.size() + pCount);
@@ -26,6 +33,9 @@ namespace app {
 			static void clear_slots() {
 				slots.clear();
 			}
+			static void clear_events() {
+				eventBuffer.clear();
+			}
 			static void checkEvents() {//throws the signals of the events in eventBuffer
 				for (size_t e = 0; e < EventSlot<EventType>::eventBuffer.size(); ++e) {
 					EventType& evnt = EventSlot<EventType>::eventBuffer[e];
@@ -36,7 +46,6 @@ namespace app {
 						}
 					}
 				}
-				EventSlot<EventType>::eventBuffer.clear();
 			}
 			static std::vector<EventSlot<EventType>> slots;//all event slots of this type
 			static std::vector<EventType> eventBuffer;
@@ -46,24 +55,36 @@ namespace app {
 		private:
 			EventType event_signature;
 			size_t stateIndex;
-			struct initializer {
-				initializer() {
-					eventCheckers.push_back(EventSlot<EventType>::checkEvents);
-					eventDestructors.push_back(EventSlot<EventType>::clear_slots);
-				}
-			};
-			const initializer ini = initializer();
 		};
+
+
 		template<class EventType>
 		void pushEvent(EventType pEvent) {
 			EventSlot<EventType>::eventBuffer.push_back(pEvent);
 		}
-
+		struct Event {//event state source
+			Event()
+				:src(-1) {}
+			Event(size_t pIndex)
+				:src(pIndex) {}
+			size_t src;
+			bool operator()() {
+				return allEventStates[src];
+			}
+		};
+		inline bool operator==(Event const & l, Event const& r) {
+			return l.src == r.src;
+		}
 		template<class EventType>
-		size_t createEvent(EventType&& pEvent) {
-			EventSlot<EventType>::slots.emplace_back(allEventStates.size(), pEvent);
+		Event createEvent(EventType pEvent) {
+			if (!EventSlot<EventType>::slots.size()) {
+				eventCheckers.push_back(EventSlot<EventType>::checkEvents);
+				eventDestructors.push_back(EventSlot<EventType>::clear_slots);
+				eventResetters.push_back(EventSlot<EventType>::clear_events);
+			}
+			EventSlot<EventType>::slots.emplace_back(allEventStates.size(), std::forward<EventType>(pEvent));
 			allEventStates.push_back(false);
-			return allEventStates.size()-1;
+			return Event(allEventStates.size() - 1);
 		}
 
 		template<class EventType>
@@ -73,9 +94,6 @@ namespace app {
 		std::vector<EventType> EventSlot<EventType>::eventBuffer = std::vector<EventType>();
 
 
-		extern std::vector<bool> allEventStates;//shows the events which occurred each frame
-		extern std::vector<void(*)()> eventCheckers;//checks all EventSlot templates
-		extern std::vector<void(*)()> eventDestructors;//destroys all EventSlot templates
-
+		
 	}
 }

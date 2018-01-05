@@ -16,37 +16,7 @@ when checking all functors, the functorOrder queue is used. the invoker_index is
 namespace app {
 	namespace Input {
 
-		struct AnyGate {
-			bool func(std::vector<size_t>& pSet, bool(*check)(size_t)) {
-				return std::any_of(pSet.begin(), pSet.end(), check);
-			}
-		};
-		struct AllGate {
-			bool func(std::vector<size_t>& pSet, bool(*check)(size_t)) {
-				return std::all_of(pSet.begin(), pSet.end(), check);
-			}
-		};
-		struct SequenceGate {
-			bool func(std::vector<size_t>& pSet, bool(*check)(size_t)) {
-				for (size_t s = 0; s < pSet.size(); ++s) {
-					if (!check(pSet[s]) && s >= dropped) {
-						dropped = s;
-						return false;
-					}
-				}
-				dropped = 0;
-				return true;
-			}
-		private:
-			int dropped = 0;
-		};
-		struct AlwaysGate {
-			bool func(std::vector<size_t>& pSet, bool(*check)(size_t)) {
-				return true;
-			}
-		};
-
-
+		
 		template<size_t N, typename... Args>
 		struct applier {
 			template<typename...ExArgs>
@@ -66,13 +36,14 @@ namespace app {
 		void function_caller(void(*pF)(Args...), const std::tuple<Args...>& pArgTuple) {
 			applier<sizeof...(Args), Args...>::func(pF, pArgTuple);
 		}
-
+		
 		template<typename... Args>
 		class Functor {
 		public:
 			Functor(size_t pIndex, void(*pF)(Args...), Args... pArgs)
 				:func(pF), args(std::forward_as_tuple<Args...>(std::forward<Args>(pArgs)...)), slot_index(pIndex)
-			{}
+			{
+			}
 			static void clear() {
 				slots.clear();
 			}
@@ -88,7 +59,12 @@ namespace app {
 				}
 			}
 			bool check() {
-				return std::any_of(signalSet.begin(), signalSet.end(), [](size_t s)->bool {return allSignals[s]; });
+				for (unsigned int s = 0; s < signalSet.size(); ++s){
+					if (allSignals[signalSet[s]]) {
+						return true;
+					}
+				}
+				return false;
 			}
 			void setTriggers(std::initializer_list<size_t> pSet) {
 				signalSet = pSet;
@@ -97,14 +73,6 @@ namespace app {
 			static std::vector<Functor<Args...>> slots;
 			size_t slot_index;
 		private:
-			struct initializer {
-				initializer() {
-					functorDestructors.push_back(clear);
-					invoker_index = functorInvokers.size();
-					functorInvokers.push_back(call);
-				}
-			};
-			const initializer ini = initializer();
 			std::vector<size_t> signalSet;
 			void(*func)(Args...);
 			std::tuple<Args...> args;
@@ -131,6 +99,11 @@ namespace app {
 		template<class...Args>
 		FunctorRef<Args...> createFunctor(void(*pF)(Args...), Args... pArgs) {
 			size_t ind = Functor<Args...>::slots.size();
+			if(!ind) {
+				Functor<Args...>::invoker_index = functorInvokers.size();
+				functorInvokers.push_back(Functor<Args...>::call);
+				functorDestructors.push_back(Functor<Args...>::clear);
+			}
 			functorOrder.emplace_back(Functor<Args...>::invoker_index, ind);
 			Functor<Args...>::slots.emplace_back(ind, pF, pArgs...);
 			return ind;

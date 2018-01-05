@@ -3,9 +3,9 @@
 #include "Event.h"
 
 std::vector<bool> app::Input::allEventStates;
-std::vector<void(*)()> app::Input::eventCheckers;
-std::vector<void(*)()> app::Input::eventDestructors;
-
+std::vector<void(*)()> app::Input::eventCheckers = std::vector<void(*)()>();
+std::vector<void(*)()> app::Input::eventDestructors = std::vector<void(*)()>();
+std::vector<void(*)()> app::Input::eventResetters = std::vector<void(*)()>();
 
 void app::Input::checkEvents() {
 	for (void(*&checker)() : eventCheckers) {
@@ -19,5 +19,9 @@ void app::Input::clearEvents() {
 }
 
 void app::Input::resetEvents() {
+	for (unsigned int i = 0; i < eventResetters.size(); ++i) {
+		eventResetters[i]();
+	}
 	std::fill(allEventStates.begin(), allEventStates.end(), false);
 }
+

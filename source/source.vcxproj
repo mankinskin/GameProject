@@ -175,6 +175,7 @@
     <ClInclude Include="GUI\Text\stdafx.h" />
     <ClInclude Include="GUI\Text\Text.h" />
     <ClInclude Include="GUI\UI\Colorings.h" />
+    <ClInclude Include="GUI\UI\Initializer.h" />
     <ClInclude Include="GUI\UI\QuadLayout.h" />
     <ClInclude Include="GUI\UI\GUI.h" />
     <ClInclude Include="GUI\UI\Line.h" />

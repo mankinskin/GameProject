@@ -7,12 +7,7 @@
 #include "Quad.h"
 namespace gui {
 
-	template<class... Colors>
-	struct WidgetColors {
-		WidgetColors(Colors... pColors)
-			:colors(pColors...) {}
-		std::tuple<Colors...> colors;
-	};
+
 
 	struct ConstColor {
 		ConstColor(std::string pColorName);

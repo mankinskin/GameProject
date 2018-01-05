@@ -342,7 +342,7 @@ void gui::text::renderGlyphs()
 		}
 	}
 	glEnable(GL_DEPTH_TEST);
-	glAlphaFunc(GL_GREATER, 0.0f);
+	glAlphaFunc(GL_ALWAYS, 0.0f);
 	glDebug::getGLError("renderGlyphs():");
 	shader::unuse();
 	glBindVertexArray(0);
