@@ -86,8 +86,8 @@ void lighting::reservePointLightSpace(size_t pCount) {
 void lighting::renderLights()
 {
 	
-	glDepthMask(0);
-	glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
+	//glDepthMask(0);
+	//glBlendFunc(GL_ONE, GL_ZERO);
 	//glDepthFunc(GL_LEQUAL);
 	glBindVertexArray(lightVAO);
 	shader::use(lightShaderProgram);

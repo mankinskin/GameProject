@@ -7,6 +7,9 @@
 #include "Event.h"
 #include <array>
 #include "../GUI/UI/Quad.h"
+
+
+using namespace events;
 glm::vec2 app::Input::relativeCursorPosition;
 glm::uvec2 app::Input::absoluteCursorPosition;
 glm::vec2 app::Input::cursorFrameDelta;

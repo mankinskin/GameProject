@@ -3,6 +3,9 @@
 #include "Keys.h"
 #include "Signal.h"
 #include "Event.h"
+#include "EventGates.h"
+using namespace signals;
+using namespace events;
 app::Input::KeySignal::KeySignal(int pKey)
 {
 	Event press_evt = createEvent(KeyEvent(pKey, KeyCondition(1, 0)));

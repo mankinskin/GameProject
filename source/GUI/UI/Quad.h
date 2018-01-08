@@ -9,6 +9,7 @@ namespace gui {
 	size_t createQuad(float pPosX, float pPosY, float pWidth, float pHeight);
 	size_t createQuad(glm::vec4 pQuad);
 
+	
 	struct Quad {
 		typedef typename QuadData initer_t;
 		Quad() :index(-1) {}
@@ -19,6 +20,9 @@ namespace gui {
 		
 		size_t index;
 		//--
+		void set_pos(glm::vec2 pos) {
+			std::memcpy(&allQuads[index - 1], &pos, sizeof(glm::vec2));
+		}
 		void move(glm::vec2 dir) {
 			allQuads[index-1] += glm::vec4(dir, 0.0f, 0.0f);
 		}
@@ -27,6 +31,9 @@ namespace gui {
 		}
 		glm::vec2 get_pos() {
 			return glm::vec2(allQuads[index - 1].x, allQuads[index - 1].y);
+		}
+		glm::vec2 get_size() {
+			return glm::vec2(allQuads[index - 1].z, allQuads[index - 1].w);
 		}
 
 		template<class ColorType>
@@ -44,9 +51,24 @@ namespace gui {
 
 	};
 
-	
+	void moveQuad(size_t pQuad, glm::vec2 pOffset);
+	void resizeQuad(size_t pQuad, glm::vec2 pOffset);
+	void setQuadPos(size_t pQuad, glm::vec2 pPos);
 
+	template<typename A, typename B>
+	void moveQuad(size_t pQuad, A pOffsetX, B pOffsetY) {
+		allQuads[pQuad - 1] += glm::vec4(pOffsetX, pOffsetY, 0.0f, 0.0f);
+	}
+	template<typename A, typename B>
+	void setQuadPos(size_t pQuad, A pPosX, B pPosY) {
+		allQuads[pQuad - 1].x = pPosX;
+		allQuads[pQuad - 1].y = pPosY;
+	}
 
+	template<typename A, typename B>
+	void resizeQuad(size_t pQuad, A pOffsetX, B pOffsetY) {
+		allQuads[pQuad - 1] += glm::vec4(0.0f, 0.0f, pOffsetX, pOffsetY);
+	}
 	void rasterQuadIndices();
 
 
@@ -66,40 +88,4 @@ namespace gui {
 
 	const size_t MAX_QUAD_COUNT = 10000;
 	extern size_t quadBuffer;
-
-
-	namespace experimental{
-		//template<typename ...Elements>
-		//struct Widget {
-		//	Widget() {}
-		//	typedef typename std::tuple<Elements::initer_t...> initer_t;//recursive construction of initializer type
-		//
-		//	Widget(initer_t pIniter) :elements(pIniter) {}
-		//	template<size_t N>
-		//	size_t element() {
-		//		return std::get<N>(elements);
-		//	}
-		//	std::tuple<Elements...> elements;
-		//};
-		//
-		//template<>//actually a Quad
-		//struct Widget<float, float, float, float> {
-		//
-		//	typedef typename std::tuple<float, float, float, float> initer_t;
-		//	Widget() {}
-		//	Widget(float pX, float pY, float pWidth, float pHeight) :index(createQuad(pX, pY, pWidth, pHeight)) {}
-		//	Widget(std::tuple<float, float, float, float> pIniter) :index(createQuad(pIniter)) {}
-		//
-		//
-		//	size_t index;
-		//
-		//	template<size_t N>
-		//	size_t element() {
-		//		return index;
-		//	}
-		//	size_t element() {
-		//		return index;
-		//	}
-		//};
-	}
 }

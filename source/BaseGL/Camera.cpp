@@ -12,7 +12,7 @@
 
 const float yRestrictionAngle = 3.0f;
 const float eulerian = 0.0001f;
-camera::Camera camera::main_camera = camera::Camera(camera::CAMERA_MODES[0]);
+camera::Camera camera::main_camera = camera::Camera(camera::CAMERA_MODES[1]);
 
 void camera::Camera::init()
 {
@@ -122,7 +122,6 @@ void camera::Camera::move(glm::vec3 pDir) {
 
 void camera::Camera::toggleLook()
 {
-	app::Input::toggleCursor();
 	followCursor = !followCursor;
 }
 

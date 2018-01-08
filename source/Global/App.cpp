@@ -52,7 +52,6 @@ void app::init()
 	Input::init();
 	gl::init();
 	gui::text::initStyleBuffer();
-	Input::initSignals();
 	Input::setupControls();
 	
 	debug::printErrors();
@@ -89,9 +88,14 @@ void app::mainMenuLoop()
 }
 
 void app::gameloop()
-{
+{	
+	
 	lighting::createLight(glm::vec4(1.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 10.0f));
-	lighting::createLight(glm::vec4(0.0f, 3.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.4f, 0.5f, 10.0f));
+	lighting::createLight(glm::vec4(0.0f, 3.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 10.0f));
+	lighting::createLight(glm::vec4(3.0f, 3.0f, 0.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 10.0f));
+	lighting::createLight(glm::vec4(-1.0f, 2.0f, 3.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 10.0f));
+	
+
 
 	debug::printErrors();
 	while (state == app::Running) {
@@ -111,6 +115,8 @@ void app::gameloop()
 		gui::updateQuadBuffer();
 		gui::updateColorings();
 		gui::text::updateCharStorage();
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, texture::gBuffer);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -118,7 +124,6 @@ void app::gameloop()
 		mesh::renderMeshes();
 		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, gl::screenWidth, gl::screenHeight);
 		lighting::renderLights();
 		mesh::renderMeshNormals();
@@ -139,8 +144,8 @@ void app::gameloop()
 
 
 	gui::clearQuads();
-	Input::clearFunctors();
-	Input::clearSignals();
+	functors::clearFunctors();
+	signals::clearSignals();
 }
 
 void app::fetchInput()
@@ -155,12 +160,12 @@ void app::fetchInput()
 	Input::fetchGLFWEvents();
 
 	Input::getMouseEvents();
-	Input::checkEvents();
-	Input::checkSignals();
-	Input::callFunctors();
+	events::checkEvents();
+	signals::checkSignals();
+	functors::callFunctors();
 
-	Input::resetEvents();
-	Input::resetSignals();
+	events::resetEvents();
+	signals::resetSignals();
 	Input::end();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

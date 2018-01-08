@@ -113,3 +113,14 @@ float gui::readQuadDepthMap(size_t pXPos, size_t pYPos)
 }
 
 
+void gui::moveQuad(size_t pQuad, glm::vec2 pOffset) {
+	allQuads[pQuad - 1] += glm::vec4(pOffset.x, pOffset.y, 0.0f, 0.0f);
+}
+void gui::resizeQuad(size_t pQuad, glm::vec2 pOffset) {
+	allQuads[pQuad - 1] += glm::vec4(0.0f, 0.0f, pOffset.x, pOffset.y);
+}
+
+void gui::setQuadPos(size_t pQuad, glm::vec2 pPos)
+{
+	std::memcpy(&allQuads[pQuad - 1], &pPos, sizeof(glm::vec2));
+}

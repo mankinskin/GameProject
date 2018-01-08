@@ -183,6 +183,7 @@
     <ClInclude Include="GUI\UI\stdafx.h" />
     <ClInclude Include="GUI\UI\Widget.h" />
     <ClInclude Include="Input\Event.h" />
+    <ClInclude Include="Input\EventGates.h" />
     <ClInclude Include="Input\Functor.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\Keys.h" />

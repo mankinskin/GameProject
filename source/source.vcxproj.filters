@@ -257,5 +257,8 @@
     <ClInclude Include="GUI\UI\Initializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Input\EventGates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
