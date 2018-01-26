@@ -78,7 +78,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
@@ -119,89 +119,89 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseGL\Camera.cpp" />
-    <ClCompile Include="BaseGL\ContextWindow.cpp" />
-    <ClCompile Include="BaseGL\Framebuffer.cpp" />
-    <ClCompile Include="BaseGL\Shader\Shader.cpp" />
-    <ClCompile Include="BaseGL\Shader\Shader_Loader.cpp" />
-    <ClCompile Include="BaseGL\Texture.cpp" />
-    <ClCompile Include="BaseGL\VAO.cpp" />
-    <ClCompile Include="GlobalGL\gl.cpp" />
-    <ClCompile Include="GlobalGL\glDebug.cpp" />
+    <ClCompile Include="Graphics\BaseGL\Camera.cpp" />
+    <ClCompile Include="Graphics\BaseGL\ContextWindow.cpp" />
+    <ClCompile Include="Graphics\BaseGL\Framebuffer.cpp" />
+    <ClCompile Include="Graphics\BaseGL\Shader\Shader.cpp" />
+    <ClCompile Include="Graphics\BaseGL\Shader\Shader_Loader.cpp" />
+    <ClCompile Include="Graphics\BaseGL\Texture.cpp" />
+    <ClCompile Include="Graphics\BaseGL\VAO.cpp" />
+    <ClCompile Include="Graphics\GlobalGL\gl.cpp" />
+    <ClCompile Include="Graphics\GlobalGL\glDebug.cpp" />
     <ClCompile Include="Global\App.cpp" />
     <ClCompile Include="Global\Debug.cpp" />
-    <ClCompile Include="GUI\Text\Font.cpp" />
-    <ClCompile Include="GUI\Text\Font_Loader.cpp" />
-    <ClCompile Include="GUI\Text\Text.cpp" />
-    <ClCompile Include="GUI\UI\Colorings.cpp" />
-    <ClCompile Include="GUI\UI\QuadLayout.cpp" />
-    <ClCompile Include="GUI\UI\GUI.cpp" />
-    <ClCompile Include="GUI\UI\Line.cpp" />
-    <ClCompile Include="GUI\UI\Quad.cpp" />
-    <ClCompile Include="GUI\UI\Widget.cpp" />
+    <ClCompile Include="Graphics\GUI\Text\Font.cpp" />
+    <ClCompile Include="Graphics\GUI\Text\Font_Loader.cpp" />
+    <ClCompile Include="Graphics\GUI\Text\Text.cpp" />
+    <ClCompile Include="Graphics\GUI\UI\Colorings.cpp" />
+    <ClCompile Include="Graphics\GUI\UI\GUI.cpp" />
+    <ClCompile Include="Graphics\GUI\UI\Line.cpp" />
+    <ClCompile Include="Graphics\GUI\UI\Quad.cpp" />
+    <ClCompile Include="Graphics\GUI\UI\Widget.cpp" />
     <ClCompile Include="Input\Event.cpp" />
     <ClCompile Include="Input\Functor.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Input\Keys.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
     <ClCompile Include="Input\Signal.cpp" />
-    <ClCompile Include="Lighting\Lights.cpp" />
+    <ClCompile Include="Graphics\Lighting\Lights.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mesh\Material.cpp" />
-    <ClCompile Include="Mesh\Mesh.cpp" />
-    <ClCompile Include="Model\Model.cpp" />
-    <ClCompile Include="Model\Model_Loader.cpp" />
-    <ClCompile Include="Model\Node.cpp" />
-    <ClCompile Include="Physics\Collision.cpp" />
-    <ClCompile Include="Physics\Physics.cpp" />
+    <ClCompile Include="Graphics\Mesh\Material.cpp" />
+    <ClCompile Include="Graphics\Mesh\Mesh.cpp" />
+    <ClCompile Include="Graphics\Model\Model.cpp" />
+    <ClCompile Include="Graphics\Model\Model_Loader.cpp" />
+    <ClCompile Include="Graphics\Model\Node.cpp" />
+    <ClCompile Include="World\Physics\Collision.cpp" />
+    <ClCompile Include="World\Physics\Physics.cpp" />
+    <ClCompile Include="World\Voxelization\voxelization.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseGL\Camera.h" />
-    <ClInclude Include="BaseGL\ContextWindow.h" />
-    <ClInclude Include="BaseGL\Framebuffer.h" />
-    <ClInclude Include="BaseGL\Shader\Shader.h" />
-    <ClInclude Include="BaseGL\Shader\Shader_Loader.h" />
-    <ClInclude Include="BaseGL\Shader\stdafx.h" />
-    <ClInclude Include="BaseGL\Texture.h" />
-    <ClInclude Include="BaseGL\VAO.h" />
-    <ClInclude Include="GlobalGL\gl.h" />
-    <ClInclude Include="GlobalGL\glDebug.h" />
-    <ClInclude Include="GlobalGL\stdafx.h" />
+    <ClInclude Include="Graphics\BaseGL\Camera.h" />
+    <ClInclude Include="Graphics\BaseGL\ContextWindow.h" />
+    <ClInclude Include="Graphics\BaseGL\Framebuffer.h" />
+    <ClInclude Include="Graphics\BaseGL\Shader\Shader.h" />
+    <ClInclude Include="Graphics\BaseGL\Shader\Shader_Loader.h" />
+    <ClInclude Include="Graphics\BaseGL\Shader\stdafx.h" />
+    <ClInclude Include="Graphics\BaseGL\Texture.h" />
+    <ClInclude Include="Graphics\BaseGL\VAO.h" />
+    <ClInclude Include="Graphics\GlobalGL\gl.h" />
+    <ClInclude Include="Graphics\GlobalGL\glDebug.h" />
+    <ClInclude Include="Graphics\GlobalGL\stdafx.h" />
     <ClInclude Include="Global\App.h" />
     <ClInclude Include="Global\Debug.h" />
     <ClInclude Include="Global\stdafx.h" />
-    <ClInclude Include="GUI\Text\Font.h" />
-    <ClInclude Include="GUI\Text\Font_Loader.h" />
-    <ClInclude Include="GUI\Text\stdafx.h" />
-    <ClInclude Include="GUI\Text\Text.h" />
-    <ClInclude Include="GUI\UI\Colorings.h" />
-    <ClInclude Include="GUI\UI\Initializer.h" />
-    <ClInclude Include="GUI\UI\QuadLayout.h" />
-    <ClInclude Include="GUI\UI\GUI.h" />
-    <ClInclude Include="GUI\UI\Line.h" />
-    <ClInclude Include="GUI\UI\Quad.h" />
-    <ClInclude Include="GUI\UI\stdafx.h" />
-    <ClInclude Include="GUI\UI\Widget.h" />
+    <ClInclude Include="Graphics\GUI\Text\Font.h" />
+    <ClInclude Include="Graphics\GUI\Text\Font_Loader.h" />
+    <ClInclude Include="Graphics\GUI\Text\stdafx.h" />
+    <ClInclude Include="Graphics\GUI\Text\Text.h" />
+    <ClInclude Include="Graphics\GUI\UI\Colorings.h" />
+    <ClInclude Include="Graphics\GUI\UI\Initializer.h" />
+    <ClInclude Include="Graphics\GUI\UI\GUI.h" />
+    <ClInclude Include="Graphics\GUI\UI\Line.h" />
+    <ClInclude Include="Graphics\GUI\UI\Quad.h" />
+    <ClInclude Include="Graphics\GUI\UI\stdafx.h" />
+    <ClInclude Include="Graphics\GUI\UI\Widget.h" />
     <ClInclude Include="Input\Event.h" />
-    <ClInclude Include="Input\EventGates.h" />
+    <ClInclude Include="Input\Gates.h" />
     <ClInclude Include="Input\Functor.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\Keys.h" />
     <ClInclude Include="Input\Mouse.h" />
     <ClInclude Include="Input\Signal.h" />
     <ClInclude Include="Input\stdafx.h" />
-    <ClInclude Include="Lighting\Lights.h" />
-    <ClInclude Include="Lighting\stdafx.h" />
-    <ClInclude Include="Mesh\Material.h" />
-    <ClInclude Include="Mesh\Mesh.h" />
-    <ClInclude Include="Mesh\stdafx.h" />
-    <ClInclude Include="Model\Model.h" />
-    <ClInclude Include="Model\Model_Loader.h" />
-    <ClInclude Include="Model\Node.h" />
-    <ClInclude Include="Model\stdafx.h" />
-    <ClInclude Include="Physics\Collision.h" />
-    <ClInclude Include="Physics\Physics.h" />
-    <ClInclude Include="Physics\stdafx.h" />
+    <ClInclude Include="Graphics\Lighting\Lights.h" />
+    <ClInclude Include="Graphics\Lighting\stdafx.h" />
+    <ClInclude Include="Graphics\Mesh\Material.h" />
+    <ClInclude Include="Graphics\Mesh\Mesh.h" />
+    <ClInclude Include="Graphics\Mesh\stdafx.h" />
+    <ClInclude Include="Graphics\Model\Model.h" />
+    <ClInclude Include="Graphics\Model\Model_Loader.h" />
+    <ClInclude Include="Graphics\Model\Node.h" />
+    <ClInclude Include="Graphics\Model\stdafx.h" />
+    <ClInclude Include="World\Physics\Collision.h" />
+    <ClInclude Include="World\Physics\Physics.h" />
+    <ClInclude Include="World\Physics\stdafx.h" />
+    <ClInclude Include="World\Voxelization\voxelization.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

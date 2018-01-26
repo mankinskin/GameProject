@@ -10,24 +10,25 @@
 #include <conio.h>
 #include <thread>
 #include <chrono>
-#include "../GlobalGL/gl.h"
-#include "../gui\text\text.h"
-#include "../BaseGL/camera.h"
-#include "../GlobalGL/glDebug.h"
-#include "../gui\text\Font_Loader.h"
-#include "../gui\UI\gui.h"
-#include "../Model\Model.h"
-#include "../Mesh\Mesh.h"
-#include "../lighting\Lights.h"
-#include "../gui/UI/Colorings.h"
-#include "../BaseGL/Framebuffer.h"
-#include "../gui\UI\Quad.h"
+#include "../Graphics/GlobalGL/gl.h"
+#include "../Graphics/gui\text\text.h"
+#include "../Graphics/BaseGL/camera.h"
+#include "../Graphics/GlobalGL/glDebug.h"
+#include "../Graphics/gui\text\Font_Loader.h"
+#include "../Graphics/gui\UI\gui.h"
+#include "../Graphics/Model\Model.h"
+#include "../Graphics/Mesh\Mesh.h"
+#include "../Graphics/lighting\Lights.h"
+#include "../Graphics/gui/UI/Colorings.h"
+#include "../Graphics/BaseGL/Framebuffer.h"
+#include "../Graphics/gui\UI\Quad.h"
 #include <functional>
 #include <algorithm>
-#include "../Model/Node.h"
-#include "../BaseGL/ContextWindow.h"
-#include "../physics/physics.h"
-
+#include "../Graphics/Model/Node.h"
+#include "../Graphics/BaseGL/ContextWindow.h"
+#include "../World/physics/physics.h"
+#include "../World/Voxelization/voxelization.h"
+#include "../Graphics/GUI/UI/Line.h"
 app::State app::state = app::State::Init;
 app::ContextWindow::Window app::mainWindow = app::ContextWindow::Window();
 double app::timeFactor = 1.0;
@@ -51,7 +52,8 @@ void app::init()
 	//Input listeners
 	Input::init();
 	gl::init();
-	gui::text::initStyleBuffer();
+
+	//gui::text::initStyleBuffer();
 	Input::setupControls();
 	
 	debug::printErrors();
@@ -89,55 +91,71 @@ void app::mainMenuLoop()
 
 void app::gameloop()
 {	
+	GLuint gui_clear_index[4] = { 0, 0, 0, 0 };
+	GLfloat g_clear_color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	GLfloat g_clear_depth = 1.0f;
 	
-	lighting::createLight(glm::vec4(1.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 10.0f));
-	lighting::createLight(glm::vec4(0.0f, 3.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 10.0f));
-	lighting::createLight(glm::vec4(3.0f, 3.0f, 0.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 10.0f));
-	lighting::createLight(glm::vec4(-1.0f, 2.0f, 3.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 10.0f));
-	
-
-
-	debug::printErrors();
 	while (state == app::Running) {
 		fetchInput();
-		node::translate(0, node_mov * 0.01f);
-		camera::main_camera.look(Input::cursorFrameDelta);
-		node_mov = glm::vec3();
+		//node::translate(0, node_mov * 0.01f);
+		//node_mov = glm::vec3();
 
+		camera::main_camera.look(Input::cursorFrameDelta);
 		camera::main_camera.update();
+
 		gl::updateGeneralUniformBuffer();
-		lighting::updateLightIndexRangeBuffer();
-		lighting::updateLightDataBuffer();
+		//lighting::updateLightIndexRangeBuffer();
+		//lighting::updateLightDataBuffer();
 		node::updateNodeMatrices();
 		node::updateNodeBuffers();
 		mesh::updateMeshBuffers();
-		
-		gui::updateQuadBuffer();
-		gui::updateColorings();
-		gui::text::updateCharStorage();
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glBindFramebuffer(GL_FRAMEBUFFER, texture::gBuffer);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glViewport(0, 0, gl::screenWidth*gl::resolution, gl::screenHeight*gl::resolution);
+		//gui::updateQuadBuffer();
+		//gui::updateColorings();
+		//gui::text::updateCharStorage();
+
+		//reset g_buffer
+		//glClearNamedFramebufferfv(texture::gBuffer, GL_COLOR, 0, g_clear_color);
+		//glClearNamedFramebufferfv(texture::gBuffer, GL_COLOR, 1, g_clear_color);
+		//glClearNamedFramebufferfv(texture::gBuffer, GL_COLOR, 2, g_clear_color);
+		//glClearNamedFramebufferfv(texture::gBuffer, GL_COLOR, 3, g_clear_color);
+		//glClearNamedFramebufferfv(texture::gBuffer, GL_COLOR, 4, g_clear_color);
+		//glClearNamedFramebufferfv(texture::gBuffer, GL_DEPTH, 0, &g_clear_depth);
+		//clear screen buffer
+		//voxelization::clearVolumeTexture();
+		glClearNamedFramebufferfv(0, GL_COLOR, 0, g_clear_color);
+		glClearNamedFramebufferfv(0, GL_DEPTH, 0, &g_clear_depth);
+		////reset guiFBO
+		//glClearNamedFramebufferuiv(texture::guiFBO, GL_COLOR, 0, gui_clear_index);
+		//glClearNamedFramebufferfv(texture::guiFBO, GL_DEPTH, 0, &g_clear_depth);
+
+		//glBindFramebuffer(GL_FRAMEBUFFER, texture::guiFBO);
+		//gui::rasterQuadIndices();
+		//gui::readQuadIndexBuffer();
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//voxelization::voxelizeMeshes();
+		gui::renderLines();
+		//glBindFramebuffer(GL_FRAMEBUFFER, texture::gBuffer);
 		mesh::renderMeshes();
-		
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glViewport(0, 0, gl::screenWidth, gl::screenHeight);
-		lighting::renderLights();
-		mesh::renderMeshNormals();
-		gui::renderColorings();
-		gui::text::renderGlyphs();
-		glDebug::drawGrid();
 
+		//glBindFramebuffer(GL_READ_FRAMEBUFFER, texture::gBuffer);
+		
+		//glBlitFramebuffer(0, 0, gl::screenWidth, gl::screenHeight, 0, 0, gl::screenWidth, gl::screenHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//lighting::renderLights();
+
+		//mesh::renderMeshNormals();
+		
+		//gui::renderColorings();
+		//gui::text::renderGlyphs();
+		
 		glfwSwapBuffers(mainWindow.window);
-	
+
 		debug::printErrors();
 		updateTime();
 		updateTimeFactor();
 		limitFPS();
-
 		debug::printInfo();
 	}
 	gui::text::clearCharStorage();
@@ -150,12 +168,6 @@ void app::gameloop()
 
 void app::fetchInput()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, texture::guiFBO);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	gui::rasterQuadIndices();
-	gui::readQuadIndexBuffer();
-
 	Input::updateMouse();
 	Input::fetchGLFWEvents();
 
@@ -167,7 +179,7 @@ void app::fetchInput()
 	events::resetEvents();
 	signals::resetSignals();
 	Input::end();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 }
 
 void app::initGLFW()

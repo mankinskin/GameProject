@@ -9,8 +9,8 @@ namespace app {
 				:key(-1) {}
 			MouseKeyEvent(int pKey, KeyCondition pChange)
 				:key(pKey), change(pChange) {}
-			MouseKeyEvent(int pKey, int pAction, int pMods)
-				:key(pKey), change(KeyCondition(pAction, pMods)) {}
+			MouseKeyEvent(int pKey, int pAction)
+				:key(pKey), change(KeyCondition(pAction)) {}
 			int key;
 			KeyCondition change;
 		};

@@ -6,7 +6,6 @@ int main() {
 
 	app::init();
 	while (app::state != app::State::Exit) {
-		app::mainMenuLoop();
 		app::gameloop();
 	}
 

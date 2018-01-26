@@ -1,26 +1,23 @@
 #pragma once
-#include "../BaseGL/ContextWindow.h"
+#include "../Graphics/BaseGL/ContextWindow.h"
 namespace app {
 	namespace Input {
 
 		class KeyCondition {
 		public:
 			KeyCondition()
-				:action(0), // 0 = release, 1 = press
-				mods(0) {}
-			KeyCondition(int pAction, int pMods)
-				:action(pAction),
-				mods(pMods)
+				:action(0) // 0 = release, 1 = press
 			{}
-
+			KeyCondition(int pAction)
+				:action(pAction)
+			{}
 			int action;
-			int mods;
 		};
 		inline bool operator==(KeyCondition const & l, KeyCondition const& r) {
-			return l.action == r.action && l.mods == r.mods;
+			return l.action == r.action;
 		}
 		inline bool operator!=(KeyCondition const & l, KeyCondition const& r) {
-			return l.action != r.action || l.mods != r.mods;
+			return l.action != r.action;
 		}
 
 		class KeyEvent {
@@ -30,7 +27,7 @@ namespace app {
 			KeyEvent(int pKey, KeyCondition pChange)
 				:key(pKey), change(pChange) {}
 			KeyEvent(int pKey, int pAction, int pMods)
-				:key(pKey), change(KeyCondition(pAction, pMods)) {}
+				:key(pKey), change(KeyCondition(pAction)) {}
 
 			int key;
 			KeyCondition change;
@@ -40,6 +37,7 @@ namespace app {
 			return l.key == r.key && l.change == r.change;
 		}
 		struct KeySignal {
+			KeySignal(){}
 			KeySignal(int pKey);
 			size_t hold;
 			size_t press;

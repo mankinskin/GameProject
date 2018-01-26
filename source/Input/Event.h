@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "Signal.h"
-
+#include "Gates.h"
 namespace events {
 
 	//EventSlots store a signature of their type to check it against their eventBuffer.
@@ -97,4 +97,22 @@ namespace events {
 	template<class EventType>
 	std::vector<EventType> EventSlot<EventType>::eventBuffer = std::vector<EventType>();
 
+	template<typename OnType, typename OffType = OnType>
+	struct ButtonEvents {
+		ButtonEvents(){}
+		ButtonEvents(OnType pOn, OffType pOff)
+			:on_evt(pOn),
+			off_evt(pOff),
+			hold_evt(gates::switch_gate<OnType, OffType>(on_evt, off_evt)),
+			on(signals::createSignal(on_evt)),
+			off(signals::createSignal(off_evt)),
+			hold(signals::createSignal(hold_evt))
+		{}
+		OnType on_evt;
+		OffType off_evt;
+		gates::switch_gate<OnType, OffType> hold_evt;
+		size_t on;
+		size_t off;
+		size_t hold;
+	};
 }

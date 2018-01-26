@@ -2,12 +2,12 @@
 #include "stdafx.h"
 #include "Mouse.h"
 #include "..\Global\app.h"
-#include "../BaseGL/ContextWindow.h"
+#include "../Graphics/BaseGL/ContextWindow.h"
 #include <algorithm>
 #include "Event.h"
 #include <array>
-#include "../GUI/UI/Quad.h"
-
+#include "../Graphics/GUI/UI/Quad.h"
+#include "../Graphics/GlobalGL/gl.h"
 
 using namespace events;
 glm::vec2 app::Input::relativeCursorPosition;
@@ -29,13 +29,13 @@ void app::Input::updateMouse() {
 	glfwGetCursorPos(app::mainWindow.window, &ax, &ay);
 	float rx = (float)ax;
 	float ry = (float)ay;
-	ax = glm::clamp(ax, 0.0, (double)mainWindow.width - 1.0);
-	ay = glm::clamp(ay, 0.0, (double)mainWindow.height - 1.0);
+	ax = glm::clamp(ax*gl::resolution, 0.0, (double)(mainWindow.width*gl::resolution) - 1.0);
+	ay = glm::clamp(ay*gl::resolution, 0.0, (double)(mainWindow.height*gl::resolution) - 1.0);
 	if (!disableCursor) {
 		rx = (float)ax;//clamp relative positions too if cursor is not disabled
 		ry = (float)ay;
 	}
-	absoluteCursorPosition = glm::uvec2((unsigned int)ax, mainWindow.height - (unsigned int)ay - 1);
+	absoluteCursorPosition = glm::uvec2((unsigned int)ax, (mainWindow.height*gl::resolution) - (unsigned int)ay - 1);
 
 	rx = ((rx / (float)app::mainWindow.width)*2.0f) - 1.0f;
 	ry = 1.0f - (ry / (float)app::mainWindow.height)*2.0f;
@@ -98,7 +98,7 @@ void app::Input::getMouseEvents()
 void app::Input::mouseKey_Callback(GLFWwindow * window, int pKey, int pAction, int pMods)
 {
 	if (pKey < 3 && pKey >= 0) {
-		mouseKeys[pKey] = KeyCondition(pAction, pMods);
+		mouseKeys[pKey] = KeyCondition(pAction);
 	}
 }
 
