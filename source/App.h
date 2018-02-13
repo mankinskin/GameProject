@@ -25,8 +25,8 @@ namespace app {
     extern double lastFrameLimitedMS;
     extern double lastFrameMS;
     extern double totalMS;
-    extern double targetFrameMS;
-    void setTargetFPS(size_t pTargetFPS);
+    extern double minFrameMS;
+    void setMaxFPS(size_t pMaxFPS);
     void updateTime();
     void updateTimeFactor();
     void limitFPS();

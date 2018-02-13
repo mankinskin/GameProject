@@ -29,14 +29,14 @@ void shader::loadShaders()
 	mesh::initMeshShader();
 	//mesh::initBlendMeshShader();
 	//mesh::initMeshNormalShader();
-	//lighting::initLightShader();
+	lighting::initLightShader();
 	gui::initQuadIndexShader();
 	gui::initColoringShaders();
 	//gui::text::initFontShader();
-	//voxelization::init();
+	voxelization::init();
 	gui::initLineShader();
 	shader::Loader::buildShaderPrograms();
-	//voxelization::setupShader();
+
 }
 
 size_t shader::createModule(std::string pFileName)

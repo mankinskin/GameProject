@@ -57,7 +57,7 @@ void gui::initWidgets()
 	using Button = Widget<Quad, Quad>;
 	using ButtonColors = WidgetColors<ConstColor, ConstColor>;
 
-	ButtonColors buttonColors = ButtonColors(ConstColor("yellow"), ConstColor("darkgrey"));
+	ButtonColors buttonColors = ButtonColors(ConstColor("lightgrey"), ConstColor("darkgrey"));
 	
 	float button_width = gui::pixel_size.x * 100.0f;
 	float button_height = gui::pixel_size.x * 55.0f;

@@ -87,9 +87,6 @@
     <ClCompile Include="source\Mouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\Node.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\Physics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -120,7 +117,10 @@
     <ClCompile Include="source\Widget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Neural.cpp">
+    <ClCompile Include="source\Neural.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Entities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -197,9 +197,6 @@
     <ClInclude Include="source\Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\Node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="source\Physics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -248,7 +245,13 @@
     <ClInclude Include="source\dt\pnmfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Neural.h">
+    <ClInclude Include="source\Neural.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Entities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

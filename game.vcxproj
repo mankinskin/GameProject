@@ -102,7 +102,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Neural.cpp" />
     <ClCompile Include="source\App.cpp" />
     <ClCompile Include="source\Camera.cpp" />
     <ClCompile Include="source\Collision.cpp" />
@@ -127,7 +126,8 @@
     <ClCompile Include="source\Model.cpp" />
     <ClCompile Include="source\Model_Loader.cpp" />
     <ClCompile Include="source\Mouse.cpp" />
-    <ClCompile Include="source\Node.cpp" />
+    <ClCompile Include="source\Neural.cpp" />
+    <ClCompile Include="source\Entities.cpp" />
     <ClCompile Include="source\Physics.cpp" />
     <ClCompile Include="source\Quad.cpp" />
     <ClCompile Include="source\Shader.cpp" />
@@ -140,7 +140,6 @@
     <ClCompile Include="source\Widget.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Neural.h" />
     <ClInclude Include="source\App.h" />
     <ClInclude Include="source\Camera.h" />
     <ClInclude Include="source\Collision.h" />
@@ -171,7 +170,8 @@
     <ClInclude Include="source\Model.h" />
     <ClInclude Include="source\Model_Loader.h" />
     <ClInclude Include="source\Mouse.h" />
-    <ClInclude Include="source\Node.h" />
+    <ClInclude Include="source\Neural.h" />
+    <ClInclude Include="source\Entities.h" />
     <ClInclude Include="source\Physics.h" />
     <ClInclude Include="source\Quad.h" />
     <ClInclude Include="source\Shader.h" />
@@ -179,6 +179,7 @@
     <ClInclude Include="source\Signal.h" />
     <ClInclude Include="source\Text.h" />
     <ClInclude Include="source\Texture.h" />
+    <ClInclude Include="source\Time.h" />
     <ClInclude Include="source\VAO.h" />
     <ClInclude Include="source\voxelization.h" />
     <ClInclude Include="source\Widget.h" />

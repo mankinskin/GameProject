@@ -20,7 +20,9 @@ namespace model {
 	Model& getModel(size_t pID);
 	Model& getModel(std::string pName);
 	const size_t MAX_MODELS = 100;
+	const size_t MAX_MESHES_PER_MODEL = 10;
 
 	size_t createModel(size_t pMeshOffset, size_t pMeshCount);
 	extern std::vector<std::string> allModelNames;
+
 }

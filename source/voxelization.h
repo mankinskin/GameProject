@@ -20,8 +20,11 @@ namespace voxelization {
 	void voxelizeMeshes();
 	void setupShader();
 	void clearVolumeTexture();
+	void swapVolumeBuffers();
 
 	extern glm::uvec3 frustum_size;
+	extern glm::mat4 projectionMatrix;
 	extern size_t volumeImage;
+	extern size_t backVolumeImage;//Back buffer for volume rendering
 	extern size_t voxelizationShader;
 }

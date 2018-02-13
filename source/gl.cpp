@@ -19,11 +19,11 @@
 #include "Lights.h"
 #include "Colorings.h"
 #include "Line.h"
-#include "Node.h"
+#include "Entities.h"
 #include "Mesh.h"
 #include "physics.h"
 #include "Collision.h"
-
+#include "voxelization.h"
 
 int gl::MAX_WORK_GROUP_COUNT = 0;
 glm::ivec3 gl::MAX_WORK_GROUP_SIZE = {};
@@ -67,15 +67,15 @@ void gl::init()
 	texture::initFramebuffers();
 	shader::loadShaders();
 	
-	//lighting::initLighting();
-	node::initNodeBuffers();
+	lighting::initLighting();
+	entities::initEntityBuffers();
 	model::initModels();
 	mesh::initMeshVAO();
 	model::setupModels();
 
-	//node::updateNodeMatrices();
+	//entities::updateEntityMatrices();
 	//model::revalidateModelMeshOffsets();
-	//mesh::revalidateMeshNodeOffsets();
+	//mesh::revalidateMeshEntityOffsets();
 
 	bindUniformBufferLocations();
 	debug::printErrors();
@@ -83,13 +83,14 @@ void gl::init()
 
 void gl::bindUniformBufferLocations()
 {
-	//lighting::setupLightShader();
+	lighting::setupLightShader();
 	mesh::setupMeshShader();
 	//mesh::setupBlendMeshShader();
 	//mesh::setupMeshNormalShader();
 	gui::setupQuadIndexShader();
 	gui::setupLineShader();
 	gui::setupColoringShaders();
+	voxelization::setupShader();
 	debug::printErrors();
 }
 
@@ -150,9 +151,9 @@ void gl::initGLEW() {
 
 void gl::initGeneralUniformBuffer()
 {
-	//contains: projectionMatrix(mat4), viewMatrix(mat4), camera position(vec4)
+	//contains: projectionMatrix(mat4), viewMatrix(mat4), camera position(vec4)(todo:remove), voxelizationProjection
 
-	size_t generalUniformDataSize = sizeof(float) * (16 + 16 + 4);
+	size_t generalUniformDataSize = sizeof(float) * (16 + 16 + 4 + 16);
 
 	generalUniformBuffer = vao::createStorage(generalUniformDataSize, nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS);
 	vao::createStream(generalUniformBuffer, GL_MAP_WRITE_BIT);
@@ -163,12 +164,13 @@ void gl::initGeneralUniformBuffer()
 
 void gl::updateGeneralUniformBuffer()
 {
-	std::vector<float> generalUniformData(36);
+	std::vector<float> generalUniformData(52);
 
 	std::memcpy(&generalUniformData[0], glm::value_ptr(camera::main_camera.getProjection()), sizeof(float) * 16);
 	std::memcpy(&generalUniformData[16], glm::value_ptr(camera::main_camera.getView()), sizeof(float) * 16);
 	std::memcpy(&generalUniformData[32], glm::value_ptr(camera::main_camera.getPos()), sizeof(float) * 3);
-	vao::uploadStorage(generalUniformBuffer, sizeof(float) * 36, &generalUniformData[0]);
+	std::memcpy(&generalUniformData[36], glm::value_ptr(voxelization::projectionMatrix), sizeof(float) * 16);
+	vao::uploadStorage(generalUniformBuffer, sizeof(float) * 52, &generalUniformData[0]);
 }
 void gl::initPrimitiveVBO()
 {

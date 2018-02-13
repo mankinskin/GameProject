@@ -1,5 +1,5 @@
 #include "Collision.h"
-#include "node.h"
+#include "Entities.h"
 #include "Mesh.h"
 
 std::vector<physics::BoundingSphere> physics::allBoundingSpheres;
@@ -34,8 +34,8 @@ float physics::checkTriangleIntersect(size_t pIndexOffset_A, size_t pEntity_A, s
 	glm::vec3 B_verts[3];
 	glm::vec3 B_edge_vectors[3];
 
-	glm::mat4 A_transform = node::allMatrices[pEntity_A];
-	glm::mat4 B_transform = node::allMatrices[pEntity_B];
+	glm::mat4 A_transform = entities::allMatrices[pEntity_A];
+	glm::mat4 B_transform = entities::allMatrices[pEntity_B];
 
 	for (size_t i = 0; i < 3; ++i) {
 		face_A[i] = allIndices[pIndexOffset_A + i];
@@ -72,7 +72,7 @@ float physics::checkSphereIntersect(size_t pSphereA, size_t pSphereB)
 	BoundingSphere& A = allBoundingSpheres[node_link_A.second];
 	BoundingSphere& B = allBoundingSpheres[node_link_B.second];
 
-	glm::vec3 pos_A = A.local_pos + node::allPositions[node_link_A.first];
-	glm::vec3 pos_B = B.local_pos + node::allPositions[node_link_B.first];
+	glm::vec3 pos_A = A.local_pos + entities::allPositions[node_link_A.first];
+	glm::vec3 pos_B = B.local_pos + entities::allPositions[node_link_B.first];
 	return glm::length(pos_A - pos_B) - (A.radius + B.radius);//returns the distance between both bounding spheres (if negative, the spheres intersect by that distance)
 }

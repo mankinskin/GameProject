@@ -2,7 +2,7 @@
 #include "glDebug.h"
 #include "Model.h"
 #include "shader.h"
-#include "Node.h"
+#include "Entities.h"
 #include "VAO.h"
 #include "Lights.h"
 #include "Material.h"
@@ -33,7 +33,7 @@ void mesh::initMeshVAO()
 	glCreateVertexArrays(1, &meshVAO);
 	meshVBO = vao::createStorage(sizeof(Vertex)*mesh::allStaticVertices.size(), &mesh::allStaticVertices[0], 0);
 	meshIBO = vao::createStorage(sizeof(size_t)*mesh::allIndices.size(), &mesh::allIndices[0], 0);
-	nodeIndexBuffer = vao::createStorage(sizeof(size_t)*node::MAX_NODES * model::MAX_MODELS, nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS);
+	nodeIndexBuffer = vao::createStorage(sizeof(size_t)*model::MAX_MODELS*model::MAX_MESHES_PER_MODEL, nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS);
 	vao::createStream(nodeIndexBuffer, GL_MAP_WRITE_BIT);
 	glBindVertexArray(meshVAO);
 	glVertexArrayElementBuffer(meshVAO, meshIBO + 1);
@@ -81,7 +81,7 @@ void mesh::setupBlendMeshShader()
 	shader::bindUniformBufferToShader(blendMeshShader, materialUBO, "MaterialBuffer");
 	shader::bindUniformBufferToShader(blendMeshShader, lighting::lightDataUBO, "LightDataBuffer");
 	shader::bindUniformBufferToShader(blendMeshShader, gl::generalUniformBuffer, "GeneralUniformBuffer");
-	shader::bindUniformBufferToShader(blendMeshShader, node::nodeMatrixBuffer, "NodeMatrixBuffer");
+	shader::bindUniformBufferToShader(blendMeshShader, entities::entityMatrixBuffer, "NodeMatrixBuffer");
 }
 
 void mesh::renderMeshes()
@@ -156,14 +156,14 @@ void mesh::updateMeshBuffers()
 void mesh::setupMeshShader()
 {
 	shader::bindUniformBufferToShader(meshShader, gl::generalUniformBuffer, "GeneralUniformBuffer");
-	shader::bindUniformBufferToShader(meshShader, node::nodeMatrixBuffer, "NodeMatrixBuffer");
+	shader::bindUniformBufferToShader(meshShader, entities::entityMatrixBuffer, "NodeMatrixBuffer");
 	shader::bindUniformBufferToShader(meshShader, materialUBO, "MaterialBuffer");
 }
 
 void mesh::setupMeshNormalShader()
 {
 	shader::bindUniformBufferToShader(meshNormalShader, gl::generalUniformBuffer, "GeneralUniformBuffer");
-	shader::bindUniformBufferToShader(meshNormalShader, node::nodeMatrixBuffer, "NodeMatrixBuffer");
+	shader::bindUniformBufferToShader(meshNormalShader, entities::entityMatrixBuffer, "NodeMatrixBuffer");
 }
 
 

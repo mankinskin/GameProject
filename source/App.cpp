@@ -23,7 +23,7 @@
 #include "Quad.h"
 #include <functional>
 #include <algorithm>
-#include "Node.h"
+#include "Entities.h"
 #include "ContextWindow.h"
 #include "physics.h"
 #include "voxelization.h"
@@ -34,7 +34,7 @@ double app::timeFactor = 1.0;
 double app::lastFrameMS = 0;
 double app::lastFrameLimitedMS = 0;
 double app::totalMS = 0;
-double app::targetFrameMS = 16.0;
+double app::minFrameMS = 8.0;
 
 
 glm::vec3 app::node_mov = glm::vec3();
@@ -42,6 +42,7 @@ glm::vec3 app::node_mov = glm::vec3();
 void app::init()
 {
 	state = Running;
+	setMaxFPS(10000);
 	initGLFW();
 	//Windows and gl Context
 	ContextWindow::initMonitors();
@@ -67,17 +68,17 @@ void app::gameloop()
 	
 	while (state == app::Running) {
 		fetchInput();
-		//node::translate(0, node_mov * 0.01f);
+		//entities::translate(0, node_mov * 0.01f);
 		//node_mov = glm::vec3();
 
 		camera::main_camera.look(Input::cursorFrameDelta);
 		camera::main_camera.update();
 
 		gl::updateGeneralUniformBuffer();
-		//lighting::updateLightIndexRangeBuffer();
-		//lighting::updateLightDataBuffer();
-		node::updateNodeMatrices();
-		node::updateNodeBuffers();
+		lighting::updateLightIndexRangeBuffer();
+		lighting::updateLightDataBuffer();
+		entities::updateEntityMatrices();
+		entities::updateEntityBuffers();
 		mesh::updateMeshBuffers();
 		gui::updateLineBuffers();
 		gui::updateQuadBuffer();
@@ -92,7 +93,7 @@ void app::gameloop()
 		//glClearNamedFramebufferfv(texture::gBuffer, GL_COLOR, 4, g_clear_color);
 		//glClearNamedFramebufferfv(texture::gBuffer, GL_DEPTH, 0, &g_clear_depth);
 		//clear screen buffer
-		//voxelization::clearVolumeTexture();
+		voxelization::clearVolumeTexture();
 		glClearNamedFramebufferfv(0, GL_COLOR, 0, g_clear_color);
 		glClearNamedFramebufferfv(0, GL_DEPTH, 0, &g_clear_depth);
 		////reset guiFBO
@@ -103,17 +104,17 @@ void app::gameloop()
 		gui::rasterQuadIndices();
 		gui::readQuadIndexBuffer();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		//voxelization::voxelizeMeshes();
+		voxelization::voxelizeMeshes();
 		gui::renderLines();
 		//glBindFramebuffer(GL_FRAMEBUFFER, texture::gBuffer);
-		mesh::renderMeshes();
+		//mesh::renderMeshes();
 
 		//glBindFramebuffer(GL_READ_FRAMEBUFFER, texture::gBuffer);
 		
 		//glBlitFramebuffer(0, 0, gl::screenWidth, gl::screenHeight, 0, 0, gl::screenWidth, gl::screenHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		//lighting::renderLights();
+		lighting::renderLights();
 
 		//mesh::renderMeshNormals();
 		
@@ -173,19 +174,19 @@ void app::updateTime()
 void app::limitFPS()
 {
 	lastFrameLimitedMS = lastFrameMS;
-	if (lastFrameMS < targetFrameMS) {
-		lastFrameLimitedMS = targetFrameMS;
-		std::this_thread::sleep_for(std::chrono::milliseconds((int)(targetFrameMS - lastFrameMS)));
+	if (lastFrameMS < minFrameMS) {
+		lastFrameLimitedMS = minFrameMS;
+		std::this_thread::sleep_for(std::chrono::milliseconds((int)(minFrameMS - lastFrameMS)));
 	}
 }
 
 void app::updateTimeFactor() {
-	timeFactor = lastFrameMS / targetFrameMS;
+	timeFactor = 1.0f;
 }
 
-void app::setTargetFPS(size_t pTargetFPS)
+void app::setMaxFPS(size_t pMaxFPS)
 {
-	targetFrameMS = (size_t)(1000.0f / (float)pTargetFPS);
+	minFrameMS = (size_t)(1000.0f / (float)pMaxFPS);
 }
 
 void app::run() {
