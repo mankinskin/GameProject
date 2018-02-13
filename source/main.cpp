@@ -1,6 +1,6 @@
-#include"Global\stdafx.h"
-#include "Global\app.h"
 #include <conio.h>
+#include "app.h"
+
 
 int main() {
 
