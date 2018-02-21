@@ -1,7 +1,4 @@
 assets/
 *.dll
-*.vstheme
 deps/
 Debug/
-*.sln
-.vs
