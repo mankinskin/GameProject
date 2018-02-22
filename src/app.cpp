@@ -1,33 +1,33 @@
 #include "app.h"
-#include "Debug.h"
-#include "Input.h"
-#include "Keys.h"
-#include "Functor.h"
-#include "Mouse.h"
-#include "Event.h"
-#include "Signal.h"
+#include "debug.h"
+#include "input.h"
+#include "keys.h"
+#include "functor.h"
+#include "mouse.h"
+#include "event.h"
+#include "signal.h"
 #include <conio.h>
 #include <thread>
 #include <chrono>
 #include "gl.h"
 #include "text.h"
 #include "camera.h"
-#include "glDebug.h"
-#include "Font_Loader.h"
+#include "gldebug.h"
+#include "font_loader.h"
 #include "gui.h"
-#include "Model.h"
-#include "Mesh.h"
-#include "Lights.h"
-#include "Colorings.h"
-#include "Framebuffer.h"
-#include "Quad.h"
+#include "model.h"
+#include "mesh.h"
+#include "lights.h"
+#include "colorings.h"
+#include "framebuffer.h"
+#include "quad.h"
 #include <functional>
 #include <algorithm>
-#include "Entities.h"
-#include "ContextWindow.h"
+#include "entities.h"
+#include "contextwindow.h"
 #include "physics.h"
 #include "voxelization.h"
-#include "Line.h"
+#include "line.h"
 app::State app::state = app::State::Init;
 app::ContextWindow::Window app::mainWindow = app::ContextWindow::Window();
 double app::timeFactor = 1.0;
@@ -57,6 +57,10 @@ void app::init()
 	Input::setupControls();
 	
 	debug::printErrors();
+
+	while (app::state != app::State::Exit) {
+		app::gameloop();
+	}
 }
 
 

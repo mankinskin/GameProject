@@ -1,5 +1,5 @@
 #pragma once
-#include <gl\glew.h>
+#include <glew.h>
 #include "ContextWindow.h"
 #include <glm\glm.hpp>
 
