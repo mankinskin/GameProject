@@ -1,0 +1,12 @@
+LIBGLFW_DIR=/lib/i386-linux-gnu/
+LIBFREETYPE_DIR=/lib/i386-linux-gnu/
+LIBGL_DIR=/lib/i386-linux-gnu/
+LIBGLU_DIR=/lib/i386-linux-gnu/
+LIBGLEW_DIR=/lib/i386-linux-gnu/
+
+
+
+INCLUDE_GLEW_DIR=/usr/include/GLEW/
+INCLUDE_GL_DIR=/usr/include/GL/
+INCLUDE_FREETYPE_DIR=/usr/include/freetype2/
+INCLUDE_GLM_DIR=/usr/include/GLM
