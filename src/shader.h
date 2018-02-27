@@ -1,10 +1,10 @@
 #pragma once
 #include "gl.h"
-#include <GL\glew.h>
+#include <GL/glew.h>
 #include <string>
 #include <unordered_map>
-#include <glm\glm.hpp>
-#include "VAO.h"
+#include <glm.hpp>
+#include "vao.h"
 
 namespace shader {
 	void loadShaders();

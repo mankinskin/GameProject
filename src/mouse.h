@@ -1,8 +1,8 @@
 #pragma once
-#include <gl\glew.h>
-#include <GLFW\glfw3.h>
-#include <glm/glm.hpp>
-#include "Keys.h"
+#include <glew.h>
+#include <glfw3.h>
+#include <glm.hpp>
+#include "keys.h"
 namespace app {
 	namespace Input {
 		

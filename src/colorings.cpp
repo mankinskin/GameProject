@@ -1,9 +1,10 @@
-#include "Colorings.h"
+#include "colorings.h"
+#include <algorithm>
 #include "gui.h"
-#include "VAO.h"
+#include "vao.h"
 #include "shader.h"
 #include "gl.h"
-#include "glDebug.h"
+#include "gldebug.h"
 #include "texture.h"
 
 
@@ -15,7 +16,7 @@ size_t gui::constColorBuffer;
 size_t gui::constColorVAO;
 std::vector<glm::vec4> gui::constColors;
 template<class ColorType>
-ColorType gui::colorings[gui::MAX_QUAD_COUNT];//one index into constColors for each quad
+ColorType gui::colorings[gui::MAX_QUAD_COUNT];  //one index into constColors for each quad
 size_t gui::constColorShader;
 size_t gui::constColoringBuffer;
 std::vector<std::string> constColorNames;
@@ -40,7 +41,7 @@ void gui::initConstColorVAO() {
 }
 
 void gui::initConstColorShader() {
-	constColorShader = shader::newProgram("constColorQuadShader", shader::createModule("constColorQuadShader.vert"), shader::createModule("constColorQuadShader.frag"));
+	constColorShader = shader::newProgram("constColorquad.hader", shader::createModule("constColorquad.hader.vert"), shader::createModule("constColorquad.hader.frag"));
 	shader::addVertexAttribute(constColorShader, "corner_pos", 0);
 }
 

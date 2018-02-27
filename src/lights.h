@@ -1,6 +1,6 @@
 #pragma once 
 #include <vector> 
-#include <glm\glm.hpp>
+#include <glm.hpp>
 
 namespace lighting {
 	struct LightIndexRange {
@@ -26,8 +26,8 @@ namespace lighting {
 	void initLightShader();
 	void renderLights();
 	void setupLightShader();
-	size_t createLight(glm::vec4& pPos, glm::vec4& pColor);
-	size_t createLight(glm::vec4& pPos, glm::vec4& pColor, glm::vec4& pFrustum);
+	size_t createLight(glm::vec4 pPos, glm::vec4 pColor);
+	size_t createLight(glm::vec4 pPos, glm::vec4 pColor, glm::vec4 pFrustum);
 	void setLightPos(size_t pLightIndex, glm::vec3& pPos);
 	void setLightPos(size_t pLightIndex, glm::vec4& pPos);
 	void setLightColor(size_t pLightIndex, glm::vec3& pColor);

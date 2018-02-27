@@ -1,4 +1,4 @@
-#include "Signal.h"
+#include "signal.h"
 
 std::vector<bool> signals::allSignals;
 std::vector<void(*)()> signals::signalCheckers;//checks all Signal templates

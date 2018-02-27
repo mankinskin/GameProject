@@ -1,10 +1,10 @@
-#include "Mouse.h"
+#include "mouse.h"
 #include "app.h"
-#include "ContextWindow.h"
+#include "contextwindow.h"
 #include <algorithm>
-#include "Event.h"
+#include "event.h"
 #include <array>
-#include "Quad.h"
+#include "quad.h"
 #include "gl.h"
 
 using namespace events;
@@ -42,8 +42,8 @@ void app::Input::updateMouse() {
 		(newRelativeCursorPosition.y - relativeCursorPosition.y));
 	relativeCursorPosition = newRelativeCursorPosition;
 
-	//printf("%f\n%f\n\n\n", pX, pY);
-	//printf("%i\n%i\n\n\n", absoluteCursorPosition.x, absoluteCursorPosition.y);
+	//printf("%f/n%f/n/n/n", pX, pY);
+	//printf("%i/n%i/n/n/n", absoluteCursorPosition.x, absoluteCursorPosition.y);
 	
 }
 
@@ -68,7 +68,7 @@ void app::Input::getMouseEvents()
 	last_hovered_quad = hovered_quad;
 	hovered_quad = gui::readQuadIndexMap(absoluteCursorPosition.x, absoluteCursorPosition.y);
 	float quad_depth = gui::readQuadDepthMap(absoluteCursorPosition.x, absoluteCursorPosition.y);
-	//printf("%i\t%f\n", hovered_quad, quad_depth);
+	//printf("%i/t%f/n", hovered_quad, quad_depth);
 
 	if(last_hovered_quad != hovered_quad){
 		//quad change

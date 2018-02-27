@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <glm\glm.hpp>
+#include <glm.hpp>
 
 //node
 //node hold the information about the transformation of an object. They store a position, an orientation and a scale.

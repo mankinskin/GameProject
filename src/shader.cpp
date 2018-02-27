@@ -1,19 +1,19 @@
 #include "shader.h"
 #include "gl.h"
-#include "glDebug.h"
-#include "Debug.h"
+#include "gldebug.h"
+#include "debug.h"
 #include "camera.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <glm\gtc\type_ptr.hpp>
-#include "Mesh.h"
-#include "Lights.h"
-#include "Colorings.h"
-#include "Line.h"
-#include "Font.h"
-#include "Shader_Loader.h"
-#include "Quad.h"
+#include <gtc/type_ptr.hpp>
+#include "mesh.h"
+#include "lights.h"
+#include "colorings.h"
+#include "line.h"
+#include "font.h"
+#include "shader_loader.h"
+#include "quad.h"
 #include "voxelization.h"
 
 size_t shader::currentShaderProgram;
@@ -139,7 +139,7 @@ void shader::addVertexAttribute(std::string pProgramName, std::string pAttribute
 {
 	auto it = shaderProgramLookup.find(pProgramName.c_str());
 	if (it == shaderProgramLookup.end()) {
-		debug::pushError("addVertexAttribute():\nCould not find shader Program " + pProgramName + "!\n");
+		debug::pushError("addVertexAttribute():/nCould not find shader Program " + pProgramName + "!/n");
 		return;
 	}
 	addVertexAttribute(it->second, pAttributeName, pAttributeIndex);

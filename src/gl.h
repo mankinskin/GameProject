@@ -1,9 +1,9 @@
 #pragma once
-#include <gl\glew.h>
+#include <glew.h>
 #include <string>
 #include <vector>
-#include <glm\glm.hpp>
-#include "ContextWindow.h"
+#include <glm.hpp>
+#include "contextwindow.h"
 
 namespace gl {
 

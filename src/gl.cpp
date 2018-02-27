@@ -1,28 +1,28 @@
 #include "gl.h"
-#include "Debug.h"
-#include <conio.h>
-#include "App.h"
+#include "debug.h"
+#include <ncurses.h>
+#include "app.h"
 #include <array>
-#include "Shader_Loader.h"
+#include "shader_loader.h"
 #include "shader.h"
 #include "camera.h"
-#include "glDebug.h"
-#include <glm\gtc\type_ptr.hpp>
+#include "gldebug.h"
+#include <gtc/type_ptr.hpp>
 #include "texture.h"
-#include "Font_Loader.h"
+#include "font_loader.h"
 #include "gui.h"
-#include "Quad.h"
-#include "Model.h"
-#include "Model_Loader.h"
+#include "quad.h"
+#include "model.h"
+#include "model_loader.h"
 #include "text.h"
-#include "Framebuffer.h"
-#include "Lights.h"
-#include "Colorings.h"
-#include "Line.h"
-#include "Entities.h"
-#include "Mesh.h"
+#include "framebuffer.h"
+#include "lights.h"
+#include "colorings.h"
+#include "line.h"
+#include "entities.h"
+#include "mesh.h"
 #include "physics.h"
-#include "Collision.h"
+#include "collision.h"
 #include "voxelization.h"
 
 int gl::MAX_WORK_GROUP_COUNT = 0;
@@ -138,13 +138,13 @@ void gl::getOpenGLInitValues()
 }
 
 void gl::initGLEW() {
-	puts("Initializing OpenGL(GLEW)...\n");
+	puts("Initializing OpenGL(GLEW).../n");
 	size_t glew = glewInit();
 	if (glew != GLEW_OK) {
 
-		debug::pushError(std::string("\napp::init() - Unable to initialize GLEW (glewInit() return code: %i)\nGLEW Error Log\n %s"
+		debug::pushError(std::string("/napp::init() - Unable to initialize GLEW (glewInit() return code: %i)/nGLEW Error Log/n %s"
 			+ glew) + std::string((const char*)glewGetErrorString(glew)), debug::Error::Severity::Fatal);
-		while (!_getch()) {}
+		while (!getch()) {}
 		exit(glew);
 	}
 }

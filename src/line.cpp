@@ -1,7 +1,7 @@
-#include "Line.h"
-#include "VAO.h"
+#include "line.h"
+#include "vao.h"
 #include "shader.h"
-#include "Colorings.h"
+#include "colorings.h"
 
 const size_t MAX_LINE_VERTEX_COUNT = 1000;
 const size_t MAX_LINE_COUNT = 1000;

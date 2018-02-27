@@ -1,8 +1,8 @@
-#include "VAO.h"
-#include "glDebug.h"
+#include "vao.h"
+#include "gldebug.h"
 #include <algorithm>
-#include "Debug.h"
-#include <glm\gtc\type_ptr.hpp>
+#include "debug.h"
+#include <gtc/type_ptr.hpp>
 
 
 std::vector<vao::Storage> vao::allStorages;
@@ -65,7 +65,7 @@ void* vao::mapStorage(Storage& pStorage, size_t pFlags)
 {
 	void* p = glMapNamedBufferRange(pStorage.ID, 0, pStorage.capacity, pFlags);
 	if (!p) {
-		debug::pushError("Failed to map Storage!\n");
+		debug::pushError("Failed to map Storage!/n");
 	}
 	return p;
 }

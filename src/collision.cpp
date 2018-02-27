@@ -1,6 +1,6 @@
-#include "Collision.h"
-#include "Entities.h"
-#include "Mesh.h"
+#include "collision.h"
+#include "entities.h"
+#include "mesh.h"
 
 std::vector<physics::BoundingSphere> physics::allBoundingSpheres;
 std::vector<std::pair<size_t, size_t>> physics::allBoundingSpherenode;

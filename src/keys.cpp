@@ -1,7 +1,7 @@
-#include "Keys.h"
-#include "Signal.h"
-#include "Event.h"
-#include "Gates.h"
+#include "keys.h"
+#include "signal.h"
+#include "event.h"
+#include "gates.h"
 using namespace signals;
 using namespace events;
 app::Input::KeySignal::KeySignal(int pKey)
@@ -29,5 +29,5 @@ void app::Input::key_Callback(GLFWwindow * window, int pKey, int pScancode, int 
 
 void app::Input::char_Callback(GLFWwindow * window, size_t pCodepoint)
 {
-	//printf("char callBack! Char: %c \n", pCodepoint);
+	//printf("char callBack! Char: %c /n", pCodepoint);
 }

@@ -1,11 +1,11 @@
-#include "Quad.h"
+#include "quad.h"
 #include "shader.h"
-#include "VAO.h"
+#include "vao.h"
 #include <algorithm>
-#include "Input.h"
-#include "Mouse.h"
-#include "glDebug.h"
-#include "Framebuffer.h"
+#include "input.h"
+#include "mouse.h"
+#include "gldebug.h"
+#include "framebuffer.h"
 
 std::vector<glm::vec4> gui::allQuads;
 size_t gui::quadBuffer;

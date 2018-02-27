@@ -1,8 +1,8 @@
 #pragma once
-#include <gl\glew.h>
-#include <glm/glm.hpp>
+#include <glew.h>
+#include <glm.hpp>
 #include  <string>
-#include <GLFW\glfw3.h>
+#include <glfw3.h>
 namespace camera {
 	class Camera;
 	struct LookPolicy {//stores relative offsets of vectors in a camera object to be used to move the camera frustum

@@ -1,17 +1,19 @@
-#pragma once
-#include <glm/glm.hpp>
+#ifndef QUAD_H
+#define QUAD_H
+#include <cstring>
+#include <glm.hpp>
 #include <vector>
-#include "Event.h"
+#include "event.h"
 #include <tuple>
 namespace gui {
-	typedef typename glm::vec4 QuadData;
+	typedef glm::vec4 QuadData;
 	extern std::vector<glm::vec4> allQuads;
 	size_t createQuad(float pPosX, float pPosY, float pWidth, float pHeight);
 	size_t createQuad(glm::vec4 pQuad);
 
 	
 	struct Quad {
-		typedef typename QuadData initer_t;
+		typedef glm::vec4 initer_t;
 		Quad() :index(-1) {}
 		Quad(size_t pIndex) :index(pIndex) {}
 		Quad(initer_t pIniter) :index(createQuad(pIniter)) {}
@@ -89,3 +91,4 @@ namespace gui {
 	const size_t MAX_QUAD_COUNT = 10000;
 	extern size_t quadBuffer;
 }
+#endif //QUAD_H
