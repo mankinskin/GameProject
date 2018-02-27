@@ -5,13 +5,14 @@
 #include "framebuffer.h"
 #include "gldebug.h"
 #include "voxelization.h"
+#include <cstring>
 
 std::vector<glm::vec4> lighting::allLightData;
 std::vector<lighting::LightIndexRange> lighting::allLightIndexRanges;
-size_t lighting::lightVAO = 0;
-size_t lighting::lightIndexVBO = 0;
-size_t lighting::lightDataUBO = 0;
-size_t lighting::lightShaderProgram = 0;
+unsigned int lighting::lightVAO = 0;
+unsigned int lighting::lightIndexVBO = 0;
+unsigned int lighting::lightDataUBO = 0;
+unsigned int lighting::lightShaderProgram = 0;
 size_t lighting::MAX_LIGHT_COUNT = 100;
 
 void lighting::initLighting()

@@ -10,9 +10,6 @@
 #include "framebuffer.h"
 
 
-size_t mesh::meshShader = 0;
-size_t mesh::blendMeshShader = 0;
-size_t mesh::meshNormalShader = 0;
 bool mesh::draw_normals = false;
 bool mesh::cull_face = true;
 std::vector<mesh::Mesh> mesh::allMeshes;
@@ -21,12 +18,14 @@ std::vector<mesh::Vertex> mesh::allStaticVertices;
 std::vector<size_t> mesh::allMeshInstancenode;
 std::vector<size_t> mesh::opaqueMeshList;
 std::vector<size_t> mesh::blendMeshList;
-size_t mesh::meshVAO = 0;
-size_t mesh::meshVBO = 0;
-size_t mesh::meshIBO = 0;
-
-size_t mesh::nodeIndexBuffer = 0;
-size_t mesh::normalShaderProgram = 0;
+unsigned int mesh::meshShader = 0;
+unsigned int mesh::blendMeshShader = 0;
+unsigned int mesh::meshNormalShader = 0;
+unsigned int mesh::meshVAO = 0;
+unsigned int mesh::meshVBO = 0;
+unsigned int mesh::meshIBO = 0;
+unsigned int mesh::nodeIndexBuffer = 0;
+unsigned int mesh::normalShaderProgram = 0;
 
 void mesh::initMeshVAO()
 {
@@ -129,14 +128,14 @@ void mesh::renderBlendMeshes()
 	//glDepthMask(0);
 	glDisable(GL_CULL_FACE);
 	for (size_t m = 0; m < allMeshes.size(); ++m) {
-		mesh::Mesh& mesh = mesh::allMeshes[m];
+		mesh::Mesh mesh = mesh::allMeshes[m];
 		glActiveTexture(GL_TEXTURE0);//amb
 		glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].amb_tex);
 		glActiveTexture(GL_TEXTURE1);//diff
 		glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].diff_tex);
 		glActiveTexture(GL_TEXTURE2);//spec
 		glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].spec_tex);
-		shader::setUniform(meshShader, "materialIndex", (size_t&)mesh.materialIndex);
+		shader::setUniform(meshShader, "materialIndex", mesh.materialIndex);
 
 		glDrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, (void*)(mesh.indexOffset * sizeof(size_t)), mesh.instanceCount, mesh.instanceOffset);
 	}

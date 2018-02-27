@@ -1,7 +1,7 @@
 include deppaths # include paths to dependencies (Libraries, Include Directories)
 
 INCLUDE_GL= -I$(INCLUDE_GL_DIR) -I$(INCLUDE_GLFW_DIR) -I$(INCLUDE_GLM_DIR)
-GCC=gcc -std=c++17
+GCC=g++ -std=c++17
 C_INCLUDE_PATH=
 CPLUS_INCLUDE_PATH=/usr/include/c++
 INCLUDE_FREETYPE=-I$(INCLUDE_FREETYPE_DIR)
@@ -29,14 +29,26 @@ all: build $(OBJ_FILES)
 #include $(dependfiles)
 
 
+gui.o:
+#$(GCC) -c src/gui.cpp -o build/$@ $(INCLUDE_GL) 
+input.o:
+#$(GCC) -c src/input.cpp -o build/$@ $(INCLUDE_GL) 
+widget.o:
+#$(GCC) -c src/widget.cpp -o build/$@ $(INCLUDE_GL) 
+colorings.o:
+#$(GCC) -c src/colorings.cpp -o build/$@ $(INCLUDE_GL) 
+material.o:
+	$(GCC) -c src/material.cpp -o build/$@ $(INCLUDE_GL)
+line.o:
+	$(GCC) -c src/line.cpp -o build/$@ $(INCLUDE_GL)
+lights.o:
+	$(GCC) -c src/lights.cpp -o build/$@ $(INCLUDE_GL)
 voxelization.o:
 	$(GCC) -c src/voxelization.cpp -o build/$@ $(INCLUDE_GL) 
 vao.o:
 	$(GCC) -c src/vao.cpp -o build/$@ $(INCLUDE_GL) 
 shader.o:
 	$(GCC) -c src/shader.cpp -o build/$@ $(INCLUDE_GL) 
-gui.o:
-	#$(GCC) -c src/gui.cpp -o build/$@ $(INCLUDE_GL) 
 physics.o:
 	$(GCC) -c src/physics.cpp -o build/$@ $(INCLUDE_GL) 
 debug.o:
@@ -47,9 +59,7 @@ gl.o:
 	$(GCC) -c src/gl.cpp -o build/$@ $(INCLUDE_GL) $(INCLUDE_FREETYPE)
 gldebug.o:
 	$(GCC) -c src/gldebug.cpp -o build/$@ $(INCLUDE_GL) 
-colorings.o:
-#$(GCC) -c src/colorings.cpp $(INCLUDE_GL) 
-mesh.o:
+mesh.o: shader.o
 	$(GCC) -c src/mesh.cpp -o build/$@ $(INCLUDE_GL) 
 framebuffer.o:
 	$(GCC) -c src/framebuffer.cpp -o build/$@ $(INCLUDE_GL) 
@@ -63,8 +73,6 @@ signal.o:
 	$(GCC) -c src/signal.cpp -o build/$@ $(INCLUDE_GL) 
 event.o:
 	$(GCC) -c src/event.cpp -o build/$@ $(INCLUDE_GL) 
-widget.o:
-	#$(GCC) -c src/widget.cpp -o build/$@ $(INCLUDE_GL) 
 text.o:
 	$(GCC) -c src/text.cpp -o build/$@ $(INCLUDE_GL) $(INCLUDE_FREETYPE)
 font_loader.o:
@@ -83,16 +91,15 @@ gates.o:
 	$(GCC) -c src/gates.cpp -o build/$@ $(INCLUDE_GL) 
 functor.o:
 	$(GCC) -c src/functor.cpp -o build/$@ $(INCLUDE_GL) 
-input.o:
-	$(GCC) -c src/input.cpp -o build/$@ $(INCLUDE_GL) 
 contextwindow.o: 
 	$(GCC) -c src/contextwindow.cpp -o build/$@ $(INCLUDE_GL)
-
 app.o:
 	$(GCC) -c src/app.cpp -o src/$@ $(INCLUDE_GL) $(INCLUDE_FREETYPE)
-	
+main.o:	
+	$(GCC) -c src/main.cpp -o src/$@ $(INCLUDE_GL)
 
 cleanbuild: 
 	rm -r build
-
+cleanobj:
+	rm src/*.o
 clean: cleanbuild

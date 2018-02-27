@@ -62,12 +62,12 @@ namespace mesh {
 	extern std::vector<size_t> allMeshInstancenode;
 	extern bool draw_normals;
 	extern bool cull_face;
-	extern size_t meshShader;
-	extern size_t blendMeshShader;
-	extern size_t meshNormalShader;
-	extern size_t meshVAO;
-	extern size_t meshVBO;
-	extern size_t meshIBO;
-	extern size_t nodeIndexBuffer;
-	extern size_t normalShaderProgram;
+	extern unsigned int meshShader;
+	extern unsigned int blendMeshShader;
+	extern unsigned int meshNormalShader;
+	extern unsigned int meshVAO;
+	extern unsigned int meshVBO;
+	extern unsigned int meshIBO;
+	extern unsigned int nodeIndexBuffer;
+	extern unsigned int normalShaderProgram;
 }

@@ -32,7 +32,7 @@ namespace shader {
 		GLuint ID;
 		ModuleType type;
 	};
-	extern size_t currentShaderProgram;
+	
 	extern std::vector<Program> allPrograms;
 	extern std::unordered_map<std::string, size_t> shaderProgramLookup;
 	extern std::vector<Module> allModules;

@@ -77,21 +77,15 @@ namespace gui {
 		typedef typename std::tuple<WidgetSetup<Elems>...> initer_t;
 
 
-		template<size_t N, typename Dummy>
+		template<size_t N>
 		struct construct_all {
 
 			static std::tuple<Elems...> func(typename Widget<Elems...>::initer_t pIniter) {
-				std::tuple<Elems...> re = construct_all<N - 1, Dummy>::func(pIniter);
+				std::tuple<Elems...> re = construct_all<N - 1>::func(pIniter);
 				std::get<N - 1>(re) = std::get<N - 1>(pIniter);
 				return re;
 			}
 
-		};
-		template<typename Dummy>
-		struct construct_all<0, Dummy> {
-			static std::tuple<Elems...> func(typename Widget<Elems...>::initer_t pIniter) {
-				return std::tuple<Elems...>();
-			}
 		};
 		Widget() {	}
 		Widget(Elems... pElements)
@@ -101,7 +95,7 @@ namespace gui {
 			:elements(pElements)
 		{	}
 		Widget(initer_t pIniter)
-			:elements(construct_all<ELEMENT_COUNT, void>::func(pIniter))
+			:elements(construct_all<ELEMENT_COUNT>::func(pIniter))
 		{	}
 		Widget(typename Widget<Elems...>::initer_t pIniter, WidgetMovePolicy<Widget<Elems...>> pMovePolicy, WidgetResizePolicy<Widget<Elems...>> pResizePolicy)
 			:move_policy(pMovePolicy), resize_policy(pResizePolicy), elements(construct_all<ELEMENT_COUNT>::func(pIniter))
@@ -143,12 +137,12 @@ namespace gui {
 		}
 
 		void move_to(glm::vec2 pNewPos) {
-			move_all<ELEMENT_COUNT>((pNewPos - pos) * move_policy.matrix[N]);
+			move_all<ELEMENT_COUNT>((pNewPos - allWidgetPositions[pos_index]));
 			allWidgetPositions[pos_index] = pNewPos;
 		}
 		template<size_t N>
 		void move_element_to(glm::vec2& pNewPos) {
-			std::get<N>(elements).move((pNewPos - pos) * move_policy.matrix[N]);
+			std::get<N>(elements).move((pNewPos - allWidgetPositions[pos_index]) * move_policy.matrix[N]);
 		}
 
 		void resize(glm::vec2& pOffset) {
@@ -177,18 +171,14 @@ namespace gui {
 		template<size_t N>
 		void move_all(glm::vec2& pOffset) {//move all elements
 			move_all<N - 1>(pOffset);
-			move_element<N - 1>(pOffset);
+			move_element<N - 1>(pOffset) * move_policy.matrix[N];
 		}
-		template<>
-		void move_all<0>(glm::vec2& pOffset) {}
 
 		template<size_t N>
 		void set_all_pos(glm::vec2& pNewPos) {//move all elements
 			set_all_pos<N - 1>(pNewPos);
 			set_element_pos<N - 1>(pNewPos);
 		}
-		template<>
-		void set_all_pos<0>(glm::vec2& pNewPos) {}
 
 		template<size_t N>
 		void resize_all(glm::vec2& pOffset) {//move all elements
@@ -197,8 +187,6 @@ namespace gui {
 			move_element<N - 1>(pOffset * glm::vec2(resize_policy.matrix[N - 1].x, resize_policy.matrix[N - 1].y));
 			resize_element<N - 1>(pOffset);//resize matrix is applied later to size
 		}
-		template<>
-		void resize_all<0>(glm::vec2& pOffset) {}
 
 		template<class... Colors>
 		struct col {
@@ -209,35 +197,49 @@ namespace gui {
 					std::get<I - 1>(pElems).color(std::get<I - 1>(pColors.colors));
 				}
 			};
-			template<>
-			struct color_elements<0> {
-				static void func(std::tuple<Elems...>& pElems, WidgetColors<Colors...>& pColors) {				}
-			};
 
 		};
 
+		template<class... Colors>
+		struct col<Colors...>::color_elements<0> {
+			static void func(std::tuple<Elems...>& pElems, WidgetColors<Colors...>& pColors) {				}
+		};
 
 	};
 
+	template<typename... Elements>
+	void Widget<Elements...>move_all<0>(glm::vec2& pOffset) {}
 
-	template<class Widget>
-	void move_widget(Widget pWidget, glm::vec2& pOffset) {
+	template<typename... Elements>
+	void Widget<Elements...>::set_all_pos<0>(glm::vec2& pNewPos) {}
+
+	template<typename... Elements>
+	void Widget<Elements...>::resize_all<0>(glm::vec2& pOffset) {}
+
+	template<typename... Elems>
+    struct Widget<Elems...>::construct_all<0> {
+    	static std::tuple<Elems...> func(typename Widget<Elems...>::initer_t pIniter) {
+    		return std::tuple<Elems...>();
+    	}
+    };
+	template<class Wid>
+	void move_widget(Wid pWidget, glm::vec2& pOffset) {
 		pWidget.move(pOffset);
 	}
-	template<class Widget, typename A, typename B>
-	void move_widget(Widget pWidget, A pOffsetX, B pOffsetY) {
+	template<class Wid, typename A, typename B>
+	void move_widget(Wid pWidget, A pOffsetX, B pOffsetY) {
 		pWidget.move(glm::vec2(pOffsetX, pOffsetY));
 	}
-	template<class Widget, size_t N>
-	void move_widget_element(Widget pWidget, float pOffsetX, float pOffsetY) {
+	template<class Wid, size_t N>
+	void move_widget_element(Wid pWidget, float pOffsetX, float pOffsetY) {
 		pWidget.move.element<N>(glm::vec2(pOffsetX, pOffsetY));
 	}
-	template<class Widget>
-	void resize_widget(Widget pWidget, glm::vec2& pOffset) {
+	template<class Wid>
+	void resize_widget(Wid pWidget, glm::vec2& pOffset) {
 		pWidget.resize(pOffset);
 	}
-	template<class Widget, typename A, typename B>
-	void resize_widget(Widget pWidget, A pDirX, B pDirY) {
+	template<class Wid, typename A, typename B>
+	void resize_widget(Wid pWidget, A pDirX, B pDirY) {
 		pWidget.resize(glm::vec2(pDirX, pDirY));
 	}
 

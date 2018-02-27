@@ -12,10 +12,10 @@ namespace lighting {
 
 	extern std::vector<glm::vec4> allLightData;
 	extern std::vector<LightIndexRange> allLightIndexRanges;
-	extern size_t lightVAO;
-	extern size_t lightIndexVBO;
-	extern size_t lightDataUBO;
-	extern size_t lightShaderProgram;
+	extern unsigned int lightVAO;
+	extern unsigned int lightIndexVBO;
+	extern unsigned int lightDataUBO;
+	extern unsigned int lightShaderProgram;
 	extern size_t MAX_LIGHT_COUNT;
 
 	void initLighting();

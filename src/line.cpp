@@ -9,11 +9,11 @@ std::vector<gui::LineGroup> allLineGroups;
 std::vector<glm::vec4> allLineVertexPositions;
 std::vector<glm::uvec2> allLineVertices;//stores a vertex as the indices to its data (pos & color)
 std::vector<glm::uvec2> allLines;//stores each line as 2 indices to its vertices
-size_t lineVAO = 0;
-size_t lineVBO = 0;
-size_t lineEBO = 0;
-size_t linePosBuffer = 0;
-size_t lineShader = 0;
+unsigned int lineVAO = 0;
+unsigned int lineVBO = 0;
+unsigned int lineEBO = 0;
+unsigned int linePosBuffer = 0;
+unsigned int lineShader = 0;
 
 std::vector<int> lineGroupFlags;
 
