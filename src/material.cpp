@@ -1,8 +1,8 @@
-#include "material.h"
-#include "vao.h"
+#include "Material.h"
+#include "VAO.h"
 #include "shader.h"
-#include "gldebug.h"
-#include "mesh.h"
+#include "glDebug.h"
+#include "Mesh.h"
 
 std::vector<mesh::Material> mesh::allMaterials;
 std::vector<mesh::MaterialTextures> mesh::allMaterialTextures;

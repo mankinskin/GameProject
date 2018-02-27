@@ -1,9 +1,9 @@
-#include "lights.h"
-#include "vao.h"
+#include "Lights.h"
+#include "VAO.h"
 #include "shader.h"
 #include "gl.h"
-#include "framebuffer.h"
-#include "gldebug.h"
+#include "Framebuffer.h"
+#include "glDebug.h"
 #include "voxelization.h"
 
 std::vector<glm::vec4> lighting::allLightData;
@@ -66,7 +66,7 @@ void lighting::initLightShader()
 	shader::addVertexAttribute(lightShaderProgram, "index_range", 1);
 }
 
-size_t lighting::createLight(glm::vec4 pPos, glm::vec4 pColor)
+size_t lighting::createLight(glm::vec4& pPos, glm::vec4& pColor)
 {
 	allLightIndexRanges.emplace_back(allLightData.size(), 2);
 	allLightData.push_back(pPos);
@@ -74,7 +74,7 @@ size_t lighting::createLight(glm::vec4 pPos, glm::vec4 pColor)
 	return allLightIndexRanges.size() - 1;
 }
 
-size_t lighting::createLight(glm::vec4 pPos, glm::vec4 pColor, glm::vec4 pFrustum)
+size_t lighting::createLight(glm::vec4& pPos, glm::vec4& pColor, glm::vec4& pFrustum)
 {
 	allLightIndexRanges.emplace_back(allLightData.size(), 3);
 	allLightData.push_back(pPos);

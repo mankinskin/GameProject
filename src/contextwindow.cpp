@@ -1,5 +1,5 @@
-#include "contextwindow.h"
-#include "debug.h"
+#include "ContextWindow.h"
+#include "Debug.h"
 #include "app.h"
 #include "gl.h"
 
@@ -48,12 +48,12 @@ void app::ContextWindow::Window::init()
     //sets up GLFW Window with OpenGL context
     if (window != nullptr) {
 #ifdef _DEBUG
-	puts("/nDestroying current GLFW Window...");
+	puts("\nDestroying current GLFW Window...");
 #endif
 	glfwDestroyWindow(window);
     }
 #ifdef _DEBUG
-    printf("/nGLFW Window Size:/nX: %i Y: %i/n", width, height);
+    printf("\nGLFW Window Size:\nX: %i Y: %i\n", width, height);
 #endif
 
 

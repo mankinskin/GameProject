@@ -1,21 +1,22 @@
-#include "framebuffer.h"
+#include "Framebuffer.h"
 #include "texture.h"
 #include "gl.h"
-#include "debug.h"
-#include "app.h"
-#include "vao.h"
-unsigned int texture::gBuffer;
-unsigned int texture::gPosTexture;
-unsigned int texture::gNormalTexture;
-unsigned int texture::gAmbientTexture;
-unsigned int texture::gDiffuseTexture;
-unsigned int texture::gSpecularTexture;
-unsigned int texture::gDepthRenderbuffer;
-unsigned int texture::guiFBO;
-unsigned int texture::fontColorTexture;
-unsigned int texture::quadIndexTexture;
-unsigned int texture::quadIndexBuffer;
-unsigned int texture::guiDepthRenderbuffer;
+#include "Debug.h"
+#include "App.h"
+#include "VAO.h"
+size_t texture::gBuffer;
+size_t texture::gPosTexture;
+size_t texture::gNormalTexture;
+size_t texture::gAmbientTexture;
+size_t texture::gDiffuseTexture;
+size_t texture::gSpecularTexture;
+size_t texture::gDepthRenderbuffer;
+
+size_t texture::guiFBO;
+size_t texture::fontColorTexture;
+size_t texture::quadIndexTexture;
+size_t texture::quadIndexBuffer;
+size_t texture::guiDepthRenderbuffer;
 
 void texture::initFramebuffers()
 {	initGUIFBO();
@@ -47,7 +48,7 @@ void texture::initGBuffer()
 	glBindRenderbuffer(GL_RENDERBUFFER, gDepthRenderbuffer);
 
 	const size_t attch_sz = 5;
-	unsigned int attachments[attch_sz] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4 };
+	size_t attachments[attch_sz] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4 };
 	glNamedFramebufferDrawBuffers(gBuffer, attch_sz, &attachments[0]);
 	
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -76,7 +77,7 @@ void texture::initGUIFBO() {
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, guiDepthRenderbuffer);
 
 	const size_t attch_sz = 1;
-	unsigned int attachments[attch_sz] = { GL_COLOR_ATTACHMENT0 };
+	size_t attachments[attch_sz] = { GL_COLOR_ATTACHMENT0 };
 	glNamedFramebufferDrawBuffers(guiFBO, attch_sz, &attachments[0]);
 
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);

@@ -1,9 +1,9 @@
-#include "shader_loader.h"
+#include "Shader_Loader.h"
 #include "shader.h"
-#include "debug.h"
+#include "Debug.h"
 #include <fstream>
 #include <sstream>
-#include "gldebug.h"
+#include "glDebug.h"
 
 #define DEFAULT_SHADER_DIRECTORY "deps//shaders//"
 
@@ -47,13 +47,13 @@ void shader::Loader::compileModule(size_t pModuleIndex)
 		mod.type = ModuleType::Compute;
 	}
 	else {
-		debug::pushError("/nShader::loadShader(): invalid shader file name " + mod.fileName + "!/nHas to include '.vert', '.frag', '.geo' or '.comp'!", debug::Error::Fatal);
+		debug::pushError("\nShader::loadShader(): invalid shader file name " + mod.fileName + "!\nHas to include '.vert', '.frag', '.geo' or '.comp'!", debug::Error::Fatal);
 		return;
 	}
 	std::ifstream moduleFile;
 	moduleFile.open(SHADER_DIR + mod.fileName + ".txt");
 	if (moduleFile.fail()) {
-		debug::pushError("Failed to compile shader: Could not open " + SHADER_DIR + mod.fileName + ".txt" + "!/n");
+		debug::pushError("Failed to compile shader: Could not open " + SHADER_DIR + mod.fileName + ".txt" + "!\n");
 		return;
 	}
 
@@ -69,7 +69,7 @@ void shader::Loader::compileModule(size_t pModuleIndex)
 		glGetShaderiv(mod.ID, GL_INFO_LOG_LENGTH, &maxLength);
 		std::vector<char> errorLog(maxLength);
 		glGetShaderInfoLog(mod.ID, maxLength, &maxLength, &errorLog[0]);
-		debug::pushError("Failed to compile " + mod.fileName + "/nOpenGL Error Log: " + std::string(&(errorLog[0])) + "/n", debug::Error::Fatal);
+		debug::pushError("Failed to compile " + mod.fileName + "\nOpenGL Error Log: " + std::string(&(errorLog[0])) + "\n", debug::Error::Fatal);
 		return;
 	}
 	allModules[pModuleIndex] = mod;
@@ -103,7 +103,7 @@ void shader::Loader::linkProgram(size_t pProgramIndex)
 		glDeleteProgram(program.ID);
 
 
-		debug::pushError("!!!/nError when linking program: " + program.name + " /nopenGL Error Log: " + &(errorLog[0]), debug::Error::Fatal);
+		debug::pushError("!!!\nError when linking program: " + program.name + " \nopenGL Error Log: " + &(errorLog[0]), debug::Error::Fatal);
 
 	}
 

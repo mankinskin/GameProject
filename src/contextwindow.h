@@ -1,7 +1,7 @@
 #pragma once
-#include <glew.h>
+#include <gl\glew.h>
 #include <string>
-#include <glfw3.h>
+#include <GLFW\glfw3.h>
 
 namespace app {
     namespace ContextWindow {

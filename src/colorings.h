@@ -1,30 +1,28 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include <tuple>
-#include "quad.h"
-
+#include "Quad.h"
 namespace gui {
 
-	struct ConstColor {
-		size_t color_index;
 
+
+	struct ConstColor {
 		ConstColor(std::string pColorName);
 		ConstColor(size_t pIndex)
 			:color_index(pIndex){}
 		ConstColor():color_index(0){}
+		size_t color_index;
 	};
 	
 	const size_t MAX_CONST_COLOR_COUNT = 100;
 
 	extern size_t constColorBuffer;
 	extern size_t constColorVAO;
-	extern std::vector<glm::vec4> constColors;  //all registered colors
-
+	extern std::vector<glm::vec4> constColors;
 	template<class ColorType>
-	extern ColorType colorings[MAX_QUAD_COUNT]; //one index into constColors for each quad
-
+	extern ColorType colorings[MAX_QUAD_COUNT];//one index into constColors for each quad
 	extern size_t constColorShader;
 	extern size_t constColoringBuffer;
 

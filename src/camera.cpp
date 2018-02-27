@@ -1,13 +1,13 @@
 #include "camera.h"
 #include "gl.h"
-#include <GLM/gtc/matrix_transform.hpp>
-#include <GLM/gtx/rotate_vector.hpp>
-#include <gtc/type_ptr.hpp>
+#include <GLM\gtc\matrix_transform.hpp>
+#include <GLM\gtx\rotate_vector.hpp>
+#include <glm\gtc\type_ptr.hpp>
 #include "app.h"
 #include <math.h>
-#include "gldebug.h"
+#include "glDebug.h"
 #include <algorithm>
-#include "mouse.h"
+#include "Mouse.h"
 
 const float yRestrictionAngle = 3.0f;
 const float eulerian = 0.0001f;

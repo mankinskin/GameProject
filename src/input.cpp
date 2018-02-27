@@ -1,20 +1,20 @@
-#include "input.h"
+#include "Input.h"
 #include "app.h"
-#include "debug.h"
-#include "camera.h"
-#include "gldebug.h"
+#include "Debug.h"
+#include "Camera.h"
+#include "glDebug.h"
 #include <functional>
-#include "mouse.h"
+#include "Mouse.h"
 #include <algorithm>
-#include "functor.h"
-#include "mesh.h"
+#include "Functor.h"
+#include "Mesh.h"
 #include <array>
-#include "text.h"
-#include "lights.h"
-#include <glm.hpp>
-#include "gui.h"
-#include "line.h"
-#include "widget.h"
+#include "Text.h"
+#include "Lights.h"
+#include <glm\glm.hpp>
+#include "GUI.h"
+#include "Line.h"
+#include "Widget.h"
 #include <tuple>
 
 /*
@@ -61,7 +61,7 @@ size_t app::Input::always;
 
 void app::Input::init()
 {
-	puts("Initilizing GLFW Input.../n");
+	puts("Initilizing GLFW Input...\n");
 	//initializes GLFW input and defines the keys to track
 	glfwSetInputMode(app::mainWindow.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	glfwSetKeyCallback(app::mainWindow.window, key_Callback);

@@ -4,7 +4,7 @@ list=$(ls)
 all_yes=false
 for line in $list
 do
-    new_name=$(sed 's/.*//L&/' <<< $line)
+    new_name=$(sed 's/.*/\L&/' <<< $line)
     if [ $all_yes = true ]; then
         mv $line $new_name
     fi

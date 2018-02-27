@@ -1,18 +1,18 @@
-﻿#include "gldebug.h"
-#include "debug.h"
+﻿#include "glDebug.h"
+#include "Debug.h"
 #include "shader.h"
 #include "camera.h"
-#include "vao.h"
-#include "framebuffer.h"
-#include "line.h"
-#include "colorings.h"
+#include "VAO.h"
+#include "Framebuffer.h"
+#include "Line.h"
+#include "Colorings.h"
 
 
 size_t coord_line_group;
 size_t grid_1_line_group;
 size_t grid_2_line_group;
-void APIENTRY glerror_callback(GLenum sourcei, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
-	debug::pushError(message, debug::Error::Fatal);
+void APIENTRY glerror_callback(GLenum source​, GLenum type​, GLuint id​, GLenum severity​, GLsizei length​, const GLchar* message​, const void* userParam​) {
+	debug::pushError(message​, debug::Error::Fatal);
 }
 void glDebug::init()
 {

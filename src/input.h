@@ -1,15 +1,15 @@
 #pragma once
-#include <glew.h>
-#include <glfw3.h>
-#include <glm.hpp>
+#include <gl\glew.h>
+#include <GLFW\glfw3.h>
+#include <glm\glm.hpp>
 #include <unordered_map>
 #include <functional>
 #include <tuple>
 #include <utility>
 #include <initializer_list>
-#include "keys.h"
-#include "gates.h"
-#include "event.h"
+#include "Keys.h"
+#include "Gates.h"
+#include "Event.h"
 namespace app {
 	namespace Input {
 		extern KeySignal key_esc;

@@ -1,10 +1,10 @@
 #include "voxelization.h"
-#include "shader.h"
+#include "Shader.h"
 #include "texture.h"
-#include "mesh.h"
-#include "material.h"
-#include "entities.h"
-#include <GLM/gtc/matrix_transform.hpp>
+#include "Mesh.h"
+#include "Material.h"
+#include "Entities.h"
+#include <GLM\gtc\matrix_transform.hpp>
 
 glm::uvec3 voxelization::frustum_size = glm::ivec3(200, 200, 200);
 size_t voxelization::voxelizationShader = 0;

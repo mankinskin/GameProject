@@ -1,13 +1,13 @@
-#include "mesh.h"
-#include "gldebug.h"
-#include "model.h"
+#include "Mesh.h"
+#include "glDebug.h"
+#include "Model.h"
 #include "shader.h"
-#include "entities.h"
-#include "vao.h"
-#include "lights.h"
-#include "material.h"
+#include "Entities.h"
+#include "VAO.h"
+#include "Lights.h"
+#include "Material.h"
 #include "texture.h"
-#include "framebuffer.h"
+#include "Framebuffer.h"
 
 
 size_t mesh::meshShader = 0;

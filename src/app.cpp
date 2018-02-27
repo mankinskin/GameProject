@@ -6,11 +6,7 @@
 #include "mouse.h"
 #include "event.h"
 #include "signal.h"
-#ifdef WINDOWS
-    #include <ncurses.h>
-#else
-    #include <curses.h>
-#endif
+#include <conio.h>
 #include <thread>
 #include <chrono>
 #include "gl.h"
@@ -163,11 +159,11 @@ void app::fetchInput()
 
 void app::initGLFW()
 {
-	std::puts("Initializing GLFW.../n");
+	std::puts("Initializing GLFW...\n");
 	size_t glfw = glfwInit();
 	if (glfw != GLFW_TRUE) {
-		debug::pushError(("/napp::init() - Unable to initialize GLFW (glfwInit() return code: %i)/n" + glfw), debug::Error::Severity::Fatal);
-		while (!getch()) {}
+		debug::pushError(("\napp::init() - Unable to initialize GLFW (glfwInit() return code: %i)\n" + glfw), debug::Error::Severity::Fatal);
+		while (!_getch()) {}
 		exit(glfw);
 	}
 }

@@ -1,13 +1,13 @@
 #include "text.h"
 #include "shader.h"
-#include "gldebug.h"
+#include "glDebug.h"
 #include <algorithm>
-#include "camera.h"
-#include "debug.h"
-#include <gtc/matrix_transform.hpp>
-#include "framebuffer.h"
-#include "quad.h"
-#include "font_loader.h"
+#include "Camera.h"
+#include "Debug.h"
+#include <glm\gtc\matrix_transform.hpp>
+#include "Framebuffer.h"
+#include "Quad.h"
+#include "Font_Loader.h"
 
 struct TextboxMetrics {
 	TextboxMetrics(size_t pFont, glm::vec2 pGlyphScale, float pAdvanceScale, float pLineGapScale)
@@ -199,7 +199,7 @@ void loadTextboxGlyphs(Textbox& pTextbox, TextboxMetrics& pTextMetrics, gui::tex
 		size_t glyphIndex = std::max((size_t)0, std::min(charCode - font_inst.startCode, font_inst.glyphCount - 1));
 		gui::text::GlyphMetrics& met = gui::text::allMetrics[pFont.metricOffset + glyphIndex];
 
-		if (charCode != '/n') {
+		if (charCode != '\n') {
 			//append char to all chars
 			gui::text::CharQuad qd(cursor + met.bearingX* pTextMetrics.glyphScale.x, met.bearingY* pTextMetrics.glyphScale.y, met.width * pTextMetrics.glyphScale.x, met.height * pTextMetrics.glyphScale.y);
 			thisLineGreatestAscend = std::max(thisLineGreatestAscend, met.bearingY);

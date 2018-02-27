@@ -2,4 +2,3 @@ assets/
 *.dll
 deps/
 Debug/
-*.o

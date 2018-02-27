@@ -1,17 +1,17 @@
-#include "font_loader.h"
+#include "Font_Loader.h"
 #define _USE_MATH_DEFINES
 #include "shader.h"
 #include "texture.h"
-#include "gldebug.h"
+#include "glDebug.h"
 #include "camera.h"
-#include "vao.h"
-#include "debug.h"
+#include "VAO.h"
+#include "Debug.h"
 #include <algorithm>
 #include "dt/dt.h"
 #include "dt/image.h"
 #include <fstream>
-#include "contextwindow.h"
-#include "font.h"
+#include "ContextWindow.h"
+#include "Font.h"
 
 #define DEFAULT_TTF_DIR "../assets//fonts//"
 #define DEFAULT_STORE_DIR "../assets//glyph_atlas_fonts//"
@@ -133,8 +133,8 @@ void loadAtlas(FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, L
 
 		//if this flag is set, FreeType has loaded the glyph bitmaps with a higher resolution than needed (*upsampling)
 		//therefore all sizes have to be scaled back down to their actual, screen fitted sizes
-		maxGlyphWidth = (size_t)std::ceil(((float)maxGlyphWidth) * size_scale + spread_dist * 2);
-		maxGlyphHeight = (size_t)std::ceil(((float)maxGlyphHeight) * size_scale + spread_dist * 2);
+		maxGlyphWidth = (size_t)ceil(((float)maxGlyphWidth) * size_scale + spread_dist * 2);
+		maxGlyphHeight = (size_t)ceil(((float)maxGlyphHeight) * size_scale + spread_dist * 2);
 	}
 	const size_t atlasMaxAdvanceX = maxGlyphWidth + pad_pixels * 2;
 	const size_t atlasMaxAdvanceY = maxGlyphHeight + pad_pixels * 2;
@@ -217,7 +217,7 @@ void loadAtlas(FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, L
 					innerMaxDistance = std::max(innerMaxDistance, innerOutImg.data[h*dtSize.x + w]);
 				}
 			}
-			innerMaxDistance = std::min(spread_dist, std::sqrt(innerMaxDistance));
+			innerMaxDistance = std::min(spread_dist, sqrt(innerMaxDistance));
 			/*  In      Out
 			   43210 | 01234567
 			   43210 | 01234567
@@ -233,8 +233,8 @@ void loadAtlas(FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, L
 			for (size_t h = 0; h < dtSize.y; ++h) {
 				for (size_t w = 0; w < dtSize.x; ++w) {
 
-					float outDist = std::min(spread_dist, std::sqrt(outerOutImg.data[h*dtSize.x + w])); //values from 0 to outerMaxDistance
-					float inDist = std::min(spread_dist, std::sqrt(innerOutImg.data[h*dtSize.x + w])); //values from 0 to innerMaxDistance
+					float outDist = std::min(spread_dist, sqrt(outerOutImg.data[h*dtSize.x + w])); //values from 0 to outerMaxDistance
+					float inDist = std::min(spread_dist, sqrt(innerOutImg.data[h*dtSize.x + w])); //values from 0 to innerMaxDistance
 
 					float val = ((inDist - outDist) + spread_dist) / max_range;
 					//distance values are never more than innerMaxDistance
@@ -269,7 +269,7 @@ void loadAtlas(FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, L
 
 		//check whether to start a new line of glyphs in the atlas
 		if ((cursor.x + (atlasMaxAdvanceX)) > preWidth || g + 1 == pFontInstructions.glyphCount) {
-			maxAtlasWidth = std::max(maxAtlasWidth, (size_t)cursor.x);
+			maxAtlasWidth = std::max(maxAtlasWidth, cursor.x);
 			cursor.x = 0;
 			cursor.y += thisLineMaxY;
 
@@ -344,7 +344,7 @@ void removeFileExtension(std::string& pFileName) {
 	pFileName.resize(nameCharCount);
 }
 size_t gui::text::initializer::
-includeFont(std::string pFontFileName, FontInstructions pLoadInstructions = gui::text::FontInstructions())
+includeFont(std::string pFontFileName, FontInstructions& pLoadInstructions = gui::text::FontInstructions())
 {
 	size_t sz = loadFontBuffer.size();
 	LoadFont font;
@@ -361,7 +361,7 @@ createFontInstructions(size_t pPointSize, size_t pStartCode, size_t pGlyphCount,
 }
 
 size_t gui::text::initializer::
-createFontInstructions(gui::text::FontInstructions pInstructions)
+createFontInstructions(gui::text::FontInstructions & pInstructions)
 {
 	size_t sz = allFontInstructions.size();
 	size_t i = std::find(allFontInstructions.begin(), allFontInstructions.end(), pInstructions) - allFontInstructions.begin();

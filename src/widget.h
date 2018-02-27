@@ -1,9 +1,9 @@
 #pragma once
-#include "quad.h"
+#include "Quad.h"
 #include <tuple>
 #include <utility>
-#include "colorings.h"
-#include <glm.hpp>
+#include "Colorings.h"
+#include <glm\glm.hpp>
 #include <vector>
 #include <array>
 //-----Widgets
@@ -77,18 +77,18 @@ namespace gui {
 		typedef typename std::tuple<WidgetSetup<Elems>...> initer_t;
 
 
-		template<size_t N, typename Dummy>
+		template<size_t N>
 		struct construct_all {
 
 			static std::tuple<Elems...> func(typename Widget<Elems...>::initer_t pIniter) {
-				std::tuple<Elems...> re = construct_all<N - 1, Dummy>::func(pIniter);
+				std::tuple<Elems...> re = construct_all<N - 1>::func(pIniter);
 				std::get<N - 1>(re) = std::get<N - 1>(pIniter);
 				return re;
 			}
 
 		};
-		template<typename Dummy>
-		struct construct_all<0, Dummy> {
+		template<>
+		struct construct_all<0> {
 			static std::tuple<Elems...> func(typename Widget<Elems...>::initer_t pIniter) {
 				return std::tuple<Elems...>();
 			}
@@ -101,7 +101,7 @@ namespace gui {
 			:elements(pElements)
 		{	}
 		Widget(initer_t pIniter)
-			:elements(construct_all<ELEMENT_COUNT, void>::func(pIniter))
+			:elements(construct_all<ELEMENT_COUNT>::func(pIniter))
 		{	}
 		Widget(typename Widget<Elems...>::initer_t pIniter, WidgetMovePolicy<Widget<Elems...>> pMovePolicy, WidgetResizePolicy<Widget<Elems...>> pResizePolicy)
 			:move_policy(pMovePolicy), resize_policy(pResizePolicy), elements(construct_all<ELEMENT_COUNT>::func(pIniter))

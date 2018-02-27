@@ -1,7 +1,7 @@
-#include "entities.h"
-#include <gtc/matrix_transform.hpp>
-#include "vao.h"
-#include "model.h"
+#include "Entities.h"
+#include <glm\gtc\matrix_transform.hpp>
+#include "VAO.h"
+#include "Model.h"
 
 std::vector<glm::mat4> entities::allMatrices;
 std::vector<glm::vec3> entities::allPositions;

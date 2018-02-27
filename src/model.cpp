@@ -1,10 +1,10 @@
 #include "model.h"
-#include "model_loader.h"
-#include "model.h"
+#include "Model_Loader.h"
+#include "Model.h"
 #include "shader.h"
-#include "mesh.h"
-#include "entities.h"
-#include "collision.h"
+#include "Mesh.h"
+#include "Entities.h"
+#include "Collision.h"
 #include <cstdlib>
 #include <vector>
 #include <chrono>

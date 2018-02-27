@@ -1,8 +1,6 @@
 #pragma once
-#include <glm.hpp>
+#include <glm\glm.hpp>
 #include <vector>
-#include <string>
-
 namespace gui {
 	namespace text {
 
@@ -15,7 +13,7 @@ namespace gui {
 
 		struct Font {
 			Font() :instructions(0), kerningOffset(0), kerningCount(0), metricOffset(0), metricCount(0), glyphStorageIndex(0), atlasID(0), fontMetric(FontMetric()), stringOffset(0), stringCount(0) {}
-			unsigned int atlasID;
+			size_t atlasID;
 			FontMetric fontMetric;
 			size_t instructions;
 			size_t glyphStorageIndex;
@@ -91,8 +89,8 @@ namespace gui {
 			glm::vec2 pos;
 			glm::vec2 size;
 		};
-		extern unsigned int fontVAO;
-		extern unsigned int glyphShaderProgram;
+		extern size_t fontVAO;
+		extern size_t glyphShaderProgram;
 		extern std::vector<size_t> glyphIndexBuffer;
 		extern std::vector<Font> allFonts;
 

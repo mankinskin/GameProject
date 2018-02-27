@@ -1,17 +1,17 @@
-#include "font.h"
+#include "Font.h"
 #include "text.h"
 #include "shader.h"
 
 size_t MAX_CHARS = 1000;
-unsigned int quadStorage = 0;
-unsigned int charStorage = 0;
+size_t quadStorage = 0;
+unsigned charStorage = 0;
 std::vector<gui::text::String> allStrings;
 
 size_t styleStorage = 0;
 std::vector<gui::text::TextStyle> allTextStyles;
 
-unsigned int gui::text::fontVAO = 0;
-unsigned int gui::text::glyphShaderProgram = 0;
+size_t gui::text::fontVAO = 0;
+size_t gui::text::glyphShaderProgram = 0;
 std::vector<size_t> gui::text::glyphIndexBuffer;
 std::vector<gui::text::Font> gui::text::allFonts;
 std::vector<gui::text::FontInstructions> gui::text::allFontInstructions;

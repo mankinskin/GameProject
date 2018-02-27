@@ -1,10 +1,10 @@
-#include "model_loader.h"
-#include "debug.h"
-#include <assimp/postprocess.h>
+#include "Model_Loader.h"
+#include "Debug.h"
+#include <assimp\postprocess.h>
 #include "model.h"
-#include "mesh.h"
-#include "material.h"
-#include "texture.h"
+#include "Mesh.h"
+#include "Material.h"
+#include "Texture.h"
 #define DEFAULT_MODEL_DIR "assets//models//"
 
 std::string model::Loader::MODEL_DIR = DEFAULT_MODEL_DIR;
@@ -123,7 +123,7 @@ void model::Loader::loadModelFile(ModelLoadFile pFile)
 	using namespace mesh;
 	const aiScene* scene = imp.ReadFile(MODEL_DIR + pFile.filename, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded	);
 	const char* err = imp.GetErrorString();
-	if (err[0] != '/0') {
+	if (err[0] != '\0') {
 		debug::pushError(err);
 	}
 	if (scene == nullptr) {

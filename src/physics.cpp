@@ -1,6 +1,6 @@
 #include "physics.h"
-#include "collision.h"
-#include "entities.h"
+#include "Collision.h"
+#include "Entities.h"
 float physics::gravity_force = 9.81f;//m/s²
 
 void physics::step()
@@ -15,7 +15,7 @@ void physics::step()
 			glm::vec3 AtoB = glm::normalize(B_pos - A_pos) * dist;
 
 			if (dist < 0.0f) {
-				printf("Spheres are intersecting by %7.5f/n", dist);
+				printf("Spheres are intersecting by %7.5f\n", dist);
 				A_pos += AtoB * (0.5f);
 				B_pos += AtoB * -0.5f;
 			}

@@ -1,4 +1,4 @@
-#include "neural.h"
+#include "Neural.h"
 using namespace neural;
 
 Agent agent;

@@ -5,7 +5,7 @@
 #include <functional>
 #include <algorithm>
 #include <tuple>
-#include "signal.h"
+#include "Signal.h"
 
 namespace functors {
 /*

@@ -1,6 +1,6 @@
 #pragma once
 #include "gl.h"
-#include "font.h"
+#include "Font.h"
 
 #define TEXT_LAYOUT_BOUND_LEFT 00000001
 #define TEXT_LAYOUT_BOUND_RIGHT 00000010
