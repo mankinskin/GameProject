@@ -62,7 +62,7 @@ void model::Loader::loadMesh(const aiScene* pScene, size_t pMeshIndex, size_t& p
 		if (mesh->HasTextureCoords(pMeshIndex)) {
 			uv = mesh->mTextureCoords[0][v];
 		}
-		mesh::allStaticVertices.emplace_back(pos.x, pos.y, pos.z, normal.x, normal.y, normal.z, uv.x, uv.y);
+		mesh::allStaticVertices.push_back(mesh::Vertex(pos.x, pos.y, pos.z, normal.x, normal.y, normal.z, uv.x, uv.y));
 	}
 	for (size_t f = 0; f < mesh->mNumFaces; ++f) {
 		aiFace face = mesh->mFaces[f];
@@ -123,7 +123,7 @@ void model::Loader::loadModelFile(ModelLoadFile pFile)
 	using namespace mesh;
 	const aiScene* scene = imp.ReadFile(MODEL_DIR + pFile.filename, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded	);
 	const char* err = imp.GetErrorString();
-	if (err[0] != '/0') {
+	if (err[0] != '\0') {
 		debug::pushError(err);
 	}
 	if (scene == nullptr) {

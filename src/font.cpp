@@ -64,16 +64,16 @@ void gui::text::insertFontString(Font & pFont, String pString)
 	++pFont.stringCount;
 	allFontStrings.insert(allFontStrings.begin() + pFont.stringOffset, pString);
 }
-size_t gui::text::createTextStyle(TextStyle & pStyle)
-{
-	allTextStyles.push_back(pStyle);
-	return allTextStyles.size() - 1;
-}
+//size_t gui::text::createTextStyle(TextStyle & pStyle)
+//{
+//	allTextStyles.push_back(pStyle);
+//	return allTextStyles.size() - 1;
+//}
 void gui::text::initStyleBuffer() {
 
 	allTextStyles.reserve(2);
-	createTextStyle(1.5f, 0.8f);
-	createTextStyle(1.2f, 0.8f);
+	//createTextStyle(1.5f, 0.8f);
+	//createTextStyle(1.2f, 0.8f);
 	styleStorage = vao::createStorage(sizeof(TextStyle)*allTextStyles.size(), &allTextStyles[0], 0);
 
 	shader::bindUniformBufferToShader(glyphShaderProgram, styleStorage, "StyleBuffer");

@@ -1,6 +1,7 @@
 #include "debug.h"
 #include "app.h"
 #include <ncurses.h>
+#include <curses.h>
 #include <cstdio>
 #include <algorithm>
 

@@ -24,7 +24,7 @@ namespace voxelization {
 
 	extern glm::uvec3 frustum_size;
 	extern glm::mat4 projectionMatrix;
-	extern size_t volumeImage;
-	extern size_t backVolumeImage;//Back buffer for volume rendering
-	extern size_t voxelizationShader;
+	extern unsigned int volumeImage;
+	extern unsigned int backVolumeImage;//Back buffer for volume rendering
+	extern unsigned int voxelizationShader;
 }

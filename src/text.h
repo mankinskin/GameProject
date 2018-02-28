@@ -35,8 +35,8 @@ namespace gui {
 		void insertFontString(Font & pFont, String pString);
 		void setupGlyphShader();
 
-		size_t createTextStyle(TextStyle& pInstructions);
-		size_t createTextStyle(float pThickness, float pHardness);
+		//size_t createTextStyle(TextStyle pInstructions);
+		//size_t createTextStyle(float pThickness, float pHardness);
 		size_t createTextColor(glm::vec4 pColor);
 		void initStyleBuffer();
 		//extern std::vector<std::string> allTextColorNames;//only an idea. like white, grey, blue, pink, magenta

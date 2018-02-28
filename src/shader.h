@@ -26,16 +26,16 @@ namespace shader {
     void bindUniformBufferToShader(size_t pProgram, vao::Storage& pStorage, std::string pBlockName);
     extern unsigned int currentShaderProgram;
 
-    void setUniform(size_t& pProgram, std::string pUniformName, int pValue);
-    void setUniform(size_t& pProgram, std::string pUniformName, size_t pValue);
-    void setUniform(size_t& pProgram, std::string pUniformName, float pValue);
-    void setUniform(size_t& pProgram, std::string pUniformName, glm::vec3 pValue);
-    void setUniform(size_t& pProgram, std::string pUniformName, glm::vec4 pValue); 
-    void setUniform(size_t& pProgram, std::string pUniformName, glm::uvec4 pValue);
-    void setUniform(size_t& pProgram, std::string pUniformName, glm::uvec3 pValue);
-    void setUniform(size_t& pProgram, std::string pUniformName, glm::ivec4 pValue);
-    void setUniform(size_t& pProgram, std::string pUniformName, glm::ivec3 pValue);
-    void setUniform(size_t& pProgram, std::string pUniformName, glm::mat4 pValue, bool pTranspose);
-    void setUniform(size_t& pProgram, std::string pUniformName, glm::mat3 pValue, bool pTranspose);
+    void setUniform(size_t pProgram, std::string pUniformName, int pValue);
+    void setUniform(size_t pProgram, std::string pUniformName, size_t pValue);
+    void setUniform(size_t pProgram, std::string pUniformName, float pValue);
+    void setUniform(size_t pProgram, std::string pUniformName, glm::vec3 pValue);
+    void setUniform(size_t pProgram, std::string pUniformName, glm::vec4 pValue); 
+    void setUniform(size_t pProgram, std::string pUniformName, glm::uvec4 pValue);
+    void setUniform(size_t pProgram, std::string pUniformName, glm::uvec3 pValue);
+    void setUniform(size_t pProgram, std::string pUniformName, glm::ivec4 pValue);
+    void setUniform(size_t pProgram, std::string pUniformName, glm::ivec3 pValue);
+    void setUniform(size_t pProgram, std::string pUniformName, glm::mat4 pValue, bool pTranspose);
+    void setUniform(size_t pProgram, std::string pUniformName, glm::mat3 pValue, bool pTranspose);
 }
 

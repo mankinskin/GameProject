@@ -27,7 +27,7 @@ void app::Input::key_Callback(GLFWwindow * window, int pKey, int pScancode, int 
 	pushEvent(KeyEvent(pKey, pAction, pMods));
 }
 
-void app::Input::char_Callback(GLFWwindow * window, size_t pCodepoint)
+void app::Input::char_Callback(GLFWwindow * window, unsigned int pCodepoint)
 {
 	//printf("char callBack! Char: %c /n", pCodepoint);
 }

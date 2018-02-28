@@ -46,6 +46,6 @@ namespace app {
 
 		void reserveKeySignals(size_t pCount);
 		void key_Callback(GLFWwindow* window, int pKey, int pScancode, int pAction, int pMods);
-		void char_Callback(GLFWwindow* window, size_t pCodepoint);
+		void char_Callback(GLFWwindow* window, unsigned int pCodepoint);
 	}
 }

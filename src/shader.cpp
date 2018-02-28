@@ -145,36 +145,36 @@ void shader::addVertexAttribute(std::string pProgramName, std::string pAttribute
     addVertexAttribute(it->second, pAttributeName, pAttributeIndex);
 }
 
-void shader::setUniform(size_t& pProgram, std::string pUniformName, int pValue) {
+void shader::setUniform(size_t pProgram, std::string pUniformName, int pValue) {
     glUniform1i(glGetUniformLocation(pProgram, pUniformName.c_str()), pValue);
 }
-void shader::setUniform(size_t& pProgram, std::string pUniformName, size_t pValue) {
+void shader::setUniform(size_t pProgram, std::string pUniformName, size_t pValue) {
     glUniform1ui(glGetUniformLocation(pProgram, pUniformName.c_str()), pValue);
 }
-void shader::setUniform(size_t& pProgram, std::string pUniformName, float pValue) {
+void shader::setUniform(size_t pProgram, std::string pUniformName, float pValue) {
     glUniform1f(glGetUniformLocation(pProgram, pUniformName.c_str()), pValue);
 }
-void shader::setUniform(size_t& pProgram, std::string pUniformName, glm::vec3 pValue) {
+void shader::setUniform(size_t pProgram, std::string pUniformName, glm::vec3 pValue) {
     glUniform3f(glGetUniformLocation(pProgram, pUniformName.c_str()), pValue.x, pValue.y, pValue.z);
 }
-void shader::setUniform(size_t& pProgram, std::string pUniformName, glm::vec4 pValue) {
+void shader::setUniform(size_t pProgram, std::string pUniformName, glm::vec4 pValue) {
     glUniform4f(glGetUniformLocation(pProgram, pUniformName.c_str()), pValue.x, pValue.y, pValue.z, pValue.w);
 }
-void shader::setUniform(size_t& pProgram, std::string pUniformName, glm::uvec4 pValue) {
+void shader::setUniform(size_t pProgram, std::string pUniformName, glm::uvec4 pValue) {
     glUniform4ui(glGetUniformLocation(pProgram, pUniformName.c_str()), pValue.x, pValue.y, pValue.z, pValue.w);
 }
-void shader::setUniform(size_t& pProgram, std::string pUniformName, glm::uvec3 pValue) {
+void shader::setUniform(size_t pProgram, std::string pUniformName, glm::uvec3 pValue) {
     glUniform3ui(glGetUniformLocation(pProgram, pUniformName.c_str()), pValue.x, pValue.y, pValue.z);
 }
-void shader::setUniform(size_t& pProgram, std::string pUniformName, glm::ivec4 pValue) {
+void shader::setUniform(size_t pProgram, std::string pUniformName, glm::ivec4 pValue) {
     glUniform4i(glGetUniformLocation(pProgram, pUniformName.c_str()), pValue.x, pValue.y, pValue.z, pValue.w);
 }
-void shader::setUniform(size_t& pProgram, std::string pUniformName, glm::ivec3 pValue) {
+void shader::setUniform(size_t pProgram, std::string pUniformName, glm::ivec3 pValue) {
     glUniform3i(glGetUniformLocation(pProgram, pUniformName.c_str()), pValue.x, pValue.y, pValue.z);
 }
-void shader::setUniform(size_t& pProgram, std::string pUniformName, glm::mat4 pValue, bool pTranspose) {
+void shader::setUniform(size_t pProgram, std::string pUniformName, glm::mat4 pValue, bool pTranspose) {
     glUniformMatrix4fv(glGetUniformLocation(currentShaderProgram, pUniformName.c_str()), 1, pTranspose, glm::value_ptr(pValue));
 }
-void shader::setUniform(size_t& pProgram, std::string pUniformName, glm::mat3 pValue, bool pTranspose) {
+void shader::setUniform(size_t pProgram, std::string pUniformName, glm::mat3 pValue, bool pTranspose) {
     glUniformMatrix3fv(glGetUniformLocation(pProgram, pUniformName.c_str()), 1, pTranspose, glm::value_ptr(pValue));
 }

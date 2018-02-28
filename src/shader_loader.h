@@ -37,6 +37,7 @@ namespace shader {
 	extern std::unordered_map<std::string, size_t> shaderProgramLookup;
 	extern std::vector<Module> allModules;
 	extern std::unordered_map<std::string, size_t> moduleLookup;
+
 	namespace Loader {
 		extern std::string SHADER_DIR;
 

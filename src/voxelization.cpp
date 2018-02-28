@@ -7,9 +7,9 @@
 #include <GLM/gtc/matrix_transform.hpp>
 
 glm::uvec3 voxelization::frustum_size = glm::ivec3(200, 200, 200);
-size_t voxelization::voxelizationShader = 0;
-size_t voxelization::volumeImage = 0;
-size_t voxelization::backVolumeImage = 0;
+unsigned int voxelization::voxelizationShader = 0;
+unsigned int voxelization::volumeImage = 0;
+unsigned int voxelization::backVolumeImage = 0;
 glm::mat4 voxelization::projectionMatrix;
 glm::vec4* volume = new glm::vec4[200*200*200];
 void voxelization::init() {

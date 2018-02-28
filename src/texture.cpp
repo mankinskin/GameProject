@@ -4,7 +4,7 @@
 #include <SOIL.h>
 #define DEFAULT_TEXTURE_DIRECTORY "assets//textures//"
 std::vector<texture::Texture2D> texture::all2DTextures;
-std::unordered_map<std::string, size_t> texture::textureLookup;
+std::unordered_map<std::string, unsigned int> texture::textureLookup;
 std::string texture::TEXTURE_DIR = DEFAULT_TEXTURE_DIRECTORY;
 
 
@@ -18,7 +18,7 @@ void texture::loadTextureBuffer(TextureBuffer & pBuffer, std::string pFilename, 
 	pBuffer.data = SOIL_load_image((TEXTURE_DIR + pFilename).c_str(), &pBuffer.width, &pBuffer.height, &pBuffer.channels, pForceChannels);
 
 	if (!pBuffer.data) {
-		debug::pushError("texture not found: /"" + (TEXTURE_DIR + pFilename) + "/" !!!");
+		debug::pushError("texture not found: " + (TEXTURE_DIR + pFilename) + " !!!");
 	}
 }
 

@@ -18,15 +18,16 @@ namespace gui {
 	
 	const size_t MAX_CONST_COLOR_COUNT = 100;
 
-	extern size_t constColorBuffer;
-	extern size_t constColorVAO;
+	extern unsigned int constColorBuffer;
+	extern unsigned int constColorVAO;
+	extern unsigned int constColorShader;
+	extern unsigned int constColoringBuffer;
+
 	extern std::vector<glm::vec4> constColors;  //all registered colors
 
 	template<class ColorType>
-	extern ColorType colorings[MAX_QUAD_COUNT]; //one index into constColors for each quad
+	ColorType colorings[MAX_QUAD_COUNT]; //one index into constColors for each quad
 
-	extern size_t constColorShader;
-	extern size_t constColoringBuffer;
 
 	void initConstColorVAO();
 	void initConstColorShader();

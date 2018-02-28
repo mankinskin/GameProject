@@ -135,7 +135,7 @@ void vao::bindStorage(size_t pTarget, Storage& pStorage)
 	pStorage.target = pTarget;
 	
 	if (pTarget == GL_UNIFORM_BUFFER || pTarget == GL_SHADER_STORAGE_BUFFER) {//binds a storage to an index of a target (like GL_UNIFORM_BUFFER or GL_SHADER_STORAGE_BUFFER)
-		auto& bufferTargetBinding = bufferTargetBinds.find(pTarget);
+		auto bufferTargetBinding = bufferTargetBinds.find(pTarget);
 		if (bufferTargetBinding == bufferTargetBinds.end()) {
 			bufferTargetBinding = bufferTargetBinds.insert(std::make_pair(pTarget, 0)).first;
 		}

@@ -166,10 +166,10 @@ size_t gui::text::createTextboxMetrics(size_t pFont, float pGlyphScaleX, float p
 
 
 
-size_t gui::text::createTextStyle(float pThickness, float pHardness)
-{
-	return createTextStyle(TextStyle(pThickness, pHardness));
-}
+//size_t gui::text::createTextStyle(float pThickness, float pHardness)
+//{
+//	return createTextStyle(TextStyle(pThickness, pHardness));
+//}
 
 size_t gui::text::createTextColor(glm::vec4 pColor)
 {
@@ -199,7 +199,7 @@ void loadTextboxGlyphs(Textbox& pTextbox, TextboxMetrics& pTextMetrics, gui::tex
 		size_t glyphIndex = std::max((size_t)0, std::min(charCode - font_inst.startCode, font_inst.glyphCount - 1));
 		gui::text::GlyphMetrics& met = gui::text::allMetrics[pFont.metricOffset + glyphIndex];
 
-		if (charCode != '/n') {
+		if (charCode != '\n') {
 			//append char to all chars
 			gui::text::CharQuad qd(cursor + met.bearingX* pTextMetrics.glyphScale.x, met.bearingY* pTextMetrics.glyphScale.y, met.width * pTextMetrics.glyphScale.x, met.height * pTextMetrics.glyphScale.y);
 			thisLineGreatestAscend = std::max(thisLineGreatestAscend, met.bearingY);

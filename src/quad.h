@@ -85,10 +85,10 @@ namespace gui {
 	void initQuadBuffer();
 	void updateQuadBuffer();
 	void readQuadIndexBuffer();
-	extern size_t quadIndexShader;
-	extern size_t quadIndexVAO;
+	extern unsigned int quadIndexShader;
+	extern unsigned int quadIndexVAO;
+	extern unsigned int quadBuffer;
 
 	const size_t MAX_QUAD_COUNT = 10000;
-	extern size_t quadBuffer;
 }
 #endif //QUAD_H

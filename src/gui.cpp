@@ -69,7 +69,7 @@ void gui::initWidgets()
 	WidgetSetup<Button> button_setup(button_initer, button_move_policy, button_resize_policy);
 	
 	Button quitButton(button_setup);
-	quitButton.move(gui::pixel_round(glm::vec2(-0.9f, -0.6f)));
+	//quitButton.move(gui::pixel_round(glm::vec2(-0.9f, -0.6f)));
 	
 	quitButton.color(buttonColors);
 	

@@ -12,13 +12,13 @@ size_t guiTextureAtlas;
 std::vector<glm::vec4> allAtlasUVs;
 size_t uvBuffer = 0;
 
-size_t gui::constColorBuffer;
-size_t gui::constColorVAO;
+unsigned int gui::constColorBuffer;
+unsigned int gui::constColorVAO;
+unsigned int gui::constColorShader;
+unsigned int gui::constColoringBuffer;
 std::vector<glm::vec4> gui::constColors;
-template<class ColorType>
-ColorType gui::colorings[gui::MAX_QUAD_COUNT];  //one index into constColors for each quad
-size_t gui::constColorShader;
-size_t gui::constColoringBuffer;
+//template<class ColorType>
+//ColorType gui::colorings[gui::MAX_QUAD_COUNT];  //one index into constColors for each quad
 std::vector<std::string> constColorNames;
 
 gui::ConstColor::ConstColor(std::string pColorName) {

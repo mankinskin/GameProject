@@ -8,10 +8,9 @@
 #include "framebuffer.h"
 
 std::vector<glm::vec4> gui::allQuads;
-size_t gui::quadBuffer;
-
-size_t gui::quadIndexShader;
-size_t gui::quadIndexVAO;
+unsigned int gui::quadBuffer;
+unsigned int gui::quadIndexShader;
+unsigned int gui::quadIndexVAO;
 std::vector<size_t> quadIndexMap;
 std::vector<float> quadDepthMap;
 

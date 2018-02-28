@@ -7,7 +7,7 @@ namespace texture {
 
 	struct Texture2D {
 		Texture2D(size_t pWidth, size_t pHeight, GLenum pInternalFormat, GLenum pFormat, GLenum pType);
-		size_t ID = 0;
+		unsigned int ID = 0;
 		size_t width = 0;
 		size_t height = 0;
 		GLenum internalFormat;
@@ -40,5 +40,5 @@ namespace texture {
 	void setTextureDirectory(std::string& pDirectory);
 	void resetTextureDirectory();
 	extern std::string TEXTURE_DIR;
-	extern std::unordered_map<std::string, size_t> textureLookup;
+	extern std::unordered_map<std::string, unsigned int> textureLookup;
 }

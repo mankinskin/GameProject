@@ -11,14 +11,14 @@ namespace vao {
 	extern int MAX_UNIFORM_BUFFER_BINDINGS;
 	struct Storage {
 		Storage() {}
-		size_t ID = 0;
+		unsigned int ID = 0;
 		size_t capacity = 0;
 		size_t bufferFlags = 0;
 		size_t streamIndex = 0;
-		size_t target = 0;
-		size_t binding = 0;
+		unsigned int target = 0;
+		unsigned int binding = 0;
 
-		size_t vaoID = 0;
+		unsigned int vaoID = 0;
 		size_t stride = UNIFORM_BUFFER_OFFSET_ALIGNMENT;
 	};
 
