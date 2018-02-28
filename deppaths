@@ -1,4 +1,4 @@
-LIBGLFW_DIR=/lib/i386-linux-gnu/
+LIBGLFW_DIR=/usr/lib/x86_64-linux-gnu/
 LIBFREETYPE_DIR=/lib/i386-linux-gnu/
 LIBGL_DIR=/lib/i386-linux-gnu/
 LIBGLU_DIR=/lib/i386-linux-gnu/

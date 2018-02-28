@@ -45,6 +45,7 @@ glm::vec3 app::node_mov = glm::vec3();
 
 void app::init()
 {
+    puts("Hello");
 	state = Running;
 	setMaxFPS(10000);
 	initGLFW();
@@ -70,6 +71,7 @@ void app::init()
 
 void app::gameloop()
 {	
+    puts("Entering gameloop");
 	GLuint gui_clear_index[4] = { 0, 0, 0, 0 };
 	GLfloat g_clear_color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	GLfloat g_clear_depth = 1.0f;

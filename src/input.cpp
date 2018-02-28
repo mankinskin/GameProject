@@ -61,7 +61,7 @@ size_t app::Input::always;
 
 void app::Input::init()
 {
-	puts("Initilizing GLFW Input.../n");
+	puts("Setting GLFW Callbacks...");
 	//initializes GLFW input and defines the keys to track
 	glfwSetInputMode(app::mainWindow.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	glfwSetKeyCallback(app::mainWindow.window, key_Callback);
@@ -71,6 +71,7 @@ void app::Input::init()
 	glfwSetMouseButtonCallback(app::mainWindow.window, mouseKey_Callback);
 	glfwSetScrollCallback(app::mainWindow.window, scroll_Callback);
 	reserveKeySignals(20);
+    puts("Initializing Key Listeners...");
 	key_esc = app::Input::KeySignal(GLFW_KEY_ESCAPE);
 	key_c = app::Input::KeySignal(GLFW_KEY_C);
 	key_g = app::Input::KeySignal(GLFW_KEY_G);

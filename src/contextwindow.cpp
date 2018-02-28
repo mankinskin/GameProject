@@ -10,16 +10,19 @@ app::ContextWindow::Monitor app::ContextWindow::primaryMonitor;
 
 void app::ContextWindow::initMonitors()
 {
+    puts("Detecting Monitors...");
     //find primary monitor for GLFW
     allMonitors = glfwGetMonitors(&monitorCount);
+    printf("%d monitors detected.", monitorCount);
     if (monitorCount > 0) {
 	primaryMonitor.monitor = allMonitors[0];
     }
     else {
+        printf("Could not detect any monitors.\nAttempting to use primary monitor.");
 	primaryMonitor.monitor = glfwGetPrimaryMonitor();
     }
     if (primaryMonitor.monitor == nullptr) {
-	debug::pushError("GLFW could not find your (primary) monitor!", debug::Error::Fatal);
+	debug::pushError("GLFW could not find any monitor!", debug::Error::Fatal);
     }
 }
 

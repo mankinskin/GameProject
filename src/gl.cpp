@@ -47,6 +47,7 @@ size_t gl::cubeEBO = 0;
 void gl::init()
 {
 	initGLEW();
+    puts("Initializing OpenGL...");
 	getOpenGLInitValues();
 	setViewport(app::mainWindow);
 
@@ -55,20 +56,42 @@ void gl::init()
 	lighting::createLight(glm::vec4(1.0f, 14.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 100.0f));
 	lighting::createLight(glm::vec4(4.0f, -4.0f, 3.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 100.0f));
 	lighting::createLight(glm::vec4(3.0f, 15.0f, -5.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 100.0f));
+    puts("Initializing Global Data...");
 	initPrimitiveVBO();
+
+    puts("GUI...");
 	gui::init();
+
+    puts("glDebug...");
 	glDebug::init();
+
+    puts("Colors...");
 	gui::uploadConstColors();
+
+    puts("Lines...");
 	gui::initLineVAO();
+
+    puts("Widgets...");
 	gui::initWidgets();
+
+    puts("Camera...");
 	camera::main_camera.init();
+
 	initGeneralUniformBuffer();
 
+    puts("Framebuffers...");
 	texture::initFramebuffers();
+
+    puts("Shaders...");
 	shader::loadShaders();
-	
+
+	puts("Lighting...");
 	lighting::initLighting();
+
+    puts("Entities...");
 	entities::initEntityBuffers();
+
+    puts("Models...");
 	model::initModels();
 	mesh::initMeshVAO();
 	model::setupModels();
@@ -77,6 +100,7 @@ void gl::init()
 	//model::revalidateModelMeshOffsets();
 	//mesh::revalidateMeshEntityOffsets();
 
+    puts("Binding uniform buffers...");
 	bindUniformBufferLocations();
 	debug::printErrors();
 }
@@ -107,11 +131,18 @@ void gl::getOpenGLInitValues()
 	GLSL_VERSION = std::string((char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 	SYSTEM_RENDERER = std::string((char*)glGetString(GL_RENDERER));
 
+    printf("OpenGL %s.%s\n", std::to_string(OPENGL_VERSION[0]).c_str(), std::to_string(OPENGL_VERSION[1]).c_str());
+    printf("GLSL %s\n", GLSL_VERSION.c_str());
+    printf("Renderer %s\n", SYSTEM_RENDERER.c_str());
+
 	glGetIntegerv(GL_NUM_EXTENSIONS, &EXTENSIONS_SUPPORTED_NUM);
+    printf("%d Extensions found.\n", EXTENSIONS_SUPPORTED_NUM);
 	EXTENSION_LIST.resize(EXTENSIONS_SUPPORTED_NUM);
 	for (int k = 0; k < EXTENSIONS_SUPPORTED_NUM; ++k) {
-		EXTENSION_LIST[k] = std::string((char*)glGetStringi(GL_EXTENSIONS, k));
+		EXTENSION_LIST[k] = std::string((const char*)glGetStringi(GL_EXTENSIONS, k));
+        printf("%s\n", EXTENSION_LIST[k].c_str());
 	}
+    
 
 	glGetIntegeri_v(GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 0, &MAX_WORK_GROUP_SIZE.x);
 	glGetIntegeri_v(GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 1, &MAX_WORK_GROUP_SIZE.y);
@@ -138,7 +169,7 @@ void gl::getOpenGLInitValues()
 }
 
 void gl::initGLEW() {
-	puts("Initializing OpenGL(GLEW).../n");
+	puts("Initializing GLEW...");
 	size_t glew = glewInit();
 	if (glew != GLEW_OK) {
 
@@ -147,6 +178,7 @@ void gl::initGLEW() {
 		while (!getch()) {}
 		exit(glew);
 	}
+    printf("GLEW %s\n", (const char*)glewGetString(GLEW_VERSION));
 }
 
 void gl::initGeneralUniformBuffer()
