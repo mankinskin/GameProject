@@ -13,7 +13,9 @@ OBJ_TARGETS=$(patsubst %, build/%, $(OBJ_FILES))
 H_FILES=$(shell ls src | grep -e '\.h')
 
 INCLUDE_LIBS=-lassimp -lglfw -lGLEW -lGL -lGLU -lm -lSOIL -lfreetype -lncurses
-dep:
+depinstall:
+	apt-get install libglm-dev libglfw3-dev libglew-dev libassimp-dev libsoil-dev freeglut3  -y
+dep: depinstall
 	cp $(LIBGLFW_DIR)/libglfw.so .
 	cp $(LIBASSIMP_DIR)/libassimp.so .
 	cp $(LIBGLEW_DIR)/libGLEW.so .
