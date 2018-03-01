@@ -92,9 +92,9 @@ void gl::init()
 	entities::initEntityBuffers();
 
     puts("Models...");
-	model::initModels();
-	mesh::initMeshVAO();
-	model::setupModels();
+	//model::initModels();
+	//mesh::initMeshVAO();
+	//model::setupModels();
 
 	//entities::updateEntityMatrices();
 	//model::revalidateModelMeshOffsets();
@@ -170,6 +170,7 @@ void gl::getOpenGLInitValues()
 
 void gl::initGLEW() {
 	puts("Initializing GLEW...");
+    glewExperimental = true;
 	size_t glew = glewInit();
 	if (glew != GLEW_OK) {
 

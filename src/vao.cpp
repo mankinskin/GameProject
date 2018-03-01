@@ -19,23 +19,19 @@ std::unordered_map<size_t, size_t> vao::bufferTargetBinds;
 size_t vao::createStorage()
 {
 	Storage storage;
-    puts("New Storage...");
-	unsigned int ind = 0;//allStorages.size();
-    printf("New Storage created\n");
-    fflush(stdout);
-	glCreateBuffers(1, &ind);
-	//allStorages.push_back(storage);
+	unsigned int ind = allStorages.size();
+	glCreateBuffers(1, &storage.ID);
+	allStorages.push_back(storage);
 	return ind;
 }
 size_t vao::createStorage(size_t pCapacity, const void* pData, size_t pFlags)
 {
 	size_t ind = createStorage();
-	//initStorageData(ind, pCapacity, pData, pFlags);
+	initStorageData(ind, pCapacity, pData, pFlags);
 	return ind;
 }
 void vao::initStorageData(size_t pStorage, size_t pCapacity, const void* pData, size_t pFlags)
 {
-    puts("Initializing Storage...");
 	Storage& stor = allStorages[pStorage];
 	glNamedBufferStorage(stor.ID, pCapacity, pData, pFlags);
 	stor.capacity = pCapacity;

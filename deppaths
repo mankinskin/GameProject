@@ -1,7 +1,7 @@
 LIBGLFW_DIR=/usr/lib/x86_64-linux-gnu/
 LIBFREETYPE_DIR=/lib/i386-linux-gnu/
 LIBGL_DIR=/lib/i386-linux-gnu/
-LIBGLU_DIR=/lib/i386-linux-gnu/
+LIBGLUT_DIR=/usr/lib/x86_64-linux-gnu/
 LIBGLEW_DIR=/usr/lib/x86_64-linux-gnu/
 LIBASSIMP_DIR=/usr/lib/x86_64-linux-gnu/
 LIBSOIL_DIR=/usr/lib/
