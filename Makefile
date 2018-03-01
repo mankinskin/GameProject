@@ -12,7 +12,7 @@ OBJ_FILES=$(SRC_FILES:cpp=o)
 OBJ_TARGETS=$(patsubst %, build/%, $(OBJ_FILES))
 H_FILES=$(shell ls src | grep -e '\.h')
 
-INCLUDE_LIBS=-lassimp -lglfw -lGLEW -lGL -lglut -lGLU -lm -lSOIL -lfreetype -lncurses
+INCLUDE_LIBS=-lassimp -lglfw -lGLEW -lGL -lGLU -lm -lSOIL -lfreetype -lncurses
 dep:
 	cp $(LIBGLFW_DIR)/libglfw.so .
 	cp $(LIBASSIMP_DIR)/libassimp.so .

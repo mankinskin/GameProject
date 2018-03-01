@@ -1,7 +1,7 @@
 #include "camera.h"
 #include "gl.h"
-#include <GLM/gtc/matrix_transform.hpp>
-#include <GLM/gtx/rotate_vector.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtx/rotate_vector.hpp>
 #include <gtc/type_ptr.hpp>
 #include "app.h"
 #include <math.h>
