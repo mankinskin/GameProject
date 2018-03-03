@@ -13,7 +13,7 @@ void app::ContextWindow::initMonitors()
     puts("Detecting Monitors...");
     //find primary monitor for GLFW
     allMonitors = glfwGetMonitors(&monitorCount);
-    printf("%d monitors detected.", monitorCount);
+    printf("%d monitors detected.\n", monitorCount);
     if (monitorCount > 0) {
 	primaryMonitor.monitor = allMonitors[0];
     }

@@ -20,7 +20,7 @@ size_t vao::createStorage()
 {
 	Storage storage;
 	unsigned int ind = allStorages.size();
-	glCreateBuffers(1, &storage.ID);
+	glGenBuffers(1, &storage.ID);
 	allStorages.push_back(storage);
 	return ind;
 }
@@ -62,10 +62,11 @@ void* vao::mapStorage(size_t pStorageIndex, size_t pFlags)
 }
 
 void* vao::mapStorage(Storage& pStorage, size_t pFlags)
-{
+{ 
+    printf("Mapping Storage %d...\n", pStorage.ID);
 	void* p = glMapNamedBufferRange(pStorage.ID, 0, pStorage.capacity, pFlags);
 	if (!p) {
-		debug::pushError("Failed to map Storage!/n");
+		debug::pushError("Failed to map Storage!\n");
 	}
 	return p;
 }
