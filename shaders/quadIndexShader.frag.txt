@@ -1,0 +1,9 @@
+#version 450
+
+layout(location = 0)out unsigned int id;
+
+flat in unsigned int quad_id;
+
+void main(){
+	id = quad_id;
+}
