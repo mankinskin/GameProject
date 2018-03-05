@@ -58,6 +58,7 @@ size_t vao::createStream(size_t pStorageIndex, size_t pMapFlags)
 
 void* vao::mapStorage(size_t pStorageIndex, size_t pFlags)
 {
+    printf("Accessing Storage at index %d\n", pStorageIndex);
 	return mapStorage(allStorages[pStorageIndex], pFlags);
 }
 
@@ -172,8 +173,3 @@ void vao::setVertexArrayVertexStorage(size_t pVAO, size_t pBinding, Storage & pS
 	pStorage.binding = pBinding;
 	pStorage.stride = pStride;
 }
-
-
-
-
-

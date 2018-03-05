@@ -1,6 +1,7 @@
 #include "camera.h"
 #include "gl.h"
 #include <gtc/matrix_transform.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
 #include <gtx/rotate_vector.hpp>
 #include <gtc/type_ptr.hpp>
 #include "app.h"
@@ -220,5 +221,5 @@ void camera::CameraMode::apply(Camera* pCam) {
 	movement.apply(pCam);
 	look.apply(pCam);
 	pCam->lookAt = frustum.center;
-	pCam->normal = frustum.up;
+        pCam->normal = frustum.up;
 }
