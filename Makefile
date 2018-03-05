@@ -23,8 +23,10 @@ depinstall: .deps_installed
 		sudo apt-get install libglew-dev libglm-dev libglfw3 libglfw3-dev libassimp-dev libsoil-dev freeglut3 libfreetype6-dev -y;
 
 dep: .deps_installed
+	sudo cp $(LIBGLFW_DIR)/libglfw.so .
 	sudo cp $(LIBGLFW_DIR)/libglfw.so.3 .
 	sudo cp $(LIBASSIMP_DIR)/libassimp.so .
+	sudo cp $(LIBGLEW_DIR)/libGLEW.so .
 	sudo cp $(LIBGLEW_DIR)/libGLEW.so.2.0 .
 	sudo cp $(LIBGLEW_DIR)/libGLEW.so.2.0.0 .
 	sudo cp $(LIBGLUT_DIR)/libglut.so.3 .
@@ -45,7 +47,9 @@ run: all
 cleanbuild: 
 	rm -rf build
 cleandep:
-	rm .deps_installed
+	rm -f .deps_installed
+	rm -f libglfw.so libglfw.so.3 libassimp.so libGLEW.so libGLEW.so.2.0 libGLEW.so.2.0 libGLEW.so.2.0.0 libglut.so.3 libglut.so.3.9.0
+	rm -f game
 clean: cleanbuild cleandep
 
 fresh: clean all

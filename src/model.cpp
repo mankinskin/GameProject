@@ -15,7 +15,7 @@ std::vector<std::string> model::allModelNames;
 void model::initModels()
 {
 	//create meshes
-	model::Loader::includeModel("sphere.3DS", "sphere");
+	//model::Loader::includeModel("sphere.3DS", "sphere");
 	//model::Loader::includeModel("cube.obj");
 	//model::Loader::includeModel("astroBoy_walk.dae");
 	//model::Loader::includeModel("deer.3ds");
@@ -23,13 +23,13 @@ void model::initModels()
 	model::Loader::loadModels();
 	
 	//normalize sphere mesh
-	size_t sphere_mesh = model::getModel("sphere").meshOffset;
-	size_t vertexOffset = mesh::allMeshes[sphere_mesh].vertexOffset;
-	size_t vertexCount = mesh::allMeshes[sphere_mesh].vertexCount;
-	for (size_t v = 0; v < vertexCount; ++v) {
-		glm::vec3& vert = mesh::allStaticVertices[vertexOffset + v].pos;
-		vert = glm::normalize(vert);
-	}
+	//size_t sphere_mesh = model::getModel("sphere").meshOffset;
+	//size_t vertexOffset = mesh::allMeshes[sphere_mesh].vertexOffset;
+	//size_t vertexCount = mesh::allMeshes[sphere_mesh].vertexCount;
+	//for (size_t v = 0; v < vertexCount; ++v) {
+	//	glm::vec3& vert = mesh::allStaticVertices[vertexOffset + v].pos;
+	//	vert = glm::normalize(vert);
+	//}
 }
 
 void model::setupModels()

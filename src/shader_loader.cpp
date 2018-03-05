@@ -5,7 +5,7 @@
 #include <sstream>
 #include "gldebug.h"
 
-#define DEFAULT_SHADER_DIRECTORY "deps//shaders//"
+#define DEFAULT_SHADER_DIRECTORY "shaders//"
 
 std::string shader::Loader::SHADER_DIR = DEFAULT_SHADER_DIRECTORY;
 
