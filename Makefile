@@ -20,7 +20,7 @@ INCLUDE_LIBS=-lncurses -lassimp -lglfw -lGLEW -lGL -lGLU -lSOIL -lfreetype -lX11
 
 depinstall: .deps_installed
 	sudo apt-get install mesa-utils libgl1-mesa-dev libglu1-mesa-dev 
-	sudo apt-get install libglew-dev libglm-dev libglfw3 libglfw3-dev libassimp-dev libsoil-dev freeglut3 libfreetype6-dev -y;
+		sudo apt-get install libglew-dev libglm-dev libglfw3 libglfw3-dev libassimp-dev libsoil-dev freeglut3 libfreetype6-dev -y;
 
 dep: .deps_installed
 	sudo cp $(LIBGLFW_DIR)/libglfw.so.3 .
@@ -31,7 +31,7 @@ dep: .deps_installed
 	sudo cp $(LIBGLUT_DIR)/libglut.so.3.9.0 .
 
 build/%.o: src/%.cpp 
-	$(GCC) -o $@ -c $< $(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_ASSIMP) $(INCLUDE_SOIL)
+	$(GCC) -o $@ -c $< $(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_ASSIMP) $(INCLUDE_SOIL) $(INCLUDE_LIB_PATHS) $(INCLUDE_LIBS)
 
 build:
 	mkdir build
