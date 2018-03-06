@@ -45,7 +45,7 @@ glm::vec3 app::node_mov = glm::vec3();
 
 void app::init()
 {
-    puts("Hello");
+	puts("Hello");
 	state = Running;
 	setMaxFPS(10000);
 	initGLFW();
@@ -59,8 +59,8 @@ void app::init()
 	gl::init();
 
 	//gui::text::initStyleBuffer();
-	Input::setupControls();
-	
+	//Input::setupControls();
+
 	debug::printErrors();
 
 	while (app::state != app::State::Exit) {
@@ -71,28 +71,29 @@ void app::init()
 
 void app::gameloop()
 {	
-    puts("Entering gameloop");
+	puts("Entering gameloop");
 	GLuint gui_clear_index[4] = { 0, 0, 0, 0 };
 	GLfloat g_clear_color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	GLfloat g_clear_depth = 1.0f;
-	
+
 	while (state == app::Running) {
 		fetchInput();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//entities::translate(0, node_mov * 0.01f);
 		//node_mov = glm::vec3();
 
-		camera::main_camera.look(Input::cursorFrameDelta);
-		camera::main_camera.update();
+		//camera::main_camera.look(Input::cursorFrameDelta);
+		//camera::main_camera.update();
 
-		gl::updateGeneralUniformBuffer();
-		lighting::updateLightIndexRangeBuffer();
-		lighting::updateLightDataBuffer();
-		entities::updateEntityMatrices();
-		entities::updateEntityBuffers();
-		mesh::updateMeshBuffers();
-		gui::updateLineBuffers();
-		gui::updateQuadBuffer();
-		gui::updateColorings();
+		//gl::updateGeneralUniformBuffer();
+		//lighting::updateLightIndexRangeBuffer();
+		//lighting::updateLightDataBuffer();
+		//entities::updateEntityMatrices();
+		//entities::updateEntityBuffers();
+		//mesh::updateMeshBuffers();
+		//gui::updateLineBuffers();
+		//gui::updateQuadBuffer();
+		//gui::updateColorings();
 		//gui::text::updateCharStorage();
 
 		//reset g_buffer
@@ -103,41 +104,41 @@ void app::gameloop()
 		//glClearNamedFramebufferfv(texture::gBuffer, GL_COLOR, 4, g_clear_color);
 		//glClearNamedFramebufferfv(texture::gBuffer, GL_DEPTH, 0, &g_clear_depth);
 		//clear screen buffer
-		voxelization::clearVolumeTexture();
-		glClearNamedFramebufferfv(0, GL_COLOR, 0, g_clear_color);
-		glClearNamedFramebufferfv(0, GL_DEPTH, 0, &g_clear_depth);
+		//voxelization::clearVolumeTexture();
+		//glClearNamedFramebufferfv(0, GL_COLOR, 0, g_clear_color);
+		//glClearNamedFramebufferfv(0, GL_DEPTH, 0, &g_clear_depth);
 		////reset guiFBO
-		glClearNamedFramebufferuiv(texture::guiFBO, GL_COLOR, 0, gui_clear_index);
-		glClearNamedFramebufferfv(texture::guiFBO, GL_DEPTH, 0, &g_clear_depth);
+		//glClearNamedFramebufferuiv(texture::guiFBO, GL_COLOR, 0, gui_clear_index);
+		//glClearNamedFramebufferfv(texture::guiFBO, GL_DEPTH, 0, &g_clear_depth);
 
-		glBindFramebuffer(GL_FRAMEBUFFER, texture::guiFBO);
-		gui::rasterQuadIndices();
-		gui::readQuadIndexBuffer();
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		voxelization::voxelizeMeshes();
-		gui::renderLines();
+		//glBindFramebuffer(GL_FRAMEBUFFER, texture::guiFBO);
+		//gui::rasterQuadIndices();
+		//gui::readQuadIndexBuffer();
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//voxelization::voxelizeMeshes();
+		//gui::renderLines();
 		//glBindFramebuffer(GL_FRAMEBUFFER, texture::gBuffer);
 		//mesh::renderMeshes();
 
 		//glBindFramebuffer(GL_READ_FRAMEBUFFER, texture::gBuffer);
-		
+
 		//glBlitFramebuffer(0, 0, gl::screenWidth, gl::screenHeight, 0, 0, gl::screenWidth, gl::screenHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		lighting::renderLights();
+		//lighting::renderLights();
 
 		//mesh::renderMeshNormals();
-		
-		gui::renderColorings();
+
+		//gui::renderColorings();
 		//gui::text::renderGlyphs();
-		
+
 		glfwSwapBuffers(mainWindow.window);
 
 		debug::printErrors();
-		updateTime();
-		updateTimeFactor();
-		limitFPS();
-		debug::printInfo();
+		//updateTime();
+		//updateTimeFactor();
+		//limitFPS();
+		//debug::printInfo();
 	}
 	gui::text::clearCharStorage();
 
@@ -152,10 +153,10 @@ void app::fetchInput()
 	Input::updateMouse();
 	Input::fetchGLFWEvents();
 
-	Input::getMouseEvents();
-	events::checkEvents();
-	signals::checkSignals();
-	functors::callFunctors();
+	//Input::getMouseEvents();
+	//events::checkEvents();
+	//signals::checkSignals();
+	//functors::callFunctors();
 
 	events::resetEvents();
 	signals::resetSignals();
@@ -165,10 +166,10 @@ void app::fetchInput()
 
 void app::initGLFW()
 {
-	std::puts("Initializing GLFW.../n");
+	std::puts("Initializing GLFW...\n");
 	size_t glfw = glfwInit();
 	if (glfw != GLFW_TRUE) {
-		debug::pushError(("/napp::init() - Unable to initialize GLFW (glfwInit() return code: %i)/n" + glfw), debug::Error::Severity::Fatal);
+		debug::pushError(("\napp::init() - Unable to initialize GLFW (glfwInit() return code: %i)\n" + glfw), debug::Error::Severity::Fatal);
 		//while (!getch()) {}
 		exit(glfw);
 	}
