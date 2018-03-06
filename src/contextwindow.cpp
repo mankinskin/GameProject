@@ -51,19 +51,22 @@ void app::ContextWindow::Window::init()
     //sets up GLFW Window with OpenGL context
     if (window != nullptr) {
 #ifdef _DEBUG
-	puts("/nDestroying current GLFW Window...");
+	puts("\nDestroying current GLFW Window...");
 #endif
 	glfwDestroyWindow(window);
     }
 #ifdef _DEBUG
-    printf("/nGLFW Window Size:/nX: %i Y: %i/n", width, height);
+    printf("\nGLFW Window Size:\nX: %i Y: %i\n", width, height);
 #endif
 
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
 #ifdef _DEBUG
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
+    //glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
     glfwWindowHint(GLFW_CONTEXT_NO_ERROR, 1);
 #endif
     glfwWindowHint(GLFW_RESIZABLE, 1);
@@ -72,7 +75,9 @@ void app::ContextWindow::Window::init()
     glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
     //glfwWindowHint(GLFW_DEPTH_BITS, 24);
     //glfwWindowHint(GLFW_SAMPLES, 4);
+
     window = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr);
+
     glfwSetWindowPos(window, (primaryMonitor.currentVideoMode->width / 2) - width / 2, (primaryMonitor.currentVideoMode->height / 2) - height / 2);
     glfwMakeContextCurrent(window);
     glfwSetWindowUserPointer(window, window);
