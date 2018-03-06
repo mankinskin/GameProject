@@ -66,13 +66,13 @@ void gl::init()
 	glDebug::init();
 
 	puts("Shaders...");
-	shader::loadShaders();
+	loadShaders();
 
 	//puts("Colors...");
 	//gui::uploadConstColors();
 
-	//puts("Lines...");
-	//gui::initLineVAO();
+	puts("Lines...");
+	gui::initLineVAO();
 
 	//puts("Widgets...");
 	//gui::initWidgets();
@@ -106,16 +106,31 @@ void gl::init()
 	debug::printErrors();
 }
 
+void gl::loadShaders()
+{
+    gui::initLineShader();
+    //mesh::initMeshShader();
+    //mesh::initBlendMeshShader();
+    //mesh::initMeshNormalShader();
+    //lighting::initLightShader();
+    //gui::initQuadIndexShader();
+    //gui::initColoringShaders();
+    //gui::text::initFontShader();
+    //voxelization::init();
+    shader::Loader::buildShaderPrograms();
+
+}
+
 void gl::bindUniformBufferLocations()
 {
-	lighting::setupLightShader();
-	mesh::setupMeshShader();
+	gui::setupLineShader();
+	//mesh::setupMeshShader();
+	//lighting::setupLightShader();
 	//mesh::setupBlendMeshShader();
 	//mesh::setupMeshNormalShader();
-	gui::setupQuadIndexShader();
-	gui::setupLineShader();
-	gui::setupColoringShaders();
-	voxelization::setupShader();
+	//gui::setupQuadIndexShader();
+	//gui::setupColoringShaders();
+	//voxelization::setupShader();
 	debug::printErrors();
 }
 

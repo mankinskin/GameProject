@@ -9,7 +9,7 @@
 #include <gtc/type_ptr.hpp>
 
 namespace shader {
-    void loadShaders();
+
     size_t createModule(std::string pFileName);
     size_t createProgram(std::string pProgramName);
     size_t newProgram(std::string pProgramName, size_t pVertexModuleIndex, size_t pFragmentModuleIndex);

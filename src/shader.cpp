@@ -23,21 +23,6 @@ std::unordered_map<std::string, size_t> shader::shaderProgramLookup;
 std::vector<shader::Module> shader::allModules;
 std::unordered_map<std::string, size_t> shader::moduleLookup;
 
-void shader::loadShaders()
-{
-    //include shaders
-    mesh::initMeshShader();
-    //mesh::initBlendMeshShader();
-    //mesh::initMeshNormalShader();
-    lighting::initLightShader();
-    gui::initQuadIndexShader();
-    gui::initColoringShaders();
-    //gui::text::initFontShader();
-    voxelization::init();
-    gui::initLineShader();
-    shader::Loader::buildShaderPrograms();
-
-}
 
 size_t shader::createModule(std::string pFileName)
 {
