@@ -13,7 +13,6 @@ std::string shader::Loader::SHADER_DIR = DEFAULT_SHADER_DIRECTORY;
 
 void shader::Loader::buildShaderPrograms()
 {
-
 	compileAndLink();
 }
 
@@ -30,6 +29,7 @@ void shader::Loader::resetShaderDirectory()
 void shader::Loader::compileModule(size_t pModuleIndex)
 {
 	Module& mod = allModules[pModuleIndex];
+	printf("Compiling Shader Module %s\n", mod.fileName.c_str());
 	if (mod.fileName.find(".vert") != std::string::npos) {
 		mod.ID = glCreateShader(GL_VERTEX_SHADER);
 		mod.type = ModuleType::Vertex;
@@ -47,13 +47,13 @@ void shader::Loader::compileModule(size_t pModuleIndex)
 		mod.type = ModuleType::Compute;
 	}
 	else {
-		debug::pushError("/nShader::loadShader(): invalid shader file name " + mod.fileName + "!/nHas to include '.vert', '.frag', '.geo' or '.comp'!", debug::Error::Fatal);
+		debug::pushError("\nShader::loadShader(): invalid shader file name " + mod.fileName + "!\nHas to include '.vert', '.frag', '.geo' or '.comp'!", debug::Error::Fatal);
 		return;
 	}
 	std::ifstream moduleFile;
 	moduleFile.open(SHADER_DIR + mod.fileName + ".txt");
 	if (moduleFile.fail()) {
-		debug::pushError("Failed to compile shader: Could not open " + SHADER_DIR + mod.fileName + ".txt" + "!/n");
+		debug::pushError("Failed to compile shader: Could not open " + SHADER_DIR + mod.fileName + ".txt" + "!\n");
 		return;
 	}
 
@@ -69,7 +69,7 @@ void shader::Loader::compileModule(size_t pModuleIndex)
 		glGetShaderiv(mod.ID, GL_INFO_LOG_LENGTH, &maxLength);
 		std::vector<char> errorLog(maxLength);
 		glGetShaderInfoLog(mod.ID, maxLength, &maxLength, &errorLog[0]);
-		debug::pushError("Failed to compile " + mod.fileName + "/nOpenGL Error Log: " + std::string(&(errorLog[0])) + "/n", debug::Error::Fatal);
+		debug::pushError("\n!!! Failed to compile " + mod.fileName + "\nOpenGL Error Log: " + std::string(&(errorLog[0])) + "\n", debug::Error::Fatal);
 		return;
 	}
 	allModules[pModuleIndex] = mod;

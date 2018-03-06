@@ -41,7 +41,7 @@ void gui::initConstColorVAO() {
 }
 
 void gui::initConstColorShader() {
-	constColorShader = shader::newProgram("constColorquad.hader", shader::createModule("constColorquad.hader.vert"), shader::createModule("constColorquad.hader.frag"));
+	constColorShader = shader::newProgram("constColorQuadShader", shader::createModule("constColorQuadShader.vert"), shader::createModule("constColorQuadShader.frag"));
 	shader::addVertexAttribute(constColorShader, "corner_pos", 0);
 }
 

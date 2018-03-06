@@ -20,6 +20,6 @@ namespace debug {
 	void printErrors();
 	void togglePrintInfo();
 	void printInfo();
-	extern int shouldPrintInfo;
+	extern bool shouldPrintInfo;
 	extern std::vector<Error> errorBuffer;
 }

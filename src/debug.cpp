@@ -5,12 +5,13 @@
 #include <cstdio>
 #include <algorithm>
 
-int debug::shouldPrintInfo;
+bool debug::shouldPrintInfo = true;
 std::vector<debug::Error> debug::errorBuffer;
 
 void debug::pushError(std::string pMessage, Error::Severity errorSeverity)
 {
-	errorBuffer.emplace_back(pMessage, errorSeverity);
+	puts(pMessage.c_str());
+	//errorBuffer.emplace_back(pMessage, errorSeverity);
 }
 
 void debug::printErrors()
