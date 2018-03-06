@@ -18,9 +18,9 @@ unsigned int texture::quadIndexBuffer;
 unsigned int texture::guiDepthRenderbuffer;
 
 void texture::initFramebuffers()
-{	initGUIFBO();
+{	
+	//initGUIFBO();
 	initGBuffer();
-
 }
 
 void texture::initGBuffer()

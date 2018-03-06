@@ -20,7 +20,7 @@ size_t vao::createStorage()
 {
 	Storage storage;
 	unsigned int ind = allStorages.size();
-	glGenBuffers(1, &storage.ID);
+	glCreateBuffers(1, &storage.ID);
 	allStorages.push_back(storage);
 	return ind;
 }

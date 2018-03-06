@@ -18,21 +18,21 @@
 #include <tuple>
 
 /*
-button-pipeline
-to set up
-- bind quads as buttons
-- calculateQuadRanges
+   button-pipeline
+   to set up
+   - bind quads as buttons
+   - calculateQuadRanges
 
-every frame
-- fetch Events
-	- iterate through buttons
-	- get button state and compare it to previous state
-	- if different -> generate event
-- check for relevant events/wheater callbacks should be called
-	- iterate through all events
-	- check buttonID-specific range in functor array
-- callButtons
-*/
+   every frame
+   - fetch Events
+   - iterate through buttons
+   - get button state and compare it to previous state
+   - if different -> generate event
+   - check for relevant events/wheater callbacks should be called
+   - iterate through all events
+   - check buttonID-specific range in functor array
+   - callButtons
+   */
 
 app::Input::KeySignal app::Input::key_esc;
 app::Input::KeySignal app::Input::key_c;
@@ -71,7 +71,7 @@ void app::Input::init()
 	glfwSetMouseButtonCallback(app::mainWindow.window, mouseKey_Callback);
 	glfwSetScrollCallback(app::mainWindow.window, scroll_Callback);
 	reserveKeySignals(20);
-    puts("Initializing Key Listeners...");
+	puts("Initializing Key Listeners...");
 	key_esc = app::Input::KeySignal(GLFW_KEY_ESCAPE);
 	key_c = app::Input::KeySignal(GLFW_KEY_C);
 	key_g = app::Input::KeySignal(GLFW_KEY_G);
@@ -105,9 +105,6 @@ void app::Input::setupControls()
 	using namespace functors;
 	using namespace signals;
 	using namespace gates;
-
-
-
 	{
 		FunctorRef<void> toggle_cull_func = createFunctor(mesh::toggleCullFace);
 		FunctorRef<void> toggle_cursor_func = createFunctor(app::Input::toggleCursor);
@@ -119,7 +116,7 @@ void app::Input::setupControls()
 		FunctorRef<void, camera::Camera&> cycle_modes_func = createFunctor<void, camera::Camera&>(camera::cycleModes, camera::main_camera);
 		FunctorRef<void, camera::Camera&, float> higher_cam_speed_func = createFunctor<void, camera::Camera&, float>(camera::setSpeed, camera::main_camera, 1.0f);
 		FunctorRef<void, camera::Camera&, float> normal_cam_speed_func = createFunctor<void, camera::Camera&, float>(camera::setSpeed, camera::main_camera, 0.3f);
-		
+
 		toggle_cull_func.set_triggers({ key_i.press });
 		toggle_cursor_func.set_triggers({ key_c.press, rmb.on, rmb.off });
 		toggle_look_func.set_triggers({ key_c.press, rmb.on, rmb.off });
@@ -132,7 +129,7 @@ void app::Input::setupControls()
 		higher_cam_speed_func.set_triggers({ key_lshift.press });
 		normal_cam_speed_func.set_triggers({ key_lshift.release });
 	}
-	
+
 	{//camera
 		FunctorRef<void, camera::Camera&> forward_func = createFunctor<void, camera::Camera&>(camera::forward, camera::main_camera);
 		FunctorRef<void, camera::Camera&> backward_func = createFunctor<void, camera::Camera&>(camera::back, camera::main_camera);

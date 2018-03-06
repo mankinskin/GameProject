@@ -78,6 +78,7 @@ void gui::initQuadBuffer()
 	quadIndexMap.resize(gl::screenWidth * gl::screenHeight);
 	quadDepthMap.resize(gl::screenWidth * gl::screenHeight);
 }
+
 void gui::initQuadIndexShader()
 {
 	quadIndexShader = shader::newProgram("quadIndexShader", shader::createModule("quadIndexShader.vert"), shader::createModule("quadIndexShader.frag"));

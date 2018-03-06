@@ -59,7 +59,7 @@ void app::init()
 	gl::init();
 
 	//gui::text::initStyleBuffer();
-	//Input::setupControls();
+	Input::setupControls();
 
 	debug::printErrors();
 
@@ -82,18 +82,18 @@ void app::gameloop()
 		//entities::translate(0, node_mov * 0.01f);
 		//node_mov = glm::vec3();
 
-		//camera::main_camera.look(Input::cursorFrameDelta);
-		//camera::main_camera.update();
+		camera::main_camera.look(Input::cursorFrameDelta);
+		camera::main_camera.update();
 
-		//gl::updateGeneralUniformBuffer();
+		gl::updateGeneralUniformBuffer();
 		//lighting::updateLightIndexRangeBuffer();
 		//lighting::updateLightDataBuffer();
 		//entities::updateEntityMatrices();
 		//entities::updateEntityBuffers();
 		//mesh::updateMeshBuffers();
-		//gui::updateLineBuffers();
-		//gui::updateQuadBuffer();
-		//gui::updateColorings();
+		gui::updateLineBuffers();
+		gui::updateQuadBuffer();
+		gui::updateColorings();
 		//gui::text::updateCharStorage();
 
 		//reset g_buffer
@@ -114,9 +114,9 @@ void app::gameloop()
 		//glBindFramebuffer(GL_FRAMEBUFFER, texture::guiFBO);
 		//gui::rasterQuadIndices();
 		//gui::readQuadIndexBuffer();
-		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		//voxelization::voxelizeMeshes();
-		//gui::renderLines();
+		gui::renderLines();
 		//glBindFramebuffer(GL_FRAMEBUFFER, texture::gBuffer);
 		//mesh::renderMeshes();
 
@@ -129,7 +129,7 @@ void app::gameloop()
 
 		//mesh::renderMeshNormals();
 
-		//gui::renderColorings();
+		gui::renderColorings();
 		//gui::text::renderGlyphs();
 
 		glfwSwapBuffers(mainWindow.window);
@@ -153,10 +153,11 @@ void app::fetchInput()
 	Input::updateMouse();
 	Input::fetchGLFWEvents();
 
-	//Input::getMouseEvents();
-	//events::checkEvents();
-	//signals::checkSignals();
-	//functors::callFunctors();
+	//Input::getCursorQuad();
+	Input::getMouseKeyEvents();
+	events::checkEvents();
+	signals::checkSignals();
+	functors::callFunctors();
 
 	events::resetEvents();
 	signals::resetSignals();

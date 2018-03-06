@@ -40,7 +40,8 @@ namespace app {
 		void updateMouse();
 		void resetMouse();
 		void toggleCursor();
-		void getMouseEvents();
+		void getCursorQuadEvents();
+		void getMouseKeyEvents();
 
 		void mouseKey_Callback(GLFWwindow* window, int pKey, int pAction, int pMods);
 		void cursorPosition_Callback(GLFWwindow* window, double pX, double pY);

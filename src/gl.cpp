@@ -56,11 +56,9 @@ void gl::init()
 	lighting::createLight(glm::vec4(1.0f, 14.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 100.0f));
 	lighting::createLight(glm::vec4(4.0f, -4.0f, 3.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 100.0f));
 	lighting::createLight(glm::vec4(3.0f, 15.0f, -5.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 100.0f));
+
 	puts("Initializing Global Data...");
 	initPrimitiveVBO();
-
-	//puts("GUI...");
-	//gui::init();
 
 	puts("glDebug...");
 	glDebug::init();
@@ -68,23 +66,24 @@ void gl::init()
 	puts("Shaders...");
 	loadShaders();
 
-	//puts("Colors...");
-	//gui::uploadConstColors();
+	puts("GUI...");
+	gui::init();
+	puts("Colors...");
+	gui::uploadConstColors();
 
 	puts("Lines...");
 	gui::initLineVAO();
 
-	//puts("Widgets...");
-	//gui::initWidgets();
+	puts("Widgets...");
+	gui::initWidgets();
 
-	//puts("Camera...");
-	//camera::main_camera.init();
+	puts("Camera...");
+	camera::main_camera.init();
 
-	//initGeneralUniformBuffer();
+	initGeneralUniformBuffer();
 
 	//puts("Framebuffers...");
 	//texture::initFramebuffers();
-
 
 	//puts("Lighting...");
 	//lighting::initLighting();
@@ -114,7 +113,7 @@ void gl::loadShaders()
     //mesh::initMeshNormalShader();
     //lighting::initLightShader();
     //gui::initQuadIndexShader();
-    //gui::initColoringShaders();
+    gui::initColoringShaders();
     //gui::text::initFontShader();
     //voxelization::init();
     shader::Loader::buildShaderPrograms();
@@ -129,7 +128,7 @@ void gl::bindUniformBufferLocations()
 	//mesh::setupBlendMeshShader();
 	//mesh::setupMeshNormalShader();
 	//gui::setupQuadIndexShader();
-	//gui::setupColoringShaders();
+	gui::setupColoringShaders();
 	//voxelization::setupShader();
 	debug::printErrors();
 }
@@ -171,7 +170,7 @@ void gl::getOpenGLInitValues()
 	glGetIntegerv(GL_MIN_MAP_BUFFER_ALIGNMENT, &vao::MIN_MAP_BUFFER_ALIGNMENT);
 
 
-	glClearColor(0.22f, 0.22f, 0.2f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClearDepth(1.0f);
 	glDepthRange(0.0f, 1.0f);
 	glEnable(GL_CULL_FACE);

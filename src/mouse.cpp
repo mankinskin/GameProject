@@ -63,8 +63,18 @@ void app::Input::toggleCursor()
 	}
 }
 
-void app::Input::getMouseEvents()
-{
+void app::Input::getMouseKeyEvents(){
+	static std::array<KeyCondition, 3> lastMouseKeys;
+
+	for (unsigned int c = 0; c < 3; ++c) {
+		if (mouseKeys[c] != lastMouseKeys[c]) {//mouse key change event
+			pushEvent(MouseKeyEvent(c, mouseKeys[c]));
+		}
+	}
+	
+	lastMouseKeys = mouseKeys;
+}
+void app::Input::getCursorQuadEvents(){
 	last_hovered_quad = hovered_quad;
 	hovered_quad = gui::readQuadIndexMap(absoluteCursorPosition.x, absoluteCursorPosition.y);
 	float quad_depth = gui::readQuadDepthMap(absoluteCursorPosition.x, absoluteCursorPosition.y);
@@ -81,16 +91,6 @@ void app::Input::getMouseEvents()
 			pushEvent(QuadEvent(hovered_quad, 1));
 		}
 	}
-
-	static std::array<KeyCondition, 3> lastMouseKeys;
-
-	for (unsigned int c = 0; c < 3; ++c) {
-		if (mouseKeys[c] != lastMouseKeys[c]) {//mouse key change event
-			pushEvent(MouseKeyEvent(c, mouseKeys[c]));
-		}
-	}
-	
-	lastMouseKeys = mouseKeys;
 }
 
 void app::Input::mouseKey_Callback(GLFWwindow * window, int pKey, int pAction, int pMods)

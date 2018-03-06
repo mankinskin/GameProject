@@ -19,6 +19,7 @@ iDEP_PACKAGES=libglfw3 libglfw3-dev
 	touch .deps_installed
 
 depinstall: .deps_installed
+	sudo apt-get install llvm-6.0-dev 
 	sudo apt-get install libgl1-mesa-dev libgl1-mesa-dri libglw1-mesa libgl1-mesa-glx libglapi-mesa libglu1-mesa-dev mesa-common-dev libglu1-mesa mesa-utils-extra
 	sudo apt-get install libglfw3-dev libassimp-dev libglew-dev freeglut3-dev libglm-dev libncurses-dev libfreetype6-dev libsoil-dev 
 	sudo cp $(LIBGLFW_DIR)/libglfw.so .
