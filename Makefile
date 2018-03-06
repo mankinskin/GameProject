@@ -13,16 +13,14 @@ OBJ_TARGETS=$(patsubst %, build/%, $(OBJ_FILES))
 H_FILES=$(shell ls src | grep -e '\.h')
 INCLUDE_LIB_PATHS=-L$(LIBGL_DIR) -L$(LIBGLFW_DIR) -L$(LIBFREETYPE_DIR) -L$(LIBASSIMP_DIR) -L$(LIBSOIL_DIR) -L$(LIBGLUT_DIR)
 INCLUDE_LIBS=-lncurses -lassimp -lglfw -lGLEW -lGL -lGLU -lSOIL -lfreetype -lX11 -lm -lrt  
-
+iDEP_PACKAGES=libglfw3 libglfw3-dev 
 
 .deps_installed:
 	touch .deps_installed
 
 depinstall: .deps_installed
-	sudo apt-get install mesa-utils libgl1-mesa-dev libglu1-mesa-dev 
-		sudo apt-get install libglew-dev libglm-dev libglfw3 libglfw3-dev libassimp-dev libsoil-dev freeglut3 libfreetype6-dev -y;
-
-dep: .deps_installed
+	sudo apt-get install libgl1-mesa-dev libgl1-mesa-dri libglw1-mesa libgl1-mesa-glx libglapi-mesa libglu1-mesa-dev mesa-common-dev libglu1-mesa mesa-utils-extra
+	sudo apt-get install libglfw3-dev libassimp-dev libglew-dev freeglut3-dev libglm-dev libncurses-dev libfreetype6-dev libsoil-dev 
 	sudo cp $(LIBGLFW_DIR)/libglfw.so .
 	sudo cp $(LIBGLFW_DIR)/libglfw.so.3 .
 	sudo cp $(LIBASSIMP_DIR)/libassimp.so .
@@ -38,7 +36,7 @@ build/%.o: src/%.cpp
 build:
 	mkdir build
 
-all: build dep $(OBJ_TARGETS) 
+all: build depinstall $(OBJ_TARGETS) 
 	$(GCC) -o game $(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_GLFW) $(INCLUDE_SOIL) $(OBJ_TARGETS) $(INCLUDE_LIB_PATHS)  $(INCLUDE_LIBS)
 
 run: all
