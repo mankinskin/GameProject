@@ -1,8 +1,8 @@
 #version 450
 
-layout(location = 0)out unsigned int id;
+layout(location = 0)out uint id;
 
-flat in unsigned int quad_id;
+flat in uint quad_id;
 
 void main(){
 	id = quad_id;

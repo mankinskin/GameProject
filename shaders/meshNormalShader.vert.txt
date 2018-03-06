@@ -2,7 +2,7 @@
 layout(location = 0) in vec3 pos;
 layout(location = 1) in vec3 normal;
 layout(location = 3) in unsigned int transform;
-const unsigned int MAX_ENTITIES = 10000;
+const unsigned int MAX_ENTITIES = 1000;
 
 
 

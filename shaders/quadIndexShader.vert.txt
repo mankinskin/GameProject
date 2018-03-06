@@ -1,6 +1,6 @@
 #version 450
 
-const unsigned int MAX_QUAD_COUNT = 10000;
+const uint MAX_QUAD_COUNT = 1000;
 layout(location = 0)in vec2 corner_pos;
 
 layout(std140)uniform QuadBuffer{
@@ -8,7 +8,7 @@ layout(std140)uniform QuadBuffer{
 };
 
 
-flat out unsigned int quad_id;
+flat out uint quad_id;
 void main(){
 
 	vec4 quad = quadBuffer[gl_InstanceID];

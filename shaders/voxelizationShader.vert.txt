@@ -1,8 +1,8 @@
 #version 450
 layout(location = 0) in vec3 vertex_pos;
 layout(location = 1) in vec3 vertex_normal;
-layout(location = 3) in unsigned int transform;
-const unsigned int MAX_ENTITIES = 10000;
+layout(location = 3) in uint transform;
+const uint MAX_ENTITIES = 1000;
 
 out vec3 v_pos;
 out vec3 v_normal;

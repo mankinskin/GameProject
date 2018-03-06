@@ -9,6 +9,7 @@ layout(location = 4)out vec3 normalBuffer;
 layout(binding = 0) uniform sampler2D amb_texture;
 layout(binding = 1) uniform sampler2D diff_texture;
 layout(binding = 2) uniform sampler2D spec_texture;
+
 struct Material{
         vec4 ambient_albedo;
         vec4 diffuse_albedo;
@@ -19,7 +20,7 @@ layout(std140)uniform MaterialBuffer{
         vec4 materialBuffer[10];
 };
 
-uniform unsigned int materialIndex;
+uniform uint materialIndex;
 
 in Vertex{
 	vec3 pos;
