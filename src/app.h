@@ -19,14 +19,14 @@ namespace app {
     void run();
     void quit();
     void mainmenu();
-    extern ContextWindow::Window mainWindow;
+    extern Window mainWindow;
 
     extern double timeFactor;
     extern double lastFrameLimitedMS;
     extern double lastFrameMS;
     extern double totalMS;
     extern double minFrameMS;
-    void setMaxFPS(size_t pMaxFPS);
+    void setMaxFPS(unsigned int pMaxFPS);
     void updateTime();
     void updateTimeFactor();
     void limitFPS();

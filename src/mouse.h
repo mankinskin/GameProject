@@ -23,9 +23,9 @@ namespace app {
 		struct QuadEvent {//events thrown when entering or leaving quads with the cursor
 			QuadEvent()
 				:quad_index(0), enter(0) {}
-			QuadEvent(size_t pQuad, int pEnter)
+			QuadEvent(unsigned int pQuad, int pEnter)
 				:quad_index(pQuad), enter(pEnter) {}
-			size_t quad_index;//0 if none
+			unsigned int quad_index;//0 if none
 			int enter;
 		};
 		inline bool operator==(QuadEvent const & l, QuadEvent const& r) {

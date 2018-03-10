@@ -57,7 +57,7 @@ app::Input::KeySignal app::Input::key_l;
 app::Input::KeySignal app::Input::key_lshift;
 events::ButtonEvents<events::Event> app::Input::lmb;
 events::ButtonEvents<events::Event> app::Input::rmb;
-size_t app::Input::always;
+unsigned int app::Input::always;
 
 void app::Input::init()
 {

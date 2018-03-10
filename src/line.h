@@ -5,27 +5,31 @@
 namespace gui
 {
 	struct LineGroup {
-		LineGroup(size_t pLineOffset, size_t pLineCount)
+		LineGroup(unsigned int pLineOffset, unsigned int pLineCount)
 			:lineOffset(pLineOffset), lineCount(pLineCount){}
-		size_t lineOffset;
-		size_t lineCount;
+		unsigned int lineOffset;
+		unsigned int lineCount;
 	};
+
+	void toggleLineGroup(unsigned int pLineGroup);
+	unsigned int getLineCount();
+
 	const int DEFAULT_FLAG = 1;
-	void toggleLineGroup(size_t pLineGroup);
-	size_t getLineCount();
-	size_t createLineGroup(size_t pLineOffset, size_t pLineCount, int pFlag = DEFAULT_FLAG);
-	size_t createLine(glm::vec4 pVertexAPos, size_t pColorIndexA, glm::vec4 pVertexBPos, size_t pColorIndexB);
-	size_t createLine(glm::vec4 pVertexAPos, glm::vec4 pVertexBPos, size_t pColorIndex);
-	size_t createLine(size_t pVertexA, size_t pVertexB);
-	size_t createLineVertex(glm::vec4 pPos, size_t pColorIndex);
-	size_t createLineVertex(size_t pPosIndex, size_t pColorIndex);
-	size_t createLineVertexPosition(glm::vec4 pPos);
-	void setLineColor(size_t pLineIndex, size_t pColorIndex);
-	void setLineVertexColor(size_t pLineIndex, size_t pVertex, size_t pColorIndex);
+	unsigned int createLineGroup(unsigned int pLineOffset, unsigned int pLineCount, int pFlag = DEFAULT_FLAG);
+	unsigned int createLine(glm::vec4 pVertexAPos, unsigned int pColorIndexA, glm::vec4 pVertexBPos, unsigned int pColorIndexB);
+	unsigned int createLine(glm::vec4 pVertexAPos, glm::vec4 pVertexBPos, unsigned int pColorIndex);
+	unsigned int createLine(unsigned int pVertexA, unsigned int pVertexB);
+	unsigned int createLineVertex(glm::vec4 pPos, unsigned int pColorIndex);
+	unsigned int createLineVertex(unsigned int pPosIndex, unsigned int pColorIndex);
+	unsigned int createLineVertexPosition(glm::vec4 pPos);
+	void setLineColor(unsigned int pLineIndex, unsigned int pColorIndex);
+	void setLineVertexColor(unsigned int pLineIndex, unsigned int pVertex, unsigned int pColorIndex);
+
 	void initLineVAO();
 	void updateLinePositions();
 	void renderLines();
 	void initLineShader();
 	void updateLineBuffers();
 	void setupLineShader();
+
 }

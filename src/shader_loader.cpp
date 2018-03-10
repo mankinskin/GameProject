@@ -26,7 +26,7 @@ void shader::Loader::resetShaderDirectory()
 	SHADER_DIR = DEFAULT_SHADER_DIRECTORY;
 }
 
-void shader::Loader::compileModule(size_t pModuleIndex)
+void shader::Loader::compileModule(unsigned int pModuleIndex)
 {
 	Module& mod = allModules[pModuleIndex];
 	printf("Compiling Shader Module %s\n", mod.fileName.c_str());
@@ -75,7 +75,7 @@ void shader::Loader::compileModule(size_t pModuleIndex)
 	allModules[pModuleIndex] = mod;
 }
 
-void shader::Loader::linkProgram(size_t pProgramIndex)
+void shader::Loader::linkProgram(unsigned int pProgramIndex)
 {
 	Program& program = allPrograms[pProgramIndex];
 
@@ -85,7 +85,7 @@ void shader::Loader::linkProgram(size_t pProgramIndex)
 	}
 	else
 	{
-		for (size_t i = 0; i < program.shaderCount; ++i) {
+		for (unsigned int i = 0; i < program.shaderCount; ++i) {
 			program.stages[i] = allModules[program.stages[i]].ID;
 			glAttachShader((GLuint)program.ID, (GLuint)program.stages[i]);
 		}
@@ -107,17 +107,17 @@ void shader::Loader::linkProgram(size_t pProgramIndex)
 
 	}
 
-	for (size_t i = 0; i < program.shaderCount; ++i) {
+	for (unsigned int i = 0; i < program.shaderCount; ++i) {
 		glDetachShader(program.ID, program.stages[i]);
 	}
 }
 
 void shader::Loader::compileAndLink()
 {
-	for (size_t s = 0; s < allModules.size(); ++s) {
+	for (unsigned int s = 0; s < allModules.size(); ++s) {
 		compileModule(s);
 	}
-	for (size_t p = 0; p < allPrograms.size(); ++p) {
+	for (unsigned int p = 0; p < allPrograms.size(); ++p) {
 		linkProgram(p);
 	}
 }

@@ -3,6 +3,8 @@
 #include <ncurses.h>
 #include "app.h"
 #include <array>
+#include "viewport.h"
+#include "primitives.h"
 #include "shader_loader.h"
 #include "shader.h"
 #include "camera.h"
@@ -17,6 +19,7 @@
 #include "text.h"
 #include "framebuffer.h"
 #include "lights.h"
+#include "color.h"
 #include "colorings.h"
 #include "line.h"
 #include "entities.h"
@@ -25,54 +28,52 @@
 #include "collision.h"
 #include "voxelization.h"
 
+int gl::MAX_UNIFORM_BLOCK_SIZE = 0;
 int gl::MAX_WORK_GROUP_COUNT = 0;
 glm::ivec3 gl::MAX_WORK_GROUP_SIZE = {};
-size_t gl::quadVBO = 0;
-size_t gl::quadEBO = 0;
 std::vector<std::string> gl::EXTENSION_LIST = {};
 int gl::EXTENSIONS_SUPPORTED_NUM = 0;
 int gl::OPENGL_VERSION[2] = {};
 std::string gl::GLSL_VERSION = "";
 std::string gl::SYSTEM_RENDERER = "";
-float gl::resolution = 1.0f;
+gl::Viewport screenViewport;
 int gl::MAX_TEXTURE_UNIT_COUNT;
-size_t gl::screenWidth = 0;
-size_t gl::screenHeight = 0;
-size_t gl::generalUniformBuffer = 0;
-size_t gl::screenQuadVAO;
-size_t gl::screenShaderProgram;
-size_t gl::cubeVBO = 0;
-size_t gl::cubeEBO = 0;
+unsigned int gl::generalUniformBuffer = 0;
+unsigned int gl::screenQuadVAO;
+unsigned int gl::screenShaderProgram;
 
 void gl::init()
 {
 	initGLEW();
 	puts("Initializing OpenGL...");
 	getOpenGLInitValues();
-	setViewport(app::mainWindow);
-
-	lighting::createLight(glm::vec4(3.0f, 5.0f, -5.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 100.0f));
-	lighting::createLight(glm::vec4(-1.0f, 4.0f, 3.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 100.0f));
-	lighting::createLight(glm::vec4(1.0f, 14.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 100.0f));
-	lighting::createLight(glm::vec4(4.0f, -4.0f, 3.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 100.0f));
-	lighting::createLight(glm::vec4(3.0f, 15.0f, -5.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 100.0f));
+	screenViewport = Viewport(app::mainWindow);
+    screenViewport.bind();
+	//lights::createLight(glm::vec4(3.0f, 5.0f, -5.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 100.0f));
+	//lights::createLight(glm::vec4(-1.0f, 4.0f, 3.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 100.0f));
+	//lights::createLight(glm::vec4(1.0f, 14.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 100.0f));
+	//lights::createLight(glm::vec4(4.0f, -4.0f, 3.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 100.0f));
+	//lights::createLight(glm::vec4(3.0f, 15.0f, -5.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 100.0f));
 
 	puts("Initializing Global Data...");
 	initPrimitiveVBO();
 
-	puts("glDebug...");
-	glDebug::init();
-
 	puts("Shaders...");
 	loadShaders();
+    
+    glDebug::createDebugGeometry();
+    puts("Colors...");
+    initColors();
 
 	puts("GUI...");
 	gui::init();
-	puts("Colors...");
-	gui::uploadConstColors();
 
 	puts("Lines...");
 	gui::initLineVAO();
+
+	puts("glDebug...");
+	glDebug::init();
+
 
 	puts("Widgets...");
 	gui::initWidgets();
@@ -86,7 +87,7 @@ void gl::init()
 	//texture::initFramebuffers();
 
 	//puts("Lighting...");
-	//lighting::initLighting();
+	//lights::initLighting();
 
 	//puts("Entities...");
 	//entities::initEntityBuffers();
@@ -111,7 +112,7 @@ void gl::loadShaders()
     //mesh::initMeshShader();
     //mesh::initBlendMeshShader();
     //mesh::initMeshNormalShader();
-    //lighting::initLightShader();
+    //lights::initLightShader();
     //gui::initQuadIndexShader();
     gui::initColoringShaders();
     //gui::text::initFontShader();
@@ -124,19 +125,13 @@ void gl::bindUniformBufferLocations()
 {
 	gui::setupLineShader();
 	//mesh::setupMeshShader();
-	//lighting::setupLightShader();
+	//lights::setupLightShader();
 	//mesh::setupBlendMeshShader();
 	//mesh::setupMeshNormalShader();
 	//gui::setupQuadIndexShader();
 	gui::setupColoringShaders();
 	//voxelization::setupShader();
 	debug::printErrors();
-}
-
-void gl::setViewport(app::ContextWindow::Window& pViewport) {
-	screenWidth = pViewport.width * resolution;
-	screenHeight = pViewport.height * resolution;
-	glViewport(0, 0, screenWidth, screenHeight);
 }
 
 void gl::getOpenGLInitValues()
@@ -158,7 +153,6 @@ void gl::getOpenGLInitValues()
 		//printf("%s\n", EXTENSION_LIST[k].c_str());
 	}
 
-
 	glGetIntegeri_v(GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 0, &MAX_WORK_GROUP_SIZE.x);
 	glGetIntegeri_v(GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 1, &MAX_WORK_GROUP_SIZE.y);
 	glGetIntegeri_v(GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 2, &MAX_WORK_GROUP_SIZE.z);
@@ -168,6 +162,9 @@ void gl::getOpenGLInitValues()
 	glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS, &vao::MAX_UNIFORM_BUFFER_BINDINGS);
 	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &MAX_TEXTURE_UNIT_COUNT);
 	glGetIntegerv(GL_MIN_MAP_BUFFER_ALIGNMENT, &vao::MIN_MAP_BUFFER_ALIGNMENT);
+    glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &MAX_UNIFORM_BLOCK_SIZE);
+
+    printf("Max Uniform Block Size:\t%d\n", MAX_UNIFORM_BLOCK_SIZE);
 
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -186,7 +183,7 @@ void gl::getOpenGLInitValues()
 void gl::initGLEW() {
 	puts("Initializing GLEW...");
 	glewExperimental = true;
-	size_t glew = glewInit();
+	unsigned int glew = glewInit();
 	if (glew != GLEW_OK) {
 
 		debug::pushError(std::string("/napp::init() - Unable to initialize GLEW (glewInit() return code: %i)/nGLEW Error Log/n %s"
@@ -201,7 +198,7 @@ void gl::initGeneralUniformBuffer()
 {
 	//contains: projectionMatrix(mat4), viewMatrix(mat4), camera position(vec4)(todo:remove), voxelizationProjection
 
-	size_t generalUniformDataSize = sizeof(float) * (16 + 16 + 4 + 16);
+	unsigned int generalUniformDataSize = sizeof(float) * (16 + 16 + 4 + 16);
 
 	generalUniformBuffer = vao::createStorage(generalUniformDataSize, nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS);
 	vao::createStream(generalUniformBuffer, GL_MAP_WRITE_BIT);
@@ -236,11 +233,11 @@ void gl::initPrimitiveVBO()
 		1.0f, 1.0f
 	};
 
-	std::array<size_t, 6> iarr = {
+	std::array<unsigned int, 6> iarr = {
 		2, 0, 1, 1, 3, 2
 	};
 	quadVBO = vao::createStorage(sizeof(float) * 4 * 2, &varr[0], 0);
-	quadEBO = vao::createStorage(sizeof(size_t) * 6, &iarr[0], 0);
+	quadEBO = vao::createStorage(sizeof(unsigned int) * 6, &iarr[0], 0);
 
 	float cube_width = 1.0f;
 	glm::vec3 cube_verts[8] = {
@@ -255,7 +252,7 @@ void gl::initPrimitiveVBO()
 		glm::vec3(0.0f, cube_width, cube_width)
 	};
 
-	size_t cube_inds[36] = {
+	unsigned int cube_inds[36] = {
 		0, 1, 2,
 		0, 2, 3,
 
@@ -275,6 +272,6 @@ void gl::initPrimitiveVBO()
 		4, 7, 6
 	};
 	cubeVBO = vao::createStorage(sizeof(glm::vec3) * 8, &cube_verts[0], 0);
-	cubeEBO = vao::createStorage(sizeof(size_t) * 36, &cube_inds[0], 0);
+	cubeEBO = vao::createStorage(sizeof(unsigned int) * 36, &cube_inds[0], 0);
 }
 

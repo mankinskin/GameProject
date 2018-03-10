@@ -2,10 +2,10 @@
 layout(location = 0)in uvec2 vertex;
 
 layout(std140)uniform ColorBuffer{
-	vec4 colorBuffer[1000];
+	vec4 colorBuffer[100];
 };
 layout(std140)uniform PosBuffer{
-	vec4 posBuffer[1000];
+	vec4 posBuffer[3000];
 };
 
 layout(std140)uniform GeneralUniformBuffer{

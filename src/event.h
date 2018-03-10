@@ -21,17 +21,17 @@ namespace events {
 	template<class EventType>
 	class EventSlot {
 	public:
-		EventSlot(size_t pStateIndex, EventType&& pEvent)
+		EventSlot(unsigned int pStateIndex, EventType&& pEvent)
 			:event_signature(pEvent), stateIndex(pStateIndex)
 		{		}
-		static void reserve_slots(size_t pCount) {
+		static void reserve_slots(unsigned int pCount) {
 			allEventStates.reserve(allEventStates.size() + pCount);
 			slots.reserve(slots.size() + pCount);
 		}
-		static size_t slot_count() {//instances of this type
+		static unsigned int slot_count() {//instances of this type
 			return slots.size();
 		}
-		static EventSlot<EventType>& get_slot(size_t index) {
+		static EventSlot<EventType>& get_slot(unsigned int index) {
 			return slots[index];
 		}
 		static void clear_slots() {
@@ -41,9 +41,9 @@ namespace events {
 			eventBuffer.clear();
 		}
 		static void checkEvents() {//throws the signals of the events in eventBuffer
-			for (size_t e = 0; e < EventSlot<EventType>::eventBuffer.size(); ++e) {
+			for (unsigned int e = 0; e < EventSlot<EventType>::eventBuffer.size(); ++e) {
 				EventType& evnt = EventSlot<EventType>::eventBuffer[e];
-				for (size_t sl = 0; sl < EventSlot<EventType>::slots.size(); ++sl) {
+				for (unsigned int sl = 0; sl < EventSlot<EventType>::slots.size(); ++sl) {
 					EventSlot<EventType>& slot = EventSlot<EventType>::slots[sl];
 					if (evnt == slot.event_signature) {//trigger signal
 						slot.set();
@@ -58,7 +58,7 @@ namespace events {
 		}
 	private:
 		EventType event_signature;
-		size_t stateIndex;
+		unsigned int stateIndex;
 	};
 
 
@@ -69,9 +69,9 @@ namespace events {
 	struct Event {//event state source
 		Event()
 			:src(-1) {}
-		Event(size_t pIndex)
+		Event(unsigned int pIndex)
 			:src(pIndex) {}
-		size_t src;
+		unsigned int src;
 		bool operator()() {
 			return allEventStates[src];
 		}
@@ -112,8 +112,8 @@ namespace events {
 		OnType on_evt;
 		OffType off_evt;
 		gates::switch_gate<OnType, OffType> hold_evt;
-		size_t on;
-		size_t off;
-		size_t hold;
+		unsigned int on;
+		unsigned int off;
+		unsigned int hold;
 	};
 }

@@ -11,7 +11,7 @@ namespace voxelization {
 	{
 		glm::vec3 normal;
 	};
-	template<size_t LevelCount>
+	template<unsigned int LevelCount>
 	struct Octree
 	{
 		std::vector<TreeNode> nodes[LevelCount];

@@ -9,7 +9,7 @@ std::string texture::TEXTURE_DIR = DEFAULT_TEXTURE_DIRECTORY;
 
 
 
-texture::Texture2D::Texture2D(size_t pWidth, size_t pHeight, GLenum pInternalFormat, GLenum pFormat, GLenum pType)
+texture::Texture2D::Texture2D(unsigned int pWidth, unsigned int pHeight, GLenum pInternalFormat, GLenum pFormat, GLenum pType)
 	:width(pWidth), height(pHeight), internalFormat(pInternalFormat), format(pFormat), type(pType) {}
 
 
@@ -22,33 +22,39 @@ void texture::loadTextureBuffer(TextureBuffer & pBuffer, std::string pFilename, 
 	}
 }
 
-size_t texture::createTexture2D(size_t pWidth, size_t pHeight, GLenum pInternalFormat, GLenum pFormat, GLenum pType, const void* pData)
+unsigned int texture::createTexture2D(unsigned int pWidth, unsigned int pHeight, 
+        GLenum pInternalFormat, GLenum pFormat, GLenum pType, const void* pData)
 {
 	Texture2D texture(pWidth, pHeight, pInternalFormat, pFormat, pType);
-
-	glGenTextures(1, &texture.ID);
 	glBindTexture(GL_TEXTURE_2D, texture.ID);
+	glCreateTextures(GL_TEXTURE_2D, 1, &texture.ID);
 
 
 	glTexImage2D(GL_TEXTURE_2D, 0, texture.internalFormat, texture.width, texture.height, 0, texture.format, texture.type, pData);
-	glTextureParameteri(texture.ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTextureParameteri(texture.ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTextureParameteri(texture.ID, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTextureParameteri(texture.ID, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	all2DTextures.push_back(texture);
 	return all2DTextures.size() - 1;
 }
 
-size_t texture::createTexture2D(std::string pFilename)
+unsigned int texture::generateMipMap(Texture2D& texture, 
+        int glMinFilter = GL_NEAREST_MIPMAP_LINEAR, 
+        int glMagFilter = GL_NEAREST)
+{
+	glTextureParameteri(texture.ID, GL_TEXTURE_MIN_FILTER, glMinFilter);
+	glTextureParameteri(texture.ID, GL_TEXTURE_MAG_FILTER, glMagFilter);
+	glGenerateMipmap(GL_TEXTURE_2D);
+}
+
+unsigned int texture::createTexture2D(std::string pFilename)
 {
 	TextureBuffer buffer;
 	loadTextureBuffer(buffer, pFilename, SOIL_LOAD_AUTO);
 	return createTexture2D(buffer);
 }
-size_t texture::createTexture2D(TextureBuffer pBuffer)
+unsigned int texture::createTexture2D(TextureBuffer pBuffer)
 {
 	int internal_format = 0;
 	int format = 0;
@@ -76,19 +82,19 @@ size_t texture::createTexture2D(TextureBuffer pBuffer)
 	return createTexture2D(pBuffer.width, pBuffer.height, internal_format, format, GL_UNSIGNED_BYTE, pBuffer.data);
 }
 
-void texture::setTextureWrapping(size_t pTextureIndex, size_t pWrapS, size_t pWrapT)
+void texture::setTextureWrapping(unsigned int pTextureIndex, unsigned int pWrapS, unsigned int pWrapT)
 {
 	glTextureParameteri(all2DTextures[pTextureIndex].ID, GL_TEXTURE_WRAP_S, pWrapS);
 	glTextureParameteri(all2DTextures[pTextureIndex].ID, GL_TEXTURE_WRAP_T, pWrapT);
 }
 
-void texture::setTextureFilter(size_t pTextureIndex, size_t pMagFilter, size_t pMinFilter)
+void texture::setTextureFilter(unsigned int pTextureIndex, unsigned int pMagFilter, unsigned int pMinFilter)
 {
 	glTextureParameteri(all2DTextures[pTextureIndex].ID, GL_TEXTURE_MIN_FILTER, pMinFilter);
 	glTextureParameteri(all2DTextures[pTextureIndex].ID, GL_TEXTURE_MAG_FILTER, pMagFilter);
 }
 
-size_t texture::get2DTextureID(size_t pTextureIndex)
+unsigned int texture::get2DTextureID(unsigned int pTextureIndex)
 {
 	return all2DTextures[pTextureIndex].ID;
 }

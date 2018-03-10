@@ -1,18 +1,19 @@
 #include "font.h"
 #include "text.h"
 #include "shader.h"
+#include "primitives.h"
 
-size_t MAX_CHARS = 1000;
+unsigned int MAX_CHARS = 1000;
 unsigned int quadStorage = 0;
 unsigned int charStorage = 0;
 std::vector<gui::text::String> allStrings;
 
-size_t styleStorage = 0;
+unsigned int styleStorage = 0;
 std::vector<gui::text::TextStyle> allTextStyles;
 
 unsigned int gui::text::fontVAO = 0;
 unsigned int gui::text::glyphShaderProgram = 0;
-std::vector<size_t> gui::text::glyphIndexBuffer;
+std::vector<unsigned int> gui::text::glyphIndexBuffer;
 std::vector<gui::text::Font> gui::text::allFonts;
 std::vector<gui::text::FontInstructions> gui::text::allFontInstructions;
 std::vector<gui::text::GlyphMetrics> gui::text::allMetrics;
@@ -29,7 +30,7 @@ void gui::text::initFontShader()
 void gui::text::
 initFontVAO() {
 	quadStorage = vao::createStorage(MAX_CHARS * sizeof(CharQuad), nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS);
-	charStorage = vao::createStorage(MAX_CHARS * sizeof(size_t), nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS);
+	charStorage = vao::createStorage(MAX_CHARS * sizeof(unsigned int), nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS);
 	vao::createStream(quadStorage, GL_MAP_WRITE_BIT);
 	vao::createStream(charStorage, GL_MAP_WRITE_BIT);
 	glCreateVertexArrays(1, &fontVAO);
@@ -45,12 +46,12 @@ initFontVAO() {
 	glVertexArrayVertexBuffer(fontVAO, 0, gl::quadVBO + 1, 0, sizeof(float) * 2);
 
 	vao::setVertexArrayVertexStorage(fontVAO, 1, quadStorage, sizeof(CharQuad));
-	vao::setVertexArrayVertexStorage(fontVAO, 2, charStorage, sizeof(size_t));
+	vao::setVertexArrayVertexStorage(fontVAO, 2, charStorage, sizeof(unsigned int));
 }
 
 void gui::text::revalidateFontStringIndices()
 {
-	size_t off = 0;
+	unsigned int off = 0;
 	for (Font& fon : allFonts) {
 		fon.stringOffset = off;
 		off += fon.stringCount;
@@ -64,7 +65,7 @@ void gui::text::insertFontString(Font & pFont, String pString)
 	++pFont.stringCount;
 	allFontStrings.insert(allFontStrings.begin() + pFont.stringOffset, pString);
 }
-//size_t gui::text::createTextStyle(TextStyle & pStyle)
+//unsigned int gui::text::createTextStyle(TextStyle & pStyle)
 //{
 //	allTextStyles.push_back(pStyle);
 //	return allTextStyles.size() - 1;
@@ -83,7 +84,7 @@ void gui::text::updateCharStorage()
 {
 	if (charQuadBuffer.size()) {
 		vao::uploadStorage(quadStorage, sizeof(CharQuad)*charQuadBuffer.size(), &charQuadBuffer[0]);
-		vao::uploadStorage(charStorage, sizeof(size_t)*glyphIndexBuffer.size(), &glyphIndexBuffer[0]);
+		vao::uploadStorage(charStorage, sizeof(unsigned int)*glyphIndexBuffer.size(), &glyphIndexBuffer[0]);
 	}
 }
 

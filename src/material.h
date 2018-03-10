@@ -9,13 +9,13 @@ namespace mesh {
 		glm::vec4 spec_color;
 	};
 	struct MaterialTextures {
-		size_t amb_tex;
-		size_t diff_tex;
-		size_t spec_tex;
+		unsigned int amb_tex;
+		unsigned int diff_tex;
+		unsigned int spec_tex;
 	};
 	extern std::vector<Material> allMaterials;
 	extern std::vector<MaterialTextures> allMaterialTextures;
-	extern size_t materialUBO;
+	extern unsigned int materialUBO;
 	void storeMaterials();
 
 }

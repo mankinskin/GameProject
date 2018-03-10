@@ -5,6 +5,7 @@
 #include "material.h"
 #include "entities.h"
 #include <gtc/matrix_transform.hpp>
+#include "viewport.h"
 
 glm::uvec3 voxelization::frustum_size = glm::ivec3(200, 200, 200);
 unsigned int voxelization::voxelizationShader = 0;
@@ -52,16 +53,16 @@ void voxelization::voxelizeMeshes()
 	float fitx = 1.0f;
 	float fity = 1.0f;
 	glViewport(0, 0, frustum_size.x*fitx, frustum_size.y*fity);
-	//glViewport(0, 0, gl::screenWidth, gl::screenHeight);
+	//glViewport(0, 0, gl::Viewport::current->width, gl::Viewport::current->height);
 	shader::use(voxelizationShader);
 	glBindVertexArray(mesh::meshVAO);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_3D, volumeImage);
 	glBindImageTexture(0, volumeImage, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RGBA16F);
-	for (size_t m = 0; m < mesh::allMeshes.size(); ++m) {
+	for (unsigned int m = 0; m < mesh::allMeshes.size(); ++m) {
 		mesh::Mesh& mesh = mesh::allMeshes[m];
-		glDrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, (void*)(mesh.indexOffset * sizeof(size_t)), mesh.instanceCount, mesh.instanceOffset);
+		glDrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, (void*)(mesh.indexOffset * sizeof(unsigned int)), mesh.instanceCount, mesh.instanceOffset);
 	}
 	
 	glBindImageTexture(0, 0, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RGBA16F);
@@ -69,7 +70,7 @@ void voxelization::voxelizeMeshes()
 	glBindVertexArray(0);
 	shader::unuse();
 	//swapVolumeBuffers();
-	glViewport(0, 0, gl::screenWidth, gl::screenHeight);
+	glViewport(0, 0, gl::Viewport::current->width, gl::Viewport::current->height);
 }
 
 void voxelization::setupShader()
@@ -86,7 +87,7 @@ void voxelization::clearVolumeTexture()
 }
 
 void voxelization::swapVolumeBuffers() {
-	size_t old_front = volumeImage;
+	unsigned int old_front = volumeImage;
 	volumeImage = backVolumeImage;
 	backVolumeImage = old_front;
 }

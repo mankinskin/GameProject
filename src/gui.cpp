@@ -16,36 +16,20 @@
 #include "signal.h"
 #include "app.h"
 #include "lights.h"
+#include "viewport.h"
 
 glm::vec2 gui::pixel_size;
+using gl::ConstColor;
 
 void gui::init()
 {
-	pixel_size = glm::vec2(2.0f / gl::screenWidth, 2.0f / gl::screenHeight);
-	initColors();
+	pixel_size = glm::vec2(2.0f / gl::Viewport::current->width, 2.0f / gl::Viewport::current->height);
 	initColoringVAOs();	
 	initQuadBuffer();
-	
 	//text::initFonts();
 	debug::printErrors();
 }
 
-void gui::initColors()
-{
-	createConstColor(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), "nocolor");
-	createConstColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), "black");
-	createConstColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), "white");
-	createConstColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "red");
-	createConstColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), "green");
-	createConstColor(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), "blue");
-	createConstColor(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), "yellow");
-	createConstColor(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), "cyan");
-	createConstColor(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), "magenta");
-	createConstColor(glm::vec4(0.5f, 0.0f, 0.5f, 1.0f), "purple");
-	createConstColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f), "grey");
-	createConstColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f), "darkgrey");
-	createConstColor(glm::vec4(0.7f, 0.7f, 0.7f, 1.0f), "lightgrey");
-}
 void gui::initWidgets()
 {
 	using namespace gates;
@@ -89,17 +73,17 @@ void gui::initWidgets()
 	toggle_gate<decltype(ent_or_lea)> on_button(ent_or_lea);
 	
 	
-	size_t button_enter = createSignal(button_enters_src);
-	size_t button_leave = createSignal(button_leaves_src);
+	unsigned int button_enter = createSignal(button_enters_src);
+	unsigned int button_leave = createSignal(button_leaves_src);
 	
 	
-	FunctorRef<void, size_t, ConstColor> light_button = createFunctor(gui::colorQuad<ConstColor>, quitButton.element<0>().index, ConstColor("white"));
-	FunctorRef<void, size_t, ConstColor> unlight_button = createFunctor(gui::colorQuad<ConstColor>, quitButton.element<0>().index, ConstColor("yellow"));
+	FunctorRef<void, unsigned int, ConstColor> light_button = createFunctor(gui::colorQuad<ConstColor>, quitButton.element<0>().index, ConstColor("white"));
+	FunctorRef<void, unsigned int, ConstColor> unlight_button = createFunctor(gui::colorQuad<ConstColor>, quitButton.element<0>().index, ConstColor("yellow"));
 	light_button.set_triggers({ button_enter });
 	unlight_button.set_triggers({ button_leave });
 	
 	gate<and_op, decltype(on_button), decltype(lmb.on_evt)> button_press(and_op(), on_button, lmb.on_evt);
-	size_t quit_button_press = createSignal(button_press);
+	unsigned int quit_button_press = createSignal(button_press);
 
 
 	FunctorRef<void> quit_func = createFunctor(app::quit);
@@ -227,14 +211,14 @@ void gui::initWidgets()
 	//
 	//
 	//Event slider_box_enter_evt = createEvent(QuadEvent(slider.element<0>().index, 1));
-	//size_t slider_box_enter = createSignal(slider_box_enter_evt);
+	//unsigned int slider_box_enter = createSignal(slider_box_enter_evt);
 	//Event slider_box_leave_evt = createEvent(QuadEvent(slider.element<0>().index, 0));
-	//size_t slider_box_leave = createSignal(slider_box_leave_evt);
+	//unsigned int slider_box_leave = createSignal(slider_box_leave_evt);
 	//
 	//Event slider_slide_enter_evt = createEvent(QuadEvent(slider.element<1>().index, 1));
-	//size_t slider_slide_enter = createSignal(slider_slide_enter_evt);
+	//unsigned int slider_slide_enter = createSignal(slider_slide_enter_evt);
 	//Event slider_slide_leave_evt = createEvent(QuadEvent(slider.element<1>().index, 0));
-	//size_t slider_slide_leave = createSignal(slider_slide_leave_evt);
+	//unsigned int slider_slide_leave = createSignal(slider_slide_leave_evt);
 	//
 	//
 	//gate<or_op, Event, Event> slider_any_enter_evt(or_op(), slider_slide_enter_evt, slider_box_enter_evt);
@@ -273,14 +257,14 @@ void gui::initWidgets()
 	//	float amt = (slide_pos - box_pos) / (box_size - half_width);
 	//	pTarget = glm::vec4(amt, amt, amt, amt)*10.0f;
 	//};
-	//FunctorRef<void, glm::vec4&, Quad, Quad> set_slide_target_func = createFunctor<void, glm::vec4&, Quad, Quad>(set_slide_target, lighting::getLightColor(0), slider.element<0>(), slider.element<1>());
+	//FunctorRef<void, glm::vec4&, Quad, Quad> set_slide_target_func = createFunctor<void, glm::vec4&, Quad, Quad>(set_slide_target, lights::getLightColor(0), slider.element<0>(), slider.element<1>());
 	//set_slide_target_func.set_triggers({ slider_lmb.hold });
 	//
 	////text
 	//gui::text::createTextboxMetrics(0, 1.0, 1.0, 1.0, 1.0);
 	//
-	//size_t qu_tb = gui::text::createTextbox(quitButton.element<1>().index, 0, TEXT_LAYOUT_CENTER_Y);
-	////size_t fps_tb = gui::text::createTextbox(fps_box.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y);
+	//unsigned int qu_tb = gui::text::createTextbox(quitButton.element<1>().index, 0, TEXT_LAYOUT_CENTER_Y);
+	////unsigned int fps_tb = gui::text::createTextbox(fps_box.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y);
 	//
 	//gui::text::setTextboxString(qu_tb, " QUIT");
 	////gui::text::setTextboxString(pl_tb, " Play");

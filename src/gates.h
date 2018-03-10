@@ -14,7 +14,7 @@ namespace gates {
         gate(Op pOp, Srcs... pSrcs) :op(pOp), srcs(pSrcs...) {}
         std::tuple<Srcs...> srcs;
         Op op;
-        template<size_t I, typename Dummy=float>// Dummy enables template specialization in class scope
+        template<unsigned int I, typename Dummy=float>// Dummy enables template specialization in class scope
         struct evaluator {
             static bool next(std::tuple<Srcs...>& pSrcs){
                 return Op::eval(std::get<I>(pSrcs)(), evaluator<I - 1>::next(pSrcs));

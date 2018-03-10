@@ -17,16 +17,16 @@ namespace mesh {
 		glm::vec2 uv;
 	};
 	struct Mesh {
-		Mesh(size_t pVertexOffset, size_t pVertexCount, size_t pIndexOffset, size_t pIndexCount, size_t pMaterialIndex = 0)
+		Mesh(unsigned int pVertexOffset, unsigned int pVertexCount, unsigned int pIndexOffset, unsigned int pIndexCount, unsigned int pMaterialIndex = 0)
 			:vertexOffset(pVertexOffset), vertexCount(pVertexCount), indexOffset(pIndexOffset), indexCount(pIndexCount), materialIndex(pMaterialIndex), instanceOffset(0), instanceCount(0) {}
-		size_t vertexOffset = 0;
-		size_t vertexCount = 0;
-		size_t indexOffset = 0;
-		size_t indexCount = 0;
-		size_t materialIndex = 0;
+		unsigned int vertexOffset = 0;
+		unsigned int vertexCount = 0;
+		unsigned int indexOffset = 0;
+		unsigned int indexCount = 0;
+		unsigned int materialIndex = 0;
 
-		size_t instanceOffset = 0;
-		size_t instanceCount = 0;
+		unsigned int instanceOffset = 0;
+		unsigned int instanceCount = 0;
 	};
 
 
@@ -37,9 +37,9 @@ namespace mesh {
 	void setupMeshNormalShader();
 	void initBlendMeshShader();
 	void setupBlendMeshShader();
-	size_t createMesh(size_t pIndexOffset, size_t pIndexCount, size_t pVertexOffset, size_t pVertexCount, size_t pMaterialIndex);
-	size_t createMesh(std::vector<Vertex> pVertices, std::vector<size_t> pIndices, size_t pMaterialIndex);
-	void addInstancesToMesh(size_t pMeshIndex, std::vector<size_t> pNodeIDs);
+	unsigned int createMesh(unsigned int pIndexOffset, unsigned int pIndexCount, unsigned int pVertexOffset, unsigned int pVertexCount, unsigned int pMaterialIndex);
+	unsigned int createMesh(std::vector<Vertex> pVertices, std::vector<unsigned int> pIndices, unsigned int pMaterialIndex);
+	void addInstancesToMesh(unsigned int pMeshIndex, std::vector<unsigned int> pNodeIDs);
 
 	void revalidateMeshNodeOffsets();
 	void updateMeshBuffers();
@@ -53,13 +53,13 @@ namespace mesh {
 
 	
 
-	extern std::vector<size_t> opaqueMeshList;
-	extern std::vector<size_t> blendMeshList;
+	extern std::vector<unsigned int> opaqueMeshList;
+	extern std::vector<unsigned int> blendMeshList;
 
-	extern std::vector<size_t> allIndices;
+	extern std::vector<unsigned int> allIndices;
 	extern std::vector<Vertex> allStaticVertices;
 	extern std::vector<Mesh> allMeshes;
-	extern std::vector<size_t> allMeshInstancenode;
+	extern std::vector<unsigned int> allMeshInstancenode;
 	extern bool draw_normals;
 	extern bool cull_face;
 	extern unsigned int meshShader;

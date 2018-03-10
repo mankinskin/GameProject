@@ -8,21 +8,21 @@ namespace model {
 	struct Model {
 		Model()
 			:meshOffset(0), meshCount(0) {}
-		Model(size_t pMeshOffset, size_t pMeshCount)
+		Model(unsigned int pMeshOffset, unsigned int pMeshCount)
 			:meshOffset(pMeshOffset), meshCount(pMeshCount) {}
 
-		size_t meshOffset = 0;
-		size_t meshCount = 0;
+		unsigned int meshOffset = 0;
+		unsigned int meshCount = 0;
 	};
 	void initModels();
 	void setupModels();
 	void revalidateModelMeshOffsets();
-	Model& getModel(size_t pID);
+	Model& getModel(unsigned int pID);
 	Model& getModel(std::string pName);
-	const size_t MAX_MODELS = 100;
-	const size_t MAX_MESHES_PER_MODEL = 10;
+	const unsigned int MAX_MODELS = 100;
+	const unsigned int MAX_MESHES_PER_MODEL = 10;
 
-	size_t createModel(size_t pMeshOffset, size_t pMeshCount);
+	unsigned int createModel(unsigned int pMeshOffset, unsigned int pMeshCount);
 	extern std::vector<std::string> allModelNames;
 
 }

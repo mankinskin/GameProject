@@ -9,8 +9,8 @@ std::vector<glm::vec3> entities::allNormals;
 std::vector<glm::vec3> entities::allScales;
 std::vector<glm::vec4> entities::allRotations;
 
-size_t entities::num_entities;
-size_t entities::entityMatrixBuffer;
+unsigned int entities::num_entities;
+unsigned int entities::entityMatrixBuffer;
 
 
 void entities::initEntityBuffers()
@@ -31,7 +31,7 @@ void entities::updateEntityBuffers()
 
 void entities::updateEntityMatrices()
 {
-	for (size_t e = 0; e < num_entities; ++e) {
+	for (unsigned int e = 0; e < num_entities; ++e) {
 
 		allMatrices[e] = glm::translate(glm::mat4(), allPositions[e]);
 		allMatrices[e] = glm::scale(allMatrices[e], allScales[e]);
@@ -41,9 +41,9 @@ void entities::updateEntityMatrices()
 	}
 }
 
-void entities::createEntities(size_t pCount, size_t * pEntityIDs)
+void entities::createEntities(unsigned int pCount, unsigned int * pEntityIDs)
 {
-	for (size_t p = 0; p < pCount; ++p) {
+	for (unsigned int p = 0; p < pCount; ++p) {
 		*(pEntityIDs + p) = num_entities + p;
 	}
 	num_entities += pCount;
@@ -53,7 +53,7 @@ void entities::createEntities(size_t pCount, size_t * pEntityIDs)
 	allPositions.resize(num_entities);
 	allScales.resize(num_entities);
 }
-void entities::createEntity(size_t* pNode) {
+void entities::createEntity(unsigned int* pNode) {
 	newEntityID(*pNode);
 	allNormals.resize(num_entities, glm::vec3(0.0f, 1.0f, 0.0f));
 	allRotations.resize(num_entities);
@@ -62,12 +62,12 @@ void entities::createEntity(size_t* pNode) {
 	allScales.resize(num_entities);
 }
 
-void entities::newEntityID(size_t& pNode)
+void entities::newEntityID(unsigned int& pNode)
 {
 	pNode = num_entities++;;
 }
 
-void entities::reserveEntities(size_t pCount)
+void entities::reserveEntities(unsigned int pCount)
 {
 	allNormals.reserve(num_entities + pCount);
 	allRotations.resize(num_entities + pCount);
@@ -76,20 +76,20 @@ void entities::reserveEntities(size_t pCount)
 	allScales.resize(num_entities + pCount);
 }
 
-void entities::setScale(size_t pNodeID, glm::vec3 pScale)
+void entities::setScale(unsigned int pNodeID, glm::vec3 pScale)
 {
 	allScales[pNodeID] = pScale;
 }
 
-void entities::setPos(size_t pNodeID, glm::vec3 pPos)
+void entities::setPos(unsigned int pNodeID, glm::vec3 pPos)
 {
 	allPositions[pNodeID] = pPos;
 }
-void entities::setRotation(size_t pNodeID, glm::vec4 pRotation)
+void entities::setRotation(unsigned int pNodeID, glm::vec4 pRotation)
 {
 	allRotations[pNodeID] += pRotation;
 }
-void entities::translate(size_t pNodeID, glm::vec3 pPos)
+void entities::translate(unsigned int pNodeID, glm::vec3 pPos)
 {
 	allPositions[pNodeID] += pPos;
 }

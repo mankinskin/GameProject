@@ -23,10 +23,10 @@ void model::initModels()
 	model::Loader::loadModels();
 	
 	//normalize sphere mesh
-	//size_t sphere_mesh = model::getModel("sphere").meshOffset;
-	//size_t vertexOffset = mesh::allMeshes[sphere_mesh].vertexOffset;
-	//size_t vertexCount = mesh::allMeshes[sphere_mesh].vertexCount;
-	//for (size_t v = 0; v < vertexCount; ++v) {
+	//unsigned int sphere_mesh = model::getModel("sphere").meshOffset;
+	//unsigned int vertexOffset = mesh::allMeshes[sphere_mesh].vertexOffset;
+	//unsigned int vertexCount = mesh::allMeshes[sphere_mesh].vertexCount;
+	//for (unsigned int v = 0; v < vertexCount; ++v) {
 	//	glm::vec3& vert = mesh::allStaticVertices[vertexOffset + v].pos;
 	//	vert = glm::normalize(vert);
 	//}
@@ -36,11 +36,11 @@ void model::setupModels()
 {
 	using namespace mesh;
 	srand(time(NULL));
-	size_t nodes_to_generate = 100;
-	std::vector<size_t> generated_nodes(nodes_to_generate);
+	unsigned int nodes_to_generate = 100;
+	std::vector<unsigned int> generated_nodes(nodes_to_generate);
 	entities::reserveEntities(nodes_to_generate);
 
-	size_t grid_width = 100;
+	unsigned int grid_width = 100;
 
 	for (unsigned int ni = 0; ni < nodes_to_generate; ++ni) {
 
@@ -54,7 +54,7 @@ void model::setupModels()
 	//addInstancesToMesh(getModel(1).meshOffset, { sphere_B_node });
 }
 
-model::Model& model::getModel(size_t pID)
+model::Model& model::getModel(unsigned int pID)
 {
 	return allModels[pID];
 }
@@ -62,7 +62,7 @@ model::Model& model::getModel(size_t pID)
 model::Model& model::getModel(std::string pName)
 {
 	try {
-		size_t i = std::find(allModelNames.begin(), allModelNames.end(), pName) - allModelNames.begin();
+		unsigned int i = std::find(allModelNames.begin(), allModelNames.end(), pName) - allModelNames.begin();
 		if (i < 0 || i >= allModelNames.size()) {
 			throw "Could not find Model '"+pName+"'!";
 		}
@@ -74,7 +74,7 @@ model::Model& model::getModel(std::string pName)
 	}
 }
 
-size_t model::createModel(size_t pMeshOffset, size_t pMeshCount)
+unsigned int model::createModel(unsigned int pMeshOffset, unsigned int pMeshCount)
 {
 	allModels.emplace_back(pMeshOffset, pMeshCount);
 	return allModels.size() - 1;
@@ -82,8 +82,8 @@ size_t model::createModel(size_t pMeshOffset, size_t pMeshCount)
 
 void model::revalidateModelMeshOffsets()
 {
-	size_t offs = 0;
-	for (size_t mod = 0; mod < allModels.size(); ++mod) {
+	unsigned int offs = 0;
+	for (unsigned int mod = 0; mod < allModels.size(); ++mod) {
 		allModels[mod].meshOffset = offs;
 		offs += allModels[mod].meshCount;
 	}

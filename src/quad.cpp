@@ -6,12 +6,14 @@
 #include "mouse.h"
 #include "gldebug.h"
 #include "framebuffer.h"
+#include "viewport.h"
+#include "primitives.h"
 
 std::vector<glm::vec4> gui::allQuads;
 unsigned int gui::quadBuffer;
 unsigned int gui::quadIndexShader;
 unsigned int gui::quadIndexVAO;
-std::vector<size_t> quadIndexMap;
+std::vector<unsigned int> quadIndexMap;
 std::vector<float> quadDepthMap;
 
 
@@ -40,17 +42,17 @@ void gui::rasterQuadIndices()
 }
 
 
-size_t gui::createQuad(float pPosX, float pPosY, float pWidth, float pHeight)
+unsigned int gui::createQuad(float pPosX, float pPosY, float pWidth, float pHeight)
 {
 	allQuads.emplace_back(pPosX, pPosY, pWidth, pHeight);
 	return allQuads.size();
 }
-size_t gui::createQuad(glm::vec4 pQuad)
+unsigned int gui::createQuad(glm::vec4 pQuad)
 {
 	allQuads.push_back(pQuad);
 	return allQuads.size();
 }
-void gui::reserveQuads(size_t pCount)
+void gui::reserveQuads(unsigned int pCount)
 {
 	allQuads.reserve(allQuads.size() + pCount);
 }
@@ -59,7 +61,7 @@ void gui::readQuadIndexBuffer()
 	//use pixel pack buffer
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, texture::quadIndexBuffer + 1);
 	//get quad depth pixels
-	glReadPixels(0, 0, gl::screenWidth, gl::screenHeight, GL_RED_INTEGER, GL_UNSIGNED_INT, 0);
+	glReadPixels(0, 0, gl::Viewport::current->width, gl::Viewport::current->height, GL_RED_INTEGER, GL_UNSIGNED_INT, 0);
 
 	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 }
@@ -75,8 +77,8 @@ void gui::initQuadBuffer()
 
 	vao::setVertexAttrib(quadIndexVAO, 0, 0, 2, GL_FLOAT, 0);
 
-	quadIndexMap.resize(gl::screenWidth * gl::screenHeight);
-	quadDepthMap.resize(gl::screenWidth * gl::screenHeight);
+	quadIndexMap.resize(gl::Viewport::current->width * gl::Viewport::current->height);
+	quadDepthMap.resize(gl::Viewport::current->width * gl::Viewport::current->height);
 }
 
 void gui::initQuadIndexShader()
@@ -93,30 +95,30 @@ void gui::clearQuads()
 {
 	allQuads.clear();
 }
-size_t gui::readQuadIndexMap(size_t pPos) {
-	return *((size_t*)vao::getMappedPtr(texture::quadIndexBuffer) + pPos);
+unsigned int gui::readQuadIndexMap(unsigned int pPos) {
+	return *((unsigned int*)vao::getMappedPtr(texture::quadIndexBuffer) + pPos);
 }
-size_t gui::readQuadIndexMap(size_t pXPos, size_t pYPos) {
-	return readQuadIndexMap((gl::screenWidth * pYPos) + pXPos);
+unsigned int gui::readQuadIndexMap(unsigned int pXPos, unsigned int pYPos) {
+	return readQuadIndexMap((gl::Viewport::current->width * pYPos) + pXPos);
 }
 
-float gui::readQuadDepthMap(size_t pPos)
+float gui::readQuadDepthMap(unsigned int pPos)
 {
 	return quadDepthMap[pPos];
 }
 
-float gui::readQuadDepthMap(size_t pXPos, size_t pYPos)
+float gui::readQuadDepthMap(unsigned int pXPos, unsigned int pYPos)
 {
-	return readQuadDepthMap((gl::screenWidth * pYPos) + pXPos);
+	return readQuadDepthMap((gl::Viewport::current->width * pYPos) + pXPos);
 }
-void gui::moveQuad(size_t pQuad, glm::vec2 pOffset) {
+void gui::moveQuad(unsigned int pQuad, glm::vec2 pOffset) {
 	allQuads[pQuad - 1] += glm::vec4(pOffset.x, pOffset.y, 0.0f, 0.0f);
 }
-void gui::resizeQuad(size_t pQuad, glm::vec2 pOffset) {
+void gui::resizeQuad(unsigned int pQuad, glm::vec2 pOffset) {
 	allQuads[pQuad - 1] += glm::vec4(0.0f, 0.0f, pOffset.x, pOffset.y);
 }
 
-void gui::setQuadPos(size_t pQuad, glm::vec2 pPos)
+void gui::setQuadPos(unsigned int pQuad, glm::vec2 pPos)
 {
 	std::memcpy(&allQuads[pQuad - 1], &pPos, sizeof(glm::vec2));
 }

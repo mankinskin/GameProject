@@ -7,11 +7,12 @@
 #include "vao.h"
 #include "debug.h"
 #include <algorithm>
-#include "dt/dt.h"
-#include "dt/image.h"
+#include "../dt/dt.h"
+#include "../dt/image.h"
 #include <fstream>
-#include "contextwindow.h"
+#include "viewport.h"
 #include "font.h"
+
 
 #define DEFAULT_TTF_DIR "../assets//fonts//"
 #define DEFAULT_STORE_DIR "../assets//glyph_atlas_fonts//"
@@ -386,8 +387,8 @@ void storeGlyphs(gui::text::Font& pFont, const LoadFont & pLoadFont)
 		const LoadGlyphMetrics& met = pLoadFont.metrics[g];
 		glyphs[g] = gui::text::Glyph((float)qud.minX / (float)pLoadFont.atlas.width, (float)qud.minY / (float)pLoadFont.atlas.height,
 			(float)(qud.maxX) / (float)pLoadFont.atlas.width, (float)(qud.maxY) / (float)pLoadFont.atlas.height);
-		gui::text::allMetrics[pFont.metricOffset + g] = gui::text::GlyphMetrics((float)(qud.maxX - qud.minX) / ((float)gl::screenWidth / 2.0f), (float)(qud.maxY - qud.minY) / ((float)gl::screenHeight / 2.0f),
-			(float)met.advanceX / ((float)gl::screenWidth / 2.0f), (float)met.xBearing / ((float)gl::screenWidth / 2.0f), (float)met.yBearing / ((float)gl::screenHeight / 2.0f));
+		gui::text::allMetrics[pFont.metricOffset + g] = gui::text::GlyphMetrics((float)(qud.maxX - qud.minX) / ((float)gl::Viewport::current->width / 2.0f), (float)(qud.maxY - qud.minY) / ((float)gl::Viewport::current->height / 2.0f),
+			(float)met.advanceX / ((float)gl::Viewport::current->width / 2.0f), (float)met.xBearing / ((float)gl::Viewport::current->width / 2.0f), (float)met.yBearing / ((float)gl::Viewport::current->height / 2.0f));
 		//allMetrics[pSize.metricOffset + g] = GlyphMetrics((float)met.width, (float)met.height, (float)met.advanceX, (float)met.xBearing, (float)met.yBearing);
 	}
 	pFont.glyphStorageIndex = vao::createStorage(sizeof(gui::text::Glyph)*glyCount, &glyphs[0], 0);
@@ -401,7 +402,7 @@ std::pair<size_t, size_t> convertKerning(std::vector<int>& pKerningMap)
 	size_t offset = gui::text::allKerning.size();
 	gui::text::allKerning.resize(offset + count);
 	for (size_t i = 0; i < count; ++i) {
-		gui::text::allKerning[offset + i] = (float)pKerningMap[i] / ((float)gl::screenWidth / 2.0f);
+		gui::text::allKerning[offset + i] = (float)pKerningMap[i] / ((float)gl::Viewport::current->width / 2.0f);
 	}
 	return std::pair<size_t, size_t>(offset, count);
 }
@@ -429,7 +430,7 @@ gui::text::Font integrateFont(LoadFont& pFont) {
 	std::pair<size_t, size_t> range = convertKerning(pFont.kerningMap);
 	font.kerningOffset = range.first;
 	font.kerningCount = range.second;
-	font.fontMetric.lineGap = (float)pFont.fontMetrics.lineGap / ((float)gl::screenHeight / 2.0f);
+	font.fontMetric.lineGap = (float)pFont.fontMetrics.lineGap / ((float)gl::Viewport::current->height / 2.0f);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, pFont.atlas.width, pFont.atlas.height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, &pFont.atlas.buffer[0]);
 
 	glGenerateMipmap(GL_TEXTURE_2D);

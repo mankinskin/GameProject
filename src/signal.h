@@ -19,12 +19,12 @@ namespace signals {
 
 	template<typename Source>
 	struct Signal {
-		Signal(size_t pSignal, Source pSource)
+		Signal(unsigned int pSignal, Source pSource)
 			:signal(pSignal), src(pSource) {
 		}
 
 		static void check_slots() {
-			for (size_t s = 0; s < slots.size(); ++s) {
+			for (unsigned int s = 0; s < slots.size(); ++s) {
 				slots[s].check();
 			}
 		}
@@ -37,7 +37,7 @@ namespace signals {
 		static std::vector<Signal<Source>> slots;
 	private:
 
-		size_t signal;
+		unsigned int signal;
 		Source src;
 	};
 
@@ -56,7 +56,7 @@ namespace signals {
 	std::vector<Signal<Source>> Signal<Source>::slots = std::vector<Signal<Source>>();
 
 	template<typename Source>
-	size_t createSignal(Source pSource, bool pStartAs = false) {
+	unsigned int createSignal(Source pSource, bool pStartAs = false) {
 		if (!Signal<Source>::slots.size()) {
 			signalCheckers.push_back(Signal<Source>::check_slots);
 			signalDestructors.push_back(Signal<Source>::clear);

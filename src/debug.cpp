@@ -17,7 +17,7 @@ void debug::pushError(std::string pMessage, Error::Severity errorSeverity)
 void debug::printErrors()
 {
 	int fatal = 0;
-	size_t errorCount = errorBuffer.size();
+	unsigned int errorCount = errorBuffer.size();
 	if (errorCount) {
 		printf("\n%i Error(s) or Warning(s) occured.\n", errorCount);
 	}

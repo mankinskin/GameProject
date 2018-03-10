@@ -5,22 +5,26 @@
 #include <vector>
 #include "event.h"
 #include <tuple>
+#include "colorings.h"
+
 namespace gui {
 	typedef glm::vec4 QuadData;
 	extern std::vector<glm::vec4> allQuads;
-	size_t createQuad(float pPosX, float pPosY, float pWidth, float pHeight);
-	size_t createQuad(glm::vec4 pQuad);
+	unsigned int createQuad(float pPosX, float pPosY, float pWidth, float pHeight);
+	unsigned int createQuad(glm::vec4 pQuad);
 
+	template<class ColorType>
+	void colorQuad(unsigned int pQuad, ColorType pColor);
 	
 	struct Quad {
 		typedef glm::vec4 initer_t;
 		Quad() :index(-1) {}
-		Quad(size_t pIndex) :index(pIndex) {}
+		Quad(unsigned int pIndex) :index(pIndex) {}
 		Quad(initer_t pIniter) :index(createQuad(pIniter)) {}
-		Quad operator=(size_t i) { return Quad(i); }
+		Quad operator=(unsigned int i) { return Quad(i); }
 
 		
-		size_t index;
+		unsigned int index;
 		//--
 		void set_pos(glm::vec2 pos) {
 			std::memcpy(&allQuads[index - 1], &pos, sizeof(glm::vec2));
@@ -43,32 +47,32 @@ namespace gui {
 			colorQuad(index, pColor);
 		}
 		//--
-		template<size_t N>
-		size_t element() {
+		template<unsigned int N>
+		unsigned int element() {
 			return index;
 		}
-		size_t element() {
+		unsigned int element() {
 			return index;
 		}
 
 	};
 
-	void moveQuad(size_t pQuad, glm::vec2 pOffset);
-	void resizeQuad(size_t pQuad, glm::vec2 pOffset);
-	void setQuadPos(size_t pQuad, glm::vec2 pPos);
+	void moveQuad(unsigned int pQuad, glm::vec2 pOffset);
+	void resizeQuad(unsigned int pQuad, glm::vec2 pOffset);
+	void setQuadPos(unsigned int pQuad, glm::vec2 pPos);
 
 	template<typename A, typename B>
-	void moveQuad(size_t pQuad, A pOffsetX, B pOffsetY) {
+	void moveQuad(unsigned int pQuad, A pOffsetX, B pOffsetY) {
 		allQuads[pQuad - 1] += glm::vec4(pOffsetX, pOffsetY, 0.0f, 0.0f);
 	}
 	template<typename A, typename B>
-	void setQuadPos(size_t pQuad, A pPosX, B pPosY) {
+	void setQuadPos(unsigned int pQuad, A pPosX, B pPosY) {
 		allQuads[pQuad - 1].x = pPosX;
 		allQuads[pQuad - 1].y = pPosY;
 	}
 
 	template<typename A, typename B>
-	void resizeQuad(size_t pQuad, A pOffsetX, B pOffsetY) {
+	void resizeQuad(unsigned int pQuad, A pOffsetX, B pOffsetY) {
 		allQuads[pQuad - 1] += glm::vec4(0.0f, 0.0f, pOffsetX, pOffsetY);
 	}
 	void rasterQuadIndices();
@@ -76,12 +80,12 @@ namespace gui {
 
 	void initQuadIndexShader();
 	void setupQuadIndexShader();
-	void reserveQuads(size_t pCount);
+	void reserveQuads(unsigned int pCount);
 	void clearQuads();
-	size_t readQuadIndexMap(size_t pPos);
-	size_t readQuadIndexMap(size_t pXPos, size_t pYPos);
-	float readQuadDepthMap(size_t pPos);
-	float readQuadDepthMap(size_t pXPos, size_t pYPos);
+	unsigned int readQuadIndexMap(unsigned int pPos);
+	unsigned int readQuadIndexMap(unsigned int pXPos, unsigned int pYPos);
+	float readQuadDepthMap(unsigned int pPos);
+	float readQuadDepthMap(unsigned int pXPos, unsigned int pYPos);
 	void initQuadBuffer();
 	void updateQuadBuffer();
 	void readQuadIndexBuffer();
@@ -89,6 +93,10 @@ namespace gui {
 	extern unsigned int quadIndexVAO;
 	extern unsigned int quadBuffer;
 
-	const size_t MAX_QUAD_COUNT = 10000;
+}
+template<class ColorType>
+void gui::colorQuad(unsigned int pQuadID, ColorType pColor) {
+
+	colorings<ColorType>[pQuadID-1] = pColor;
 }
 #endif //QUAD_H

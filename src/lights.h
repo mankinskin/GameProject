@@ -1,14 +1,24 @@
 #pragma once 
 #include <vector> 
 #include <glm.hpp>
+//Lights are a set of data used as a light source in a layered shading process
+//each light is either of type
+//  - point light/omnidirectional light
+//  - spot light/cone light (not yet implemented)
+//
+//Using the data rendered into the Geometry Framebuffer, each light can calculate its influence 
+//on every pixel on the screen
+namespace lights {
 
-namespace lighting {
 	struct LightIndexRange {
-		LightIndexRange(size_t pOffset, size_t pCount)
+		LightIndexRange(unsigned int pOffset, unsigned int pCount)
 			:offset(pOffset), count(pCount) {}
-		size_t offset;
-		size_t count;
+		unsigned int offset;
+		unsigned int count;
 	};
+
+	void initLights();
+    unsigned int getMaxLightCount();
 
 	extern std::vector<glm::vec4> allLightData;
 	extern std::vector<LightIndexRange> allLightIndexRanges;
@@ -16,26 +26,32 @@ namespace lighting {
 	extern unsigned int lightIndexVBO;
 	extern unsigned int lightDataUBO;
 	extern unsigned int lightShaderProgram;
-	extern size_t MAX_LIGHT_COUNT;
+	extern unsigned int MAX_LIGHT_COUNT;
 
-	void initLighting();
-	void initLightVAO();
-	void initLightDataBuffer();
+	void createLightVAO();
+    void createLightVBO();
+
+	void createLightDataBuffer();
 	void updateLightDataBuffer();
 	void updateLightIndexRangeBuffer();
+
 	void initLightShader();
+
 	void renderLights();
 	void setupLightShader();
-	size_t createLight(glm::vec4 pPos, glm::vec4 pColor);
-	size_t createLight(glm::vec4 pPos, glm::vec4 pColor, glm::vec4 pFrustum);
-	void setLightPos(size_t pLightIndex, glm::vec3& pPos);
-	void setLightPos(size_t pLightIndex, glm::vec4& pPos);
-	void setLightColor(size_t pLightIndex, glm::vec3& pColor);
-	void setLightColor(size_t pLightIndex, glm::vec4& pColor);
+	unsigned int createLight(glm::vec4 pPos, glm::vec4 pColor);
+	unsigned int createLight(glm::vec4 pPos, glm::vec4 pColor, glm::vec4 pFrustum);
+	void setLightPos(unsigned int pLightIndex, glm::vec3& pPos);
+	void setLightPos(unsigned int pLightIndex, glm::vec4& pPos);
+	void setLightColor(unsigned int pLightIndex, glm::vec3& pColor);
+	void setLightColor(unsigned int pLightIndex, glm::vec4& pColor);
 	
-	glm::vec4 & getLightColor(size_t pLightIndex);
+	glm::vec4 & getLightColor(unsigned int pLightIndex);
 
-	void reserveLightSpace(size_t pCount);//reserves 3 vec4s and one index range for count
-	void reservePointLightSpace(size_t pCount);//reserves only 2 vec4 (and one index range) per light
+	void reserveLightSpace(unsigned int pCount);//reserves 3 vec4s and one index range for count
+	void reservePointLightSpace(unsigned int pCount);//reserves only 2 vec4 (and one index range) per light
+    namespace internal {
+        
+    }
 }
 

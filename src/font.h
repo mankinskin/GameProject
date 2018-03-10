@@ -17,16 +17,16 @@ namespace gui {
 			Font() :instructions(0), kerningOffset(0), kerningCount(0), metricOffset(0), metricCount(0), glyphStorageIndex(0), atlasID(0), fontMetric(FontMetric()), stringOffset(0), stringCount(0) {}
 			unsigned int atlasID;
 			FontMetric fontMetric;
-			size_t instructions;
-			size_t glyphStorageIndex;
+			unsigned int instructions;
+			unsigned int glyphStorageIndex;
 
-			size_t kerningOffset;
-			size_t kerningCount;
-			size_t metricOffset;
-			size_t metricCount;
+			unsigned int kerningOffset;
+			unsigned int kerningCount;
+			unsigned int metricOffset;
+			unsigned int metricCount;
 
-			size_t stringOffset;
-			size_t stringCount;
+			unsigned int stringOffset;
+			unsigned int stringCount;
 		};
 
 
@@ -52,13 +52,13 @@ namespace gui {
 		struct FontInstructions {
 			FontInstructions()
 				:pointSize(11), startCode(35), glyphCount(100), flags(0) {}
-			FontInstructions(size_t pPointSize, size_t pStartCode, size_t pGlyphCount, int pFlags, size_t pUpsampling)
+			FontInstructions(unsigned int pPointSize, unsigned int pStartCode, unsigned int pGlyphCount, int pFlags, unsigned int pUpsampling)
 				:pointSize(pPointSize), startCode(pStartCode), glyphCount(pGlyphCount), flags(pFlags), upsampling(pUpsampling) {}
-			size_t startCode = 35;
-			size_t glyphCount = 100;
-			size_t pointSize = 11;
+			unsigned int startCode = 35;
+			unsigned int glyphCount = 100;
+			unsigned int pointSize = 11;
 			int flags = 0;
-			size_t upsampling = 4;
+			unsigned int upsampling = 4;
 		};
 
 		inline bool operator==(const FontInstructions& l, const FontInstructions& r) {
@@ -67,11 +67,11 @@ namespace gui {
 		struct String {
 			String()
 				:offset(0), count(0) {}
-			String(size_t pOffset, size_t pCount)
+			String(unsigned int pOffset, unsigned int pCount)
 				:offset(pOffset), count(pCount) {}
 			String(std::string pString);
-			size_t offset;
-			size_t count;
+			unsigned int offset;
+			unsigned int count;
 		};
 
 		struct TextStyle {
@@ -93,7 +93,7 @@ namespace gui {
 		};
 		extern unsigned int fontVAO;
 		extern unsigned int glyphShaderProgram;
-		extern std::vector<size_t> glyphIndexBuffer;
+		extern std::vector<unsigned int> glyphIndexBuffer;
 		extern std::vector<Font> allFonts;
 
 		extern std::vector<FontInstructions> allFontInstructions;

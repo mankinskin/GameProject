@@ -13,11 +13,11 @@
 bool mesh::draw_normals = false;
 bool mesh::cull_face = true;
 std::vector<mesh::Mesh> mesh::allMeshes;
-std::vector<size_t> mesh::allIndices;
+std::vector<unsigned int> mesh::allIndices;
 std::vector<mesh::Vertex> mesh::allStaticVertices;
-std::vector<size_t> mesh::allMeshInstancenode;
-std::vector<size_t> mesh::opaqueMeshList;
-std::vector<size_t> mesh::blendMeshList;
+std::vector<unsigned int> mesh::allMeshInstancenode;
+std::vector<unsigned int> mesh::opaqueMeshList;
+std::vector<unsigned int> mesh::blendMeshList;
 unsigned int mesh::meshShader = 0;
 unsigned int mesh::blendMeshShader = 0;
 unsigned int mesh::meshNormalShader = 0;
@@ -31,14 +31,14 @@ void mesh::initMeshVAO()
 {
 	glCreateVertexArrays(1, &meshVAO);
 	meshVBO = vao::createStorage(sizeof(Vertex)*mesh::allStaticVertices.size(), &mesh::allStaticVertices[0], 0);
-	meshIBO = vao::createStorage(sizeof(size_t)*mesh::allIndices.size(), &mesh::allIndices[0], 0);
-	nodeIndexBuffer = vao::createStorage(sizeof(size_t)*model::MAX_MODELS*model::MAX_MESHES_PER_MODEL, nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS);
+	meshIBO = vao::createStorage(sizeof(unsigned int)*mesh::allIndices.size(), &mesh::allIndices[0], 0);
+	nodeIndexBuffer = vao::createStorage(sizeof(unsigned int)*model::MAX_MODELS*model::MAX_MESHES_PER_MODEL, nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS);
 	vao::createStream(nodeIndexBuffer, GL_MAP_WRITE_BIT);
 	glBindVertexArray(meshVAO);
 	glVertexArrayElementBuffer(meshVAO, meshIBO + 1);
 	glVertexArrayVertexBuffer(meshVAO, 0, meshVBO + 1, 0, sizeof(Vertex));
 	glVertexArrayVertexBuffer(meshVAO, 1, nodeIndexBuffer + 1, 0, sizeof(Vertex));
-	vao::setVertexArrayVertexStorage(meshVAO, 1, nodeIndexBuffer, sizeof(size_t));
+	vao::setVertexArrayVertexStorage(meshVAO, 1, nodeIndexBuffer, sizeof(unsigned int));
 
 	vao::setVertexAttrib(meshVAO, 0, 0, 3, GL_FLOAT, offsetof(Vertex, pos));
 	vao::setVertexAttrib(meshVAO, 0, 1, 3, GL_FLOAT, offsetof(Vertex, normal));
@@ -78,7 +78,7 @@ void mesh::initBlendMeshShader()
 void mesh::setupBlendMeshShader()
 {
 	shader::bindUniformBufferToShader(blendMeshShader, materialUBO, "MaterialBuffer");
-	shader::bindUniformBufferToShader(blendMeshShader, lighting::lightDataUBO, "LightDataBuffer");
+	shader::bindUniformBufferToShader(blendMeshShader, lights::lightDataUBO, "LightDataBuffer");
 	shader::bindUniformBufferToShader(blendMeshShader, gl::generalUniformBuffer, "GeneralUniformBuffer");
 	shader::bindUniformBufferToShader(blendMeshShader, entities::entityMatrixBuffer, "NodeMatrixBuffer");
 }
@@ -88,7 +88,7 @@ void mesh::renderMeshes()
 	glBindVertexArray(meshVAO);
 	shader::use(meshShader);
 
-	for (size_t m = 0; m < allMeshes.size(); ++m) {
+	for (unsigned int m = 0; m < allMeshes.size(); ++m) {
 		mesh::Mesh& mesh = mesh::allMeshes[m];
 		glActiveTexture(GL_TEXTURE0);//amb
 		glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].amb_tex);
@@ -98,7 +98,7 @@ void mesh::renderMeshes()
 		glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].spec_tex);
 		shader::setUniform(meshShader, "materialIndex", mesh.materialIndex);
 
-		glDrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, (void*)(mesh.indexOffset * sizeof(size_t)), mesh.instanceCount, mesh.instanceOffset);
+		glDrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, (void*)(mesh.indexOffset * sizeof(unsigned int)), mesh.instanceCount, mesh.instanceOffset);
 	}
 	shader::unuse();
 	glBindVertexArray(0);
@@ -111,9 +111,9 @@ void mesh::renderMeshNormals()
 		mesh::updateMeshBuffers();//TODO: make work without this
 		glBindVertexArray(meshVAO);
 		shader::use(meshNormalShader);
-		for (size_t m = 0; m < allMeshes.size(); ++m) {
+		for (unsigned int m = 0; m < allMeshes.size(); ++m) {
 			mesh::Mesh& mesh = mesh::allMeshes[m];
-			glDrawElementsInstancedBaseInstance(GL_POINTS, mesh.indexCount, GL_UNSIGNED_INT, (void*)(mesh.indexOffset *sizeof(size_t)), mesh.instanceCount, mesh.instanceOffset);
+			glDrawElementsInstancedBaseInstance(GL_POINTS, mesh.indexCount, GL_UNSIGNED_INT, (void*)(mesh.indexOffset *sizeof(unsigned int)), mesh.instanceCount, mesh.instanceOffset);
 		}
 		shader::unuse();
 		glBindVertexArray(0);
@@ -127,7 +127,7 @@ void mesh::renderBlendMeshes()
 	shader::use(blendMeshShader);
 	//glDepthMask(0);
 	glDisable(GL_CULL_FACE);
-	for (size_t m = 0; m < allMeshes.size(); ++m) {
+	for (unsigned int m = 0; m < allMeshes.size(); ++m) {
 		mesh::Mesh mesh = mesh::allMeshes[m];
 		glActiveTexture(GL_TEXTURE0);//amb
 		glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].amb_tex);
@@ -137,7 +137,7 @@ void mesh::renderBlendMeshes()
 		glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].spec_tex);
 		shader::setUniform(meshShader, "materialIndex", mesh.materialIndex);
 
-		glDrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, (void*)(mesh.indexOffset * sizeof(size_t)), mesh.instanceCount, mesh.instanceOffset);
+		glDrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, (void*)(mesh.indexOffset * sizeof(unsigned int)), mesh.instanceCount, mesh.instanceOffset);
 	}
 	shader::unuse();
 	glBindVertexArray(0);
@@ -148,7 +148,7 @@ void mesh::renderBlendMeshes()
 void mesh::updateMeshBuffers()
 {
 	if (allMeshInstancenode.size()) {
-		vao::uploadStorage(nodeIndexBuffer, sizeof(size_t)*allMeshInstancenode.size(), &allMeshInstancenode[0]);
+		vao::uploadStorage(nodeIndexBuffer, sizeof(unsigned int)*allMeshInstancenode.size(), &allMeshInstancenode[0]);
 	}
 }
 
@@ -166,7 +166,7 @@ void mesh::setupMeshNormalShader()
 }
 
 
-void mesh::addInstancesToMesh(size_t pMeshIndex, std::vector<size_t> pNodeIDs)
+void mesh::addInstancesToMesh(unsigned int pMeshIndex, std::vector<unsigned int> pNodeIDs)
 {
 	Mesh& msh = allMeshes[pMeshIndex];
 	if (msh.instanceCount == 0) {
@@ -178,28 +178,28 @@ void mesh::addInstancesToMesh(size_t pMeshIndex, std::vector<size_t> pNodeIDs)
 
 void mesh::revalidateMeshNodeOffsets()
 {
-	size_t offs = 0;
-	for (size_t msh = 0; msh < allMeshes.size(); ++msh) {
+	unsigned int offs = 0;
+	for (unsigned int msh = 0; msh < allMeshes.size(); ++msh) {
 		allMeshes[msh].instanceOffset = offs;
 		offs += allMeshes[msh].instanceCount;
 	}
 }
 
-size_t mesh::createMesh(size_t pIndexOffset, size_t pIndexCount, size_t pVertexOffset, size_t pVertexCount, size_t pMaterialIndex)
+unsigned int mesh::createMesh(unsigned int pIndexOffset, unsigned int pIndexCount, unsigned int pVertexOffset, unsigned int pVertexCount, unsigned int pMaterialIndex)
 {
 	allMeshes.emplace_back(pIndexOffset, pIndexCount, pVertexOffset, pVertexCount, pMaterialIndex);
 	return allMeshes.size() - 1;
 }
 
-size_t mesh::createMesh(std::vector<Vertex> pVertices, std::vector<size_t> pIndices, size_t pMaterialIndex)
+unsigned int mesh::createMesh(std::vector<Vertex> pVertices, std::vector<unsigned int> pIndices, unsigned int pMaterialIndex)
 {
-	size_t indexOffset = allIndices.size();
-	size_t indexCount = pIndices.size();
-	size_t vertexOffset = allStaticVertices.size();
-	size_t ret_ = createMesh(indexOffset, indexCount, vertexOffset, pVertices.size(), pMaterialIndex);
+	unsigned int indexOffset = allIndices.size();
+	unsigned int indexCount = pIndices.size();
+	unsigned int vertexOffset = allStaticVertices.size();
+	unsigned int ret_ = createMesh(indexOffset, indexCount, vertexOffset, pVertices.size(), pMaterialIndex);
 
 	allIndices.resize(allIndices.size() + indexCount);
-	for (size_t i = 0; i < pIndices.size(); ++i) {
+	for (unsigned int i = 0; i < pIndices.size(); ++i) {
 		allIndices[indexOffset + i] = pIndices[i] + vertexOffset;
 	}
 	allStaticVertices.insert(allStaticVertices.end(), pVertices.begin(), pVertices.end());

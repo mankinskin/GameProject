@@ -33,7 +33,7 @@
 #include "voxelization.h"
 #include "line.h"
 app::State app::state = app::State::Init;
-app::ContextWindow::Window app::mainWindow = app::ContextWindow::Window();
+app::Window app::mainWindow = app::Window();
 double app::timeFactor = 1.0;
 double app::lastFrameMS = 0;
 double app::lastFrameLimitedMS = 0;
@@ -50,8 +50,8 @@ void app::init()
 	setMaxFPS(10000);
 	initGLFW();
 	//Windows and gl Context
-	ContextWindow::initMonitors();
-	ContextWindow::primaryMonitor.init();
+	initMonitors();
+	primaryMonitor.init();
 	mainWindow.setSize(1600, 850);
 	mainWindow.init();
 	//Input listeners
@@ -86,14 +86,14 @@ void app::gameloop()
 		camera::main_camera.update();
 
 		gl::updateGeneralUniformBuffer();
-		//lighting::updateLightIndexRangeBuffer();
-		//lighting::updateLightDataBuffer();
+		//lights::updateLightIndexRangeBuffer();
+		//lights::updateLightDataBuffer();
 		//entities::updateEntityMatrices();
 		//entities::updateEntityBuffers();
 		//mesh::updateMeshBuffers();
 		gui::updateLineBuffers();
-		gui::updateQuadBuffer();
-		gui::updateColorings();
+		//gui::updateQuadBuffer();
+		//gui::updateColorings();
 		//gui::text::updateCharStorage();
 
 		//reset g_buffer
@@ -122,14 +122,14 @@ void app::gameloop()
 
 		//glBindFramebuffer(GL_READ_FRAMEBUFFER, texture::gBuffer);
 
-		//glBlitFramebuffer(0, 0, gl::screenWidth, gl::screenHeight, 0, 0, gl::screenWidth, gl::screenHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+		//glBlitFramebuffer(0, 0, gl::Viewport::current->width, gl::Viewport::current->height, 0, 0, gl::Viewport::current->width, gl::Viewport::current->height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		//lighting::renderLights();
+		//lights::renderLights();
 
 		//mesh::renderMeshNormals();
 
-		gui::renderColorings();
+		//gui::renderColorings();
 		//gui::text::renderGlyphs();
 
 		glfwSwapBuffers(mainWindow.window);
@@ -168,7 +168,7 @@ void app::fetchInput()
 void app::initGLFW()
 {
 	std::puts("Initializing GLFW...\n");
-	size_t glfw = glfwInit();
+	unsigned int glfw = glfwInit();
 	if (glfw != GLFW_TRUE) {
 		debug::pushError(("\napp::init() - Unable to initialize GLFW (glfwInit() return code: %i)\n" + glfw), debug::Error::Severity::Fatal);
 		//while (!getch()) {}
@@ -196,9 +196,9 @@ void app::updateTimeFactor() {
 	timeFactor = 1.0f;
 }
 
-void app::setMaxFPS(size_t pMaxFPS)
+void app::setMaxFPS(unsigned int pMaxFPS)
 {
-	minFrameMS = (size_t)(1000.0f / (float)pMaxFPS);
+	minFrameMS = (unsigned int)(1000.0f / (float)pMaxFPS);
 }
 
 void app::run() {

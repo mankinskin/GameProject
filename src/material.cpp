@@ -6,7 +6,7 @@
 
 std::vector<mesh::Material> mesh::allMaterials;
 std::vector<mesh::MaterialTextures> mesh::allMaterialTextures;
-size_t mesh::materialUBO = 0;
+unsigned int mesh::materialUBO = 0;
 
 void mesh::storeMaterials()
 {

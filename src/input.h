@@ -35,7 +35,7 @@ namespace app {
 		extern KeySignal key_lshift;
 		extern events::ButtonEvents<events::Event> lmb;
 		extern events::ButtonEvents<events::Event> rmb;
-		extern size_t always;
+		extern unsigned int always;
 		void init();
 		void setupControls();
 		void fetchGLFWEvents();

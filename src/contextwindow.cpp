@@ -3,12 +3,12 @@
 #include "app.h"
 #include "gl.h"
 
-int app::ContextWindow::monitorCount = 0;
-GLFWmonitor** app::ContextWindow::allMonitors = nullptr;
-app::ContextWindow::Monitor app::ContextWindow::primaryMonitor;
+int app::monitorCount = 0;
+GLFWmonitor** app::allMonitors = nullptr;
+app::Monitor app::primaryMonitor;
 
 
-void app::ContextWindow::initMonitors()
+void app::initMonitors()
 {
     puts("Detecting Monitors...");
     //find primary monitor for GLFW
@@ -26,7 +26,7 @@ void app::ContextWindow::initMonitors()
     }
 }
 
-void app::ContextWindow::Monitor::init()
+void app::Monitor::init()
 {
     //initialize monitor member variables
     vidModes = glfwGetVideoModes(monitor, &videoModeCount);
@@ -34,19 +34,19 @@ void app::ContextWindow::Monitor::init()
     glfwGetMonitorPhysicalSize(monitor, &physical_width, &physical_height);
     pixels_x = currentVideoMode->width;
     pixels_y = currentVideoMode->height;
-    dpi_x = (size_t)((float)pixels_x / (480.0f / 25.4f));
-    dpi_y = (size_t)((float)pixels_y / (275.0f / 25.4f));
+    dpi_x = (unsigned int)((float)pixels_x / (480.0f / 25.4f));
+    dpi_y = (unsigned int)((float)pixels_y / (275.0f / 25.4f));
     glfwGetMonitorPos(monitor, &xpos, &ypos);
 }
 
-void app::ContextWindow::Window::setSize(size_t pWidth, size_t pHeight)
+void app::Window::setSize(unsigned int pWidth, unsigned int pHeight)
 {
     //set the pixel width and height of the window
     width = pWidth;
     height = pHeight;
 }
 
-void app::ContextWindow::Window::init()
+void app::Window::init()
 {
     //sets up GLFW Window with OpenGL context
     if (window != nullptr) {

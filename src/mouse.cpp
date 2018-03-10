@@ -6,6 +6,7 @@
 #include <array>
 #include "quad.h"
 #include "gl.h"
+#include "viewport.h"
 
 using namespace events;
 glm::vec2 app::Input::relativeCursorPosition;
@@ -15,8 +16,8 @@ glm::vec2 app::Input::cursorFrameDelta;
 std::array<app::Input::KeyCondition, 3> mouseKeys;
 int scroll = 0;
 int disableCursor = 0;
-size_t hovered_quad = 0;
-size_t last_hovered_quad = 0;
+unsigned int hovered_quad = 0;
+unsigned int last_hovered_quad = 0;
 
 void app::Input::updateMouse() {
 	//update cursor pos
@@ -27,13 +28,13 @@ void app::Input::updateMouse() {
 	glfwGetCursorPos(app::mainWindow.window, &ax, &ay);
 	float rx = (float)ax;
 	float ry = (float)ay;
-	ax = glm::clamp(ax*gl::resolution, 0.0, (double)(mainWindow.width*gl::resolution) - 1.0);
-	ay = glm::clamp(ay*gl::resolution, 0.0, (double)(mainWindow.height*gl::resolution) - 1.0);
+	ax = glm::clamp(ax*gl::Viewport::current->resolution, 0.0, (double)(mainWindow.width*gl::Viewport::current->resolution) - 1.0);
+	ay = glm::clamp(ay*gl::Viewport::current->resolution, 0.0, (double)(mainWindow.height*gl::Viewport::current->resolution) - 1.0);
 	if (!disableCursor) {
 		rx = (float)ax;//clamp relative positions too if cursor is not disabled
 		ry = (float)ay;
 	}
-	absoluteCursorPosition = glm::uvec2((unsigned int)ax, (mainWindow.height*gl::resolution) - (unsigned int)ay - 1);
+	absoluteCursorPosition = glm::uvec2((unsigned int)ax, (mainWindow.height*gl::Viewport::current->resolution) - (unsigned int)ay - 1);
 
 	rx = ((rx / (float)app::mainWindow.width)*2.0f) - 1.0f;
 	ry = 1.0f - (ry / (float)app::mainWindow.height)*2.0f;

@@ -13,10 +13,10 @@ int vao::SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT = 0;
 int vao::MAX_UNIFORM_BUFFER_BINDINGS = 0;
 int vao::MIN_MAP_BUFFER_ALIGNMENT = 0;
 int vao::MAP_PERSISTENT_FLAGS = GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;
-std::unordered_map<size_t, size_t> vao::bufferTargetBinds;
+std::unordered_map<unsigned int, unsigned int> vao::bufferTargetBinds;
 
 
-size_t vao::createStorage()
+unsigned int vao::createStorage()
 {
 	Storage storage;
 	unsigned int ind = allStorages.size();
@@ -24,23 +24,25 @@ size_t vao::createStorage()
 	allStorages.push_back(storage);
 	return ind;
 }
-size_t vao::createStorage(size_t pCapacity, const void* pData, size_t pFlags)
+unsigned int vao::createStorage(unsigned int pCapacity, const void* pData, unsigned int pFlags)
 {
-	size_t ind = createStorage();
+	unsigned int ind = createStorage();
 	initStorageData(ind, pCapacity, pData, pFlags);
 	return ind;
 }
-void vao::initStorageData(size_t pStorage, size_t pCapacity, const void* pData, size_t pFlags)
+void vao::initStorageData(unsigned int pStorage, unsigned int pCapacity, const void* pData, unsigned int pFlags)
 {
+    printf( "Allocating %d bytes as glStorage...\n", pCapacity );
 	Storage& stor = allStorages[pStorage];
-	glNamedBufferStorage(stor.ID, pCapacity, pData, pFlags);
+	glNamedBufferStorage( stor.ID, pCapacity, pData, pFlags );
 	stor.capacity = pCapacity;
 	stor.bufferFlags = pFlags;
 }
-size_t vao::createStream(size_t pStorageIndex, size_t pMapFlags)
+
+unsigned int vao::createStream(unsigned int pStorageIndex, unsigned int pMapFlags)
 {
 	Stream stream;
-	size_t ind = allStreams.size();
+	unsigned int ind = allStreams.size();
 	Storage& storage = allStorages[pStorageIndex];
 	storage.streamIndex = ind;
 	if (storage.target == GL_UNIFORM_BUFFER) {
@@ -56,13 +58,13 @@ size_t vao::createStream(size_t pStorageIndex, size_t pMapFlags)
 	return ind;
 }
 
-void* vao::mapStorage(size_t pStorageIndex, size_t pFlags)
+void* vao::mapStorage(unsigned int pStorageIndex, unsigned int pFlags)
 {
     printf("Accessing Storage at index %d\n", pStorageIndex);
 	return mapStorage(allStorages[pStorageIndex], pFlags);
 }
 
-void* vao::mapStorage(Storage& pStorage, size_t pFlags)
+void* vao::mapStorage(Storage& pStorage, unsigned int pFlags)
 { 
     printf("Mapping Storage %d...\n", pStorage.ID);
 	void* p = glMapNamedBufferRange(pStorage.ID, 0, pStorage.capacity, pFlags);
@@ -73,17 +75,17 @@ void* vao::mapStorage(Storage& pStorage, size_t pFlags)
 }
 
 
-void vao::uploadStorage(size_t pStorageIndex, size_t pUploadSize, void* pData)
+void vao::uploadStorage(unsigned int pStorageIndex, unsigned int pUploadSize, void* pData)
 {
 	uploadStorage(allStorages[pStorageIndex], pUploadSize, pData);
 }
 
-void vao::uploadStorage(Storage& pStorage, size_t pUploadSize, void* pData)
+void vao::uploadStorage(Storage& pStorage, unsigned int pUploadSize, void* pData)
 {
 	Stream& stream = allStreams[pStorage.streamIndex];
 	stream.updateOffset = stream.updateOffset + stream.lastUpdateSize;
 	stream.updateOffset += (stream.alignment - stream.updateOffset%stream.alignment) % stream.alignment;
-	size_t updateSize = std::max(pUploadSize, stream.alignment);
+	unsigned int updateSize = std::max(pUploadSize, stream.alignment);
 
 	stream.updateOffset = stream.updateOffset * (1 - (stream.updateOffset + updateSize > pStorage.capacity));
 
@@ -99,7 +101,7 @@ void vao::uploadStorage(Storage& pStorage, size_t pUploadSize, void* pData)
 	}
 }
 
-size_t vao::getStorageID(size_t pStorageIndex)
+unsigned int vao::getStorageID(unsigned int pStorageIndex)
 {
 	return allStorages[pStorageIndex].ID;
 }
@@ -109,12 +111,12 @@ void * vao::getMappedPtr(Storage & pStorage)
 	return allStreams[pStorage.streamIndex].mappedPtr;
 }
 
-void * vao::getMappedPtr(size_t pStorageIndex)
+void * vao::getMappedPtr(unsigned int pStorageIndex)
 {
 	return getMappedPtr(allStorages[pStorageIndex]);
 }
 
-void vao::setVertexAttrib(size_t pVAO, size_t pBindingIndex, size_t pAttributeIndex, size_t pCount, size_t pType, size_t pOffset, size_t pNormalize) {
+void vao::setVertexAttrib(unsigned int pVAO, unsigned int pBindingIndex, unsigned int pAttributeIndex, unsigned int pCount, unsigned int pType, unsigned int pOffset, unsigned int pNormalize) {
 	if (pType == GL_FLOAT) {
 		glVertexArrayAttribFormat(pVAO, pAttributeIndex, pCount, pType, pNormalize, pOffset);
 	}
@@ -128,11 +130,11 @@ void vao::setVertexAttrib(size_t pVAO, size_t pBindingIndex, size_t pAttributeIn
 	glEnableVertexArrayAttrib(pVAO, pAttributeIndex);
 }
 
-void vao::bindStorage(size_t pTarget, size_t pStorageIndex)
+void vao::bindStorage(unsigned int pTarget, unsigned int pStorageIndex)
 {
 	bindStorage(pTarget, allStorages[pStorageIndex]);
 }
-void vao::bindStorage(size_t pTarget, Storage& pStorage)
+void vao::bindStorage(unsigned int pTarget, Storage& pStorage)
 {
 	pStorage.target = pTarget;
 	
@@ -151,22 +153,22 @@ void vao::bindStorage(size_t pTarget, Storage& pStorage)
 	debug::printErrors();
 }
 
-void vao::bindStorageRange(Storage& pStorage, size_t pOffset, size_t pSize)
+void vao::bindStorageRange(Storage& pStorage, unsigned int pOffset, unsigned int pSize)
 {
 	glBindBufferRange(pStorage.target, pStorage.binding, pStorage.ID, pOffset, pSize);
 }
-void vao::bindStorageRange(size_t pStorageIndex, size_t pOffset, size_t pSize)
+void vao::bindStorageRange(unsigned int pStorageIndex, unsigned int pOffset, unsigned int pSize)
 {
 	Storage& stor = allStorages[pStorageIndex];
 	glBindBufferRange(stor.target, stor.binding, stor.ID, pOffset, pSize);
 }
 
-void vao::setVertexArrayVertexStorage(size_t pVAO, size_t pBinding, size_t pStorageIndex, size_t pStride)
+void vao::setVertexArrayVertexStorage(unsigned int pVAO, unsigned int pBinding, unsigned int pStorageIndex, unsigned int pStride)
 {
 	setVertexArrayVertexStorage(pVAO, pBinding, allStorages[pStorageIndex], pStride);
 }
 
-void vao::setVertexArrayVertexStorage(size_t pVAO, size_t pBinding, Storage & pStorage, size_t pStride)
+void vao::setVertexArrayVertexStorage(unsigned int pVAO, unsigned int pBinding, Storage & pStorage, unsigned int pStride)
 {
 	pStorage.vaoID = pVAO;
 	pStorage.target = GL_ARRAY_BUFFER;

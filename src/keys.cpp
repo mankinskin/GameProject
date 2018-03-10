@@ -18,7 +18,7 @@ app::Input::KeySignal::KeySignal(int pKey)
 	hold = createSignal(togglers);
 }
 
-void app::Input::reserveKeySignals(size_t pCount) {
+void app::Input::reserveKeySignals(unsigned int pCount) {
 	allSignals.reserve(allSignals.size() + pCount);
 	EventSlot<KeyEvent>::reserve_slots(pCount*3);
 }
