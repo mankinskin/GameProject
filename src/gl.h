@@ -7,6 +7,15 @@
 
 namespace gl {
     
+    struct Point3D{
+        Point3D(glm::vec4 position)
+            :pos(position){}
+        Point3D(float x, float y, float z, float w = 1.0f)
+            :pos(glm::vec4(x, y, z, w)){}
+
+        glm::vec4 pos;
+    };
+
 	void init();
 	void loadShaders();
 	void bindUniformBufferLocations();

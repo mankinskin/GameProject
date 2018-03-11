@@ -1,15 +1,26 @@
 #pragma once
 #include <vector>
 #include <glm.hpp>
+#include "gl.h"
+#include "color.h"
+#include "utils.h"
 
 namespace gui
 {
+    typedef utils::Itr<gl::Point3D> LinePointIt;
+
 	struct LineGroup {
 		LineGroup(unsigned int pLineOffset, unsigned int pLineCount)
 			:lineOffset(pLineOffset), lineCount(pLineCount){}
 		unsigned int lineOffset;
 		unsigned int lineCount;
 	};
+
+    struct LineVertex{
+        LinePointIt vertex;
+        gl::ConstColorIt color;
+    };
+
 
 	void toggleLineGroup(unsigned int pLineGroup);
 	unsigned int getLineCount();
@@ -20,8 +31,8 @@ namespace gui
 	unsigned int createLine(glm::vec4 pVertexAPos, glm::vec4 pVertexBPos, unsigned int pColorIndex);
 	unsigned int createLine(unsigned int pVertexA, unsigned int pVertexB);
 	unsigned int createLineVertex(glm::vec4 pPos, unsigned int pColorIndex);
-	unsigned int createLineVertex(unsigned int pPosIndex, unsigned int pColorIndex);
-	unsigned int createLineVertexPosition(glm::vec4 pPos);
+	unsigned int createLineVertex(LinePointIt pPosIndex, unsigned int pColorIndex);
+	LinePointIt createLineVertexPosition(glm::vec4 pPos);
 	void setLineColor(unsigned int pLineIndex, unsigned int pColorIndex);
 	void setLineVertexColor(unsigned int pLineIndex, unsigned int pVertex, unsigned int pColorIndex);
 

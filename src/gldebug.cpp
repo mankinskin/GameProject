@@ -58,7 +58,7 @@ unsigned int glDebug::generateDebugGrid(std::string pName,
 
 	const unsigned int lineOffset = gui::getLineCount();
 	unsigned int lineCount = pTileCountX + pTileCountY +2;
-	unsigned int grid_color = gl::createConstColor(glm::vec4(pColorR, pColorG, pColorB, pAlpha), pName + "_color").color_index;
+	unsigned int grid_color = 2;//gl::createConstColor(glm::vec4(pColorR, pColorG, pColorB, pAlpha), pName + "_color").color_index;
 	unsigned int vertexOffset = vertexCount;
 	verts.resize(vertexCount);
 	vertexCount = 0;

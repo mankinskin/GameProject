@@ -1,12 +1,11 @@
 #include "line.h"
 #include "vao.h"
 #include "shader.h"
-#include "color.h"
 
 const unsigned int MAX_LINE_VERTEX_COUNT = 4000;
 const unsigned int MAX_LINE_COUNT = 4000;
 std::vector<gui::LineGroup> allLineGroups;
-std::vector<glm::vec4> allLineVertexPositions;
+std::vector<gl::Point3D> allLinePointData;
 std::vector<glm::uvec2> allLineVertices;//stores a vertex as the indices to its data (pos & color)
 std::vector<glm::uvec2> allLines;//stores each line as 2 indices to its vertices
 unsigned int lineVAO = 0;
@@ -16,12 +15,13 @@ unsigned int vertexPosBuffer = 0;
 unsigned int lineShader = 0;
 std::vector<int> lineGroupFlags;
 
+
 unsigned int gui::getLineCount() 
 {
     return allLines.size();
 }
-unsigned int gui::createLineGroup(unsigned int pLineOffset, unsigned int pLineCount, 
-        int pFlag) 
+unsigned int gui::createLineGroup(unsigned int pLineOffset, 
+        unsigned int pLineCount, int pFlag) 
 {
     allLineGroups.push_back(LineGroup(pLineOffset, pLineCount));
     lineGroupFlags.push_back(pFlag);
@@ -49,15 +49,15 @@ unsigned int gui::createLineVertex(glm::vec4 pPos, unsigned int pColorIndex)
 {
     return createLineVertex(createLineVertexPosition(pPos), pColorIndex);
 }
-unsigned int gui::createLineVertex(unsigned int pPosIndex, unsigned int pColorIndex) 
+unsigned int gui::createLineVertex(gui::Itr<gl::Point3D> vertex, unsigned int pColorIndex) 
 {
-    allLineVertices.push_back(glm::uvec2(pPosIndex, pColorIndex));
+    allLineVertices.push_back(glm::uvec2(vertex.index, pColorIndex));
     return allLineVertices.size() - 1;
 }
-unsigned int gui::createLineVertexPosition(glm::vec4 pPos) 
+gui::LinePointIt gui::createLineVertexPosition(glm::vec4 pPos) 
 {
-    allLineVertexPositions.push_back(pPos);
-    return allLineVertexPositions.size() - 1;
+    allLinePointData.push_back(pPos);
+    return LinePointIt(allLinePointData, allLinePointData.size()-1);
 }
 void gui::setLineColor(unsigned int pLineIndex, unsigned int pColorIndex) 
 {
@@ -74,7 +74,7 @@ void gui::setLineVertexColor(unsigned int pLineIndex, unsigned int pVertex, unsi
 }
 void gui::initLineVAO() 
 {
-    allLineVertexPositions.reserve(MAX_LINE_VERTEX_COUNT);
+    allLinePointData.reserve(MAX_LINE_VERTEX_COUNT);
     allLineVertices.reserve(MAX_LINE_COUNT);
     allLines.reserve(MAX_LINE_COUNT);
     glCreateVertexArrays(1, &lineVAO);
@@ -99,7 +99,7 @@ void gui::initLineVAO()
 
 void gui::updateLinePositions()
 {
-    vao::uploadStorage( vertexPosBuffer, sizeof(glm::vec4) * allLineVertexPositions.size(), &allLineVertexPositions[0] );
+    vao::uploadStorage( vertexPosBuffer, sizeof(glm::vec4) * allLinePointData.size(), &allLinePointData[0] );
 }
 void gui::updateLineBuffers()
 {
