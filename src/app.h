@@ -14,8 +14,6 @@ namespace app {
     extern State state;
     void init();
     void initGLFW();
-    void gameloop();
-    void fetchInput();
     void run();
     void quit();
     void mainmenu();
@@ -26,7 +24,7 @@ namespace app {
     extern double lastFrameMS;
     extern double totalMS;
     extern double minFrameMS;
-    void setMaxFPS(unsigned int pMaxFPS);
+    void setMaxFPS( unsigned int pMaxFPS );
     void updateTime();
     void updateTimeFactor();
     void limitFPS();

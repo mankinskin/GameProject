@@ -21,76 +21,76 @@ std::vector<float> gui::text::allKerning;
 
 void gui::text::initFontShader()
 {
-	glyphShaderProgram = shader::newProgram("glyphShapeShader", shader::createModule("glyphShapeShader.vert"), shader::createModule("glyphShapeShader.frag"));
-	shader::addVertexAttribute(glyphShaderProgram, "pos", 0);
-	shader::addVertexAttribute(glyphShaderProgram, "quad", 1);
-	shader::addVertexAttribute(glyphShaderProgram, "index", 2);
+	glyphShaderProgram = shader::newProgram( "glyphShapeShader", shader::createModule( "glyphShapeShader.vert" ), shader::createModule( "glyphShapeShader.frag" ) );
+	shader::addVertexAttribute( glyphShaderProgram, "pos", 0 );
+	shader::addVertexAttribute( glyphShaderProgram, "quad", 1 );
+	shader::addVertexAttribute( glyphShaderProgram, "index", 2 );
 }
 
 void gui::text::
 initFontVAO() {
-	quadStorage = vao::createStorage(MAX_CHARS * sizeof(CharQuad), nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS);
-	charStorage = vao::createStorage(MAX_CHARS * sizeof(unsigned int), nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS);
-	vao::createStream(quadStorage, GL_MAP_WRITE_BIT);
-	vao::createStream(charStorage, GL_MAP_WRITE_BIT);
-	glCreateVertexArrays(1, &fontVAO);
+	quadStorage = vao::createStorage( "CharQuadBuffer", MAX_CHARS * sizeof( CharQuad ), nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS );
+	charStorage = vao::createStorage( "CharBuffer", MAX_CHARS * sizeof( unsigned int ), nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS );
+	vao::createStream( quadStorage, GL_MAP_WRITE_BIT );
+	vao::createStream( charStorage, GL_MAP_WRITE_BIT );
+	glCreateVertexArrays( 1, &fontVAO );
 
-	vao::setVertexAttrib(fontVAO, 0, 0, 2, GL_FLOAT, 0);
-	vao::setVertexAttrib(fontVAO, 1, 1, 4, GL_FLOAT, 0);
-	vao::setVertexAttrib(fontVAO, 2, 2, 1, GL_UNSIGNED_INT, 0);
+	vao::setVertexAttrib( fontVAO, 0, 0, 2, GL_FLOAT, 0 );
+	vao::setVertexAttrib( fontVAO, 1, 1, 4, GL_FLOAT, 0 );
+	vao::setVertexAttrib( fontVAO, 2, 2, 1, GL_UNSIGNED_INT, 0 );
 
-	glVertexArrayBindingDivisor(fontVAO, 1, 1);
-	glVertexArrayBindingDivisor(fontVAO, 2, 1);
+	glVertexArrayBindingDivisor( fontVAO, 1, 1 );
+	glVertexArrayBindingDivisor( fontVAO, 2, 1 );
 
-	glVertexArrayElementBuffer(fontVAO, gl::quadEBO + 1);
-	glVertexArrayVertexBuffer(fontVAO, 0, gl::quadVBO + 1, 0, sizeof(float) * 2);
+	glVertexArrayElementBuffer( fontVAO, gl::quadEBO + 1 );
+	glVertexArrayVertexBuffer( fontVAO, 0, gl::quadVBO + 1, 0, sizeof( float ) * 2 );
 
-	vao::setVertexArrayVertexStorage(fontVAO, 1, quadStorage, sizeof(CharQuad));
-	vao::setVertexArrayVertexStorage(fontVAO, 2, charStorage, sizeof(unsigned int));
+	vao::setVertexArrayVertexStorage( fontVAO, 1, quadStorage, sizeof( CharQuad ) );
+	vao::setVertexArrayVertexStorage( fontVAO, 2, charStorage, sizeof( unsigned int ) );
 }
 
 void gui::text::revalidateFontStringIndices()
 {
 	unsigned int off = 0;
-	for (Font& fon : allFonts) {
+	for ( Font& fon : allFonts ) {
 		fon.stringOffset = off;
 		off += fon.stringCount;
 	}
 }
-void gui::text::insertFontString(Font & pFont, String pString)
+void gui::text::insertFontString( Font & pFont, String pString )
 {
-	if (!pFont.stringCount) {//if first textbox of this font
+	if ( !pFont.stringCount ) {//if first textbox of this font
 		pFont.stringOffset = allFontStrings.size();//dedicate a new range of tb indices to this font
 	}
 	++pFont.stringCount;
-	allFontStrings.insert(allFontStrings.begin() + pFont.stringOffset, pString);
+	allFontStrings.insert( allFontStrings.begin() + pFont.stringOffset, pString );
 }
-//unsigned int gui::text::createTextStyle(TextStyle & pStyle)
+//unsigned int gui::text::createTextStyle( TextStyle & pStyle )
 //{
-//	allTextStyles.push_back(pStyle);
+//	allTextStyles.push_back( pStyle );
 //	return allTextStyles.size() - 1;
 //}
 void gui::text::initStyleBuffer() {
 
-	allTextStyles.reserve(2);
-	//createTextStyle(1.5f, 0.8f);
-	//createTextStyle(1.2f, 0.8f);
-	styleStorage = vao::createStorage(sizeof(TextStyle)*allTextStyles.size(), &allTextStyles[0], 0);
+	allTextStyles.reserve( 2 );
+	//createTextStyle( 1.5f, 0.8f );
+	//createTextStyle( 1.2f, 0.8f );
+	styleStorage = vao::createStorage( "FontStyleBuffer", sizeof( TextStyle )*allTextStyles.size(), &allTextStyles[0], 0 );
 
-	shader::bindUniformBufferToShader(glyphShaderProgram, styleStorage, "StyleBuffer");
+	shader::bindUniformBufferToShader( glyphShaderProgram, styleStorage, "StyleBuffer" );
 }
 
 void gui::text::updateCharStorage()
 {
-	if (charQuadBuffer.size()) {
-		vao::uploadStorage(quadStorage, sizeof(CharQuad)*charQuadBuffer.size(), &charQuadBuffer[0]);
-		vao::uploadStorage(charStorage, sizeof(unsigned int)*glyphIndexBuffer.size(), &glyphIndexBuffer[0]);
+	if ( charQuadBuffer.size() ) {
+		vao::uploadStorage( quadStorage, sizeof( CharQuad )*charQuadBuffer.size(), &charQuadBuffer[0] );
+		vao::uploadStorage( charStorage, sizeof( unsigned int )*glyphIndexBuffer.size(), &glyphIndexBuffer[0] );
 	}
 }
 
 void gui::text::clearCharStorage()
 {
-	for (Font& font : allFonts) {
+	for ( Font& font : allFonts ) {
 		font.stringOffset = 0;
 		font.stringCount = 0;
 	}

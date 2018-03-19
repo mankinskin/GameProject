@@ -28,10 +28,10 @@ namespace app {
 
 	struct Window {
 
-	    void setSize(unsigned int pWidth, unsigned int pHeight);
+	    void setSize( unsigned int pWidth, unsigned int pHeight );
 	    void init();
 
-	    GLFWwindow* operator=(const Window& obj) {
+	    GLFWwindow* operator=( const Window& obj ) {
 		return window;
 	    }
 

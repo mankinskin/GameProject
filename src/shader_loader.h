@@ -26,7 +26,7 @@ namespace shader {
 	};
 
 	struct Module {
-		Module(std::string& pFileName) :fileName(pFileName), content(""), ID(0), type(ModuleType::Vertex) {}
+		Module( std::string& pFileName ) :fileName( pFileName ), content( "" ), ID( 0 ), type( ModuleType::Vertex ) {}
 		std::string content;
 		std::string fileName;
 		GLuint ID;
@@ -42,11 +42,11 @@ namespace shader {
 		extern std::string SHADER_DIR;
 
 		void buildShaderPrograms();
-		void setShaderDirectory(std::string& pDirectory);
+		void setShaderDirectory( std::string& pDirectory );
 		void resetShaderDirectory();
 
-		void compileModule(unsigned int pModuleIndex);
-		void linkProgram(unsigned int pProgramID);
+		void compileModule( unsigned int pModuleIndex );
+		void linkProgram( unsigned int pProgramID );
 		void compileAndLink();
 	}
 }

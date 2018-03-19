@@ -7,14 +7,14 @@ namespace gui {
 	namespace text {
 
 		struct FontMetric {
-			FontMetric() :lineGap(0.0f), underline_drop(0.0f), underline_thickness(0.0f) {}
+			FontMetric() :lineGap( 0.0f ), underline_drop( 0.0f ), underline_thickness( 0.0f ) {}
 			float lineGap;
 			float underline_drop;
 			float underline_thickness;
 		};
 
 		struct Font {
-			Font() :instructions(0), kerningOffset(0), kerningCount(0), metricOffset(0), metricCount(0), glyphStorageIndex(0), atlasID(0), fontMetric(FontMetric()), stringOffset(0), stringCount(0) {}
+			Font() :instructions( 0 ), kerningOffset( 0 ), kerningCount( 0 ), metricOffset( 0 ), metricCount( 0 ), glyphStorageIndex( 0 ), atlasID( 0 ), fontMetric( FontMetric() ), stringOffset( 0 ), stringCount( 0 ) {}
 			unsigned int atlasID;
 			FontMetric fontMetric;
 			unsigned int instructions;
@@ -32,16 +32,16 @@ namespace gui {
 
 		struct Glyph {
 			Glyph() {  }
-			Glyph(float minX, float minY, float maxX, float maxY)
-				:min(glm::vec2(minX, minY)), max(glm::vec2(maxX, maxY)) {}
+			Glyph( float minX, float minY, float maxX, float maxY )
+				:min( glm::vec2( minX, minY ) ), max( glm::vec2( maxX, maxY ) ) {}
 			glm::vec2 min;
 			glm::vec2 max;
 		};
 
 		struct GlyphMetrics {
 			GlyphMetrics() {}
-			GlyphMetrics(float pWidth, float pHeight, float pAdvanceX, float pBearingX, float pBearingY)
-				:width(pWidth), height(pHeight), advanceX(pAdvanceX), bearingX(pBearingX), bearingY(pBearingY) {}
+			GlyphMetrics( float pWidth, float pHeight, float pAdvanceX, float pBearingX, float pBearingY )
+				:width( pWidth ), height( pHeight ), advanceX( pAdvanceX ), bearingX( pBearingX ), bearingY( pBearingY ) {}
 			//in screen relative coordinates
 			float width;
 			float height;
@@ -51,9 +51,9 @@ namespace gui {
 		};
 		struct FontInstructions {
 			FontInstructions()
-				:pointSize(11), startCode(35), glyphCount(100), flags(0) {}
-			FontInstructions(unsigned int pPointSize, unsigned int pStartCode, unsigned int pGlyphCount, int pFlags, unsigned int pUpsampling)
-				:pointSize(pPointSize), startCode(pStartCode), glyphCount(pGlyphCount), flags(pFlags), upsampling(pUpsampling) {}
+				:pointSize( 11 ), startCode( 35 ), glyphCount( 100 ), flags( 0 ) {}
+			FontInstructions( unsigned int pPointSize, unsigned int pStartCode, unsigned int pGlyphCount, int pFlags, unsigned int pUpsampling )
+				:pointSize( pPointSize ), startCode( pStartCode ), glyphCount( pGlyphCount ), flags( pFlags ), upsampling( pUpsampling ) {}
 			unsigned int startCode = 35;
 			unsigned int glyphCount = 100;
 			unsigned int pointSize = 11;
@@ -61,24 +61,24 @@ namespace gui {
 			unsigned int upsampling = 4;
 		};
 
-		inline bool operator==(const FontInstructions& l, const FontInstructions& r) {
+		inline bool operator==( const FontInstructions& l, const FontInstructions& r ) {
 			return  l.pointSize == r.pointSize && l.startCode == r.startCode && l.glyphCount == r.glyphCount && l.flags == r.flags;
 		}
 		struct String {
 			String()
-				:offset(0), count(0) {}
-			String(unsigned int pOffset, unsigned int pCount)
-				:offset(pOffset), count(pCount) {}
-			String(std::string pString);
+				:offset( 0 ), count( 0 ) {}
+			String( unsigned int pOffset, unsigned int pCount )
+				:offset( pOffset ), count( pCount ) {}
+			String( std::string pString );
 			unsigned int offset;
 			unsigned int count;
 		};
 
 		struct TextStyle {
 			TextStyle()
-				:thickness(1.5f), hardness(0.5f) {}
-			TextStyle(float pThickness, float pHardness)
-				:thickness(pThickness), hardness(pHardness) {}
+				:thickness( 1.5f ), hardness( 0.5f ) {}
+			TextStyle( float pThickness, float pHardness )
+				:thickness( pThickness ), hardness( pHardness ) {}
 
 			float thickness = 1.0f;
 			float hardness = 1.0f;
@@ -86,8 +86,8 @@ namespace gui {
 		};
 		struct CharQuad {
 			CharQuad() {}
-			CharQuad(float pPosX, float pPosY, float pWidth, float pHeight)
-				:pos(glm::vec2(pPosX, pPosY)), size(glm::vec2(pWidth, pHeight)) {}
+			CharQuad( float pPosX, float pPosY, float pWidth, float pHeight )
+				:pos( glm::vec2( pPosX, pPosY ) ), size( glm::vec2( pWidth, pHeight ) ) {}
 			glm::vec2 pos;
 			glm::vec2 size;
 		};

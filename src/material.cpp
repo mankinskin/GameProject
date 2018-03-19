@@ -10,8 +10,8 @@ unsigned int mesh::materialUBO = 0;
 
 void mesh::storeMaterials()
 {
-	materialUBO = vao::createStorage(sizeof(mesh::Material)*mesh::allMaterials.size(), &mesh::allMaterials[0], 0);
-	vao::bindStorage(GL_UNIFORM_BUFFER, materialUBO);
+	materialUBO = vao::createStorage( "MaterialBuffer", sizeof( mesh::Material )*mesh::allMaterials.size(), &mesh::allMaterials[0], 0 );
+	vao::bindStorage( GL_UNIFORM_BUFFER, materialUBO );
 }
 
 

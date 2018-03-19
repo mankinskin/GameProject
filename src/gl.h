@@ -8,10 +8,10 @@
 namespace gl {
     
     struct Point3D{
-        Point3D(glm::vec4 position)
-            :pos(position){}
-        Point3D(float x, float y, float z, float w = 1.0f)
-            :pos(glm::vec4(x, y, z, w)){}
+        Point3D( glm::vec4 position )
+            :pos( position ){}
+        Point3D( float x, float y, float z, float w = 1.0f )
+            :pos( glm::vec4( x, y, z, w ) ){}
 
         glm::vec4 pos;
     };
@@ -19,7 +19,7 @@ namespace gl {
 	void init();
 	void loadShaders();
 	void bindUniformBufferLocations();
-	void setViewport(app::Window& pViewport);
+	void setViewport( app::Window& pViewport );
 	void getOpenGLInitValues();
 	void initGLEW();
 

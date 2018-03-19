@@ -1,17 +1,17 @@
 #!/bin/bash
 
-list=$(ls)
+list=$( ls )
 all_yes=false
 for line in $list
 do
-    new_name=$(sed 's/.*//L&/' <<< $line)
+    new_name=$( sed 's/.*//L&/' <<< $line )
     if [ $all_yes = true ]; then
         mv $line $new_name
     fi
     next=false
     while [ $next = false -a $all_yes = false ]; do
         echo "Rename $line to $new_name?"
-        echo "(y\n) (ay/an)"
+        echo "( y\n ) ( ay/an )"
         read go_on
         if [ $go_on = "y" ]; then
             mv $line $new_name
