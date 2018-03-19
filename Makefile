@@ -27,7 +27,7 @@ iDEP_PACKAGES=libglfw3 libglfw3-dev
 	sudo cp $(LIBGLEW_DIR)/libGLEW.so.2.0.0 .
 	sudo cp $(LIBGLUT_DIR)/libglut.so.3 .
 	sudo cp $(LIBGLUT_DIR)/libglut.so.3.9.0 .
-	touch .deps_installed
+	touch $@
 
 build/%.o: src/%.cpp 
 	$(GCC) -o $@ -c $< $(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_ASSIMP) $(INCLUDE_SOIL) $(INCLUDE_LIB_PATHS) $(INCLUDE_LIBS)
@@ -35,20 +35,25 @@ build/%.o: src/%.cpp
 build:
 	mkdir build
 
-all: build .deps_installed $(OBJ_TARGETS) 
+all: build tags $(OBJ_TARGETS) 
 	$(GCC) -o game $(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_GLFW) $(INCLUDE_SOIL) $(OBJ_TARGETS) $(INCLUDE_LIB_PATHS)  $(INCLUDE_LIBS)
 
 run: all
 	./game
 
+tags: 
+	ctags -R .
+
 cleanbuild: 
 	rm -rf build
+
 cleandep:
 	rm -f .deps_installed
 	rm -f libglfw.so libglfw.so.3 libassimp.so libGLEW.so libGLEW.so.2.0 libGLEW.so.2.0 libGLEW.so.2.0.0 libglut.so.3 libglut.so.3.9.0
 	rm -f game
+
 clean: cleanbuild cleandep
 
 fresh: clean all
 
-.PHONY: clean fresh all
+.PHONY: clean fresh tags all
