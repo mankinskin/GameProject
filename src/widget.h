@@ -9,7 +9,13 @@
 #include "color.h"
 #include "utils.h"
 //-----Widgets
-//- Widgets are used to control collections of 2D Quads in an object based manner
+// This class is rather complex. It also does a little too many things in one place.
+// However it provides a very efficient and stable, yet extremely flexible foundation for a class hierarchy
+//
+// To create a Widget composed of 2D quads you have to provide some data:
+// - the initial data to be loaded into each element(quad) of the widget
+// - the policies about how the element should pass an input command to its subelements
+//
 using gl::Color;
 
 namespace gui {
@@ -65,36 +71,50 @@ namespace gui {
         };
 
 
+    template<unsigned int> struct _index{};
     extern std::vector<glm::vec2> allWidgetPositions;
     extern std::vector<glm::vec2> allWidgetSizes;
 
+    class WidgetElement {
+
+
+    };
     template<class ...Elems>
         class Widget {
             public:
-                template<unsigned int> struct _index{};
+
                 static const unsigned int ELEMENT_COUNT = sizeof...( Elems );
+
                 template<unsigned int N, typename ...Initers>
-                    struct extract_initers {
-                        typedef typename std::tuple_element_t<N - 1, std::tuple<Elems...>>::initer_t element_initializer_t;
-                        typedef typename extract_initers<N - 1, element_initializer_t, Initers...>::result result;
-                    };
+                struct extract_initers 
+                {
+                    typedef typename std::tuple_element_t<N - 1, std::tuple<Elems...>>::initer_t element_initializer_t;
+                    typedef typename extract_initers<N - 1, element_initializer_t, Initers...>::result result;
+                };
+
                 template<typename ...Rest>
-                    struct extract_initers<0, Rest...> {
-                        typedef typename std::tuple<WidgetSetup<Rest>...> result;
-                    };
+                struct extract_initers<0, Rest...> 
+                {
+                    typedef typename std::tuple<WidgetSetup<Rest>...> result;
+                };
                 typedef typename std::tuple<WidgetSetup<Elems>...> initer_t;
 
 
                 template<unsigned int N>
-                    static std::tuple<Elems...> construct_all( _index<N>, typename Widget<Elems...>::initer_t pIniter ) {
-                        std::tuple<Elems...> re = construct_all( _index<N-1>(), pIniter );
-                        std::get<N - 1>( re ) = std::get<N - 1>( pIniter );
-                        return re;
-                    }
-                static std::tuple<Elems...> construct_all( _index<0>, typename Widget<Elems...>::initer_t pIniter ) {
+                static std::tuple<Elems...> construct_all( _index<N>, typename Widget<Elems...>::initer_t pIniter ) 
+                {
+                    std::tuple<Elems...> re = construct_all( _index<N-1>(), pIniter );
+                    std::get<N - 1>( re ) = std::get<N - 1>( pIniter );
+                    return re;
+                }
+                static std::tuple<Elems...> construct_all( _index<0>, typename Widget<Elems...>::initer_t pIniter ) 
+                {
                     return std::tuple<Elems...>();
                 }
-                Widget() {	}
+
+                Widget() 
+                {	}
+
                 Widget( Elems... pElements )
                     :elements( { pElements... } )
                     {	}
@@ -113,67 +133,83 @@ namespace gui {
                     allWidgetSizes.push_back( glm::vec2() );
                 }
                 template<unsigned int N>
-                    auto element() {
+                    auto element()
+                    {
                         return std::get<N>( elements );
                     }
-                glm::vec2& get_pos() {
+                glm::vec2& get_pos()
+                {
                     return allWidgetPositions[pos_index];
                 }
-                glm::vec2& get_size() {
+                glm::vec2& get_size() 
+                {
                     return allWidgetSizes[size_index];
                 }
-                void set_pos( glm::vec2 pNewPos ) {
+                void set_pos( glm::vec2 pNewPos )
+                {
                     set_all_pos<ELEMENT_COUNT>( _index<ELEMENT_COUNT>(), pNewPos );
                     allWidgetPositions[pos_index] = pNewPos;
                 }
                 template<unsigned int N>
-                    void set_element_pos( glm::vec2 pNewPos ) {
+                    void set_element_pos( glm::vec2 pNewPos ) 
+                    {
                         std::get<N>( elements ).set_pos( pNewPos );
                     }
 
-                void move( glm::vec2 pOffset ) {
+                void move( glm::vec2 pOffset ) 
+                {
                     move_all<ELEMENT_COUNT>( pOffset );
                     allWidgetPositions[pos_index] += pOffset;
                 }
-                void move( float pOffsetX, float pOffsetY ) {
+                void move( float pOffsetX, float pOffsetY ) 
+                {
                     move( glm::vec2( pOffsetX, pOffsetY ) );
                 }
                 template<unsigned int N>
-                    void move_element( glm::vec2& pOffset ) {
+                    void move_element( glm::vec2& pOffset ) 
+                    {
                         std::get<N>( elements ).move( pOffset * move_policy.matrix[N] );
                     }
 
-                void move_to( glm::vec2 pNewPos ) {
+                void move_to( glm::vec2 pNewPos ) 
+                {
                     move_all<ELEMENT_COUNT>( pNewPos - allWidgetPositions[pos_index] );
                     allWidgetPositions[pos_index] = pNewPos;
                 }
                 template<unsigned int N>
-                    void move_element_to( glm::vec2& pNewPos ) {
+                    void move_element_to( glm::vec2& pNewPos ) 
+                    {
                         std::get<N>( elements ).move( ( pNewPos - allWidgetPositions[pos_index] ) * move_policy.matrix[N] );
                     }
 
-                void resize( glm::vec2& pOffset ) {
+                void resize( glm::vec2& pOffset ) 
+                {
                     resize_all( _index<ELEMENT_COUNT>(), pOffset );
                 }
                 template<unsigned int N>
-                    void resize_element( glm::vec2& pOffset ) {
+                    void resize_element( glm::vec2& pOffset ) 
+                    {
                         std::get<N>( elements ).resize( pOffset * glm::vec2( resize_policy.matrix[N].z, resize_policy.matrix[N].w ) );
                     }
 
                 template<typename WidColors, unsigned int I>
-                    struct color_elements {
-                        static void func( std::tuple<Elems...>& pElems, WidColors& pColors ) {
+                    struct color_elements 
+                    {
+                        static void func( std::tuple<Elems...>& pElems, WidColors& pColors ) 
+                        {
                             color_elements<WidColors, I - 1>::func( pElems, pColors );
                             std::get<I - 1>( pElems ).color( std::get<I - 1>( pColors.colors ) );
                         }
                     };
 
                 template<typename WidColors>
-                    struct color_elements<WidColors, 0> {
+                    struct color_elements<WidColors, 0> 
+                    {
                         static void func( std::tuple<Elems...>& pElems, WidColors& pColors ) {				}
                     };
                 template<class... Colors>
-                    void color( WidgetColors<Colors...> pColors ) {
+                    void color( WidgetColors<Colors...> pColors ) 
+                    {
                         static_assert( sizeof...( Colors ) == sizeof...( Elems ), "Color count does not match the element count of Widget" );
                         color_elements<WidgetColors<Colors...>, sizeof...( Elems )>::func( elements, pColors );
                     }
@@ -188,7 +224,8 @@ namespace gui {
 
                 void move_all( glm::vec2& pOffset, _index<0> = _index<0>() ) {}
                 template<unsigned int N>
-                    void move_all( glm::vec2& pOffset, _index<N> = _index<N>() ) {//move all elements
+                    void move_all( glm::vec2& pOffset, _index<N> = _index<N>() )
+                    {
                         move_all( pOffset, _index<N-1>() );
                         move_element<N - 1>( pOffset );//* ( glm::vec2 )move_policy.matrix[N] );
                     }
@@ -196,14 +233,16 @@ namespace gui {
 
                 void set_all_pos( _index<0>, glm::vec2& pNewPos ) {}
                 template<unsigned int N>
-                    void set_all_pos( _index<N>, glm::vec2& pNewPos ) {//move all elements
+                    void set_all_pos( _index<N>, glm::vec2& pNewPos )
+                    {                        
                         set_all_pos<N - 1>( _index<N-1>(), pNewPos );
                         set_element_pos<N - 1>( pNewPos );
                     }
 
                 void resize_all( _index<0>, glm::vec2& pOffset ) {}
                 template<unsigned int N>
-                    void resize_all( _index<N>, glm::vec2& pOffset ) {//move all elements
+                    void resize_all( _index<N>, glm::vec2& pOffset ) 
+                    {
                         resize_all<N - 1>( _index<N-1>(), pOffset );
 
                         move_element<N - 1>( pOffset * glm::vec2( resize_policy.matrix[N - 1].x, resize_policy.matrix[N - 1].y ) );
@@ -213,15 +252,18 @@ namespace gui {
 
 
     template<class Wid>
-        void move_widget( Wid pWidget, glm::vec2& pOffset ) {
+        void move_widget( Wid pWidget, glm::vec2& pOffset ) 
+        {
             pWidget.move( pOffset );
         }
     template<class Wid, typename A, typename B>
-        void move_widget( Wid pWidget, A pOffsetX, B pOffsetY ) {
+        void move_widget( Wid pWidget, A pOffsetX, B pOffsetY ) 
+        {
             pWidget.move( glm::vec2( pOffsetX, pOffsetY ) );
         }
     template<class Wid, unsigned int N>
-        void move_widget_element( Wid pWidget, float pOffsetX, float pOffsetY ) {
+        void move_widget_element( Wid pWidget, float pOffsetX, float pOffsetY ) 
+        {
             pWidget.move.element<N>( glm::vec2( pOffsetX, pOffsetY ) );
         }
     template<class Wid>
@@ -266,3 +308,4 @@ namespace gui {
         using ColorGroup = typename gen_color_group<ColorCount, Color>::type;
 
 }
+

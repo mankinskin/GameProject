@@ -7,4 +7,7 @@ namespace sequencer {
     void initModules();
     void fetchInput();
     void gameloop();
+    void initialize();
+    void frame();
+    void clearFramebuffers();
 }

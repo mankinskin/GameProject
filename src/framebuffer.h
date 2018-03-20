@@ -16,7 +16,6 @@ namespace texture {
 
 	void initGUIFBO();
 	extern unsigned int guiFBO;
-	extern unsigned int quadIndexBuffer;
 	extern unsigned int quadIndexTexture;
 	extern unsigned int fontColorTexture;
 	extern unsigned int guiDepthRenderbuffer;

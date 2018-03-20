@@ -58,10 +58,7 @@ void app::init()
 	mainWindow.init();
 
 	gl::init();
-    sequencer::includeShaders();
-    sequencer::initializeVAOs();
-    sequencer::buildShaders();
-    sequencer::initModules();
+    sequencer::initialize();
 	//gui::text::initStyleBuffer();
 
 	debug::printErrors();

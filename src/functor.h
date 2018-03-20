@@ -7,7 +7,8 @@
 #include <tuple>
 #include "signal.h"
 
-namespace functors {
+namespace functors 
+{
 /*
 Each functor holds a function pointer and a tuple for the arguments.
 when a functor class is first instantited from the template, its static void call( unsigned int index ) function is pushed onto the functorInvokers.
@@ -17,57 +18,77 @@ when checking all functors, the functorOrder queue is used. the invoker_index is
 */
 
 	template<unsigned int N, typename R, typename... Args>
-	struct applier {
+	struct applier 
+    {
 		template<typename...ExArgs>
-		static void func( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple, ExArgs&&... pExArgs ) {
+		static void func( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple, ExArgs&&... pExArgs ) 
+        {
 			applier<N - 1, R, Args...>::func( pF, pArgTuple, std::get<N - 1>( pArgTuple ), pExArgs... );
 		}
 	};
 	template<typename R, typename... Args>
-	struct applier<0, R, Args...> {
+	struct applier<0, R, Args...> 
+    {
 		template<typename...ExArgs>
-		static void func( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple, ExArgs&&... pExArgs ) {
+		static void func( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple, ExArgs&&... pExArgs ) 
+        {
 			pF( pExArgs... );
 		}
 	};
 
 	template<typename R, typename... Args>
-	void function_caller( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple ) {
+	void function_caller( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple ) 
+    {
 		applier<sizeof...( Args ), R, Args...>::func( pF, pArgTuple );
 	}
 
 	template<typename R, typename... Args>
-	class Functor {
+	class Functor 
+    {
 	public:
 		Functor( unsigned int pIndex, R( *pF )( Args... ), Args... pArgs )
-			:func( pF ), args( std::forward_as_tuple<Args...>( std::forward<Args>( pArgs )... ) ), slot_index( pIndex )
-		{
-		}
-		static void clear() {
+			:func( pF ), 
+            args( std::forward_as_tuple<Args...>( std::forward<Args>( pArgs )... ) ), 
+            slot_index( pIndex )
+		{ }
+		static void clear() 
+        {
 			slots.clear();
 		}
-		static void reserve_slots( unsigned int pCount ) {
+		static void reserve_slots( unsigned int pCount ) 
+        {
 			slots.reserve( pCount );
 		}
-		void invoke() const {
+		void invoke() const 
+        {
 			function_caller( func, args );
 		}
-		static void call( unsigned int pFunc ) {
-			if ( slots[pFunc].check() ) {
+		static void call( unsigned int pFunc ) 
+        {
+			if ( slots[pFunc].check() ) 
+            {
 				slots[pFunc].invoke();
 			}
 		}
-		bool check() {
-			for ( unsigned int s = 0; s < signalSet.size(); ++s ) {
-				if ( signals::allSignals[signalSet[s]] ) {
+		bool check() 
+        {
+			for ( unsigned int s = 0; s < signalSet.size(); ++s ) 
+            {
+				if ( signals::allSignals[signalSet[s]] ) 
+                {
 					return true;
 				}
 			}
 			return false;
 		}
-		void set_triggers( std::initializer_list<unsigned int> pSet ) {
+		void set_triggers( std::initializer_list<unsigned int> pSet ) 
+        {
 			signalSet = pSet;
 		}
+        void add_trigger( unsigned int pSignal )
+        {
+
+        }
 		static unsigned int invoker_index;
 		static std::vector<Functor<R, Args...>> slots;
 		unsigned int slot_index;
@@ -75,7 +96,6 @@ when checking all functors, the functorOrder queue is used. the invoker_index is
 		std::vector<unsigned int> signalSet;
 		R( *func )( Args... );
 		std::tuple<Args...> args;
-
 	};
 
 	template<typename R, typename... Args>
@@ -88,17 +108,23 @@ when checking all functors, the functorOrder queue is used. the invoker_index is
 	extern std::vector<std::pair<unsigned int, unsigned int>> functorOrder;
 
 	template<typename R, class...Args>
-	struct FunctorRef {
-		FunctorRef( unsigned int pIndex ) :index( pIndex ) {}
-		unsigned int index;
-		void set_triggers( std::initializer_list<unsigned int> pSet ) {
+	struct FunctorRef 
+    {
+		FunctorRef( unsigned int pIndex ) :index( pIndex ) 
+        {}
+		void set_triggers( std::initializer_list<unsigned int> pSet ) 
+        {
 			Functor<R, Args...>::slots[index].set_triggers( pSet );
 		}
+
+		unsigned int index;
 	};
 	template<typename R, class...Args>
-	FunctorRef<R, Args...> createFunctor( R( *pF )( Args... ), Args... pArgs ) {
+	FunctorRef<R, Args...> createFunctor( R( *pF )( Args... ), Args... pArgs ) 
+    {
 		unsigned int ind = Functor<R, Args...>::slots.size();
-		if ( !ind ) {
+		if ( !ind ) 
+        {
 			Functor<R, Args...>::invoker_index = functorInvokers.size();
 			functorInvokers.push_back( Functor<R, Args...>::call );
 			functorDestructors.push_back( Functor<R, Args...>::clear );
@@ -107,11 +133,13 @@ when checking all functors, the functorOrder queue is used. the invoker_index is
 		Functor<R, Args...>::slots.emplace_back( ind, pF, pArgs... );
 		return ind;
 	}
-	void callFunctors();
-	void clearFunctors();
 
 	template<typename R, typename... Args>
-	void reserve_functors( unsigned int pCount ) {
+	void reserve_functors( unsigned int pCount ) 
+    {
 		Functor<R, Args...>::reserve_slots( pCount );
 	}
+
+	void callFunctors();
+	void clearFunctors();
 }

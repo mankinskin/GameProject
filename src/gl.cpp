@@ -53,8 +53,6 @@ void gl::init()
 
 
 
-	//puts( "Framebuffers..." );
-	//texture::initFramebuffers();
 
 	//puts( "Lighting..." );
 	//lights::initLighting();

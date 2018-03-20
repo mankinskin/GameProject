@@ -24,12 +24,14 @@ unsigned int vao::createStorage( std::string Name )
 	allStorages.push_back( storage );
 	return ind;
 }
+
 unsigned int vao::createStorage( std::string Name, unsigned int pCapacity, const void* pData, unsigned int pFlags )
 {
 	unsigned int ind = createStorage( Name );
 	initStorageData( ind, pCapacity, pData, pFlags );
 	return ind;
 }
+
 void vao::initStorageData( unsigned int pStorage, unsigned int pCapacity, const void* pData, unsigned int pFlags )
 {
 	Storage& stor = allStorages[pStorage];

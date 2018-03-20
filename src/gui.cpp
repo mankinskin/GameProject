@@ -23,9 +23,9 @@ using gl::Color;
 
 void gui::init()
 {
-	pixel_size = glm::vec2( 2.0f / gl::Viewport::current->width, 2.0f / gl::Viewport::current->height );
-	initQuadBuffer();
-	initColorQuadVAO();	
+	pixel_size = glm::vec2( 
+            2.0f / gl::getWidth(), 
+            2.0f / gl::getHeight() );
 	//text::initFonts();
 	debug::printErrors();
 }
@@ -46,9 +46,16 @@ void gui::initWidgets()
 	float button_width = gui::pixel_size.x * 100.0f;
 	float button_height = gui::pixel_size.x * 70.0f;
 	glm::vec2 margin = gui::pixel_size * 2.0f;
-	Button::initer_t button_initer( { QuadData( 0.0f, 0.0f, button_width, button_height ), QuadData( margin.x, -margin.y, button_width - margin.x*2.0f, button_height - margin.y*2.0f ) } );
-	WidgetMovePolicy<Button> button_move_policy( { glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ) } );
-	WidgetResizePolicy<Button> button_resize_policy( { glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) } );
+
+	Button::initer_t button_initer( { 
+            QuadData( 0.0f, 0.0f, button_width, button_height ), 
+            QuadData( margin.x, -margin.y, button_width - margin.x*2.0f, button_height - margin.y*2.0f ) } );
+	WidgetMovePolicy<Button> button_move_policy( { 
+            glm::vec2( 1.0f, 1.0f ), 
+            glm::vec2( 1.0f, 1.0f ) } );
+	WidgetResizePolicy<Button> button_resize_policy( { 
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), 
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) } );
 	
 	WidgetSetup<Button> button_setup( button_initer, button_move_policy, button_resize_policy );
 	
@@ -59,19 +66,26 @@ void gui::initWidgets()
 	
 	quitButton.color( buttonColors );
 	
-	ButtonEvents<Event> border_btn( createEvent( QuadEvent( quitButton.element<0>().index, 1 ) ), createEvent( QuadEvent( quitButton.element<0>().index, 0 ) ) );
-	ButtonEvents<Event> center_btn( createEvent( QuadEvent( quitButton.element<1>().index, 1 ) ), createEvent( QuadEvent( quitButton.element<1>().index, 0 ) ) );
+	ButtonEvents<Event> border_btn( 
+            createEvent( QuadEvent( quitButton.element<0>().index, 1 ) ), 
+            createEvent( QuadEvent( quitButton.element<0>().index, 0 ) ) );
+	ButtonEvents<Event> center_btn( 
+            createEvent( QuadEvent( quitButton.element<1>().index, 1 ) ), 
+            createEvent( QuadEvent( quitButton.element<1>().index, 0 ) ) );
 	
 	//all enter and leave events through or_gates
-	gate<or_op, Event, Event> button_enters_srcs( or_op(), border_btn.on_evt, center_btn.on_evt );
-	gate<or_op, Event, Event> button_leaves_srcs( or_op(), border_btn.off_evt, center_btn.off_evt );
+	gate<or_op, Event, Event> button_enters_srcs( border_btn.on_evt, center_btn.on_evt );
+	gate<or_op, Event, Event> button_leaves_srcs( border_btn.off_evt, center_btn.off_evt );
 	
 	//outputs true when an enter occurred and no leave occurred
-	gate<and_op, decltype( button_enters_srcs ), not_gate<decltype( button_leaves_srcs )>> button_enters_src( and_op(), button_enters_srcs, not_gate<decltype( button_leaves_srcs )>( button_leaves_srcs ) );
+	gate<and_op, decltype( button_enters_srcs ), not_gate<decltype( button_leaves_srcs )>> button_enters_src( 
+            and_op(), button_enters_srcs, not_gate<decltype( button_leaves_srcs )>( button_leaves_srcs ) );
 	//outputs true when a leave occurred and no enter occurred
-	gate<and_op, decltype( button_leaves_srcs ), not_gate<decltype( button_enters_srcs )>> button_leaves_src( and_op(), button_leaves_srcs, not_gate<decltype( button_enters_srcs )>( button_enters_srcs ) );
+	gate<and_op, decltype( button_leaves_srcs ), not_gate<decltype( button_enters_srcs )>> button_leaves_src( 
+            and_op(), button_leaves_srcs, not_gate<decltype( button_enters_srcs )>( button_enters_srcs ) );
 	//a switch which is turned on by
-	gate<or_op, decltype( button_enters_src ), decltype( button_leaves_src )> ent_or_lea( or_op(), button_enters_src, button_leaves_src );
+	gate<or_op, decltype( button_enters_src ), decltype( button_leaves_src )> ent_or_lea( 
+            or_op(), button_enters_src, button_leaves_src );
 	toggle_gate<decltype( ent_or_lea )> on_button( ent_or_lea );
 	
 	
@@ -131,9 +145,11 @@ void gui::initWidgets()
 		glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
 		} );
 	WidgetResizePolicy<WindowFrame> window_frame_resize_policy( {
-		glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ),
-		glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ),
-		glm::vec4( 0.0f, 1.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 1.0f, 1.0f, 0.0f ), glm::vec4( 1.0f, 1.0f, 0.0f, 0.0f )
+		glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ), 
+        glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), 
+        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ),
+		glm::vec4( 0.0f, 1.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 1.0f, 1.0f, 0.0f ), 
+        glm::vec4( 1.0f, 1.0f, 0.0f, 0.0f )
 		} );
 	WidgetSetup<WindowFrame> window_frame_setup( window_frame_initer, window_frame_move_policy, window_frame_resize_policy );
 	
@@ -168,9 +184,9 @@ void gui::initWidgets()
 	window.move( -1.0f, 0.0f );
 	//general functions
 	
-	//ButtonEvents<Event> header( createEvent( QuadEvent( window.element<1>().element<1>().index, 1 ) ), createEvent( QuadEvent( window.element<1>().element<1>().index, 0 ) ) );
-	//gate<and_op, decltype( header.hold_evt ), decltype( lmb.on_evt )> header_press_evt( and_op(), header.hold_evt, lmb.on_evt );
-	//ButtonEvents<decltype( header_press_evt ), decltype( lmb.off_evt )> header_lmb( header_press_evt, lmb.off_evt );
+	ButtonEvents<Event> header( createEvent( QuadEvent( window.element<1>().element<1>().index, 1 ) ), createEvent( QuadEvent( window.element<1>().element<1>().index, 0 ) ) );
+	gate<and_op, decltype( header.hold_evt ), decltype( lmb.on_evt )> header_press_evt( and_op(), header.hold_evt, lmb.on_evt );
+	ButtonEvents<decltype( header_press_evt ), decltype( lmb.off_evt )> header_lmb( header_press_evt, lmb.off_evt );
 	//
 	//ButtonEvents<Event> right( createEvent( QuadEvent( window.element<0>().element<5>().index, 1 ) ), createEvent( QuadEvent( window.element<0>().element<5>().index, 0 ) ) );
 	//gate<and_op, decltype( right.hold_evt ), decltype( lmb.on_evt )> right_press_evt( and_op(), right.hold_evt, lmb.on_evt );
@@ -184,9 +200,9 @@ void gui::initWidgets()
 	//gate<and_op, decltype( bottom_right.hold_evt ), decltype( lmb.on_evt )> bottom_right_press_evt( and_op(), bottom_right.hold_evt, lmb.on_evt );
 	//ButtonEvents<decltype( bottom_right_press_evt ), decltype( lmb.off_evt )> bottom_right_and_lmb( bottom_right_press_evt, lmb.off_evt );
 	//
-	//FunctorRef<void, Window, glm::vec2&> move_window_func = createFunctor<void, Window, glm::vec2&>( move_widget, window, cursorFrameDelta );
-	//move_window_func.set_triggers( { header_lmb.hold } );
-	//
+	FunctorRef<void, Window, glm::vec2&> move_window_func = createFunctor<void, Window, glm::vec2&>( move_widget, window, cursorFrameDelta );
+	move_window_func.set_triggers( { header_lmb.hold } );
+	
 	//FunctorRef<void, Window, glm::vec2&> resize_window_func = createFunctor<void, Window, glm::vec2&>( resize_widget, window, cursorFrameDelta );
 	//resize_window_func.set_triggers( { bottom_right_and_lmb.hold } );
 	//

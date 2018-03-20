@@ -79,18 +79,20 @@ namespace gui {
         }
     void rasterQuadIndices();
 
-
+    void initQuadIndexBuffer();
     void initQuadIndexShader();
     void setupQuadIndexShader();
+    void readQuadIndexBuffer();
     void reserveQuads( unsigned int pCount );
-    void clearQuads();
     unsigned int readQuadIndexMap( unsigned int pPos );
     unsigned int readQuadIndexMap( unsigned int pXPos, unsigned int pYPos );
     float readQuadDepthMap( unsigned int pPos );
     float readQuadDepthMap( unsigned int pXPos, unsigned int pYPos );
     void initQuadBuffer();
+    void clearQuads();
     void updateQuadBuffer();
-    void readQuadIndexBuffer();
+
+	extern unsigned int quadIndexBuffer;
     extern unsigned int quadIndexShader;
     extern unsigned int quadIndexVAO;
     extern unsigned int quadBuffer;
