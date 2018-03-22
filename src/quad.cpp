@@ -20,20 +20,24 @@ unsigned int gui::quadIndexBuffer;
 
 void gui::updateQuadBuffer()
 {
-	if ( allQuads.size() ) {
-		vao::uploadStorage( quadBuffer, sizeof( glm::vec4 )*allQuads.size(), &allQuads[0] );
+	if ( allQuads.size() ) 
+    {
+		vao::uploadStorage( quadBuffer, 
+                sizeof( glm::vec4 )*allQuads.size(), &allQuads[0] );
 	}
 }
 
 void gui::rasterQuadIndices()
 {
-	if ( allQuads.size() ) {
+	if ( allQuads.size() ) 
+    {
 		glDepthMask( 0 );
 		glDepthFunc( GL_LEQUAL );
 		glBindVertexArray( quadIndexVAO );
 		shader::use( quadIndexShader );
 
-		glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, allQuads.size() );
+		glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 
+                0, allQuads.size() );
 
 		shader::unuse();
 		glBindVertexArray( 0 );
@@ -42,20 +46,23 @@ void gui::rasterQuadIndices()
 	}
 }
 
-unsigned int gui::createQuad( float pPosX, float pPosY, float pWidth, float pHeight )
+unsigned int gui::createQuad( const float pPosX, const float pPosY, 
+        const float pWidth, const float pHeight )
 {
 	allQuads.emplace_back( pPosX, pPosY, pWidth, pHeight );
+    printf( "Creating Quad %u: %f %f %f %f\n", 
+            allQuads.size(), pPosX, pPosY, pWidth, pHeight );
 	return allQuads.size();
 }
 
-unsigned int gui::createQuad( glm::vec4 pQuad )
+unsigned int gui::createQuad( const glm::vec4 pQuad )
 {
 	allQuads.push_back( pQuad );
     printf( "Creating Quad %u: %f %f %f %f\n", 
             allQuads.size(), pQuad.x, pQuad.y, pQuad.z, pQuad.w );
 	return allQuads.size();
 }
-void gui::reserveQuads( unsigned int pCount )
+void gui::reserveQuads( const unsigned int pCount )
 {
 	allQuads.reserve( allQuads.size() + pCount );
 }
@@ -115,41 +122,46 @@ void gui::clearQuads()
 	allQuads.clear();
 }
 
-unsigned int gui::readQuadIndexMap( unsigned int pPos )
+unsigned int gui::readQuadIndexMap( const unsigned int pPos )
 {
 	return *( ( unsigned char* )
             vao::getMappedPtr( quadIndexBuffer ) + pPos );
 }
 
 unsigned int gui::readQuadIndexMap( 
-        unsigned int pXPos, unsigned int pYPos )
+        const unsigned int pXPos, const unsigned int pYPos )
 {
 	return readQuadIndexMap( 
             ( gl::Viewport::current->width * pYPos ) + pXPos );
 }
 
-float gui::readQuadDepthMap( unsigned int pPos )
+float gui::readQuadDepthMap( const unsigned int pPos )
 {
 	return quadDepthMap[pPos];
 }
 
-float gui::readQuadDepthMap( unsigned int pXPos, unsigned int pYPos )
+float gui::readQuadDepthMap( const unsigned int pXPos, 
+        const unsigned int pYPos )
 {
 	return readQuadDepthMap( 
             ( gl::Viewport::current->width * pYPos ) + pXPos );
 }
 
-void gui::moveQuad( unsigned int pQuad, glm::vec2 pOffset )
+void gui::moveQuad( const unsigned int pQuad, const glm::vec2 pOffset )
 {
 	allQuads[pQuad - 1] += glm::vec4( pOffset.x, pOffset.y, 0.0f, 0.0f );
 }
 
-void gui::resizeQuad( unsigned int pQuad, glm::vec2 pOffset )
+void gui::resizeQuad( const unsigned int pQuad, const glm::vec2 pOffset )
 {
 	allQuads[pQuad - 1] += glm::vec4( 0.0f, 0.0f, pOffset.x, pOffset.y );
 }
 
-void gui::setQuadPos( unsigned int pQuad, glm::vec2 pPos )
+void gui::setQuadPos( const unsigned int pQuad, const glm::vec2 pPos )
 {
 	std::memcpy( &allQuads[pQuad - 1], &pPos, sizeof( glm::vec2 ) );
+}
+gui::QuadData gui::getQuadData( unsigned int pQuadIndex )
+{
+    return allQuads[pQuadIndex];
 }
