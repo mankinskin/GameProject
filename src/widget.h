@@ -74,13 +74,14 @@ namespace gui {
             {
                 return  std::tuple<Head>( { std::get<0>( initer ) } ); 
             }
-            template<typename Head, typename Middle, typename... Rest>
+
+            template<typename Head, typename Next, typename... Rest>
             static constexpr const 
-            std::tuple<Head, Middle, Rest...> func_impl( std::tuple<typename Head::initer_t, typename Middle::initer_t, typename Rest::initer_t...> initer )
+            std::tuple<Head, Next, Rest...> 
+            func_impl( std::tuple<typename Head::initer_t, typename Next::initer_t, typename Rest::initer_t...> initer )
             {
                 std::tuple<Head> head( { std::get<0>( initer ) } ); 
-                return std::tuple_cat( head, 
-                        func_impl<Middle, Rest...>( drop_head<typename Head::initer_t, typename Middle::initer_t, typename Rest::initer_t...>(initer) ) );
+                return std::tuple_cat( head, func_impl<Next, Rest...>( drop_head(initer) ) );
             }
 
 

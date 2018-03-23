@@ -553,7 +553,7 @@ func	src/functor.h	/^		static void func( R( *pF )( Args... ), const std::tuple<A
 func	src/widget.h	/^                        static void func( const std::tuple<Elems...>& pElems, $/;"	f	struct:gui::Widget::color_elements
 func	src/widget.h	/^                        static void func( const std::tuple<Elems...>& pElems, WidColors& pColors )$/;"	f	struct:gui::Widget::color_elements
 func	src/widget.h	/^            static constexpr const std::tuple<Elems...> func( std::tuple<typename Elems::initer_t...> initer )$/;"	f	struct:gui::construct
-func_impl	src/widget.h	/^            std::tuple<Head, Middle, Rest...> func_impl( std::tuple<typename Head::initer_t, typename Middle::initer_t, typename Rest::initer_t...> initer )$/;"	f	struct:gui::construct
+func_impl	src/widget.h	/^            func_impl( std::tuple<typename Head::initer_t, typename Next::initer_t, typename Rest::initer_t...> initer )$/;"	f	struct:gui::construct
 func_impl	src/widget.h	/^            std::tuple<Head> func_impl( std::tuple<typename Head::initer_t> initer )$/;"	f	struct:gui::construct
 function_caller	src/functor.h	/^	void function_caller( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple ) $/;"	f	namespace:functors
 functorDestructors	src/functor.cpp	/^std::vector<void( * )()> functors::functorDestructors = std::vector<void( * )()>();$/;"	m	class:functors	file:
