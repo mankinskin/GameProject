@@ -49,7 +49,7 @@ void app::init()
 {
 	puts( "Hello" );
 	state = Running;
-	setMaxFPS( 1000 );
+	setMaxFPS( 50 );
 	initGLFW();
 	//Windows and gl Context
 	initMonitors();

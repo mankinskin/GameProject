@@ -101,8 +101,8 @@ void sequencer::initModules()
 
 void sequencer::fetchInput()
 {
-	input::updateMouse();
 	input::fetchGLFWEvents();
+	input::updateMouse();
 
 	input::getCursorQuadEvents();
 	input::getMouseKeyEvents();
@@ -128,7 +128,6 @@ void sequencer::clearFramebuffers()
 }
 void sequencer::frame()
 {
-        fetchInput();
         clearFramebuffers();
 
         camera::main_camera.look( input::cursorFrameDelta );
@@ -151,7 +150,10 @@ void sequencer::frame()
 
         gui::renderColorQuads();
 
-        glfwSwapBuffers( app::mainWindow.window );
+        glfwSwapBuffers(app::mainWindow.window );
+        fetchInput();
+        app::updateTime();
+        app::limitFPS();
 
         debug::printErrors();
 }

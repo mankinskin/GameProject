@@ -40,12 +40,14 @@ void input::updateMouse()
 	rx = ( ( rx / ( float )app::mainWindow.width )*2.0f ) - 1.0f;
 	ry = 1.0f - ( ry / ( float )app::mainWindow.height )*2.0f;
 	glm::vec2 newRelativeCursorPosition = glm::vec2( rx, ry );
-	cursorFrameDelta = glm::vec2( ( newRelativeCursorPosition.x - relativeCursorPosition.x ),
-		( newRelativeCursorPosition.y - relativeCursorPosition.y ) );
+	cursorFrameDelta = glm::vec2( newRelativeCursorPosition.x - relativeCursorPosition.x,
+		newRelativeCursorPosition.y - relativeCursorPosition.y );
 	relativeCursorPosition = newRelativeCursorPosition;
 
-	//printf( "%f/n%f/n/n/n", pX, pY );
-	//printf( "%i/n%i/n/n/n", absoluteCursorPosition.x, absoluteCursorPosition.y );
+	printf( "RelPos: %.2f\t%.2f\n", relativeCursorPosition.x, relativeCursorPosition.y );
+	printf( "AbsPos: %u\t%u\n", absoluteCursorPosition.x, absoluteCursorPosition.y );
+    printf( "Delta: %.2f\t%.2f\n", cursorFrameDelta.x, cursorFrameDelta.y );
+
 	
 }
 
