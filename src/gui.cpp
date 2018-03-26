@@ -54,7 +54,7 @@ void gui::initWidgets()
                     button_width - margin.x*2.0f, 
                     button_height - margin.y*2.0f ) } );
 
-	WidgetMovePolicy<Button> button_move_policy( { 
+    std::array<glm::vec2, Button::ELEMENT_COUNT> button_move_policy( { 
             glm::vec2( 1.0f, 1.0f ), 
             glm::vec2( 1.0f, 1.0f ) } );
 	WidgetResizePolicy<Button> button_resize_policy( { 
@@ -153,11 +153,11 @@ void gui::initWidgets()
 		QuadData( window_width - border.x, -window_height + border.y, border.x, border.y )
 		} );
 	
-	WidgetMovePolicy<WindowFrame> window_frame_move_policy( {
+    std::array<glm::vec2, WindowFrame::ELEMENT_COUNT> window_frame_move_matrix{
 		glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
 		glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
 		glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-		} );
+		};
 	WidgetResizePolicy<WindowFrame> window_frame_resize_policy( {
 		glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ), 
         glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), 
@@ -173,38 +173,49 @@ void gui::initWidgets()
 		QuadData( 0.0f, 0.0f, window_width, header_height ),
 		QuadData( header_border.x, -header_border.y, window_width - header_border.x*2.0f, header_height - header_border.y*2.0f )
 		} );
-	WidgetMovePolicy<WindowHeader> window_header_move_policy( {
+    std::array<glm::vec2, WindowHeader::ELEMENT_COUNT> window_header_move_matrix{
 		glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-		} );
+		};
 	WidgetResizePolicy<WindowHeader> window_header_resize_policy( {
 		glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f )
 		} );
 	
 	Window::initer_t window_initer( {  window_frame_initer, window_header_initer} );
-	WidgetMovePolicy<Window> window_move_policy( {
+    std::array<glm::vec2, Window::ELEMENT_COUNT> window_move_policy{
 		glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-		} );
+		};
 	WidgetResizePolicy<Window> window_resize_policy( {
 		glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f )
 		} );
     
-	Window window(window_initer);
+	Window window(window_initer );
 	
     window.color( window_colors );
     window.move( -1.0f, 0.0f );
 	////general functions
 	//
-	ButtonEvents<Event> header( createEvent( QuadEvent( window.element<1>().element<1>().index, 1 ) ), createEvent( QuadEvent( window.element<1>().element<1>().index, 0 ) ) );
-	gate<and_op, decltype( header.hold_evt ), decltype( lmb.on_evt )> header_press_evt( and_op(), header.hold_evt, lmb.on_evt );
+	ButtonEvents<Event> header_button( 
+            createEvent( QuadEvent( window.element<1>().element<1>().index, 1 ) ), 
+            createEvent( QuadEvent( window.element<1>().element<1>().index, 0 ) ) );
+	gate<and_op, decltype( header_button.hold_evt ), decltype( lmb.on_evt )> header_press_evt( and_op(), 
+            header_button.hold_evt, lmb.on_evt );
 	ButtonEvents<decltype( header_press_evt ), decltype( lmb.off_evt )> header_lmb( header_press_evt, lmb.off_evt );
 	
-	ButtonEvents<Event> right( createEvent( QuadEvent( window.element<0>().element<5>().index, 1 ) ), createEvent( QuadEvent( window.element<0>().element<5>().index, 0 ) ) );
-	gate<and_op, decltype( right.hold_evt ), decltype( lmb.on_evt )> right_press_evt( and_op(), right.hold_evt, lmb.on_evt );
-	ButtonEvents<decltype( right_press_evt ), decltype( lmb.off_evt )> right_and_lmb( right_press_evt, lmb.off_evt );
+	ButtonEvents<Event> right( 
+            createEvent( QuadEvent( window.element<0>().element<5>().index, 1 ) ), 
+            createEvent( QuadEvent( window.element<0>().element<5>().index, 0 ) ) );
+	gate<and_op, decltype( right.hold_evt ), decltype( lmb.on_evt )> 
+        right_press_evt( and_op(), right.hold_evt, lmb.on_evt );
+	ButtonEvents<decltype( right_press_evt ), decltype( lmb.off_evt )> right_and_lmb( 
+            right_press_evt, lmb.off_evt );
 	
-	ButtonEvents<Event> bottom( createEvent( QuadEvent( window.element<0>().element<7>().index, 1 ) ), createEvent( QuadEvent( window.element<0>().element<7>().index, 0 ) ) );
-	gate<and_op, decltype( bottom.hold_evt ), decltype( lmb.on_evt )> bottom_press_evt( and_op(), bottom.hold_evt, lmb.on_evt );
-	ButtonEvents<decltype( bottom_press_evt ), decltype( lmb.off_evt )> bottom_and_lmb( bottom_press_evt, lmb.off_evt );
+	ButtonEvents<Event> bottom( 
+            createEvent( QuadEvent( window.element<0>().element<7>().index, 1 ) ), 
+            createEvent( QuadEvent( window.element<0>().element<7>().index, 0 ) ) );
+	gate<and_op, decltype( bottom.hold_evt ), decltype( lmb.on_evt )> bottom_press_evt( and_op(), 
+            bottom.hold_evt, lmb.on_evt );
+	ButtonEvents<decltype( bottom_press_evt ), decltype( lmb.off_evt )> bottom_and_lmb( 
+            bottom_press_evt, lmb.off_evt );
 	
 	ButtonEvents<Event> bottom_right( createEvent( QuadEvent( window.element<0>().element<8>().index, 1 ) ), createEvent( QuadEvent( window.element<0>().element<8>().index, 0 ) ) );
 	gate<and_op, decltype( bottom_right.hold_evt ), decltype( lmb.on_evt )> bottom_right_press_evt( and_op(), bottom_right.hold_evt, lmb.on_evt );
@@ -213,24 +224,24 @@ void gui::initWidgets()
 	FunctorRef<void, Window, glm::vec2&> move_window_func = createFunctor<void, Window, glm::vec2&>( move_widget, window, cursorFrameDelta );
 	move_window_func.set_triggers( { header_lmb.hold } );
 	
-	//FunctorRef<void, Window, glm::vec2&> resize_window_func = createFunctor<void, Window, glm::vec2&>( resize_widget, window, cursorFrameDelta );
-	//resize_window_func.set_triggers( { bottom_right_and_lmb.hold } );
-	//
-	//FunctorRef<void, Window, float&, float> resize_window_x_func = createFunctor<void, Window, float&, float>( resize_widget, window, cursorFrameDelta.x, 0.0f );
-	//resize_window_x_func.set_triggers( { right_and_lmb.hold } );
-	//
-	//FunctorRef<void, Window, float, float&> resize_window_y_func = createFunctor<void, Window, float, float&>( resize_widget, window, 0.0f, cursorFrameDelta.y );
-	//resize_window_y_func.set_triggers( { bottom_and_lmb.hold } );
+	FunctorRef<void, Window, glm::vec2&> resize_window_func = 
+        createFunctor<void, Window, glm::vec2&>( resize_widget<Window>, window, cursorFrameDelta );
+	resize_window_func.set_triggers( { bottom_right_and_lmb.hold } );
+	
+	FunctorRef<void, Window, float&, float> resize_window_x_func = createFunctor<void, Window, float&, float>( resize_widget, window, cursorFrameDelta.x, 0.0f );
+	resize_window_x_func.set_triggers( { right_and_lmb.hold } );
+	
+	FunctorRef<void, Window, float, float&> resize_window_y_func = createFunctor<void, Window, float, float&>( resize_widget, window, 0.0f, cursorFrameDelta.y );
+	resize_window_y_func.set_triggers( { bottom_and_lmb.hold } );
 	
 	////Slider
 	using Slider = QuadGroup<2>;
-	using SliderMovePolicy = WidgetMovePolicy<Slider>;
 	using SliderResizePolicy = WidgetResizePolicy<Slider>;
 	using SliderColors = ColorGroup<2, gl::ColorIt>;
 	
 	SliderColors slider_colors( gl::getColor( "lightgrey" ), gl::getColor( "darkgrey" ) );
 	Slider::initer_t slider_initer( { glm::vec4( 0.0f, 0.0f, 0.2f, 0.05f ), glm::vec4( 0.0f, 0.0f, 0.05f, 0.05f ) } );
-	SliderMovePolicy slider_move_policy( { glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ) } );
+    std::array<glm::vec2, Slider::ELEMENT_COUNT> slider_move_matrix{ glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ) };
 	SliderResizePolicy slider_resize_policy( { glm::vec4( 0.0f, 0.0f,1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f,1.0f, 1.0f ) } );
 	
 	Slider slider( slider_initer );

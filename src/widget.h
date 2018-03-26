@@ -103,8 +103,8 @@ namespace gui {
                     : elements( construct<Elems...>::func( pIniter ) )
                 {
                     pos_index = allWidgetPositions.size();
-                    size_index = allWidgetSizes.size();
                     allWidgetPositions.push_back( glm::vec2() );
+                    size_index = allWidgetSizes.size();
                     allWidgetSizes.push_back( glm::vec2() );
                 }
                 template<unsigned int N>
@@ -122,7 +122,7 @@ namespace gui {
                 }
                 void set_pos( glm::vec2 pNewPos ) const
                 {
-                    set_all_pos<ELEMENT_COUNT>( _index<ELEMENT_COUNT>(), pNewPos );
+                    set_all_pos<ELEMENT_COUNT>( pNewPos );
                     allWidgetPositions[pos_index] = pNewPos;
                 }
                 template<unsigned int N>
@@ -158,10 +158,16 @@ namespace gui {
                                 ( pNewPos - allWidgetPositions[pos_index] ) );//* move_policy.matrix[N] );
                     }
 
-                void resize( glm::vec2& pOffset ) const
+                void resize( glm::vec2 pOffset ) const
                 {
-                    resize_all( _index<ELEMENT_COUNT>(), pOffset );
+                    resize_all<ELEMENT_COUNT>( pOffset );
+                    allWidgetSizes[size_index] += glm::vec2( pOffset.x, -pOffset.y );
                 }
+                void resize( float X, float Y ) const
+                {
+                    resize( glm::vec2( X, Y ) );
+                }
+
                 template<unsigned int N>
                     void resize_element( glm::vec2& pOffset ) const
                     {
@@ -208,21 +214,20 @@ namespace gui {
                         move_element<N - 1>( pOffset );//* ( glm::vec2 )move_policy.matrix[N] );
                     }
 
-                void set_all_pos( _index<0>, glm::vec2& pNewPos ) const {}
+                void set_all_pos( glm::vec2& pNewPos, _index<0> = _index<0>() ) const {}
                 template<unsigned int N>
-                    void set_all_pos( _index<N>, glm::vec2& pNewPos ) const
+                    void set_all_pos( glm::vec2& pNewPos, _index<N> = _index<N>() ) const
                     {                        
-                        set_all_pos<N - 1>( _index<N-1>(), pNewPos );
+                        set_all_pos( pNewPos, _index<N-1>());
                         set_element_pos<N - 1>( pNewPos );
                     }
 
-                void resize_all( _index<0>, glm::vec2& pOffset ) const {}
+                void resize_all( glm::vec2& pOffset, _index<0> = _index<0>() ) const {}
                 template<unsigned int N>
-                    void resize_all( _index<N>, glm::vec2& pOffset ) const
+                    void resize_all( glm::vec2& pOffset, _index<N> = _index<N>() ) const
                     {
-                        resize_all<N - 1>( _index<N-1>(), pOffset );
-
-                        move_element<N - 1>(  pOffset );//* glm::vec2( resize_policy.matrix[N - 1].x, resize_policy.matrix[N - 1].y ) );
+                        resize_all( pOffset, _index<N-1>());
+                        move_element<N - 1>( pOffset );//* glm::vec2( resize_policy.matrix[N - 1].x, resize_policy.matrix[N - 1].y ) );
                         resize_element<N - 1>( pOffset );//resize matrix is applied later to size
                     }
         };

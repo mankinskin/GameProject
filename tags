@@ -1031,11 +1031,12 @@ resetShaderDirectory	src/shader_loader.cpp	/^void shader::Loader::resetShaderDir
 resetSignals	src/signal.cpp	/^void signals::resetSignals()$/;"	f	class:signals
 resetTextureDirectory	src/texture.cpp	/^void texture::resetTextureDirectory()$/;"	f	class:texture
 resize	src/quad.h	/^        void resize( glm::vec2 dir ) const$/;"	f	struct:gui::Quad
-resize	src/widget.h	/^                void resize( glm::vec2& pOffset ) const$/;"	f	class:gui::Widget
+resize	src/widget.h	/^                void resize( float X, float Y ) const$/;"	f	class:gui::Widget
+resize	src/widget.h	/^                void resize( glm::vec2 pOffset ) const$/;"	f	class:gui::Widget
 resizeQuad	src/quad.cpp	/^void gui::resizeQuad( const unsigned int pQuad, const glm::vec2 pOffset )$/;"	f	class:gui
 resizeQuad	src/quad.h	/^        void resizeQuad( const unsigned int pQuad, A pOffsetX, B pOffsetY ) {$/;"	f	namespace:gui
-resize_all	src/widget.h	/^                    void resize_all( _index<N>, glm::vec2& pOffset ) const$/;"	f	class:gui::Widget
-resize_all	src/widget.h	/^                void resize_all( _index<0>, glm::vec2& pOffset ) const {}$/;"	f	class:gui::Widget
+resize_all	src/widget.h	/^                    void resize_all( glm::vec2& pOffset, _index<N> = _index<N>() ) const$/;"	f	class:gui::Widget
+resize_all	src/widget.h	/^                void resize_all( glm::vec2& pOffset, _index<0> = _index<0>() ) const {}$/;"	f	class:gui::Widget
 resize_element	src/widget.h	/^                    void resize_element( glm::vec2& pOffset ) const$/;"	f	class:gui::Widget
 resize_widget	src/widget.h	/^        void resize_widget( Wid pWidget, A pDirX, B pDirY ) $/;"	f	namespace:gui
 resize_widget	src/widget.h	/^        void resize_widget( Wid pWidget, glm::vec2& pOffset ) $/;"	f	namespace:gui
@@ -1111,8 +1112,8 @@ setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std:
 setVertexArrayVertexStorage	src/vao.cpp	/^void vao::setVertexArrayVertexStorage( unsigned int pVAO, unsigned int pBinding, Storage & pStorage, unsigned int pStride )$/;"	f	class:vao
 setVertexArrayVertexStorage	src/vao.cpp	/^void vao::setVertexArrayVertexStorage( unsigned int pVAO, unsigned int pBinding, unsigned int pStorageIndex, unsigned int pStride )$/;"	f	class:vao
 setVertexAttrib	src/vao.cpp	/^void vao::setVertexAttrib( unsigned int pVAO, unsigned int pBindingIndex, unsigned int pAttributeIndex, unsigned int pCount, unsigned int pType, unsigned int pOffset, unsigned int pNormalize ) {$/;"	f	class:vao
-set_all_pos	src/widget.h	/^                    void set_all_pos( _index<N>, glm::vec2& pNewPos ) const$/;"	f	class:gui::Widget
-set_all_pos	src/widget.h	/^                void set_all_pos( _index<0>, glm::vec2& pNewPos ) const {}$/;"	f	class:gui::Widget
+set_all_pos	src/widget.h	/^                    void set_all_pos( glm::vec2& pNewPos, _index<N> = _index<N>() ) const$/;"	f	class:gui::Widget
+set_all_pos	src/widget.h	/^                void set_all_pos( glm::vec2& pNewPos, _index<0> = _index<0>() ) const {}$/;"	f	class:gui::Widget
 set_element_pos	src/widget.h	/^                    void set_element_pos( glm::vec2 pNewPos ) const$/;"	f	class:gui::Widget
 set_pos	src/quad.h	/^        void set_pos( glm::vec2 pos ) const$/;"	f	struct:gui::Quad
 set_pos	src/widget.h	/^                void set_pos( glm::vec2 pNewPos ) const$/;"	f	class:gui::Widget
