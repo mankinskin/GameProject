@@ -3,3 +3,4 @@ assets/
 deps/
 Debug/
 *.o
+tags
