@@ -53,43 +53,49 @@ namespace gui {
         };
 
     template<typename... Elems>
-        struct construct 
+        struct element_constructor 
         {
             template<size_t... Ns, typename Head, typename... Rest>
-                static constexpr const std::tuple<Rest...> drop_head_impl( std::index_sequence<Ns...> ns, 
-                        std::tuple<Head, Rest...> tup )
+                static constexpr const std::tuple<Rest...> 
+                    drop_head_impl( const std::index_sequence<Ns...> ns, 
+                        const std::tuple<Head, Rest...> tup )
                 {
                     return std::tuple<Rest...>( std::get<Ns + 1u>( tup )... );
                 }
 
             template<typename Head, typename... Rest>
-                static constexpr const std::tuple<Rest...> drop_head( std::tuple<Head, Rest...> tup )
+                static constexpr const std::tuple<Rest...> 
+                    drop_head( const std::tuple<Head, Rest...> tup )
                 {
                     return drop_head_impl( std::make_index_sequence<sizeof...(Rest)>(), tup );
                 }
 
             template<typename Head>
-            static constexpr const 
-            std::tuple<Head> func_impl( std::tuple<typename Head::initer_t> initer )
-            {
-                return  std::tuple<Head>( { std::get<0>( initer ) } ); 
-            }
+                static constexpr const std::tuple<Head> 
+                    func_impl( const std::tuple<typename Head::initer_t> initer )
+                {
+                    return  std::tuple<Head>( { std::get<0>( initer ) } ); 
+                }
 
             template<typename Head, typename Next, typename... Rest>
-            static constexpr const 
-            std::tuple<Head, Next, Rest...> 
-            func_impl( std::tuple<typename Head::initer_t, typename Next::initer_t, typename Rest::initer_t...> initer )
-            {
-                std::tuple<Head> head( { std::get<0>( initer ) } ); 
-                return std::tuple_cat( head, func_impl<Next, Rest...>( drop_head(initer) ) );
-            }
+                static constexpr const std::tuple<Head, Next, Rest...> 
+                    func_impl( const std::tuple<typename Head::initer_t, typename Next::initer_t, typename Rest::initer_t...> initer )
+                {
+                    std::tuple<Head> head( { std::get<0>( initer ) } ); 
+                    return std::tuple_cat( head, func_impl<Next, Rest...>( drop_head(initer) ) );
+                }
 
-
-            static constexpr const std::tuple<Elems...> func( std::tuple<typename Elems::initer_t...> initer )
+            static constexpr const std::tuple<Elems...> 
+                func( const std::tuple<typename Elems::initer_t...> initer )
             {
                 return func_impl<Elems...>( initer );
             }
         };
+    template<typename... Elems>
+        constexpr std::tuple<Elems...> construct( const std::tuple<typename Elems::initer_t...> tup )
+        {
+            return element_constructor<Elems...>::func( tup );
+        }
 
 
     template<class ...Elems>
@@ -100,7 +106,7 @@ namespace gui {
                 using initer_t = typename std::tuple<typename Elems::initer_t...>;
 
                 Widget( const initer_t pIniter )
-                    : elements( construct<Elems...>::func( pIniter ) )
+                    : elements( construct<Elems...>( pIniter ) )
                 {
                     pos_index = allWidgetPositions.size();
                     allWidgetPositions.push_back( glm::vec2() );
