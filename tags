@@ -10,12 +10,14 @@ BUF_SIZE	dt/pnmfile.h	31;"	d
 Basic	src/shader_loader.h	/^		Basic,$/;"	m	class:shader::ProgramType
 BoundingSphere	src/collision.h	/^		BoundingSphere( glm::vec3 pLocalPos, float pRadius )$/;"	f	struct:physics::BoundingSphere
 BoundingSphere	src/collision.h	/^	struct BoundingSphere {$/;"	s	namespace:physics
+Button	src/gui.cpp	/^struct Button $/;"	s	file:
 ButtonEvents	src/event.h	/^		ButtonEvents( OnType pOn, OffType pOff )$/;"	f	struct:events::ButtonEvents
 ButtonEvents	src/event.h	/^		ButtonEvents(){}$/;"	f	struct:events::ButtonEvents
 ButtonEvents	src/event.h	/^	struct ButtonEvents {$/;"	s	namespace:events
 CAMERA_MODES	src/camera.h	/^	const CameraMode CAMERA_MODES[CAMERA_MODE_COUNT] = { CameraMode( 0, FIRST_PERSON_FRUSTUM, FIRST_PERSON_MOVEMENT, FIRST_PERSON_LOOK ) , CameraMode( 1, TOP_DOWN_FRUSTUM, TOP_DOWN_MOVEMENT, TOP_DOWN_LOOK ) };$/;"	m	namespace:camera
 CAMERA_MODE_COUNT	src/camera.h	/^	const size_t CAMERA_MODE_COUNT = 2;$/;"	m	namespace:camera
 CONV_H	dt/imconv.h	22;"	d
+COUNT	src/hierarchy.h	/^            static const size_t COUNT = sizeof...( Elems );$/;"	m	struct:utils::Element
 CPLUS_INCLUDE_PATH	Makefile	/^CPLUS_INCLUDE_PATH=\/usr\/include\/c++$/;"	m
 C_INCLUDE_PATH	Makefile	/^C_INCLUDE_PATH=$/;"	m
 Camera	src/camera.h	/^		Camera( CameraMode pMode, CameraControls pControls = DEFAULT_CAMERA_CONTROLS )$/;"	f	class:camera::Camera
@@ -28,6 +30,9 @@ CharQuad	src/font.h	/^			CharQuad( float pPosX, float pPosY, float pWidth, float
 CharQuad	src/font.h	/^			CharQuad() {}$/;"	f	struct:gui::text::CharQuad
 CharQuad	src/font.h	/^		struct CharQuad {$/;"	s	namespace:gui::text
 Circuit	src/neural.h	/^	struct Circuit {$/;"	s	namespace:neural
+Color	experimental/hierarchy.cpp	/^    Color( size_t i )$/;"	f	struct:Color
+Color	experimental/hierarchy.cpp	/^    Color( vec4 pColor )$/;"	f	struct:Color
+Color	experimental/hierarchy.cpp	/^struct Color$/;"	s	file:
 Color	src/color.h	/^    typedef glm::vec4 Color;$/;"	t	namespace:gl
 ColorIt	src/color.h	/^    typedef utils::Itr<Color> ColorIt;$/;"	t	namespace:gl
 DEFAULT_CAMERA_CONTROLS	src/camera.h	/^	const CameraControls DEFAULT_CAMERA_CONTROLS = CameraControls( GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_Y );$/;"	m	namespace:camera
@@ -38,9 +43,12 @@ DEFAULT_STORE_DIR	src/font_loader.cpp	18;"	d	file:
 DEFAULT_TEXTURE_DIRECTORY	src/texture.cpp	5;"	d	file:
 DEFAULT_TTF_DIR	src/font_loader.cpp	17;"	d	file:
 DT_H	dt/dt.h	22;"	d
-ELEMENT_COUNT	src/widget.h	/^                static const unsigned int ELEMENT_COUNT = sizeof...( Elems );$/;"	m	class:gui::Widget
 EXTENSIONS_SUPPORTED_NUM	src/gl.cpp	/^int gl::EXTENSIONS_SUPPORTED_NUM = 0;$/;"	m	class:gl	file:
 EXTENSION_LIST	src/gl.cpp	/^std::vector<std::string> gl::EXTENSION_LIST = {};$/;"	m	class:gl	file:
+Element	src/hierarchy.h	/^                Element( const Element<Initers...> initer )$/;"	f	struct:utils::Element
+Element	src/hierarchy.h	/^                Element( const Initers... initers )$/;"	f	struct:utils::Element
+Element	src/hierarchy.h	/^            Element( const Elems... elems )$/;"	f	struct:utils::Element
+Element	src/hierarchy.h	/^        struct Element$/;"	s	namespace:utils
 Error	src/debug.h	/^		Error( std::string& pMsg, Severity& pSev )$/;"	f	struct:debug::Error
 Error	src/debug.h	/^		Error() :msg( "" ), severity( Warning ) {}$/;"	f	struct:debug::Error
 Error	src/debug.h	/^	struct Error {$/;"	s	namespace:debug
@@ -64,6 +72,7 @@ FontInstructions	src/font.h	/^		struct FontInstructions {$/;"	s	namespace:gui::t
 FontMetric	src/font.h	/^			FontMetric() :lineGap( 0.0f ), underline_drop( 0.0f ), underline_thickness( 0.0f ) {}$/;"	f	struct:gui::text::FontMetric
 FontMetric	src/font.h	/^		struct FontMetric {$/;"	s	namespace:gui::text
 Fragment	src/shader_loader.h	/^		Fragment,$/;"	m	class:shader::ModuleType
+Frame	src/gui.cpp	/^    struct Frame$/;"	s	struct:Window	file:
 Frustum	src/camera.h	/^		Frustum( glm::vec3 pUp, glm::vec3 pCenter, float pFOV, float pWidth, float pHeight, float pNearPlane, float pFarPlane )$/;"	f	struct:camera::Frustum
 Frustum	src/camera.h	/^	struct Frustum {$/;"	s	namespace:camera
 Functor	src/functor.h	/^		Functor( unsigned int pIndex, R( *pF )( Args... ), Args... pArgs )$/;"	f	class:functors::Functor
@@ -83,6 +92,7 @@ GlyphMetrics	src/font.h	/^			GlyphMetrics( float pWidth, float pHeight, float pA
 GlyphMetrics	src/font.h	/^			GlyphMetrics() {}$/;"	f	struct:gui::text::GlyphMetrics
 GlyphMetrics	src/font.h	/^		struct GlyphMetrics {$/;"	s	namespace:gui::text
 H_FILES	Makefile	/^H_FILES=$(shell ls src | grep -e '\\.h')$/;"	m
+Header	src/gui.cpp	/^    struct Header $/;"	s	struct:Window	file:
 ID	src/shader_loader.h	/^		GLuint ID;$/;"	m	struct:shader::Module
 ID	src/shader_loader.h	/^		GLuint ID;$/;"	m	struct:shader::Program
 ID	src/texture.h	/^		unsigned int ID = 0;$/;"	m	struct:texture::Texture2D
@@ -97,6 +107,8 @@ INCLUDE_LIB_PATHS	Makefile	/^INCLUDE_LIB_PATHS=-L$(LIBGL_DIR) -L$(LIBGLFW_DIR) -
 INCLUDE_SOIL	Makefile	/^INCLUDE_SOIL=-I$(INCLUDE_SOIL_DIR)$/;"	m
 INF	dt/dt.h	28;"	d
 Init	src/app.h	/^	Init,$/;"	e	enum:app::State
+Itr	experimental/hierarchy.cpp	/^    Itr( std::vector<T>& Container, size_t Index )$/;"	f	struct:Itr
+Itr	experimental/hierarchy.cpp	/^struct Itr$/;"	s	file:
 Itr	src/utils.h	/^        Itr( Array<T>& arr, typename Array<T>::size_type i )$/;"	f	struct:utils::Itr
 Itr	src/utils.h	/^    struct Itr {$/;"	s	namespace:utils
 KeyCondition	src/keys.h	/^            KeyCondition( int pAction )$/;"	f	class:input::KeyCondition
@@ -178,6 +190,8 @@ Point3D	src/gl.h	/^    struct Point3D{$/;"	s	namespace:gl
 Program	src/shader_loader.h	/^	struct Program {$/;"	s	namespace:shader
 ProgramType	src/shader_loader.h	/^	enum class ProgramType {$/;"	c	namespace:shader
 QUAD_H	src/quad.h	2;"	d
+Quad	experimental/hierarchy.cpp	/^    Quad( size_t pQuad )$/;"	f	struct:Quad
+Quad	experimental/hierarchy.cpp	/^struct Quad$/;"	s	file:
 Quad	src/quad.h	/^        Quad( const initer_t pIniter ) $/;"	f	struct:gui::Quad
 Quad	src/quad.h	/^        Quad( const unsigned int in )$/;"	f	struct:gui::Quad
 Quad	src/quad.h	/^    struct Quad {$/;"	s	namespace:gui
@@ -250,8 +264,6 @@ Viewport	src/viewport.cpp	/^gl::Viewport::Viewport( app::Window window, float re
 Viewport	src/viewport.cpp	/^gl::Viewport::Viewport()$/;"	f	class:gl::Viewport
 Viewport	src/viewport.h	/^    struct Viewport{$/;"	s	namespace:gl
 Warning	src/debug.h	/^			Warning,$/;"	e	enum:debug::Error::Severity
-Widget	src/widget.h	/^                Widget( const initer_t pIniter )$/;"	f	class:gui::Widget
-Widget	src/widget.h	/^        class Widget $/;"	c	namespace:gui
 WidgetColors	src/widget.h	/^            WidgetColors( Colors... pColors )$/;"	f	struct:gui::WidgetColors
 WidgetColors	src/widget.h	/^        struct WidgetColors $/;"	s	namespace:gui
 WidgetMovePolicy	src/widget.h	/^            WidgetMovePolicy( std::array<glm::vec2, Wid::ELEMENT_COUNT> pPolicyMatrix )$/;"	f	struct:gui::WidgetMovePolicy
@@ -259,6 +271,7 @@ WidgetMovePolicy	src/widget.h	/^        struct WidgetMovePolicy $/;"	s	namespace
 WidgetResizePolicy	src/widget.h	/^            WidgetResizePolicy( std::array<glm::vec4, Wid::ELEMENT_COUNT> pPolicyMatrix )$/;"	f	struct:gui::WidgetResizePolicy
 WidgetResizePolicy	src/widget.h	/^        struct WidgetResizePolicy $/;"	s	namespace:gui
 Window	src/contextwindow.h	/^	struct Window {$/;"	s	namespace:app
+Window	src/gui.cpp	/^struct Window$/;"	s	file:
 _USE_MATH_DEFINES	src/font_loader.cpp	2;"	d	file:
 _index	src/widget.h	/^    template<unsigned int> struct _index {};$/;"	s	namespace:gui
 abs	dt/misc.h	/^inline T abs(const T &x) { return (x > 0 ? x : -x); };$/;"	f
@@ -277,6 +290,7 @@ all2DTextures	src/texture.cpp	/^std::vector<texture::Texture2D> texture::all2DTe
 allBoundingSpherenode	src/collision.cpp	/^std::vector<std::pair<unsigned int, unsigned int>> physics::allBoundingSpherenode;$/;"	m	class:physics	file:
 allBoundingSpheres	src/collision.cpp	/^std::vector<physics::BoundingSphere> physics::allBoundingSpheres;$/;"	m	class:physics	file:
 allChars	src/text.cpp	/^std::vector<unsigned char> gui::text::allChars;$/;"	m	class:gui::text	file:
+allColors	experimental/hierarchy.cpp	/^std::vector<vec4> allColors;$/;"	v
 allColors	src/color.cpp	/^std::vector<gl::Color> gl::allColors;$/;"	m	class:gl	file:
 allEventStates	src/event.cpp	/^std::vector<bool> events::allEventStates;$/;"	m	class:events	file:
 allFontInstructions	src/font.cpp	/^std::vector<gui::text::FontInstructions> gui::text::allFontInstructions;$/;"	m	class:gui::text	file:
@@ -303,6 +317,7 @@ allMonitors	src/contextwindow.cpp	/^GLFWmonitor** app::allMonitors = nullptr;$/;
 allNormals	src/entities.cpp	/^std::vector<glm::vec3> entities::allNormals;$/;"	m	class:entities	file:
 allPositions	src/entities.cpp	/^std::vector<glm::vec3> entities::allPositions;$/;"	m	class:entities	file:
 allPrograms	src/shader.cpp	/^std::vector<shader::Program> shader::allPrograms;$/;"	m	class:shader	file:
+allQuads	experimental/hierarchy.cpp	/^std::vector<size_t> allQuads;$/;"	v
 allQuads	src/quad.cpp	/^std::vector<glm::vec4> gui::allQuads;$/;"	m	class:gui	file:
 allRotations	src/entities.cpp	/^std::vector<glm::vec4> entities::allRotations;$/;"	m	class:entities	file:
 allScales	src/entities.cpp	/^std::vector<glm::vec3> entities::allScales;$/;"	m	class:entities	file:
@@ -399,20 +414,18 @@ clicker_gate	src/gates.h	/^    struct clicker_gate {\/\/fires once when the inpu
 color	src/line.h	/^        gl::ColorIt color;$/;"	m	struct:gui::LineVertex
 color	src/quad.h	/^            void color( utils::Itr<ColorType> pColor ) const $/;"	f	struct:gui::Quad
 color	src/text.cpp	/^	glm::vec4 color = glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f );$/;"	m	struct:TextColor	file:
-color	src/widget.h	/^                    void color( WidgetColors<Colors...> pColors ) const$/;"	f	class:gui::Widget
 colorBuffer	src/color.cpp	/^unsigned int gl::colorBuffer;$/;"	m	class:gl	file:
 colorNames	src/color.cpp	/^std::vector<std::string> colorNames;$/;"	v
 colorQuad	src/quad.h	/^void gui::colorQuad( const unsigned int pQuadID, const utils::Itr<ColorType> pColor ) $/;"	f	class:gui
 colorQuadBuffer	src/quadcolors.cpp	/^unsigned int gui::colorQuadBuffer;$/;"	m	class:gui	file:
 colorQuadShader	src/quadcolors.cpp	/^unsigned int gui::colorQuadShader;$/;"	m	class:gui	file:
 colorQuadVAO	src/quadcolors.cpp	/^unsigned int gui::colorQuadVAO;$/;"	m	class:gui	file:
-color_elements	src/widget.h	/^                    struct color_elements $/;"	s	class:gui::Widget
-color_elements	src/widget.h	/^                    struct color_elements<WidColors, 0> $/;"	s	class:gui::Widget
 colors	src/widget.h	/^            std::tuple<Colors...> colors;$/;"	m	struct:gui::WidgetColors
 compileAndLink	src/shader_loader.cpp	/^void shader::Loader::compileAndLink()$/;"	f	class:shader::Loader
 compileModule	src/shader_loader.cpp	/^void shader::Loader::compileModule( unsigned int pModuleIndex )$/;"	f	class:shader::Loader
 compileModuleSource	src/shader_loader.cpp	/^void compileModuleSource( shader::Module& module )$/;"	f
-construct	src/widget.h	/^        struct construct $/;"	s	namespace:gui
+construct	src/hierarchy.h	/^        construct( const std::tuple<Initers...> initer )$/;"	f	namespace:utils
+container	experimental/hierarchy.cpp	/^    std::vector<T>& container;$/;"	m	struct:Itr	file:
 content	src/shader_loader.h	/^		std::string content;$/;"	m	struct:shader::Module
 controls	src/camera.h	/^		CameraControls controls;$/;"	m	class:camera::Camera
 convertKerning	src/font_loader.cpp	/^std::pair<size_t, size_t> convertKerning( std::vector<int>& pKerningMap )$/;"	f
@@ -487,15 +500,16 @@ down	src/camera.cpp	/^void camera::down( Camera & pCam )$/;"	f	class:camera
 dpi_x	src/contextwindow.h	/^	    unsigned int dpi_x;$/;"	m	struct:app::Monitor
 dpi_y	src/contextwindow.h	/^	    unsigned int dpi_y;$/;"	m	struct:app::Monitor
 draw_normals	src/mesh.cpp	/^bool mesh::draw_normals = false;$/;"	m	class:mesh	file:
-drop_head	src/widget.h	/^                static constexpr const std::tuple<Rest...> drop_head( std::tuple<Head, Rest...> tup )$/;"	f	struct:gui::construct
-drop_head_impl	src/widget.h	/^                static constexpr const std::tuple<Rest...> drop_head_impl( std::index_sequence<Ns...> ns, $/;"	f	struct:gui::construct
+drop_head	src/hierarchy.h	/^                drop_head( const std::tuple<Head, Rest...> tup )$/;"	f	struct:utils::element_constructor
+drop_head_impl	src/hierarchy.h	/^                drop_head_impl( const std::index_sequence<Ns...> ns, $/;"	f	struct:utils::element_constructor
 dt	dt/dt.h	/^static float *dt(float *f, int n) {$/;"	f
 dt	dt/dt.h	/^static image<float> *dt(image<uchar> *im, uchar on = 1) {$/;"	f
 dt	dt/dt.h	/^static void dt(image<float> *im) {$/;"	f
 element	src/quad.h	/^            unsigned int element() const$/;"	f	struct:gui::Quad
 element	src/quad.h	/^        unsigned int element() const$/;"	f	struct:gui::Quad
-element	src/widget.h	/^                    auto element() const$/;"	f	class:gui::Widget
-elements	src/widget.h	/^                const std::tuple<Elems...> elements;$/;"	m	class:gui::Widget
+element_constructor	src/hierarchy.h	/^        struct element_constructor $/;"	s	namespace:utils
+element_generator	src/hierarchy_utils.h	/^        struct element_generator $/;"	s	namespace:utils
+element_generator	src/hierarchy_utils.h	/^        struct element_generator<0, Type, SubElements...> $/;"	s	namespace:utils
 end	src/input.cpp	/^void input::end()$/;"	f	class:input
 enter	src/mouse.h	/^        int enter;$/;"	m	struct:input::QuadEvent
 entities	src/entities.h	/^namespace entities {$/;"	n
@@ -550,11 +564,9 @@ ftLib	src/font_loader.cpp	/^FT_Library ftLib;$/;"	v
 fullscreen	src/contextwindow.h	/^	    int fullscreen = 0;;$/;"	m	struct:app::Window
 func	src/functor.h	/^		R( *func )( Args... );$/;"	m	class:functors::Functor
 func	src/functor.h	/^		static void func( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple, ExArgs&&... pExArgs ) $/;"	f	struct:functors::applier
-func	src/widget.h	/^                        static void func( const std::tuple<Elems...>& pElems, $/;"	f	struct:gui::Widget::color_elements
-func	src/widget.h	/^                        static void func( const std::tuple<Elems...>& pElems, WidColors& pColors )$/;"	f	struct:gui::Widget::color_elements
-func	src/widget.h	/^            static constexpr const std::tuple<Elems...> func( std::tuple<typename Elems::initer_t...> initer )$/;"	f	struct:gui::construct
-func_impl	src/widget.h	/^            func_impl( std::tuple<typename Head::initer_t, typename Next::initer_t, typename Rest::initer_t...> initer )$/;"	f	struct:gui::construct
-func_impl	src/widget.h	/^            std::tuple<Head> func_impl( std::tuple<typename Head::initer_t> initer )$/;"	f	struct:gui::construct
+func	src/hierarchy.h	/^                func( const std::tuple<Initers...> initer )$/;"	f	struct:utils::element_constructor
+func_impl	src/hierarchy.h	/^                func_impl( const std::tuple<SubIniter> initer )$/;"	f	struct:utils::element_constructor
+func_impl	src/hierarchy.h	/^                func_impl( const std::tuple<SubIniters...> initer )$/;"	f	struct:utils::element_constructor
 function_caller	src/functor.h	/^	void function_caller( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple ) $/;"	f	namespace:functors
 functorDestructors	src/functor.cpp	/^std::vector<void( * )()> functors::functorDestructors = std::vector<void( * )()>();$/;"	m	class:functors	file:
 functorInvokers	src/functor.cpp	/^std::vector<void( * )( unsigned int )> functors::functorInvokers = std::vector<void( * )( unsigned int )>();$/;"	m	class:functors	file:
@@ -574,10 +586,6 @@ gate	src/gates.h	/^        gate( Srcs... pSrcs) :op( Op() ), srcs( pSrcs... ) $/
 gate	src/gates.h	/^    struct gate $/;"	s	namespace:gates
 gates	src/gates.h	/^namespace gates {$/;"	n
 gaussian	dt/misc.h	/^inline double gaussian(double val, double sigma) {$/;"	f
-gen_color_group	src/widget.h	/^        struct gen_color_group $/;"	s	namespace:gui
-gen_color_group	src/widget.h	/^        struct gen_color_group<0, Color, Colors...> $/;"	s	namespace:gui
-gen_quad_group	src/widget.h	/^        struct gen_quad_group \/\/MAY BE SLOW TO COMPILE $/;"	s	namespace:gui
-gen_quad_group	src/widget.h	/^        struct gen_quad_group<0, Quads...>\/\/MAY BE SLOW TO COMPILE $/;"	s	namespace:gui
 generalUniformBuffer	src/gl.cpp	/^unsigned int gl::generalUniformBuffer = 0;$/;"	m	class:gl	file:
 generateDebugGrid	src/gldebug.cpp	/^unsigned int glDebug::generateDebugGrid( std::string pName, $/;"	f	class:glDebug
 generateMipMap	src/texture.cpp	/^unsigned int texture::generateMipMap( Texture2D& texture, $/;"	f	class:texture
@@ -607,9 +615,7 @@ getStorageID	src/vao.cpp	/^unsigned int vao::getStorageID( unsigned int storageI
 getView	src/camera.cpp	/^glm::mat4 & camera::Camera::getView()$/;"	f	class:camera::Camera
 getWidth	src/viewport.cpp	/^unsigned int gl::getWidth()$/;"	f	class:gl
 get_pos	src/quad.h	/^        glm::vec2 get_pos() const$/;"	f	struct:gui::Quad
-get_pos	src/widget.h	/^                glm::vec2& get_pos() const$/;"	f	class:gui::Widget
 get_size	src/quad.h	/^        glm::vec2 get_size() const$/;"	f	struct:gui::Quad
-get_size	src/widget.h	/^                glm::vec2& get_size() const$/;"	f	class:gui::Widget
 get_slot	src/event.h	/^		static EventSlot<EventType>& get_slot( unsigned int index ) {$/;"	f	class:events::EventSlot
 gl	src/color.h	/^namespace gl {$/;"	n
 gl	src/gl.h	/^namespace gl {$/;"	n
@@ -673,6 +679,9 @@ includeFont	src/font_loader.cpp	/^size_t gui::text::initializer::includeFont( st
 includeFont	src/font_loader.cpp	/^size_t gui::text::initializer::includeFont( std::string pFontFileName, size_t pPointSize, $/;"	f	class:gui::text::initializer
 includeModel	src/model_loader.cpp	/^void model::Loader::includeModel( std::string pFilename, std::string pName )$/;"	f	class:model::Loader
 includeShaders	src/sequencer.cpp	/^void sequencer::includeShaders()$/;"	f	class:sequencer
+index	experimental/hierarchy.cpp	/^    Itr<size_t> index;$/;"	m	struct:Quad	file:
+index	experimental/hierarchy.cpp	/^    Itr<vec4> index;$/;"	m	struct:Color	file:
+index	experimental/hierarchy.cpp	/^    size_t index;$/;"	m	struct:Itr	file:
 index	src/functor.h	/^		unsigned int index;$/;"	m	struct:functors::FunctorRef
 index	src/quad.h	/^        const unsigned int index;$/;"	m	struct:gui::Quad
 index	src/utils.h	/^        typename Array<T>::size_type index;$/;"	m	struct:utils::Itr
@@ -819,6 +828,7 @@ look	src/camera.cpp	/^void camera::Camera::look( glm::vec2 pDir )$/;"	f	class:ca
 look	src/camera.h	/^		LookPolicy look;$/;"	m	struct:camera::CameraMode
 lookAt	src/camera.h	/^		glm::vec3 lookAt = glm::vec3( 0.0f, 0.0f, -1.0f );$/;"	m	class:camera::Camera
 lookAtCenter	src/camera.cpp	/^void camera::Camera::lookAtCenter()$/;"	f	class:camera::Camera
+main	experimental/hierarchy.cpp	/^int main()$/;"	f
 main	src/main.cpp	/^int main() {$/;"	f
 mainWindow	src/app.cpp	/^app::Window app::mainWindow = app::Window();$/;"	m	class:app	file:
 main_camera	src/camera.cpp	/^camera::Camera camera::main_camera = camera::Camera( camera::CAMERA_MODES[1] );$/;"	m	class:camera	file:
@@ -866,24 +876,14 @@ mouseKeys	src/mouse.cpp	/^std::array<input::KeyCondition, 3> mouseKeys;$/;"	v
 mov	src/camera.h	/^		glm::vec3 mov;$/;"	m	class:camera::Camera
 move	src/camera.cpp	/^void camera::Camera::move( glm::vec3 pDir ) {$/;"	f	class:camera::Camera
 move	src/quad.h	/^        void move( glm::vec2 dir ) const$/;"	f	struct:gui::Quad
-move	src/widget.h	/^                void move( float pOffsetX, float pOffsetY ) const$/;"	f	class:gui::Widget
-move	src/widget.h	/^                void move( glm::vec2 pOffset ) const$/;"	f	class:gui::Widget
 moveQuad	src/quad.cpp	/^void gui::moveQuad( const unsigned int pQuad, const glm::vec2 pOffset )$/;"	f	class:gui
 moveQuad	src/quad.h	/^        void moveQuad( const unsigned int pQuad, A pOffsetX, B pOffsetY ) {$/;"	f	namespace:gui
-move_all	src/widget.h	/^                    void move_all( glm::vec2& pOffset, _index<N> = _index<N>() ) const$/;"	f	class:gui::Widget
-move_all	src/widget.h	/^                void move_all( glm::vec2& pOffset, _index<0> = _index<0>() ) const {}$/;"	f	class:gui::Widget
 move_backward_key	src/camera.h	/^		int move_backward_key;$/;"	m	struct:camera::CameraControls
 move_down_key	src/camera.h	/^		int move_down_key;$/;"	m	struct:camera::CameraControls
-move_element	src/widget.h	/^                    void move_element( glm::vec2& pOffset ) const$/;"	f	class:gui::Widget
-move_element_to	src/widget.h	/^                    void move_element_to( glm::vec2& pNewPos ) const$/;"	f	class:gui::Widget
 move_forward_key	src/camera.h	/^		int move_forward_key;$/;"	m	struct:camera::CameraControls
 move_left_key	src/camera.h	/^		int move_left_key;$/;"	m	struct:camera::CameraControls
 move_right_key	src/camera.h	/^		int move_right_key;$/;"	m	struct:camera::CameraControls
-move_to	src/widget.h	/^                void move_to( glm::vec2 pNewPos ) const$/;"	f	class:gui::Widget
 move_up_key	src/camera.h	/^		int move_up_key;$/;"	m	struct:camera::CameraControls
-move_widget	src/widget.h	/^        void move_widget( Wid pWidget, A pOffsetX, B pOffsetY ) $/;"	f	namespace:gui
-move_widget	src/widget.h	/^        void move_widget( Wid pWidget, glm::vec2& pOffset ) $/;"	f	namespace:gui
-move_widget_element	src/widget.h	/^        void move_widget_element( Wid pWidget, float pOffsetX, float pOffsetY ) $/;"	f	namespace:gui
 movement	src/camera.h	/^		MovementPolicy movement;$/;"	m	struct:camera::CameraMode
 msg	src/debug.h	/^		std::string msg = "";$/;"	m	struct:debug::Error
 name	src/camera.h	/^		std::string name = "camera";$/;"	m	class:camera::Camera
@@ -932,6 +932,9 @@ operator ()	src/gates.h	/^        bool operator()() $/;"	f	struct:gates::not_gat
 operator ()	src/gates.h	/^        bool operator()() $/;"	f	struct:gates::switch_gate
 operator ()	src/gates.h	/^        bool operator()() $/;"	f	struct:gates::toggle_gate
 operator ()	src/signal.h	/^		bool operator()() {$/;"	f	struct:signals::Source
+operator *	experimental/hierarchy.cpp	/^    T& operator*()$/;"	f	struct:Itr
+operator *	experimental/hierarchy.cpp	/^    size_t& operator*()$/;"	f	struct:Quad
+operator *	experimental/hierarchy.cpp	/^    vec4& operator*()$/;"	f	struct:Color
 operator *	src/utils.h	/^        T& operator*(){$/;"	f	struct:utils::Itr
 operator =	src/contextwindow.h	/^	    GLFWwindow* operator=( const Window& obj ) {$/;"	f	struct:app::Window
 operator =	src/utils.h	/^        Itr<T>& operator=( Itr<T>& other ){$/;"	f	struct:utils::Itr
@@ -970,7 +973,6 @@ pos	src/font.h	/^			glm::vec2 pos;$/;"	m	struct:gui::text::CharQuad
 pos	src/gl.h	/^        glm::vec4 pos;$/;"	m	struct:gl::Point3D
 pos	src/mesh.h	/^		glm::vec3 pos;$/;"	m	struct:mesh::Vertex
 pos	src/text.cpp	/^	unsigned int pos;$/;"	m	struct:Textbox	file:
-pos_index	src/widget.h	/^                unsigned int pos_index;$/;"	m	class:gui::Widget
 ppem_x	src/font_loader.cpp	/^	size_t ppem_x;$/;"	m	struct:LoadFontMetrics	file:
 ppem_y	src/font_loader.cpp	/^	size_t ppem_y;$/;"	m	struct:LoadFontMetrics	file:
 press	src/keys.h	/^        unsigned int press;$/;"	m	struct:input::KeySignal
@@ -1031,15 +1033,8 @@ resetShaderDirectory	src/shader_loader.cpp	/^void shader::Loader::resetShaderDir
 resetSignals	src/signal.cpp	/^void signals::resetSignals()$/;"	f	class:signals
 resetTextureDirectory	src/texture.cpp	/^void texture::resetTextureDirectory()$/;"	f	class:texture
 resize	src/quad.h	/^        void resize( glm::vec2 dir ) const$/;"	f	struct:gui::Quad
-resize	src/widget.h	/^                void resize( float X, float Y ) const$/;"	f	class:gui::Widget
-resize	src/widget.h	/^                void resize( glm::vec2 pOffset ) const$/;"	f	class:gui::Widget
 resizeQuad	src/quad.cpp	/^void gui::resizeQuad( const unsigned int pQuad, const glm::vec2 pOffset )$/;"	f	class:gui
 resizeQuad	src/quad.h	/^        void resizeQuad( const unsigned int pQuad, A pOffsetX, B pOffsetY ) {$/;"	f	namespace:gui
-resize_all	src/widget.h	/^                    void resize_all( glm::vec2& pOffset, _index<N> = _index<N>() ) const$/;"	f	class:gui::Widget
-resize_all	src/widget.h	/^                void resize_all( glm::vec2& pOffset, _index<0> = _index<0>() ) const {}$/;"	f	class:gui::Widget
-resize_element	src/widget.h	/^                    void resize_element( glm::vec2& pOffset ) const$/;"	f	class:gui::Widget
-resize_widget	src/widget.h	/^        void resize_widget( Wid pWidget, A pDirX, B pDirY ) $/;"	f	namespace:gui
-resize_widget	src/widget.h	/^        void resize_widget( Wid pWidget, glm::vec2& pOffset ) $/;"	f	namespace:gui
 resolution	src/viewport.h	/^        float resolution;$/;"	m	struct:gl::Viewport
 revalidateFontStringIndices	src/font.cpp	/^void gui::text::revalidateFontStringIndices()$/;"	f	class:gui::text
 revalidateMeshNodeOffsets	src/mesh.cpp	/^void mesh::revalidateMeshNodeOffsets()$/;"	f	class:mesh
@@ -1112,11 +1107,7 @@ setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std:
 setVertexArrayVertexStorage	src/vao.cpp	/^void vao::setVertexArrayVertexStorage( unsigned int pVAO, unsigned int pBinding, Storage & pStorage, unsigned int pStride )$/;"	f	class:vao
 setVertexArrayVertexStorage	src/vao.cpp	/^void vao::setVertexArrayVertexStorage( unsigned int pVAO, unsigned int pBinding, unsigned int pStorageIndex, unsigned int pStride )$/;"	f	class:vao
 setVertexAttrib	src/vao.cpp	/^void vao::setVertexAttrib( unsigned int pVAO, unsigned int pBindingIndex, unsigned int pAttributeIndex, unsigned int pCount, unsigned int pType, unsigned int pOffset, unsigned int pNormalize ) {$/;"	f	class:vao
-set_all_pos	src/widget.h	/^                    void set_all_pos( glm::vec2& pNewPos, _index<N> = _index<N>() ) const$/;"	f	class:gui::Widget
-set_all_pos	src/widget.h	/^                void set_all_pos( glm::vec2& pNewPos, _index<0> = _index<0>() ) const {}$/;"	f	class:gui::Widget
-set_element_pos	src/widget.h	/^                    void set_element_pos( glm::vec2 pNewPos ) const$/;"	f	class:gui::Widget
 set_pos	src/quad.h	/^        void set_pos( glm::vec2 pos ) const$/;"	f	struct:gui::Quad
-set_pos	src/widget.h	/^                void set_pos( glm::vec2 pNewPos ) const$/;"	f	class:gui::Widget
 set_triggers	src/functor.h	/^		void set_triggers( std::initializer_list<unsigned int> pSet ) $/;"	f	class:functors::Functor
 set_triggers	src/functor.h	/^		void set_triggers( std::initializer_list<unsigned int> pSet ) $/;"	f	struct:functors::FunctorRef
 setup	src/neural.cpp	/^void neural::setup() {$/;"	f	class:neural
@@ -1146,7 +1137,6 @@ signalSet	src/functor.h	/^		std::vector<unsigned int> signalSet;$/;"	m	class:fun
 signals	src/signal.h	/^namespace signals {$/;"	n
 size	src/font.h	/^			glm::vec2 size;$/;"	m	struct:gui::text::CharQuad
 size	src/text.cpp	/^	unsigned int size;$/;"	m	struct:Textbox	file:
-size_index	src/widget.h	/^                unsigned int size_index;$/;"	m	class:gui::Widget
 slot_count	src/event.h	/^		static unsigned int slot_count() {\/\/instances of this type$/;"	f	class:events::EventSlot
 slot_index	src/functor.h	/^		unsigned int slot_index;$/;"	m	class:functors::Functor
 slots	src/event.h	/^		static std::vector<EventSlot<EventType>> slots;\/\/all event slots of this type$/;"	m	class:events::EventSlot
@@ -1183,6 +1173,7 @@ stride	src/vao.h	/^		unsigned int stride = UNIFORM_BUFFER_OFFSET_ALIGNMENT;$/;"	
 stringCount	src/font.h	/^			unsigned int stringCount;$/;"	m	struct:gui::text::Font
 stringOffset	src/font.h	/^			unsigned int stringOffset;$/;"	m	struct:gui::text::Font
 styleStorage	src/font.cpp	/^unsigned int styleStorage = 0;$/;"	v
+subelements	src/hierarchy.h	/^            const std::tuple<Elems...> subelements;$/;"	m	struct:utils::Element
 swapVolumeBuffers	src/voxelization.cpp	/^void voxelization::swapVolumeBuffers() {$/;"	f	class:voxelization
 switch_gate	src/gates.h	/^        switch_gate( On pOnSource, Off pOffSource, bool pStartWith = false ) $/;"	f	struct:gates::switch_gate
 switch_gate	src/gates.h	/^        switch_gate() $/;"	f	struct:gates::switch_gate
@@ -1223,10 +1214,6 @@ traverse	src/neural.cpp	/^void traverse() {$/;"	f
 type	src/shader_loader.h	/^		ModuleType type;$/;"	m	struct:shader::Module
 type	src/shader_loader.h	/^		ProgramType type;$/;"	m	struct:shader::Program
 type	src/texture.h	/^		GLenum type;$/;"	m	struct:texture::Texture2D
-type	src/widget.h	/^            typedef Widget<Quads...> type;$/;"	t	struct:gui::gen_quad_group
-type	src/widget.h	/^            typedef WidgetColors<Colors...> type;$/;"	t	struct:gui::gen_color_group
-type	src/widget.h	/^            typedef typename gen_color_group<N - 1, Color, Color, Colors...>::type type;$/;"	t	struct:gui::gen_color_group
-type	src/widget.h	/^            typedef typename gen_quad_group<N - 1, Quad, Quads...>::type type;$/;"	t	struct:gui::gen_quad_group
 uchar	dt/misc.h	/^typedef unsigned char uchar;$/;"	t
 underline_drop	src/font.h	/^			float underline_drop;$/;"	m	struct:gui::text::FontMetric
 underline_thickness	src/font.h	/^			float underline_thickness;$/;"	m	struct:gui::text::FontMetric
@@ -1258,10 +1245,14 @@ upward_factor	src/camera.h	/^		float upward_factor;$/;"	m	struct:camera::Movemen
 upward_off	src/camera.h	/^		size_t upward_off;$/;"	m	struct:camera::MovementPolicy
 use	src/shader.cpp	/^void shader::use( std::string pProgramName )$/;"	f	class:shader
 use	src/shader.cpp	/^void shader::use( unsigned int pID )$/;"	f	class:shader
+utils	src/hierarchy.h	/^namespace utils $/;"	n
+utils	src/hierarchy_utils.h	/^namespace utils $/;"	n
 utils	src/utils.h	/^namespace utils {$/;"	n
 uv	src/mesh.h	/^		glm::vec2 uv;$/;"	m	struct:mesh::Vertex
 vao	src/vao.h	/^namespace vao {$/;"	n
 vaoID	src/vao.h	/^		unsigned int vaoID = 0;$/;"	m	struct:vao::Storage
+vec4	experimental/hierarchy.cpp	/^    vec4( float X, float Y, float Z, float W )$/;"	f	struct:vec4
+vec4	experimental/hierarchy.cpp	/^struct vec4$/;"	s	file:
 vertex	src/line.h	/^        LinePointIt vertex;$/;"	m	struct:gui::LineVertex
 vertexCount	src/mesh.h	/^		unsigned int vertexCount = 0;$/;"	m	struct:mesh::Mesh
 vertexOffset	src/mesh.h	/^		unsigned int vertexOffset = 0;$/;"	m	struct:mesh::Mesh
@@ -1277,6 +1268,7 @@ voxelization	src/voxelization.h	/^namespace voxelization {$/;"	n
 voxelizationShader	src/voxelization.cpp	/^unsigned int voxelization::voxelizationShader = 0;$/;"	m	class:voxelization	file:
 voxelizeMeshes	src/voxelization.cpp	/^void voxelization::voxelizeMeshes()$/;"	f	class:voxelization
 w	dt/image.h	/^  int w, h;$/;"	m	class:image
+w	experimental/hierarchy.cpp	/^    float x, y, z, w;$/;"	m	struct:vec4	file:
 width	dt/image.h	/^  int width() const { return w; }$/;"	f	class:image
 width	src/camera.h	/^		float width = 1000.0f;$/;"	m	struct:camera::Frustum
 width	src/contextwindow.h	/^	    unsigned int width = 1000;$/;"	m	struct:app::Window
@@ -1288,6 +1280,7 @@ width	src/texture.h	/^		unsigned int width;$/;"	m	struct:texture::TexData2D
 width	src/viewport.h	/^        unsigned int width;$/;"	m	struct:gl::Viewport
 window	src/contextwindow.h	/^	    GLFWwindow* window = nullptr;$/;"	m	struct:app::Window
 write_packed	dt/pnmfile.h	/^static void write_packed(unsigned char *data, int size, std::ofstream &f) {$/;"	f
+x	experimental/hierarchy.cpp	/^    float x, y, z, w;$/;"	m	struct:vec4	file:
 xBearing	src/font_loader.cpp	/^	int xBearing;$/;"	m	struct:LoadGlyphMetrics	file:
 x_rotation_axis_off	src/camera.h	/^		size_t x_rotation_axis_off;$/;"	m	struct:camera::LookPolicy
 x_rotation_factor	src/camera.h	/^		float x_rotation_factor;$/;"	m	struct:camera::LookPolicy
@@ -1297,10 +1290,12 @@ xnor_op	src/gates.h	/^    struct xnor_op $/;"	s	namespace:gates
 xor_op	src/gates.h	/^        xor_op() {}$/;"	f	struct:gates::xor_op
 xor_op	src/gates.h	/^    struct xor_op $/;"	s	namespace:gates
 xpos	src/contextwindow.h	/^	    int xpos, ypos = 0;$/;"	m	struct:app::Monitor
+y	experimental/hierarchy.cpp	/^    float x, y, z, w;$/;"	m	struct:vec4	file:
 yBearing	src/font_loader.cpp	/^	int yBearing;$/;"	m	struct:LoadGlyphMetrics	file:
 yRestrictionAngle	src/camera.cpp	/^const float yRestrictionAngle = 3.0f;$/;"	v
 y_rotation_axis_off	src/camera.h	/^		size_t y_rotation_axis_off;$/;"	m	struct:camera::LookPolicy
 y_rotation_factor	src/camera.h	/^		float y_rotation_factor;$/;"	m	struct:camera::LookPolicy
 y_rotator_off	src/camera.h	/^		size_t y_rotator_off;$/;"	m	struct:camera::LookPolicy
 ypos	src/contextwindow.h	/^	    int xpos, ypos = 0;$/;"	m	struct:app::Monitor
+z	experimental/hierarchy.cpp	/^    float x, y, z, w;$/;"	m	struct:vec4	file:
 ~image	dt/image.h	/^image<T>::~image() {$/;"	f	class:image
