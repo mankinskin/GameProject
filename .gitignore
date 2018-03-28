@@ -4,3 +4,4 @@ deps/
 Debug/
 *.o
 tags
+*.swp
