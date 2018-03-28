@@ -1,6 +1,8 @@
 #include <vector>
 #include <tuple>
 
+#include "hierarchy.h"
+
 template<typename T>
 struct Itr
 {
@@ -27,7 +29,6 @@ std::vector<vec4> allColors;
 
 struct Color
 {
-    using initer_t = vec4;
     Color( vec4 pColor )
         :index( allColors, allColors.size() )
     {
@@ -44,35 +45,22 @@ struct Color
     }
 };
 
-std::vector<vec4> allQuads;
+std::vector<size_t> allQuads;
 
 struct Quad
 {
-    using initer_t = vec4;
-    Quad( vec4 pQuad )
+    Quad( size_t pQuad )
         :index( allQuads, allQuads.size() )
     {
-       allQuads.push_back( pQuad ); 
+        printf("Creating %d\n", pQuad );
+        allQuads.push_back( pQuad ); 
     }
-    Quad( size_t i )
-        :index( allQuads, i )
-    {}
-    Itr<vec4> index;
+    Itr<size_t> index;
 
-    vec4& operator*()
+    size_t& operator*()
     {
         return *index;
     }
-};
-
-template<typename... Elems>
-struct Hierarchy
-{
-    using initer_t = std::tuple<typename Elems::initer_t...>;
-    Hierarchy( const initer_t pIniter )
-        :elements( pIniter )
-    {}
-    std::tuple<Elems...> elements;
 };
 
 
@@ -80,9 +68,10 @@ int main()
 {
     Color white( vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
     Color black( vec4( 0.0f, 0.0f, 0.0f, 1.0f ) ); 
-    
-    Hierarchy<Quad, Quad>::initer_t double_quad( { vec4( 0.0f, 0.0f, 1.0f, 1.0f ), vec4( 0.1f, 0.1f, 0.9f, 0.9f ) } );
-    Hierarchy<Hierarchy<Quad, Quad>, Hierarchy<Quad, Quad>> quad_tree( { double_quad, double_quad } );
-    
+
+    Hierarchy<size_t, size_t> double_quad( (size_t)1, (size_t)2 );
+    Hierarchy<size_t, size_t> double_quad_two( size_t(3), size_t(4) );
+    Hierarchy<Hierarchy<Quad, Quad>, Hierarchy<Quad, Quad>> quad_tree( double_quad, double_quad_two );
+
     return 0;
 }
