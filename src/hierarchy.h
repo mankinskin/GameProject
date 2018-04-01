@@ -78,7 +78,13 @@ namespace utils
                 :subelements( construct<Elems...>( 
                             std::tuple<Elems...>( elems... ) ) )
             {}
+
             const std::tuple<Elems...> subelements;
+            template<size_t N>
+            constexpr auto element() const
+            {
+                return std::get<N>(subelements);
+            }
         };
 }
 

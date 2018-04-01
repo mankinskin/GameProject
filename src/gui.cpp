@@ -38,15 +38,6 @@ struct Button
 
 struct Window
 {
-    struct Header 
-    {
-        using Quads = Element<Quad, Quad>;
-        using QuadIniter = Element<glm::vec4, glm::vec4>;
-
-        using Colors = Element<ColorIt, ColorIt>;
-        using ColorIniter = Element<glm::vec4, glm::vec4>;
-    };
-
     struct Frame
     {
         using Quads = utils::gen_Element<Quad, 9>; 
@@ -56,11 +47,20 @@ struct Window
         using ColorIniter = utils::gen_Element<glm::vec4, 9>;
     };
 
-    using Quads = utils::Element<Header::Quads, Frame::Quads>;
-    using QuadIniter = utils::Element<Header::QuadIniter, Frame::QuadIniter>;
+    struct Header 
+    {
+        using Quads = Element<Quad, Quad>;
+        using QuadIniter = Element<glm::vec4, glm::vec4>;
 
-    using Colors = utils::Element<Header::Colors, Frame::Colors>;
-    using ColorIniter = utils::Element<Header::ColorIniter, Frame::ColorIniter>;
+        using Colors = Element<ColorIt, ColorIt>;
+        using ColorIniter = Element<glm::vec4, glm::vec4>;
+    };
+
+    using Quads = utils::Element<Frame::Quads, Header::Quads>;
+    using QuadIniter = utils::Element<Frame::QuadIniter, Header::QuadIniter>;
+
+    using Colors = utils::Element<Frame::Colors, Header::Colors>;
+    using ColorIniter = utils::Element<Frame::ColorIniter, Header::ColorIniter>;
 };
 
 void gui::init()
@@ -104,12 +104,12 @@ void gui::initWidgets()
     Button::Quads quitButton( button_initer );
     Button::Quads playButton( button_initer );
 
+    foreach( colorQuad, quitButton, buttonColors );
+    foreach( colorQuad, playButton, buttonColors );
+
 
     //quitButton.move( gui::pixel_round( glm::vec2( -0.9f, -0.6f ) ) );
     //playButton.move( gui::pixel_round( glm::vec2( -0.9f, -0.3f ) ) );
-
-    //quitButton.color( buttonColors );
-    //playButton.color( buttonColors );
 
     //ButtonEvents<Event> border_btn( 
     //        createEvent( QuadEvent( quitButton.element<0>().index, 1 ) ), 
@@ -156,30 +156,43 @@ void gui::initWidgets()
 
     //Window
 
-    //Window::Frame::Colors window_frame_colors( { 
-    //        gl::getColor( "grey" ), gl::getColor( "grey" ),  gl::getColor( "grey" ),
-    //        gl::getColor( "grey" ),  gl::getColor( "white" ),  gl::getColor( "grey" ),
-    //        gl::getColor( "grey" ), gl::getColor( "grey" ), gl::getColor( "grey" ) } );
+    Window::Frame::Colors window_frame_colors( { 
+            gl::getColor( "grey" ), gl::getColor( "grey" ),  gl::getColor( "grey" ),
+            gl::getColor( "grey" ),  gl::getColor( "white" ),  gl::getColor( "grey" ),
+            gl::getColor( "grey" ), gl::getColor( "grey" ), gl::getColor( "grey" ) } );
 
-    //Window::Header::Colors window_header_colors( { gl::getColor( "grey" ), gl::getColor( "white" ) } );
-    //Window::Colors window_colors( window_frame_colors, window_header_colors );
+    Window::Header::Colors window_header_colors( { gl::getColor( "grey" ), gl::getColor( "white" ) } );
+    Window::Colors window_colors( { window_frame_colors, window_header_colors } );
 
-    //float window_width = gui::pixel_size.x * 300.0f;
-    //float window_height = gui::pixel_size.x * 235.0f;
-    //glm::vec2 border = gui::pixel_size * 4.0f;
+    float window_width = gui::pixel_size.x * 300.0f;
+    float window_height = gui::pixel_size.x * 235.0f;
+    glm::vec2 border = gui::pixel_size * 4.0f;
 
-    //Window::Frame::QuadIniter window_frame_initer( {
-    //        glm::vec4( 0.0f, 0.0f, border.x, border.y ),
-    //        glm::vec4( border.x, 0.0f, window_width - border.x*2.0f, border.y ),
-    //        glm::vec4( window_width - border.x, 0.0f, border.x, border.y ),
-    //        glm::vec4( 0.0f, -border.y, border.x, window_height - border.y*2.0f ),
-    //        glm::vec4( border.x, -border.y, window_width - border.x*2.0f, window_height - border.y*2.0f ),
-    //        glm::vec4( window_width - border.x, -border.y, border.x, window_height - border.y*2.0f ),
-    //        glm::vec4( 0.0f, -window_height + border.y, border.x, border.y ),
-    //        glm::vec4( border.x, -window_height + border.y, window_width - border.x*2.0f, border.y ),
-    //        glm::vec4( window_width - border.x, -window_height + border.y, border.x, border.y )
-    //        } );
+    Window::Frame::QuadIniter window_frame_initer( {
+            glm::vec4( 0.0f, 0.0f, border.x, border.y ),
+            glm::vec4( border.x, 0.0f, window_width - border.x*2.0f, border.y ),
+            glm::vec4( window_width - border.x, 0.0f, border.x, border.y ),
+            glm::vec4( 0.0f, -border.y, border.x, window_height - border.y*2.0f ),
+            glm::vec4( border.x, -border.y, window_width - border.x*2.0f, window_height - border.y*2.0f ),
+            glm::vec4( window_width - border.x, -border.y, border.x, window_height - border.y*2.0f ),
+            glm::vec4( 0.0f, -window_height + border.y, border.x, border.y ),
+            glm::vec4( border.x, -window_height + border.y, window_width - border.x*2.0f, border.y ),
+            glm::vec4( window_width - border.x, -window_height + border.y, border.x, border.y )
+            } );
 
+    float header_height = gui::pixel_size.y * 25.0f;
+    glm::vec2 header_border = gui::pixel_size * 4.0f;
+
+    Window::Header::QuadIniter window_header_initer( {
+            glm::vec4( 0.0f, 0.0f, window_width, header_height ),
+            glm::vec4( header_border.x, -header_border.y, window_width - header_border.x*2.0f, header_height - header_border.y*2.0f )
+            } );
+
+    Window::QuadIniter window_quad_initer( {  window_frame_initer, window_header_initer } );
+
+    Window::Quads window_quads(window_quad_initer );
+    utils::foreach( colorQuad, window_quads, window_colors );
+    //
     //std::array<glm::vec2, Window::Frame::Quads::COUNT> window_frame_move_matrix{
     //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
     //        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
@@ -193,13 +206,6 @@ void gui::initWidgets()
     //        glm::vec4( 1.0f, 1.0f, 0.0f, 0.0f )
     //        } );
 
-    //float header_height = gui::pixel_size.y * 25.0f;
-    //glm::vec2 header_border = gui::pixel_size * 4.0f;
-
-    //Window::Header::Quads::COUNT window_header_initer( {
-    //        glm::vec4( 0.0f, 0.0f, window_width, header_height ),
-    //        glm::vec4( header_border.x, -header_border.y, window_width - header_border.x*2.0f, header_height - header_border.y*2.0f )
-    //        } );
     //std::array<glm::vec2, Window::Header::Quads::COUNT> window_header_move_matrix{
     //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
     //};
@@ -207,7 +213,6 @@ void gui::initWidgets()
     //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f )
     //        } );
 
-    //Window::QuadIniter window_initer( {  window_frame_initer, window_header_initer} );
     //std::array<glm::vec2, Window::COUNT> window_move_policy{
     //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
     //};
@@ -215,9 +220,7 @@ void gui::initWidgets()
     //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f )
     //        } );
 
-    //Window::Quads window(window_initer );
 
-    //window.color( window_colors );
     //window.move( -1.0f, 0.0f );
     ////general functions
     //

@@ -273,6 +273,7 @@ WidgetResizePolicy	src/widget.h	/^        struct WidgetResizePolicy $/;"	s	names
 Window	src/contextwindow.h	/^	struct Window {$/;"	s	namespace:app
 Window	src/gui.cpp	/^struct Window$/;"	s	file:
 _USE_MATH_DEFINES	src/font_loader.cpp	2;"	d	file:
+_index	src/hierarchy_utils.h	/^    template<size_t I> struct _index { };$/;"	s	namespace:utils
 _index	src/widget.h	/^    template<unsigned int> struct _index {};$/;"	s	namespace:gui
 abs	dt/misc.h	/^inline T abs(const T &x) { return (x > 0 ? x : -x); };$/;"	f
 absoluteCursorPosition	src/mouse.cpp	/^glm::uvec2 input::absoluteCursorPosition;$/;"	m	class:input	file:
@@ -412,11 +413,10 @@ clear_slots	src/event.h	/^		static void clear_slots() {$/;"	f	class:events::Even
 clicker_gate	src/gates.h	/^        clicker_gate( Source pSource, bool pStartWith = false ) $/;"	f	struct:gates::clicker_gate
 clicker_gate	src/gates.h	/^    struct clicker_gate {\/\/fires once when the input changes$/;"	s	namespace:gates
 color	src/line.h	/^        gl::ColorIt color;$/;"	m	struct:gui::LineVertex
-color	src/quad.h	/^            void color( utils::Itr<ColorType> pColor ) const $/;"	f	struct:gui::Quad
 color	src/text.cpp	/^	glm::vec4 color = glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f );$/;"	m	struct:TextColor	file:
 colorBuffer	src/color.cpp	/^unsigned int gl::colorBuffer;$/;"	m	class:gl	file:
 colorNames	src/color.cpp	/^std::vector<std::string> colorNames;$/;"	v
-colorQuad	src/quad.h	/^void gui::colorQuad( const unsigned int pQuadID, const utils::Itr<ColorType> pColor ) $/;"	f	class:gui
+colorQuad	src/quad.cpp	/^void gui::colorQuad( Quad pQuad, gl::ColorIt pColor )$/;"	f	class:gui
 colorQuadBuffer	src/quadcolors.cpp	/^unsigned int gui::colorQuadBuffer;$/;"	m	class:gui	file:
 colorQuadShader	src/quadcolors.cpp	/^unsigned int gui::colorQuadShader;$/;"	m	class:gui	file:
 colorQuadVAO	src/quadcolors.cpp	/^unsigned int gui::colorQuadVAO;$/;"	m	class:gui	file:
@@ -505,6 +505,7 @@ drop_head_impl	src/hierarchy.h	/^                drop_head_impl( const std::inde
 dt	dt/dt.h	/^static float *dt(float *f, int n) {$/;"	f
 dt	dt/dt.h	/^static image<float> *dt(image<uchar> *im, uchar on = 1) {$/;"	f
 dt	dt/dt.h	/^static void dt(image<float> *im) {$/;"	f
+element	src/hierarchy.h	/^            constexpr auto element() const$/;"	f	struct:utils::Element
 element	src/quad.h	/^            unsigned int element() const$/;"	f	struct:gui::Quad
 element	src/quad.h	/^        unsigned int element() const$/;"	f	struct:gui::Quad
 element_constructor	src/hierarchy.h	/^        struct element_constructor $/;"	s	namespace:utils
@@ -657,6 +658,8 @@ hold	src/event.h	/^		unsigned int hold;$/;"	m	struct:events::ButtonEvents
 hold	src/keys.h	/^        unsigned int hold;$/;"	m	struct:input::KeySignal
 hold_evt	src/event.h	/^		gates::switch_gate<OnType, OffType> hold_evt;$/;"	m	struct:events::ButtonEvents
 hovered_quad	src/mouse.cpp	/^unsigned int hovered_quad = 0;$/;"	v
+i	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i);$/;"	m	namespace:utils
+i	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i);$/;"	m	namespace:utils
 iDEP_PACKAGES	Makefile	/^iDEP_PACKAGES=libglfw3 libglfw3-dev $/;"	m
 id	src/camera.h	/^		size_t id;$/;"	m	struct:camera::CameraMode
 imPtr	dt/image.h	61;"	d
@@ -1153,6 +1156,12 @@ src	src/event.h	/^		unsigned int src;$/;"	m	struct:events::Event
 src	src/gates.h	/^        Source src;$/;"	m	struct:gates::clicker_gate
 src	src/gates.h	/^        Source src;$/;"	m	struct:gates::not_gate
 src	src/gates.h	/^        Source src;$/;"	m	struct:gates::toggle_gate
+src	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src);$/;"	m	namespace:utils
+src	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i)$/;"	v
+src	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i);$/;"	m	namespace:utils
+src	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i)$/;"	v
+src	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i);$/;"	m	namespace:utils
+src	src/hierarchy_utils.h	/^        void foreach( rT(&func)(TarT, SrcT), TarT tar, SrcT src);$/;"	m	namespace:utils
 src	src/signal.h	/^		Source src;$/;"	m	struct:signals::Signal
 src	src/signal.h	/^		bool src;$/;"	m	struct:signals::Source
 srcs	src/gates.h	/^        std::tuple<Srcs...> srcs;$/;"	m	struct:gates::gate
@@ -1179,6 +1188,14 @@ switch_gate	src/gates.h	/^        switch_gate( On pOnSource, Off pOffSource, boo
 switch_gate	src/gates.h	/^        switch_gate() $/;"	f	struct:gates::switch_gate
 switch_gate	src/gates.h	/^    struct switch_gate $/;"	s	namespace:gates
 synapses	src/neural.h	/^		std::vector<std::vector<Synapse>> synapses;$/;"	m	struct:neural::Circuit
+tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src)$/;"	v
+tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src);$/;"	m	namespace:utils
+tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i)$/;"	v
+tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i);$/;"	m	namespace:utils
+tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i)$/;"	v
+tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i);$/;"	m	namespace:utils
+tar	src/hierarchy_utils.h	/^        void foreach( rT(&func)(TarT, SrcT), TarT tar, SrcT src);$/;"	m	namespace:utils
+tar	src/hierarchy_utils.h	/^        void utils::foreach( rT(&func)(TarT, SrcT), TarT tar, SrcT src)$/;"	v
 target	src/vao.h	/^		unsigned int target = 0;$/;"	m	struct:vao::Storage
 text	src/font.h	/^	namespace text {$/;"	n	namespace:gui
 text	src/font_loader.h	/^	namespace text {$/;"	n	namespace:gui

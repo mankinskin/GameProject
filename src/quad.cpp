@@ -165,3 +165,8 @@ gui::QuadData gui::getQuadData( unsigned int pQuadIndex )
 {
     return allQuads[pQuadIndex];
 }
+void gui::colorQuad( Quad pQuad, gl::ColorIt pColor )
+{
+    printf( "Coloring Quad %u with color %u\n", pQuad.index, pColor.index );
+    quadColors[pQuad.index-1] = pColor.index;
+}

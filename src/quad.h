@@ -5,6 +5,7 @@
 #include <vector>
 #include "event.h"
 #include <tuple>
+#include "color.h"
 #include "quadcolors.h"
 #include "utils.h"
 
@@ -14,9 +15,6 @@ namespace gui {
 	extern std::vector<glm::vec4> allQuads;
 	unsigned int createQuad( const float pPosX, const float pPosY, const float pWidth, const float pHeight );
 	unsigned int createQuad( const glm::vec4 pQuad );
-
-	template<class ColorType>
-	void colorQuad( const unsigned int pQuadID, const utils::Itr<ColorType> pColor );
 
     struct Quad {
         using initer_t = glm::vec4;
@@ -51,12 +49,6 @@ namespace gui {
             return glm::vec2( allQuads[index - 1].z, allQuads[index - 1].w );
         }
 
-        template<class ColorType>
-            void color( utils::Itr<ColorType> pColor ) const 
-            {
-                colorQuad( index, pColor );
-            }
-        //--
         template<unsigned int N>
             unsigned int element() const
             {
@@ -68,6 +60,7 @@ namespace gui {
         }
     };
 
+    void colorQuad( Quad pQuad, gl::ColorIt pColor );
     void moveQuad( const unsigned int pQuad, const glm::vec2 pOffset );
     void resizeQuad( const unsigned int pQuad, const glm::vec2 pOffset );
     void setQuadPos( const unsigned int pQuad, const glm::vec2 pPos );
@@ -108,11 +101,5 @@ namespace gui {
     extern unsigned int quadIndexVAO;
     extern unsigned int quadBuffer;
 
-}
-template<typename ColorType>
-void gui::colorQuad( const unsigned int pQuadID, const utils::Itr<ColorType> pColor ) 
-{
-    printf( "Coloring Quad %u with color %u\n", pQuadID, pColor.index );
-    quadColors[pQuadID-1] = pColor.index;
 }
 #endif //QUAD_H
