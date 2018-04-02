@@ -183,6 +183,7 @@ OBJ_FILES	Makefile	/^OBJ_FILES=$(SRC_FILES:cpp=o)$/;"	m
 OBJ_TARGETS	Makefile	/^OBJ_TARGETS=$(patsubst %, build\/%, $(OBJ_FILES))$/;"	m
 OPENGL_VERSION	src/gl.cpp	/^int gl::OPENGL_VERSION[2] = {};$/;"	m	class:gl	file:
 Octree	src/voxelization.h	/^	struct Octree$/;"	s	namespace:voxelization
+OmniElement	src/hierarchy_utils.h	/^    struct OmniElement$/;"	s	namespace:utils
 PNM_FILE_H	dt/pnmfile.h	22;"	d
 Point3D	src/gl.h	/^        Point3D( float x, float y, float z, float w = 1.0f )$/;"	f	struct:gl::Point3D
 Point3D	src/gl.h	/^        Point3D( glm::vec4 position )$/;"	f	struct:gl::Point3D
@@ -505,7 +506,7 @@ drop_head_impl	src/hierarchy.h	/^                drop_head_impl( const std::inde
 dt	dt/dt.h	/^static float *dt(float *f, int n) {$/;"	f
 dt	dt/dt.h	/^static image<float> *dt(image<uchar> *im, uchar on = 1) {$/;"	f
 dt	dt/dt.h	/^static void dt(image<float> *im) {$/;"	f
-element	src/hierarchy.h	/^            constexpr auto element() const$/;"	f	struct:utils::Element
+element	src/hierarchy.h	/^            typename std::tuple_element<N, std::tuple<Elems...>>::type element()$/;"	f	struct:utils::Element
 element	src/quad.h	/^            unsigned int element() const$/;"	f	struct:gui::Quad
 element	src/quad.h	/^        unsigned int element() const$/;"	f	struct:gui::Quad
 element_constructor	src/hierarchy.h	/^        struct element_constructor $/;"	s	namespace:utils
@@ -610,7 +611,7 @@ getMouseKeyEvents	src/mouse.cpp	/^void input::getMouseKeyEvents()$/;"	f	class:in
 getOpenGLInitValues	src/gl.cpp	/^void gl::getOpenGLInitValues()$/;"	f	class:gl
 getPos	src/camera.cpp	/^glm::vec3 & camera::Camera::getPos()$/;"	f	class:camera::Camera
 getProjection	src/camera.cpp	/^glm::mat4 & camera::Camera::getProjection()$/;"	f	class:camera::Camera
-getQuadData	src/quad.cpp	/^gui::QuadData gui::getQuadData( unsigned int pQuadIndex )$/;"	f	class:gui
+getQuadData	src/quad.cpp	/^gui::QuadData gui::getQuadData( const Quad pQuad )$/;"	f	class:gui
 getStorage	src/vao.cpp	/^const vao::Storage& vao::getStorage( unsigned int pStorageIndex )$/;"	f	class:vao
 getStorageID	src/vao.cpp	/^unsigned int vao::getStorageID( unsigned int storageIndex ) $/;"	f	class:vao
 getView	src/camera.cpp	/^glm::mat4 & camera::Camera::getView()$/;"	f	class:camera::Camera
@@ -658,8 +659,6 @@ hold	src/event.h	/^		unsigned int hold;$/;"	m	struct:events::ButtonEvents
 hold	src/keys.h	/^        unsigned int hold;$/;"	m	struct:input::KeySignal
 hold_evt	src/event.h	/^		gates::switch_gate<OnType, OffType> hold_evt;$/;"	m	struct:events::ButtonEvents
 hovered_quad	src/mouse.cpp	/^unsigned int hovered_quad = 0;$/;"	v
-i	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i);$/;"	m	namespace:utils
-i	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i);$/;"	m	namespace:utils
 iDEP_PACKAGES	Makefile	/^iDEP_PACKAGES=libglfw3 libglfw3-dev $/;"	m
 id	src/camera.h	/^		size_t id;$/;"	m	struct:camera::CameraMode
 imPtr	dt/image.h	61;"	d
@@ -879,8 +878,8 @@ mouseKeys	src/mouse.cpp	/^std::array<input::KeyCondition, 3> mouseKeys;$/;"	v
 mov	src/camera.h	/^		glm::vec3 mov;$/;"	m	class:camera::Camera
 move	src/camera.cpp	/^void camera::Camera::move( glm::vec3 pDir ) {$/;"	f	class:camera::Camera
 move	src/quad.h	/^        void move( glm::vec2 dir ) const$/;"	f	struct:gui::Quad
-moveQuad	src/quad.cpp	/^void gui::moveQuad( const unsigned int pQuad, const glm::vec2 pOffset )$/;"	f	class:gui
-moveQuad	src/quad.h	/^        void moveQuad( const unsigned int pQuad, A pOffsetX, B pOffsetY ) {$/;"	f	namespace:gui
+moveQuad	src/quad.cpp	/^void gui::moveQuad( const Quad pQuad, const glm::vec2 pOffset )$/;"	f	class:gui
+moveQuad	src/quad.h	/^        void moveQuad( const Quad pQuad, A pOffsetX, B pOffsetY ) {$/;"	f	namespace:gui
 move_backward_key	src/camera.h	/^		int move_backward_key;$/;"	m	struct:camera::CameraControls
 move_down_key	src/camera.h	/^		int move_down_key;$/;"	m	struct:camera::CameraControls
 move_forward_key	src/camera.h	/^		int move_forward_key;$/;"	m	struct:camera::CameraControls
@@ -916,6 +915,10 @@ normal	src/voxelization.h	/^		glm::vec3 normal;$/;"	m	struct:voxelization::TreeN
 normalShaderProgram	src/mesh.cpp	/^unsigned int mesh::normalShaderProgram = 0;$/;"	m	class:mesh	file:
 not_gate	src/gates.h	/^        not_gate( Source pSource ) $/;"	f	struct:gates::not_gate
 not_gate	src/gates.h	/^    struct not_gate $/;"	s	namespace:gates
+ns	src/hierarchy_utils.h	/^                std::index_sequence<N, Ns...> ns, Es... es )$/;"	v
+ns	src/hierarchy_utils.h	/^                std::index_sequence<N, Ns...> ns, Es... es);$/;"	m	namespace:utils
+ns	src/hierarchy_utils.h	/^                std::index_sequence<N> ns, Es... es )$/;"	v
+ns	src/hierarchy_utils.h	/^                std::index_sequence<N> ns, Es... es );$/;"	m	namespace:utils
 num_entities	src/entities.cpp	/^unsigned int entities::num_entities;$/;"	m	class:entities	file:
 off	src/event.h	/^		unsigned int off;$/;"	m	struct:events::ButtonEvents
 off_evt	src/event.h	/^		OffType off_evt;$/;"	m	struct:events::ButtonEvents
@@ -1036,8 +1039,8 @@ resetShaderDirectory	src/shader_loader.cpp	/^void shader::Loader::resetShaderDir
 resetSignals	src/signal.cpp	/^void signals::resetSignals()$/;"	f	class:signals
 resetTextureDirectory	src/texture.cpp	/^void texture::resetTextureDirectory()$/;"	f	class:texture
 resize	src/quad.h	/^        void resize( glm::vec2 dir ) const$/;"	f	struct:gui::Quad
-resizeQuad	src/quad.cpp	/^void gui::resizeQuad( const unsigned int pQuad, const glm::vec2 pOffset )$/;"	f	class:gui
-resizeQuad	src/quad.h	/^        void resizeQuad( const unsigned int pQuad, A pOffsetX, B pOffsetY ) {$/;"	f	namespace:gui
+resizeQuad	src/quad.cpp	/^void gui::resizeQuad( const Quad pQuad, const glm::vec2 pOffset )$/;"	f	class:gui
+resizeQuad	src/quad.h	/^        void resizeQuad( const Quad pQuad, A pOffsetX, B pOffsetY ) {$/;"	f	namespace:gui
 resolution	src/viewport.h	/^        float resolution;$/;"	m	struct:gl::Viewport
 revalidateFontStringIndices	src/font.cpp	/^void gui::text::revalidateFontStringIndices()$/;"	f	class:gui::text
 revalidateMeshNodeOffsets	src/mesh.cpp	/^void mesh::revalidateMeshNodeOffsets()$/;"	f	class:mesh
@@ -1081,8 +1084,8 @@ setModelDirectory	src/model_loader.cpp	/^void model::Loader::setModelDirectory( 
 setModuleType	src/shader_loader.cpp	/^int setModuleType( shader::Module& module, std::string stagetype )$/;"	f
 setPos	src/entities.cpp	/^void entities::setPos( unsigned int pNodeID, glm::vec3 pPos )$/;"	f	class:entities
 setPosition	src/camera.cpp	/^void camera::Camera::setPosition( glm::vec3 pPos )$/;"	f	class:camera::Camera
-setQuadPos	src/quad.cpp	/^void gui::setQuadPos( const unsigned int pQuad, const glm::vec2 pPos )$/;"	f	class:gui
-setQuadPos	src/quad.h	/^        void setQuadPos( const unsigned int pQuad, A pPosX, B pPosY ) {$/;"	f	namespace:gui
+setQuadPos	src/quad.cpp	/^void gui::setQuadPos( const Quad pQuad, const glm::vec2 pPos )$/;"	f	class:gui
+setQuadPos	src/quad.h	/^        void setQuadPos( const Quad pQuad, A pPosX, B pPosY ) {$/;"	f	namespace:gui
 setRotation	src/entities.cpp	/^void entities::setRotation( unsigned int pNodeID, glm::vec4 pRotation )$/;"	f	class:entities
 setScale	src/entities.cpp	/^void entities::setScale( unsigned int pNodeID, glm::vec3 pScale )$/;"	f	class:entities
 setSensitivity	src/camera.cpp	/^void camera::Camera::setSensitivity( float pNewSensitivity )$/;"	f	class:camera::Camera
@@ -1156,12 +1159,6 @@ src	src/event.h	/^		unsigned int src;$/;"	m	struct:events::Event
 src	src/gates.h	/^        Source src;$/;"	m	struct:gates::clicker_gate
 src	src/gates.h	/^        Source src;$/;"	m	struct:gates::not_gate
 src	src/gates.h	/^        Source src;$/;"	m	struct:gates::toggle_gate
-src	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src);$/;"	m	namespace:utils
-src	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i)$/;"	v
-src	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i);$/;"	m	namespace:utils
-src	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i)$/;"	v
-src	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i);$/;"	m	namespace:utils
-src	src/hierarchy_utils.h	/^        void foreach( rT(&func)(TarT, SrcT), TarT tar, SrcT src);$/;"	m	namespace:utils
 src	src/signal.h	/^		Source src;$/;"	m	struct:signals::Signal
 src	src/signal.h	/^		bool src;$/;"	m	struct:signals::Source
 srcs	src/gates.h	/^        std::tuple<Srcs...> srcs;$/;"	m	struct:gates::gate
@@ -1188,14 +1185,6 @@ switch_gate	src/gates.h	/^        switch_gate( On pOnSource, Off pOffSource, boo
 switch_gate	src/gates.h	/^        switch_gate() $/;"	f	struct:gates::switch_gate
 switch_gate	src/gates.h	/^    struct switch_gate $/;"	s	namespace:gates
 synapses	src/neural.h	/^		std::vector<std::vector<Synapse>> synapses;$/;"	m	struct:neural::Circuit
-tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src)$/;"	v
-tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src);$/;"	m	namespace:utils
-tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i)$/;"	v
-tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i);$/;"	m	namespace:utils
-tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i)$/;"	v
-tar	src/hierarchy_utils.h	/^                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i);$/;"	m	namespace:utils
-tar	src/hierarchy_utils.h	/^        void foreach( rT(&func)(TarT, SrcT), TarT tar, SrcT src);$/;"	m	namespace:utils
-tar	src/hierarchy_utils.h	/^        void utils::foreach( rT(&func)(TarT, SrcT), TarT tar, SrcT src)$/;"	v
 target	src/vao.h	/^		unsigned int target = 0;$/;"	m	struct:vao::Storage
 text	src/font.h	/^	namespace text {$/;"	n	namespace:gui
 text	src/font_loader.h	/^	namespace text {$/;"	n	namespace:gui

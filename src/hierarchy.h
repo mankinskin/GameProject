@@ -80,8 +80,9 @@ namespace utils
             {}
 
             const std::tuple<Elems...> subelements;
+
             template<size_t N>
-            constexpr auto element() const
+            typename std::tuple_element<N, std::tuple<Elems...>>::type element()
             {
                 return std::get<N>(subelements);
             }

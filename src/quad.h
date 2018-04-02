@@ -61,25 +61,25 @@ namespace gui {
     };
 
     void colorQuad( Quad pQuad, gl::ColorIt pColor );
-    void moveQuad( const unsigned int pQuad, const glm::vec2 pOffset );
-    void resizeQuad( const unsigned int pQuad, const glm::vec2 pOffset );
-    void setQuadPos( const unsigned int pQuad, const glm::vec2 pPos );
+    void moveQuad( const Quad pQuad, const glm::vec2 pOffset );
+    void resizeQuad( const Quad pQuad, const glm::vec2 pOffset );
+    void setQuadPos( const Quad pQuad, const glm::vec2 pPos );
 
-    QuadData getQuadData( unsigned int pQuadIndex );
+    QuadData getQuadData( Quad pQuadIndex );
     template<typename A, typename B>
-        void moveQuad( const unsigned int pQuad, A pOffsetX, B pOffsetY ) {
-            allQuads[pQuad - 1] += glm::vec4( pOffsetX, pOffsetY, 
+        void moveQuad( const Quad pQuad, A pOffsetX, B pOffsetY ) {
+            allQuads[pQuad.index - 1] += glm::vec4( pOffsetX, pOffsetY, 
                     0.0f, 0.0f );
         }
     template<typename A, typename B>
-        void setQuadPos( const unsigned int pQuad, A pPosX, B pPosY ) {
-            allQuads[pQuad - 1].x = pPosX;
-            allQuads[pQuad - 1].y = pPosY;
+        void setQuadPos( const Quad pQuad, A pPosX, B pPosY ) {
+            allQuads[pQuad.index - 1].x = pPosX;
+            allQuads[pQuad.index - 1].y = pPosY;
         }
 
     template<typename A, typename B>
-        void resizeQuad( const unsigned int pQuad, A pOffsetX, B pOffsetY ) {
-            allQuads[pQuad - 1] += glm::vec4( 0.0f, 0.0f, pOffsetX, pOffsetY );
+        void resizeQuad( const Quad pQuad, A pOffsetX, B pOffsetY ) {
+            allQuads[pQuad.index - 1] += glm::vec4( 0.0f, 0.0f, pOffsetX, pOffsetY );
         }
     void rasterQuadIndices();
 

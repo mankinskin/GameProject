@@ -192,7 +192,8 @@ void gui::initWidgets()
 
     Window::Quads window_quads(window_quad_initer );
     utils::foreach( colorQuad, window_quads, window_colors );
-    //
+    //utils::foreach( moveQuad, window_quads, OmniElement( glm::vec2(-1.0f, 0.0f) ) );
+
     //std::array<glm::vec2, Window::Frame::Quads::COUNT> window_frame_move_matrix{
     //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
     //        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),

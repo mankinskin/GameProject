@@ -23,70 +23,90 @@ namespace utils
         using gen_Element = typename element_generator<Count, Type>::type;
 
 
+
+    template<typename T>
+    struct OmniElement
+    {
+        
+    };
+
+
     //foreach
-
+    //
+    // A function to call functions on hierarchies
+    // The goal is to call the function with each of
+    // the subelements in the given hierarchies.
+    //
+    // the function is specialized for multiple cases 
+    // which get called respective to the element type
+    // when it calls itself. 
+    //
+    // The specialization for the case where the arguments
+    // are of type Element<...> calls a recursive function
+    // which calls foreach with each of the subelement of 
+    // its argument.
+    //
+    // The specialization for the case where the arguments
+    // are of any other type simply calls the function with
+    // its arguments.
+    //
     template<typename rT, 
-        typename TarT, 
-        typename SrcT>
-        void foreach( rT(&func)(TarT, SrcT), TarT tar, SrcT src);
+        typename... FArgTs>
+        void foreach( rT(&func)(FArgTs...), FArgTs... fArgs);
 
     template<typename rT, 
         typename... FArgTs,
-        typename... TarTs, 
-        typename... SrcTs>
+        typename... Es>
         void foreach( rT(&func)(FArgTs...), 
-                Element<TarTs...> tar, Element<SrcTs...> src);
-    template<size_t N, 
-        typename rT, 
-        typename... FArgTs,
-        typename... TarTs, 
-        typename... SrcTs>
-        void foreach_n( rT(&func)(FArgTs...), 
-                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i);
+                Es... es);
 
     template<typename rT, 
         typename... FArgTs,
-        typename... TarTs, 
-        typename... SrcTs>
+        typename... Es, 
+        size_t N>
         void foreach_n( rT(&func)(FArgTs...), 
-                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i);
+                std::index_sequence<N> ns, Es... es );
+    template<typename rT, 
+        typename... FArgTs,
+        typename... Es, 
+        size_t N,
+        size_t... Ns>
+        void foreach_n( rT(&func)(FArgTs...), 
+                std::index_sequence<N, Ns...> ns, Es... es);
 }    
 
     template<typename rT, 
-        typename TarT, 
-        typename SrcT>
-        void utils::foreach( rT(&func)(TarT, SrcT), TarT tar, SrcT src)
+        typename... FArgTs>
+        void utils::foreach( rT(&func)(FArgTs...), FArgTs... fArgs)
         {
-            func(tar, src);
+            func(fArgs...);
         }
 
     template<typename rT, 
         typename... FArgTs,
-        typename... TarTs, 
-        typename... SrcTs>
+        typename... Es> 
         void utils::foreach( rT(&func)(FArgTs...), 
-                Element<TarTs...> tar, Element<SrcTs...> src)
+                Es... es)
         {
-            foreach_n(func, tar, src, _index<sizeof...(TarTs)>() );
+            foreach_n(func, std::make_index_sequence<std::tuple_element<0, std::tuple<Es...>>::type::COUNT>(), es... );
         }
-    template<size_t N, 
-        typename rT, 
-        typename... FArgTs,
-        typename... TarTs, 
-        typename... SrcTs>
-        void utils::foreach_n( rT(&func)(FArgTs...), 
-                Element<TarTs...> tar, Element<SrcTs...> src, _index<N> i)
-        {
-            utils::foreach(func, std::get<N-1>(tar.subelements), std::get<N-1>(src.subelements));
-            foreach_n(func, tar, src, _index<N-1>() );
-        }
-
     template<typename rT, 
         typename... FArgTs,
-        typename... TarTs, 
-        typename... SrcTs>
+        typename... Es,
+        size_t N>
         void utils::foreach_n( rT(&func)(FArgTs...), 
-                Element<TarTs...> tar, Element<SrcTs...> src, _index<0> i)
+                std::index_sequence<N> ns, Es... es )
         {
+            foreach(func, std::get<N>(es.subelements)... );
         }
-
+    template<typename rT, 
+        typename... FArgTs,
+        typename... Es,
+        size_t N,
+        size_t... Ns>
+        void utils::foreach_n( rT(&func)(FArgTs...), 
+                std::index_sequence<N, Ns...> ns, Es... es )
+        {
+            foreach(func, std::get<N>(es.subelements)... );
+            foreach_n(func, std::index_sequence<Ns...>(), es... );
+        }

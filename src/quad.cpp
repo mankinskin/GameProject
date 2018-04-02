@@ -147,26 +147,26 @@ float gui::readQuadDepthMap( const unsigned int pXPos,
             ( gl::Viewport::current->width * pYPos ) + pXPos );
 }
 
-void gui::moveQuad( const unsigned int pQuad, const glm::vec2 pOffset )
+void gui::moveQuad( const Quad pQuad, const glm::vec2 pOffset )
 {
-	allQuads[pQuad - 1] += glm::vec4( pOffset.x, pOffset.y, 0.0f, 0.0f );
+	allQuads[pQuad.index - 1] += glm::vec4( pOffset.x, pOffset.y, 0.0f, 0.0f );
 }
 
-void gui::resizeQuad( const unsigned int pQuad, const glm::vec2 pOffset )
+void gui::resizeQuad( const Quad pQuad, const glm::vec2 pOffset )
 {
-	allQuads[pQuad - 1] += glm::vec4( 0.0f, 0.0f, pOffset.x, pOffset.y );
+	allQuads[pQuad.index - 1] += glm::vec4( 0.0f, 0.0f, pOffset.x, pOffset.y );
 }
 
-void gui::setQuadPos( const unsigned int pQuad, const glm::vec2 pPos )
+void gui::setQuadPos( const Quad pQuad, const glm::vec2 pPos )
 {
-	std::memcpy( &allQuads[pQuad - 1], &pPos, sizeof( glm::vec2 ) );
+	std::memcpy( &allQuads[pQuad.index - 1], &pPos, sizeof( glm::vec2 ) );
 }
-gui::QuadData gui::getQuadData( unsigned int pQuadIndex )
+gui::QuadData gui::getQuadData( const Quad pQuad )
 {
-    return allQuads[pQuadIndex];
+    return allQuads[pQuad.index];
 }
 void gui::colorQuad( Quad pQuad, gl::ColorIt pColor )
 {
     printf( "Coloring Quad %u with color %u\n", pQuad.index, pColor.index );
-    quadColors[pQuad.index-1] = pColor.index;
+    quadColors[pQuad.index - 1] = pColor.index;
 }
