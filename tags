@@ -48,7 +48,7 @@ EXTENSION_LIST	src/gl.cpp	/^std::vector<std::string> gl::EXTENSION_LIST = {};$/;
 Element	src/hierarchy.h	/^                Element( const Element<Initers...> initer )$/;"	f	struct:utils::Element
 Element	src/hierarchy.h	/^                Element( const Initers... initers )$/;"	f	struct:utils::Element
 Element	src/hierarchy.h	/^            Element( const Elems... elems )$/;"	f	struct:utils::Element
-Element	src/hierarchy.h	/^        struct Element$/;"	s	namespace:utils
+Element	src/hierarchy.h	/^        struct Element $/;"	s	namespace:utils
 Error	src/debug.h	/^		Error( std::string& pMsg, Severity& pSev )$/;"	f	struct:debug::Error
 Error	src/debug.h	/^		Error() :msg( "" ), severity( Warning ) {}$/;"	f	struct:debug::Error
 Error	src/debug.h	/^	struct Error {$/;"	s	namespace:debug
@@ -75,7 +75,7 @@ Fragment	src/shader_loader.h	/^		Fragment,$/;"	m	class:shader::ModuleType
 Frame	src/gui.cpp	/^    struct Frame$/;"	s	struct:Window	file:
 Frustum	src/camera.h	/^		Frustum( glm::vec3 pUp, glm::vec3 pCenter, float pFOV, float pWidth, float pHeight, float pNearPlane, float pFarPlane )$/;"	f	struct:camera::Frustum
 Frustum	src/camera.h	/^	struct Frustum {$/;"	s	namespace:camera
-Functor	src/functor.h	/^		Functor( unsigned int pIndex, R( *pF )( Args... ), Args... pArgs )$/;"	f	class:functors::Functor
+Functor	src/functor.h	/^		Functor( unsigned int pIndex, R( &pF )( Args... ), Args... pArgs )$/;"	f	class:functors::Functor
 Functor	src/functor.h	/^	class Functor $/;"	c	namespace:functors
 FunctorRef	src/functor.h	/^		FunctorRef( unsigned int pIndex ) :index( pIndex ) $/;"	f	struct:functors::FunctorRef
 FunctorRef	src/functor.h	/^	struct FunctorRef $/;"	s	namespace:functors
@@ -183,7 +183,6 @@ OBJ_FILES	Makefile	/^OBJ_FILES=$(SRC_FILES:cpp=o)$/;"	m
 OBJ_TARGETS	Makefile	/^OBJ_TARGETS=$(patsubst %, build\/%, $(OBJ_FILES))$/;"	m
 OPENGL_VERSION	src/gl.cpp	/^int gl::OPENGL_VERSION[2] = {};$/;"	m	class:gl	file:
 Octree	src/voxelization.h	/^	struct Octree$/;"	s	namespace:voxelization
-OmniElement	src/hierarchy_utils.h	/^    struct OmniElement$/;"	s	namespace:utils
 PNM_FILE_H	dt/pnmfile.h	22;"	d
 Point3D	src/gl.h	/^        Point3D( float x, float y, float z, float w = 1.0f )$/;"	f	struct:gl::Point3D
 Point3D	src/gl.h	/^        Point3D( glm::vec4 position )$/;"	f	struct:gl::Point3D
@@ -276,6 +275,7 @@ Window	src/gui.cpp	/^struct Window$/;"	s	file:
 _USE_MATH_DEFINES	src/font_loader.cpp	2;"	d	file:
 _index	src/hierarchy_utils.h	/^    template<size_t I> struct _index { };$/;"	s	namespace:utils
 _index	src/widget.h	/^    template<unsigned int> struct _index {};$/;"	s	namespace:gui
+_type	src/hierarchy_utils.h	/^    template<typename T> struct _type { using type = T; };$/;"	s	namespace:utils
 abs	dt/misc.h	/^inline T abs(const T &x) { return (x > 0 ? x : -x); };$/;"	f
 absoluteCursorPosition	src/mouse.cpp	/^glm::uvec2 input::absoluteCursorPosition;$/;"	m	class:input	file:
 access	dt/image.h	/^  T **access;$/;"	m	class:image
@@ -443,7 +443,6 @@ createEntity	src/entities.cpp	/^void entities::createEntity( unsigned int* pNode
 createEvent	src/event.h	/^	Event createEvent( EventType pEvent ) {$/;"	f	namespace:events
 createFontInstructions	src/font_loader.cpp	/^size_t gui::text::initializer::createFontInstructions( gui::text::FontInstructions pInstructions )$/;"	f	class:gui::text::initializer
 createFontInstructions	src/font_loader.cpp	/^size_t gui::text::initializer::createFontInstructions( size_t pPointSize, size_t pStartCode, size_t pGlyphCount, int pFlags, size_t pUpsampling )$/;"	f	class:gui::text::initializer
-createFunctor	src/functor.h	/^	FunctorRef<R, Args...> createFunctor( R( *pF )( Args... ), Args... pArgs ) $/;"	f	namespace:functors
 createLight	src/lights.cpp	/^unsigned int lights::createLight( glm::vec4 pPos, glm::vec4 pColor )$/;"	f	class:lights
 createLight	src/lights.cpp	/^unsigned int lights::createLight( glm::vec4 pPos, glm::vec4 pColor, glm::vec4 pFrustum )$/;"	f	class:lights
 createLightDataBuffer	src/lights.cpp	/^void lights::createLightDataBuffer() $/;"	f	class:lights
@@ -506,7 +505,7 @@ drop_head_impl	src/hierarchy.h	/^                drop_head_impl( const std::inde
 dt	dt/dt.h	/^static float *dt(float *f, int n) {$/;"	f
 dt	dt/dt.h	/^static image<float> *dt(image<uchar> *im, uchar on = 1) {$/;"	f
 dt	dt/dt.h	/^static void dt(image<float> *im) {$/;"	f
-element	src/hierarchy.h	/^            typename std::tuple_element<N, std::tuple<Elems...>>::type element()$/;"	f	struct:utils::Element
+element	src/hierarchy.h	/^            constexpr const auto element() const$/;"	f	struct:utils::Element
 element	src/quad.h	/^            unsigned int element() const$/;"	f	struct:gui::Quad
 element	src/quad.h	/^        unsigned int element() const$/;"	f	struct:gui::Quad
 element_constructor	src/hierarchy.h	/^        struct element_constructor $/;"	s	namespace:utils
@@ -535,6 +534,8 @@ eventResetters	src/event.cpp	/^std::vector<void( * )()> events::eventResetters =
 event_signature	src/event.h	/^		EventType event_signature;$/;"	m	class:events::EventSlot
 events	src/event.h	/^namespace events {$/;"	n
 extractStageString	src/shader_loader.cpp	/^std::string extractStageString( std::string filename ) $/;"	f
+extract_count	src/hierarchy_utils.h	/^        constexpr size_t extract_count(const Element<Elems...>& e)$/;"	f	namespace:utils
+extract_count	src/hierarchy_utils.h	/^        constexpr size_t extract_count(const T& t)$/;"	f	namespace:utils
 farPlane	src/camera.h	/^		float farPlane = 1000.0f;$/;"	m	struct:camera::Frustum
 fetchGLFWEvents	src/input.cpp	/^void input::fetchGLFWEvents()$/;"	f	class:input
 fetchInput	src/sequencer.cpp	/^void sequencer::fetchInput()$/;"	f	class:sequencer
@@ -552,6 +553,9 @@ fontMetrics	src/font_loader.cpp	/^	LoadFontMetrics fontMetrics;$/;"	m	struct:Loa
 fontVAO	src/font.cpp	/^unsigned int gui::text::fontVAO = 0;$/;"	m	class:gui::text	file:
 font_input_directory	src/font_loader.cpp	/^std::string font_input_directory = DEFAULT_TTF_DIR;$/;"	v
 font_store_directory	src/font_loader.cpp	/^std::string font_store_directory = DEFAULT_STORE_DIR;$/;"	v
+foreach	src/hierarchy_utils.h	/^constexpr void utils::foreach(rT(*func)(FArgTs...), const Es... es)$/;"	f	class:utils
+foreach_imp	src/hierarchy_utils.h	/^constexpr void utils::foreach_imp( rT(*func)(FArgTs...), $/;"	f	class:utils
+foreach_imp	src/hierarchy_utils.h	/^constexpr void utils::foreach_imp(rT(*func)(Es...), const Es... es)$/;"	f	class:utils
 format	src/texture.h	/^		GLenum format;$/;"	m	struct:texture::Texture2D
 forward	src/camera.cpp	/^void camera::Camera::forward()$/;"	f	class:camera::Camera
 forward	src/camera.cpp	/^void camera::forward( Camera & pCam )$/;"	f	class:camera
@@ -564,12 +568,10 @@ frustum	src/camera.h	/^		Frustum frustum;$/;"	m	struct:camera::CameraMode
 frustum_size	src/voxelization.cpp	/^glm::uvec3 voxelization::frustum_size = glm::ivec3( 200, 200, 200 );$/;"	m	class:voxelization	file:
 ftLib	src/font_loader.cpp	/^FT_Library ftLib;$/;"	v
 fullscreen	src/contextwindow.h	/^	    int fullscreen = 0;;$/;"	m	struct:app::Window
-func	src/functor.h	/^		R( *func )( Args... );$/;"	m	class:functors::Functor
-func	src/functor.h	/^		static void func( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple, ExArgs&&... pExArgs ) $/;"	f	struct:functors::applier
+func	src/functor.h	/^		R( &func )( Args... );$/;"	m	class:functors::Functor
 func	src/hierarchy.h	/^                func( const std::tuple<Initers...> initer )$/;"	f	struct:utils::element_constructor
 func_impl	src/hierarchy.h	/^                func_impl( const std::tuple<SubIniter> initer )$/;"	f	struct:utils::element_constructor
 func_impl	src/hierarchy.h	/^                func_impl( const std::tuple<SubIniters...> initer )$/;"	f	struct:utils::element_constructor
-function_caller	src/functor.h	/^	void function_caller( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple ) $/;"	f	namespace:functors
 functorDestructors	src/functor.cpp	/^std::vector<void( * )()> functors::functorDestructors = std::vector<void( * )()>();$/;"	m	class:functors	file:
 functorInvokers	src/functor.cpp	/^std::vector<void( * )( unsigned int )> functors::functorInvokers = std::vector<void( * )( unsigned int )>();$/;"	m	class:functors	file:
 functorOrder	src/functor.cpp	/^std::vector<std::pair<unsigned int, unsigned int>> functors::functorOrder = std::vector<std::pair<unsigned int, unsigned int>>();$/;"	m	class:functors	file:
@@ -879,7 +881,7 @@ mov	src/camera.h	/^		glm::vec3 mov;$/;"	m	class:camera::Camera
 move	src/camera.cpp	/^void camera::Camera::move( glm::vec3 pDir ) {$/;"	f	class:camera::Camera
 move	src/quad.h	/^        void move( glm::vec2 dir ) const$/;"	f	struct:gui::Quad
 moveQuad	src/quad.cpp	/^void gui::moveQuad( const Quad pQuad, const glm::vec2 pOffset )$/;"	f	class:gui
-moveQuad	src/quad.h	/^        void moveQuad( const Quad pQuad, A pOffsetX, B pOffsetY ) {$/;"	f	namespace:gui
+moveQuads	src/gui.cpp	/^void moveQuads(const Element<Qs...> elem, Vec v)$/;"	f
 move_backward_key	src/camera.h	/^		int move_backward_key;$/;"	m	struct:camera::CameraControls
 move_down_key	src/camera.h	/^		int move_down_key;$/;"	m	struct:camera::CameraControls
 move_forward_key	src/camera.h	/^		int move_forward_key;$/;"	m	struct:camera::CameraControls
@@ -915,10 +917,6 @@ normal	src/voxelization.h	/^		glm::vec3 normal;$/;"	m	struct:voxelization::TreeN
 normalShaderProgram	src/mesh.cpp	/^unsigned int mesh::normalShaderProgram = 0;$/;"	m	class:mesh	file:
 not_gate	src/gates.h	/^        not_gate( Source pSource ) $/;"	f	struct:gates::not_gate
 not_gate	src/gates.h	/^    struct not_gate $/;"	s	namespace:gates
-ns	src/hierarchy_utils.h	/^                std::index_sequence<N, Ns...> ns, Es... es )$/;"	v
-ns	src/hierarchy_utils.h	/^                std::index_sequence<N, Ns...> ns, Es... es);$/;"	m	namespace:utils
-ns	src/hierarchy_utils.h	/^                std::index_sequence<N> ns, Es... es )$/;"	v
-ns	src/hierarchy_utils.h	/^                std::index_sequence<N> ns, Es... es );$/;"	m	namespace:utils
 num_entities	src/entities.cpp	/^unsigned int entities::num_entities;$/;"	m	class:entities	file:
 off	src/event.h	/^		unsigned int off;$/;"	m	struct:events::ButtonEvents
 off_evt	src/event.h	/^		OffType off_evt;$/;"	m	struct:events::ButtonEvents
@@ -960,6 +958,7 @@ operator unsigned int	src/utils.h	/^        operator unsigned int() const$/;"	f	
 or_op	src/gates.h	/^        or_op() $/;"	f	struct:gates::or_op
 or_op	src/gates.h	/^    struct or_op $/;"	s	namespace:gates
 orthoProjectionMatrix	src/camera.h	/^		glm::mat4 orthoProjectionMatrix = {};$/;"	m	class:camera::Camera
+pArgTuple	src/functor.h	/^		static void func( R( &pF )( Args... ), std::tuple<Args...> pArgTuple, ExArgs&&... pExArgs ) $/;"	m	struct:functors::applier
 pad	src/font.h	/^			glm::vec2 pad;$/;"	m	struct:gui::text::TextStyle
 physical_height	src/contextwindow.h	/^	    int physical_height;$/;"	m	struct:app::Monitor
 physical_width	src/contextwindow.h	/^	    int physical_width;$/;"	m	struct:app::Monitor
@@ -1065,6 +1064,8 @@ screenViewport	src/gl.cpp	/^gl::Viewport screenViewport;$/;"	v
 screenViewport	src/viewport.cpp	/^gl::Viewport gl::screenViewport = gl::Viewport();$/;"	m	class:gl	file:
 scroll	src/mouse.cpp	/^int scroll = 0;$/;"	v
 scroll_Callback	src/mouse.cpp	/^void input::scroll_Callback( GLFWwindow * window, double pX, double pY )$/;"	f	class:input
+select	src/hierarchy_utils.h	/^        const T& select( const T& t)$/;"	f	namespace:utils
+select	src/hierarchy_utils.h	/^        const auto& select( const Element<Elems...>& t)$/;"	f	namespace:utils
 sensitivity	src/camera.h	/^		float sensitivity;$/;"	m	struct:camera::LookPolicy
 sequencer	src/sequencer.h	/^namespace sequencer {$/;"	n
 set	src/event.h	/^		void set() {$/;"	f	class:events::EventSlot
@@ -1179,6 +1180,7 @@ stride	src/vao.h	/^		unsigned int stride = UNIFORM_BUFFER_OFFSET_ALIGNMENT;$/;"	
 stringCount	src/font.h	/^			unsigned int stringCount;$/;"	m	struct:gui::text::Font
 stringOffset	src/font.h	/^			unsigned int stringOffset;$/;"	m	struct:gui::text::Font
 styleStorage	src/font.cpp	/^unsigned int styleStorage = 0;$/;"	v
+sub	src/hierarchy_utils.h	/^constexpr void utils::sub( rT(*func)(FArgTs...), $/;"	f	class:utils
 subelements	src/hierarchy.h	/^            const std::tuple<Elems...> subelements;$/;"	m	struct:utils::Element
 swapVolumeBuffers	src/voxelization.cpp	/^void voxelization::swapVolumeBuffers() {$/;"	f	class:voxelization
 switch_gate	src/gates.h	/^        switch_gate( On pOnSource, Off pOffSource, bool pStartWith = false ) $/;"	f	struct:gates::switch_gate

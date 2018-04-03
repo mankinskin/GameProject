@@ -7,6 +7,7 @@ namespace utils
 {
 
     template<size_t I> struct _index { };
+    template<typename T> struct _type { using type = T; };
 
     template<unsigned int N, typename Type, typename ...SubElements>
         struct element_generator 
@@ -20,15 +21,7 @@ namespace utils
         };
 
     template<typename Type, unsigned int Count>
-        using gen_Element = typename element_generator<Count, Type>::type;
-
-
-
-    template<typename T>
-    struct OmniElement
-    {
-        
-    };
+        using gen_Element_t = typename element_generator<Count, Type>::type;
 
 
     //foreach
@@ -50,63 +43,94 @@ namespace utils
     // are of any other type simply calls the function with
     // its arguments.
     //
-    template<typename rT, 
-        typename... FArgTs>
-        void foreach( rT(&func)(FArgTs...), FArgTs... fArgs);
+    template<size_t N, typename T>
+        const T& select( const T& t)
+        {
+            return t;
+        } 
+    template<size_t N, typename... Elems>
+        const auto& select( const Element<Elems...>& t)
+        {
+            return std::get<N>(t.subelements);
+        } 
 
+    template<typename... Elems>
+        constexpr size_t extract_count(const Element<Elems...>& e)
+        {
+            return sizeof...(Elems);
+        };
+    template<typename T>
+        constexpr size_t extract_count(const T& t)
+        {
+            return 1;
+        };
     template<typename rT, 
         typename... FArgTs,
         typename... Es>
-        void foreach( rT(&func)(FArgTs...), 
-                Es... es);
+            constexpr void foreach( rT(*func)(FArgTs...), const Es... es);
+
+    template<typename rT, 
+        typename... Es>
+            constexpr void foreach_imp( rT(*func)(Es...), const Es... es);
 
     template<typename rT, 
         typename... FArgTs,
-        typename... Es, 
-        size_t N>
-        void foreach_n( rT(&func)(FArgTs...), 
-                std::index_sequence<N> ns, Es... es );
-    template<typename rT, 
-        typename... FArgTs,
-        typename... Es, 
-        size_t N,
-        size_t... Ns>
-        void foreach_n( rT(&func)(FArgTs...), 
-                std::index_sequence<N, Ns...> ns, Es... es);
-}    
-
-    template<typename rT, 
-        typename... FArgTs>
-        void utils::foreach( rT(&func)(FArgTs...), FArgTs... fArgs)
-        {
-            func(fArgs...);
-        }
+        typename... Elems,
+        typename... Es>
+            constexpr void foreach_imp( rT(*func)(FArgTs...), 
+                    const Element<Elems...>& first, const Es... es);
 
     template<typename rT, 
         typename... FArgTs,
         typename... Es> 
-        void utils::foreach( rT(&func)(FArgTs...), 
-                Es... es)
-        {
-            foreach_n(func, std::make_index_sequence<std::tuple_element<0, std::tuple<Es...>>::type::COUNT>(), es... );
-        }
+            constexpr void sub( rT(*func)(FArgTs...), 
+                    _index<0> i, const Es... es);
     template<typename rT, 
         typename... FArgTs,
-        typename... Es,
+        typename... Es, 
         size_t N>
-        void utils::foreach_n( rT(&func)(FArgTs...), 
-                std::index_sequence<N> ns, Es... es )
-        {
-            foreach(func, std::get<N>(es.subelements)... );
-        }
-    template<typename rT, 
-        typename... FArgTs,
-        typename... Es,
-        size_t N,
-        size_t... Ns>
-        void utils::foreach_n( rT(&func)(FArgTs...), 
-                std::index_sequence<N, Ns...> ns, Es... es )
-        {
-            foreach(func, std::get<N>(es.subelements)... );
-            foreach_n(func, std::index_sequence<Ns...>(), es... );
-        }
+            constexpr void sub( rT(*func)(FArgTs...), 
+                    _index<N> i, const Es... es);
+}    
+
+template<typename rT,
+    typename... FArgTs,
+    typename... Es>
+constexpr void utils::foreach(rT(*func)(FArgTs...), const Es... es)
+{
+    foreach_imp(func, es...);
+}
+template<typename rT,
+    typename... Es>
+constexpr void utils::foreach_imp(rT(*func)(Es...), const Es... es)
+{
+    func(es...);
+}
+
+template<typename rT, 
+    typename... FArgTs,
+    typename... Elems,
+    typename... Es> 
+constexpr void utils::foreach_imp( rT(*func)(FArgTs...), 
+        const Element<Elems...>& first, const Es... es)
+{
+    sub(func, _index<extract_count(first)>(), first, es... );
+}
+
+template<typename rT, 
+    typename... FArgTs,
+    typename... Es>
+constexpr void utils::sub( rT(*func)(FArgTs...), 
+        _index<0> i, const Es... es )
+{
+}
+template<typename rT, 
+    typename... FArgTs,
+    typename... Es,
+    size_t N>
+constexpr void utils::sub( rT(*func)(FArgTs...), 
+        _index<N> i, const Es... es )
+{
+    sub( func, _index<N-1>(), es...);
+    foreach(func, select<N-1>(es)... );
+}

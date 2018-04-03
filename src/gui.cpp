@@ -40,11 +40,11 @@ struct Window
 {
     struct Frame
     {
-        using Quads = utils::gen_Element<Quad, 9>; 
-        using QuadIniter = utils::gen_Element<glm::vec4, 9>;
+        using Quads = utils::gen_Element_t<Quad, 9>; 
+        using QuadIniter = utils::gen_Element_t<glm::vec4, 9>;
 
-        using Colors = utils::gen_Element<ColorIt, 9>;
-        using ColorIniter = utils::gen_Element<glm::vec4, 9>;
+        using Colors = utils::gen_Element_t<ColorIt, 9>;
+        using ColorIniter = utils::gen_Element_t<glm::vec4, 9>;
     };
 
     struct Header 
@@ -62,7 +62,11 @@ struct Window
     using Colors = utils::Element<Frame::Colors, Header::Colors>;
     using ColorIniter = utils::Element<Frame::ColorIniter, Header::ColorIniter>;
 };
-
+template<typename... Qs, typename Vec>
+void moveQuads(const Element<Qs...> elem, Vec v)
+{
+    utils::foreach( gui::moveQuad, elem, v );
+}
 void gui::init()
 {
     pixel_size = glm::vec2( 
@@ -101,13 +105,24 @@ void gui::initWidgets()
     //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), 
     //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) } );
 
-    Button::Quads quitButton( button_initer );
-    Button::Quads playButton( button_initer );
+    Button::Quads quitButton_quads( button_initer );
+    Button::Quads playButton_quads( button_initer );
 
-    foreach( colorQuad, quitButton, buttonColors );
-    foreach( colorQuad, playButton, buttonColors );
+    utils::foreach( colorQuad, quitButton_quads, buttonColors );
+    //foreach( colorQuad, playButton_quads, buttonColors );
 
 
+    //ButtonEvents<Event> play_button( 
+    //        createEvent( QuadEvent( playButton_quads.element<1>().index, 1 ) ), 
+    //        createEvent( QuadEvent( playButton_quads.element<1>().index, 0 ) ) );
+
+    //gate<and_op, decltype( play_button.hold_evt ), decltype( lmb.on_evt )> play_press_evt( and_op(), 
+    //        play_button.hold_evt, lmb.on_evt );
+    //ButtonEvents<decltype( play_press_evt ), decltype( lmb.off_evt )> play_lmb( play_press_evt, lmb.off_evt );
+    //auto move_play_func = 
+    //    createFunctor<void, const Button::Quads&, const glm::vec2&>( moveElement, playButton_quads, cursorFrameDelta );
+
+    //move_play_func.set_triggers( { play_lmb.hold } );
     //quitButton.move( gui::pixel_round( glm::vec2( -0.9f, -0.6f ) ) );
     //playButton.move( gui::pixel_round( glm::vec2( -0.9f, -0.3f ) ) );
 
@@ -192,8 +207,26 @@ void gui::initWidgets()
 
     Window::Quads window_quads(window_quad_initer );
     utils::foreach( colorQuad, window_quads, window_colors );
-    //utils::foreach( moveQuad, window_quads, OmniElement( glm::vec2(-1.0f, 0.0f) ) );
 
+    glm::vec2 mv (-1.0f, 0.0f);
+
+    utils::foreach( moveQuad, window_quads, mv );
+
+    ButtonEvents<Event> header_button( 
+            createEvent( QuadEvent( window_quads.element<1>().element<1>().index, 1 ) ), 
+            createEvent( QuadEvent( window_quads.element<1>().element<1>().index, 0 ) ) );
+
+    gate<and_op, decltype( header_button.hold_evt ), decltype( lmb.on_evt )> header_press_evt( and_op(), 
+            header_button.hold_evt, lmb.on_evt );
+    ButtonEvents<decltype( header_press_evt ), decltype( lmb.off_evt )> header_lmb( header_press_evt, lmb.off_evt );
+    auto move_window_func = 
+        createFunctor<void, Window::Quads, glm::vec2&>( moveQuads, window_quads, cursorFrameDelta );
+
+    move_window_func.set_triggers( { header_lmb.hold } );
+
+    //utils::Element<utils::gen_Element_t<glm::vec2&, 9>, utils::gen_Element_t<glm::vec2&, 2>> el_mv(
+    //        utils::gen_Element_t<glm::vec2&, 9>(mv, mv, mv, mv, mv, mv, mv, mv, mv),
+    //        utils::gen_Element_t<glm::vec2&, 2>(mv, mv) );
     //std::array<glm::vec2, Window::Frame::Quads::COUNT> window_frame_move_matrix{
     //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
     //        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
@@ -222,16 +255,6 @@ void gui::initWidgets()
     //        } );
 
 
-    //window.move( -1.0f, 0.0f );
-    ////general functions
-    //
-    //ButtonEvents<Event> header_button( 
-    //        createEvent( QuadEvent( window.element<1>().element<1>().index, 1 ) ), 
-    //        createEvent( QuadEvent( window.element<1>().element<1>().index, 0 ) ) );
-    //gate<and_op, decltype( header_button.hold_evt ), decltype( lmb.on_evt )> header_press_evt( and_op(), 
-    //        header_button.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( header_press_evt ), decltype( lmb.off_evt )> header_lmb( header_press_evt, lmb.off_evt );
-
     //ButtonEvents<Event> right( 
     //        createEvent( QuadEvent( window.element<0>().element<5>().index, 1 ) ), 
     //        createEvent( QuadEvent( window.element<0>().element<5>().index, 0 ) ) );
@@ -252,8 +275,6 @@ void gui::initWidgets()
     //gate<and_op, decltype( bottom_right.hold_evt ), decltype( lmb.on_evt )> bottom_right_press_evt( and_op(), bottom_right.hold_evt, lmb.on_evt );
     //ButtonEvents<decltype( bottom_right_press_evt ), decltype( lmb.off_evt )> bottom_right_and_lmb( bottom_right_press_evt, lmb.off_evt );
 
-    //FunctorRef<void, Window, glm::vec2&> move_window_func = createFunctor<void, Window, glm::vec2&>( move_widget, window, cursorFrameDelta );
-    //move_window_func.set_triggers( { header_lmb.hold } );
 
     //FunctorRef<void, Window, glm::vec2&> resize_window_func = 
     //    createFunctor<void, Window, glm::vec2&>( resize_widget<Window>, window, cursorFrameDelta );

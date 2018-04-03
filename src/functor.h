@@ -21,7 +21,7 @@ when checking all functors, the functorOrder queue is used. the invoker_index is
 	struct applier 
     {
 		template<typename...ExArgs>
-		static void func( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple, ExArgs&&... pExArgs ) 
+		static void func( R( &pF )( Args... ), std::tuple<Args...> pArgTuple, ExArgs&&... pExArgs ) 
         {
 			applier<N - 1, R, Args...>::func( pF, pArgTuple, std::get<N - 1>( pArgTuple ), pExArgs... );
 		}
@@ -29,15 +29,15 @@ when checking all functors, the functorOrder queue is used. the invoker_index is
 	template<typename R, typename... Args>
 	struct applier<0, R, Args...> 
     {
-		template<typename...ExArgs>
-		static void func( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple, ExArgs&&... pExArgs ) 
+		template<typename... ExArgs>
+		static void func( R( &pF )( Args... ), std::tuple<Args...> pArgTuple, ExArgs&&... pExArgs ) 
         {
 			pF( pExArgs... );
 		}
 	};
 
 	template<typename R, typename... Args>
-	void function_caller( R( *pF )( Args... ), const std::tuple<Args...>& pArgTuple ) 
+	void function_caller( R( &pF )( Args... ), std::tuple<Args...> pArgTuple ) 
     {
 		applier<sizeof...( Args ), R, Args...>::func( pF, pArgTuple );
 	}
@@ -46,7 +46,7 @@ when checking all functors, the functorOrder queue is used. the invoker_index is
 	class Functor 
     {
 	public:
-		Functor( unsigned int pIndex, R( *pF )( Args... ), Args... pArgs )
+		Functor( unsigned int pIndex, R( &pF )( Args... ), Args... pArgs )
 			:func( pF ), 
             args( std::forward_as_tuple<Args...>( std::forward<Args>( pArgs )... ) ), 
             slot_index( pIndex )
@@ -94,7 +94,7 @@ when checking all functors, the functorOrder queue is used. the invoker_index is
 		unsigned int slot_index;
 	private:
 		std::vector<unsigned int> signalSet;
-		R( *func )( Args... );
+		R( &func )( Args... );
 		std::tuple<Args...> args;
 	};
 
@@ -120,7 +120,7 @@ when checking all functors, the functorOrder queue is used. the invoker_index is
 		unsigned int index;
 	};
 	template<typename R, class...Args>
-	FunctorRef<R, Args...> createFunctor( R( *pF )( Args... ), Args... pArgs ) 
+	FunctorRef<R, Args...> createFunctor( R( &pF )( Args... ), Args... pArgs ) 
     {
 		unsigned int ind = Functor<R, Args...>::slots.size();
 		if ( !ind ) 

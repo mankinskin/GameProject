@@ -1,5 +1,5 @@
 #pragma once
-
+#include "quad.h"
 #include <tuple>
 
 namespace utils 
@@ -60,7 +60,7 @@ namespace utils
 
 
     template<typename... Elems>
-        struct Element
+        struct Element 
         {
             static const size_t COUNT = sizeof...( Elems );
             template<typename... Initers>
@@ -82,11 +82,12 @@ namespace utils
             const std::tuple<Elems...> subelements;
 
             template<size_t N>
-            typename std::tuple_element<N, std::tuple<Elems...>>::type element()
+            constexpr const auto element() const
             {
                 return std::get<N>(subelements);
             }
         };
+
 }
 
 

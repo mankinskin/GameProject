@@ -66,11 +66,11 @@ namespace gui {
     void setQuadPos( const Quad pQuad, const glm::vec2 pPos );
 
     QuadData getQuadData( Quad pQuadIndex );
-    template<typename A, typename B>
-        void moveQuad( const Quad pQuad, A pOffsetX, B pOffsetY ) {
-            allQuads[pQuad.index - 1] += glm::vec4( pOffsetX, pOffsetY, 
-                    0.0f, 0.0f );
-        }
+    //template<typename A, typename B>
+    //    void moveQuad( const Quad pQuad, A pOffsetX, B pOffsetY ) {
+    //        allQuads[pQuad.index - 1] += glm::vec4( pOffsetX, pOffsetY, 
+    //                0.0f, 0.0f );
+    //    }
     template<typename A, typename B>
         void setQuadPos( const Quad pQuad, A pPosX, B pPosY ) {
             allQuads[pQuad.index - 1].x = pPosX;

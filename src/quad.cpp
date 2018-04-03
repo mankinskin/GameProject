@@ -149,6 +149,7 @@ float gui::readQuadDepthMap( const unsigned int pXPos,
 
 void gui::moveQuad( const Quad pQuad, const glm::vec2 pOffset )
 {
+    printf("Moving Quad %d\n", pQuad.index );
 	allQuads[pQuad.index - 1] += glm::vec4( pOffset.x, pOffset.y, 0.0f, 0.0f );
 }
 
