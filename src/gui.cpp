@@ -109,23 +109,36 @@ void gui::initWidgets()
     Button::Quads playButton_quads( button_initer );
 
     utils::foreach( colorQuad, quitButton_quads, buttonColors );
-    //foreach( colorQuad, playButton_quads, buttonColors );
+    utils::foreach( colorQuad, playButton_quads, buttonColors );
 
 
-    //ButtonEvents<Event> play_button( 
-    //        createEvent( QuadEvent( playButton_quads.element<1>().index, 1 ) ), 
-    //        createEvent( QuadEvent( playButton_quads.element<1>().index, 0 ) ) );
+    moveQuads( playButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.6f ) ) );
+    moveQuads( quitButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.8f ) ) );
 
-    //gate<and_op, decltype( play_button.hold_evt ), decltype( lmb.on_evt )> play_press_evt( and_op(), 
-    //        play_button.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( play_press_evt ), decltype( lmb.off_evt )> play_lmb( play_press_evt, lmb.off_evt );
-    //auto move_play_func = 
-    //    createFunctor<void, const Button::Quads&, const glm::vec2&>( moveElement, playButton_quads, cursorFrameDelta );
+    ButtonEvents<Event> play_button( 
+            createEvent( QuadEvent( playButton_quads.element<1>().index, 1 ) ), 
+            createEvent( QuadEvent( playButton_quads.element<1>().index, 0 ) ) );
 
-    //move_play_func.set_triggers( { play_lmb.hold } );
-    //quitButton.move( gui::pixel_round( glm::vec2( -0.9f, -0.6f ) ) );
-    //playButton.move( gui::pixel_round( glm::vec2( -0.9f, -0.3f ) ) );
+    gate<and_op, decltype( play_button.hold_evt ), decltype( lmb.on_evt )> play_press_evt( and_op(), 
+            play_button.hold_evt, lmb.on_evt );
+    ButtonEvents<decltype( play_press_evt ), decltype( lmb.off_evt )> play_lmb( play_press_evt, lmb.off_evt );
+    auto move_play_func = 
+        createFunctor<void, Button::Quads, glm::vec2&>( moveQuads, playButton_quads, cursorFrameDelta );
 
+    move_play_func.set_triggers( { play_lmb.hold } );
+
+
+    ButtonEvents<Event> quit_button( 
+            createEvent( QuadEvent( quitButton_quads.element<1>().index, 1 ) ), 
+            createEvent( QuadEvent( quitButton_quads.element<1>().index, 0 ) ) );
+
+    gate<and_op, decltype( quit_button.hold_evt ), decltype( lmb.on_evt )> quit_press_evt( and_op(), 
+            quit_button.hold_evt, lmb.on_evt );
+    ButtonEvents<decltype( quit_press_evt ), decltype( lmb.off_evt )> quit_lmb( quit_press_evt, lmb.off_evt );
+    auto quit_button_func = 
+        createFunctor<void>( app::quit );
+
+    quit_button_func.set_triggers( { quit_lmb.hold } );
     //ButtonEvents<Event> border_btn( 
     //        createEvent( QuadEvent( quitButton.element<0>().index, 1 ) ), 
     //        createEvent( QuadEvent( quitButton.element<0>().index, 0 ) ) );
