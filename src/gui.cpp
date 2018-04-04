@@ -21,52 +21,10 @@
 #include "hierarchy_utils.h"
 
 glm::vec2 gui::pixel_size;
-using gl::Color;
 
-using utils::Element;
-using gui::Quad;
 using gl::Color;
 using gl::ColorIt;
 
-struct Button 
-{
-    using Quads = Element<Quad, Quad>;
-    using QuadIniter = Element<glm::vec4, glm::vec4>;
-
-    using Colors = Element<gl::ColorIt, gl::ColorIt>;
-};
-
-struct Window
-{
-    struct Frame
-    {
-        using Quads = utils::gen_Element_t<Quad, 9>; 
-        using QuadIniter = utils::gen_Element_t<glm::vec4, 9>;
-
-        using Colors = utils::gen_Element_t<ColorIt, 9>;
-        using ColorIniter = utils::gen_Element_t<glm::vec4, 9>;
-    };
-
-    struct Header 
-    {
-        using Quads = Element<Quad, Quad>;
-        using QuadIniter = Element<glm::vec4, glm::vec4>;
-
-        using Colors = Element<ColorIt, ColorIt>;
-        using ColorIniter = Element<glm::vec4, glm::vec4>;
-    };
-
-    using Quads = utils::Element<Frame::Quads, Header::Quads>;
-    using QuadIniter = utils::Element<Frame::QuadIniter, Header::QuadIniter>;
-
-    using Colors = utils::Element<Frame::Colors, Header::Colors>;
-    using ColorIniter = utils::Element<Frame::ColorIniter, Header::ColorIniter>;
-};
-template<typename... Qs, typename Vec>
-void moveQuads(const Element<Qs...> elem, Vec v)
-{
-    utils::foreach( gui::moveQuad, elem, v );
-}
 void gui::init()
 {
     pixel_size = glm::vec2( 
@@ -92,18 +50,18 @@ void gui::initWidgets()
     float button_height = gui::pixel_size.x * 70.0f;
     glm::vec2 margin = gui::pixel_size * 3.0f;
 
-    Button::QuadIniter button_initer( { 
+    Button::QuadIniter button_initer( 
             glm::vec4(0.0f, 0.0f, button_width, button_height ),
             glm::vec4( margin.x, -margin.y, 
                     button_width - margin.x*2.0f, 
-                    button_height - margin.y*2.0f ) } );
+                    button_height - margin.y*2.0f ) );
 
-    std::array<glm::vec2, Button::Quads::COUNT> button_move_policy( { 
+    Button::MoveRule button_move_policy( 
             glm::vec2( 1.0f, 1.0f ), 
-            glm::vec2( 1.0f, 1.0f ) } );
-    //WidgetResizePolicy<Button::Quads> button_resize_policy( { 
-    //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), 
-    //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) } );
+            glm::vec2( 1.0f, 1.0f ) );
+    Button::ResizeRule button_resize_policy(
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), 
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) );
 
     Button::Quads quitButton_quads( button_initer );
     Button::Quads playButton_quads( button_initer );
@@ -135,10 +93,11 @@ void gui::initWidgets()
     gate<and_op, decltype( quit_button.hold_evt ), decltype( lmb.on_evt )> quit_press_evt( and_op(), 
             quit_button.hold_evt, lmb.on_evt );
     ButtonEvents<decltype( quit_press_evt ), decltype( lmb.off_evt )> quit_lmb( quit_press_evt, lmb.off_evt );
-    auto quit_button_func = 
+    auto quit_func = 
         createFunctor<void>( app::quit );
 
-    quit_button_func.set_triggers( { quit_lmb.hold } );
+    quit_func.set_triggers( { quit_lmb.on, input::key_esc.press } );
+
     //ButtonEvents<Event> border_btn( 
     //        createEvent( QuadEvent( quitButton.element<0>().index, 1 ) ), 
     //        createEvent( QuadEvent( quitButton.element<0>().index, 0 ) ) );
@@ -179,8 +138,6 @@ void gui::initWidgets()
     //unsigned int quit_button_press = createSignal( button_press );
 
 
-    //FunctorRef<void> quit_func = createFunctor( app::quit );
-    //quit_func.set_triggers( { key_esc.press, quit_button_press } );
 
     //Window
 
@@ -221,9 +178,34 @@ void gui::initWidgets()
     Window::Quads window_quads(window_quad_initer );
     utils::foreach( colorQuad, window_quads, window_colors );
 
-    glm::vec2 mv (-1.0f, 0.0f);
 
-    utils::foreach( moveQuad, window_quads, mv );
+    Window::Frame::MoveRule window_frame_move_policy(
+        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
+            glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
+            glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
+    );
+    Window::Frame::ResizeRule window_frame_resize_policy(
+            glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ), 
+            glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), 
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ),
+            glm::vec4( 0.0f, 1.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 1.0f, 1.0f, 0.0f ), 
+            glm::vec4( 1.0f, 1.0f, 0.0f, 0.0f )
+            );
+
+    Window::Header::MoveRule window_header_move_policy(
+        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
+    );
+    Window::Header::ResizeRule window_header_resize_policy(
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f )
+            );
+
+    Window::MoveRule window_move_policy(
+        //glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)
+        window_frame_move_policy, window_header_move_policy
+    );
+    Window::ResizeRule window_resize_policy(
+        glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)
+            );
 
     ButtonEvents<Event> header_button( 
             createEvent( QuadEvent( window_quads.element<1>().element<1>().index, 1 ) ), 
@@ -233,39 +215,10 @@ void gui::initWidgets()
             header_button.hold_evt, lmb.on_evt );
     ButtonEvents<decltype( header_press_evt ), decltype( lmb.off_evt )> header_lmb( header_press_evt, lmb.off_evt );
     auto move_window_func = 
-        createFunctor<void, Window::Quads, glm::vec2&>( moveQuads, window_quads, cursorFrameDelta );
+        createFunctor<void, Window::Quads, Window::MoveRule, glm::vec2&>( moveQuadsScaled, window_quads, window_move_policy, cursorFrameDelta );
 
     move_window_func.set_triggers( { header_lmb.hold } );
 
-    //utils::Element<utils::gen_Element_t<glm::vec2&, 9>, utils::gen_Element_t<glm::vec2&, 2>> el_mv(
-    //        utils::gen_Element_t<glm::vec2&, 9>(mv, mv, mv, mv, mv, mv, mv, mv, mv),
-    //        utils::gen_Element_t<glm::vec2&, 2>(mv, mv) );
-    //std::array<glm::vec2, Window::Frame::Quads::COUNT> window_frame_move_matrix{
-    //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
-    //        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
-    //        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-    //};
-    //WidgetResizePolicy<Window::Frame::Quads> window_frame_resize_policy( {
-    //        glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ), 
-    //        glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), 
-    //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ),
-    //        glm::vec4( 0.0f, 1.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 1.0f, 1.0f, 0.0f ), 
-    //        glm::vec4( 1.0f, 1.0f, 0.0f, 0.0f )
-    //        } );
-
-    //std::array<glm::vec2, Window::Header::Quads::COUNT> window_header_move_matrix{
-    //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-    //};
-    //WidgetResizePolicy<Window::Header> window_header_resize_policy( {
-    //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f )
-    //        } );
-
-    //std::array<glm::vec2, Window::COUNT> window_move_policy{
-    //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-    //};
-    //WidgetResizePolicy<Window::Quads> window_resize_policy( {
-    //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f )
-    //        } );
 
 
     //ButtonEvents<Event> right( 

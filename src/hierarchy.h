@@ -59,12 +59,33 @@ namespace utils
         }
 
 
+    //template<typename T>
+    //    struct Single  
+    //    {
+    //        using initer_t = const T;
+    //        template<typename Ini>
+    //        Single( Ini initer )
+    //            :data( initer )
+    //        {}
+    //        Single( initer_t initer )
+    //            :data( initer )
+    //        {}
+
+    //        const T data;
+    //        template<size_t N>
+    //            const T& element() const 
+    //            {
+    //                return data;
+    //            }
+    //    };
+
     template<typename... Elems>
         struct Element 
         {
             static const size_t COUNT = sizeof...( Elems );
+
             template<typename... Initers>
-                Element( const Element<Initers...> initer )
+            Element( const Element<Initers...>& initer )
                 :subelements( construct<Elems...>( initer.subelements ) )
                 {}
 
@@ -82,12 +103,11 @@ namespace utils
             const std::tuple<Elems...> subelements;
 
             template<size_t N>
-            constexpr const auto element() const
-            {
-                return std::get<N>(subelements);
-            }
+                constexpr auto element() const 
+                {
+                    return std::get<N>( subelements );
+                }
         };
-
 }
 
 

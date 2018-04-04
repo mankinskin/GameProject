@@ -81,6 +81,7 @@ void gui::initQuadBuffer()
 
 	vao::setVertexAttrib( quadIndexVAO, 0, 0, 2, GL_FLOAT, 0 );
 
+    reserveQuads( MAX_QUAD_COUNT );
 	quadIndexMap.resize( gl::getWidth() * gl::getHeight() );
 	quadDepthMap.resize( gl::getWidth() * gl::getHeight() );
 }
@@ -152,6 +153,10 @@ void gui::moveQuad( const Quad pQuad, const glm::vec2 pOffset )
     printf("Moving Quad %d\n", pQuad.index );
 	allQuads[pQuad.index - 1] += glm::vec4( pOffset.x, pOffset.y, 0.0f, 0.0f );
 }
+void gui::moveQuadScaled( const Quad pQuad, const glm::vec2 pOffset, const glm::vec2 scale)
+{
+	allQuads[pQuad.index - 1] += glm::vec4( pOffset.x * scale.x, pOffset.y * scale.y, 0.0f, 0.0f );
+}
 
 void gui::resizeQuad( const Quad pQuad, const glm::vec2 pOffset )
 {
@@ -162,7 +167,7 @@ void gui::setQuadPos( const Quad pQuad, const glm::vec2 pPos )
 {
 	std::memcpy( &allQuads[pQuad.index - 1], &pPos, sizeof( glm::vec2 ) );
 }
-gui::QuadData gui::getQuadData( const Quad pQuad )
+glm::vec4 gui::getQuadData( const Quad pQuad )
 {
     return allQuads[pQuad.index];
 }

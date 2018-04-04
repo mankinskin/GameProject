@@ -54,16 +54,17 @@ namespace utils
             return std::get<N>(t.subelements);
         } 
 
+    template<typename Elem>
+        constexpr size_t extract_count(const Elem& e)
+        {
+            return 1;
+        };
     template<typename... Elems>
         constexpr size_t extract_count(const Element<Elems...>& e)
         {
             return sizeof...(Elems);
         };
-    template<typename T>
-        constexpr size_t extract_count(const T& t)
-        {
-            return 1;
-        };
+
     template<typename rT, 
         typename... FArgTs,
         typename... Es>
@@ -117,6 +118,7 @@ constexpr void utils::foreach_imp( rT(*func)(FArgTs...),
     sub(func, _index<extract_count(first)>(), first, es... );
 }
 
+
 template<typename rT, 
     typename... FArgTs,
     typename... Es>
@@ -124,6 +126,7 @@ constexpr void utils::sub( rT(*func)(FArgTs...),
         _index<0> i, const Es... es )
 {
 }
+
 template<typename rT, 
     typename... FArgTs,
     typename... Es,
