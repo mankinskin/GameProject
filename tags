@@ -93,7 +93,7 @@ GlyphMetrics	src/font.h	/^		struct GlyphMetrics $/;"	s	namespace:gui::text
 H_FILES	Makefile	/^H_FILES=$(shell ls src | grep -e '\\.h')$/;"	m
 ID	src/shader_loader.h	/^		GLuint ID;$/;"	m	struct:shader::Module
 ID	src/shader_loader.h	/^		GLuint ID;$/;"	m	struct:shader::Program
-ID	src/storage.h	/^        unsigned int ID;$/;"	m	struct:gl::Storage
+ID	src/storage.h	/^		unsigned int ID;$/;"	m	struct:gl::Storage
 ID	src/texture.h	/^		unsigned int ID = 0;$/;"	m	struct:texture::Texture2D
 IMAGE_H	dt/image.h	22;"	d
 IMUTIL_H	dt/imutil.h	22;"	d
@@ -134,7 +134,7 @@ Loader	src/model_loader.h	/^	namespace Loader {$/;"	n	namespace:model
 Loader	src/shader_loader.h	/^	namespace Loader {$/;"	n	namespace:shader
 LookPolicy	src/camera.h	/^		LookPolicy( size_t pXRotatorOffset, size_t pXRotationAxisOffset, float pXRotationFactor,$/;"	f	struct:camera::LookPolicy
 LookPolicy	src/camera.h	/^	struct LookPolicy {\/\/stores relative offsets of vectors in a camera object to be used to move the camera frustum$/;"	s	namespace:camera
-MAP_PERSISTENT_FLAGS	src/storage.cpp	/^int gl::MAP_PERSISTENT_FLAGS = GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;$/;"	m	class:gl	file:
+MAP_PERSISTENT_FLAGS	src/storage.h	/^	const int MAP_PERSISTENT_FLAGS = GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;$/;"	m	namespace:gl
 MAX_CHARS	src/font.cpp	/^unsigned int MAX_CHARS = 1000;$/;"	v
 MAX_COLOR_COUNT	src/color.h	/^	const unsigned int MAX_COLOR_COUNT = 100;$/;"	m	namespace:gl
 MAX_ENTITIES	src/entities.h	/^	const unsigned int MAX_ENTITIES = 1000;$/;"	m	namespace:entities
@@ -209,9 +209,9 @@ Signal	src/signal.h	/^	struct Signal {$/;"	s	namespace:signals
 Source	src/signal.h	/^		Source( bool pSrc )$/;"	f	struct:signals::Source
 Source	src/signal.h	/^	struct Source {$/;"	s	namespace:signals
 State	src/app.h	/^    enum State {$/;"	g	namespace:app
-Storage	src/storage.h	/^        Storage( std::string pName, unsigned int pID, unsigned int pCapacity, unsigned int pFlags )$/;"	f	struct:gl::Storage
-Storage	src/storage.h	/^        Storage() {}$/;"	f	struct:gl::Storage
-Storage	src/storage.h	/^    struct Storage $/;"	s	namespace:gl
+Storage	src/storage.h	/^		Storage( std::string pName, unsigned int pID, unsigned int pCapacity, unsigned int pFlags)$/;"	f	struct:gl::Storage
+Storage	src/storage.h	/^		Storage()$/;"	f	struct:gl::Storage
+Storage	src/storage.h	/^	struct Storage $/;"	s	namespace:gl
 Stream	src/vao.h	/^		Stream() $/;"	f	struct:gl::Stream
 Stream	src/vao.h	/^	struct Stream $/;"	s	namespace:gl
 String	src/font.h	/^			String( unsigned int pOffset, unsigned int pCount )$/;"	f	struct:gui::text::String
@@ -348,7 +348,7 @@ bearingX	src/font.h	/^			float bearingX;$/;"	m	struct:gui::text::GlyphMetrics
 bearingY	src/font.h	/^			float bearingY;$/;"	m	struct:gui::text::GlyphMetrics
 bind	src/viewport.cpp	/^void gl::Viewport::bind()$/;"	f	class:gl::Viewport
 bindUniformBufferToShader	src/shader.cpp	/^void shader::bindUniformBufferToShader( unsigned int pProgram, const gl::Storage& pStorage, std::string pBlockName )$/;"	f	class:shader
-binding	src/storage.h	/^        unsigned int binding;$/;"	m	struct:gl::Storage
+binding	src/storage.h	/^		unsigned int binding;$/;"	m	struct:gl::Storage
 blendMeshList	src/mesh.cpp	/^std::vector<unsigned int> mesh::blendMeshList;$/;"	m	class:mesh	file:
 blendMeshShader	src/mesh.cpp	/^unsigned int mesh::blendMeshShader = 0;$/;"	m	class:mesh	file:
 bound	dt/misc.h	/^inline T bound(const T &x, const T &min, const T &max) {$/;"	f
@@ -358,7 +358,7 @@ buildShaders	src/sequencer.cpp	/^void sequencer::buildShaders()$/;"	f	class:sequ
 call	src/functor.h	/^		static void call( unsigned int pFunc ) $/;"	f	class:functors::Functor
 callFunctors	src/functor.cpp	/^void functors::callFunctors()$/;"	f	class:functors
 camera	src/camera.h	/^namespace camera {$/;"	n
-capacity	src/storage.h	/^        unsigned int capacity;$/;"	m	struct:gl::Storage
+capacity	src/storage.h	/^		unsigned int capacity;$/;"	m	struct:gl::Storage
 center	src/camera.h	/^		glm::vec3 center;$/;"	m	struct:camera::Frustum
 change	src/keys.h	/^            KeyCondition change;$/;"	m	class:input::KeyEvent
 change	src/mouse.h	/^        KeyCondition change;$/;"	m	struct:input::MouseKeyEvent
@@ -440,7 +440,7 @@ createProgram	src/shader.cpp	/^unsigned int shader::createProgram( std::string p
 createQuad	src/quad.cpp	/^unsigned int gui::createQuad( const float pPosX, const float pPosY, $/;"	f	class:gui
 createQuad	src/quad.cpp	/^unsigned int gui::createQuad( const glm::vec4 pQuad )$/;"	f	class:gui
 createSignal	src/signal.h	/^	unsigned int createSignal( Source pSource, bool pStartAs = false ) {$/;"	f	namespace:signals
-createStorage	src/storage.cpp	/^const gl::Storage gl::createStorage( std::string pName, unsigned int pCapacity, unsigned int pFlags, void* pData )$/;"	f	class:gl
+createStorage	src/storage.cpp	/^gl::Storage gl::createStorage( std::string pName, unsigned int pCapacity, unsigned int pFlags, void* pData )$/;"	f	class:gl
 createTextColor	src/text.cpp	/^unsigned int gui::text::createTextColor( glm::vec4 pColor )$/;"	f	class:gui::text
 createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( glm::vec2 pTopLeft, glm::vec2 pSize, unsigned int pMetrics, int pFlags, float pMarging )$/;"	f	class:gui::text
 createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( glm::vec4 pQuad, unsigned int pMetrics, int pFlags, float pMarging )$/;"	f	class:gui::text
@@ -517,7 +517,7 @@ fileName	src/shader_loader.h	/^		std::string fileName;$/;"	m	struct:shader::Modu
 filename	src/model_loader.h	/^			std::string filename;$/;"	m	struct:model::Loader::ModelLoadFile
 flags	src/font.h	/^			int flags = 0;$/;"	m	struct:gui::text::FontInstructions
 flags	src/font_loader.cpp	/^	int flags;$/;"	m	struct:LoadAtlas	file:
-flags	src/storage.h	/^        unsigned int flags;$/;"	m	struct:gl::Storage
+flags	src/storage.h	/^		unsigned int flags;$/;"	m	struct:gl::Storage
 flags	src/text.cpp	/^	unsigned int flags;$/;"	m	struct:Textbox	file:
 followCursor	src/camera.h	/^		bool followCursor = false;$/;"	m	class:camera::Camera
 font	src/text.cpp	/^	unsigned int font;$/;"	m	struct:TextboxMetrics	file:
@@ -860,7 +860,7 @@ msg	src/debug.h	/^		std::string msg = "";$/;"	m	struct:debug::Error
 name	src/camera.h	/^		std::string name = "camera";$/;"	m	class:camera::Camera
 name	src/contextwindow.h	/^	    std::string name = "GLFW\/OpenGL Window";$/;"	m	struct:app::Window
 name	src/shader_loader.h	/^		std::string name;$/;"	m	struct:shader::Program
-name	src/storage.h	/^        std::string name;$/;"	m	struct:gl::Storage
+name	src/storage.h	/^		std::string name;$/;"	m	struct:gl::Storage
 nand_op	src/gates.h	/^        nand_op() $/;"	f	struct:gates::nand_op
 nand_op	src/gates.h	/^    struct nand_op $/;"	s	namespace:gates
 nearPlane	src/camera.h	/^		float nearPlane = 1.0f;$/;"	m	struct:camera::Frustum
@@ -1063,7 +1063,7 @@ setShaderDirectory	src/shader_loader.cpp	/^void shader::Loader::setShaderDirecto
 setSize	src/contextwindow.cpp	/^void app::Window::setSize( unsigned int pWidth, unsigned int pHeight )$/;"	f	class:app::Window
 setSpeed	src/camera.cpp	/^void camera::Camera::setSpeed( float pNewSpeed )$/;"	f	class:camera::Camera
 setSpeed	src/camera.cpp	/^void camera::setSpeed( Camera & pCam, float pSpeed )$/;"	f	class:camera
-setStorageTarget	src/storage.cpp	/^void gl::setStorageTarget( Storage& pStorage, const unsigned int pTarget )$/;"	f	class:gl
+setStorageTarget	src/storage.cpp	/^void gl::setStorageTarget( gl::Storage& pStorage, const unsigned int pTarget )$/;"	f	class:gl
 setTextboxString	src/text.cpp	/^void gui::text::setTextboxString( unsigned int pTextbox, String pString )$/;"	f	class:gui::text
 setTextboxString	src/text.cpp	/^void gui::text::setTextboxString( unsigned int pTextbox, std::string pString )$/;"	f	class:gui::text
 setTextureDirectory	src/texture.cpp	/^void texture::setTextureDirectory( std::string& pDirectory )$/;"	f	class:texture
@@ -1150,8 +1150,8 @@ switch_gate	src/gates.h	/^        switch_gate( On pOnSource, Off pOffSource, boo
 switch_gate	src/gates.h	/^        switch_gate() $/;"	f	struct:gates::switch_gate
 switch_gate	src/gates.h	/^    struct switch_gate $/;"	s	namespace:gates
 synapses	src/neural.h	/^		std::vector<std::vector<Synapse>> synapses;$/;"	m	struct:neural::Circuit
-target	src/storage.h	/^        unsigned int target;$/;"	m	struct:gl::Storage
-targetBindingCounts	src/storage.cpp	/^std::unordered_map<unsigned int, unsigned int> gl::targetBindingCounts;$/;"	m	class:gl	file:
+target	src/storage.h	/^		unsigned int target;$/;"	m	struct:gl::Storage
+targetBindingCounts	src/storage.cpp	/^std::unordered_map<unsigned int, unsigned int> targetBindingCounts;$/;"	v
 text	src/font.h	/^	namespace text $/;"	n	namespace:gui
 text	src/font_loader.h	/^	namespace text $/;"	n	namespace:gui
 text	src/text.h	/^	namespace text {$/;"	n	namespace:gui
