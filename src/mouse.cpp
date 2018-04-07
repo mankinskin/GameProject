@@ -44,11 +44,9 @@ void input::updateMouse()
 		newRelativeCursorPosition.y - relativeCursorPosition.y );
 	relativeCursorPosition = newRelativeCursorPosition;
 
-	printf( "RelPos: %.2f\t%.2f\n", relativeCursorPosition.x, relativeCursorPosition.y );
-	printf( "AbsPos: %u\t%u\n", absoluteCursorPosition.x, absoluteCursorPosition.y );
-    printf( "Delta: %.2f\t%.2f\n", cursorFrameDelta.x, cursorFrameDelta.y );
-
-	
+	//printf( "RelPos: %.2f\t%.2f\n", relativeCursorPosition.x, relativeCursorPosition.y );
+	//printf( "AbsPos: %u\t%u\n", absoluteCursorPosition.x, absoluteCursorPosition.y );
+    //printf( "Delta: %.2f\t%.2f\n", cursorFrameDelta.x, cursorFrameDelta.y );
 }
 
 void input::resetMouse()
@@ -96,7 +94,7 @@ void input::getCursorQuadEvents()
 			pushEvent( QuadEvent( hovered_quad, 1 ) );
 		}
 	}
-    //printf( "%d\n", hovered_quad );
+    printf( "%d\n", hovered_quad );
 }
 
 void input::mouseKey_Callback( GLFWwindow * window, int pKey, int pAction, int pMods )
@@ -116,5 +114,5 @@ void input::scroll_Callback( GLFWwindow * window, double pX, double pY )
 }
 void input::cursorEnter_Callback( GLFWwindow* window, int pEntered )
 {
-	//Entered = 1 if entered, on exit = 0
+
 }

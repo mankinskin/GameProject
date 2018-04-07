@@ -6,12 +6,12 @@
 
 std::vector<mesh::Material> mesh::allMaterials;
 std::vector<mesh::MaterialTextures> mesh::allMaterialTextures;
-unsigned int mesh::materialUBO = 0;
+gl::Storage mesh::materialUBO;
 
 void mesh::storeMaterials()
 {
-	materialUBO = vao::createStorage( "MaterialBuffer", sizeof( mesh::Material )*mesh::allMaterials.size(), &mesh::allMaterials[0], 0 );
-	vao::bindStorage( GL_UNIFORM_BUFFER, materialUBO );
+	materialUBO = gl::createStorage( "MaterialBuffer", sizeof( mesh::Material )*mesh::allMaterials.size(), 0, &mesh::allMaterials[0] );
+    gl::setStorageTarget( materialUBO, GL_UNIFORM_BUFFER );
 }
 
 

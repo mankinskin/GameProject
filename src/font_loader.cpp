@@ -13,11 +13,11 @@
 #include "viewport.h"
 #include "font.h"
 
-
 #define DEFAULT_TTF_DIR "../assets//fonts//"
 #define DEFAULT_STORE_DIR "../assets//glyph_atlas_fonts//"
 
-struct LoadFontMetrics {
+struct LoadFontMetrics 
+{
 	size_t ppem_x;
 	size_t ppem_y;
 	size_t scale_x;
@@ -25,20 +25,23 @@ struct LoadFontMetrics {
 	size_t lineGap;
 };
 
-struct LoadGlyphQuad {
+struct LoadGlyphQuad 
+{
 	size_t minX;
 	size_t minY;
 	size_t maxX;
 	size_t maxY;
 };
 
-struct LoadGlyphMetrics {
+struct LoadGlyphMetrics 
+{
 	size_t advanceX;
 	int xBearing;
 	int yBearing;
 };
 
-struct LoadAtlas {
+struct LoadAtlas 
+{
 	size_t width;
 	size_t height;
 	int flags;
@@ -46,7 +49,8 @@ struct LoadAtlas {
 	std::vector<unsigned char> buffer;
 };
 
-struct LoadFont {
+struct LoadFont 
+{
 	std::string fileName;
 	gui::text::FontInstructions instructions;
 	LoadFontMetrics fontMetrics;
@@ -72,7 +76,6 @@ PIPELINE FOR FONT LOADING
 //	return p*p;
 //}
 
-
 std::vector<int> getKerningMap( FT_Face pFace, size_t pStartCode, size_t pGlyphCount )
 {
 	std::vector<int> kerning( pGlyphCount*pGlyphCount );
@@ -92,8 +95,8 @@ std::vector<int> getKerningMap( FT_Face pFace, size_t pStartCode, size_t pGlyphC
 	return kerning;
 }
 
-void setFontSize( FT_Face& pFace, LoadFontMetrics& pFontMetrics, gui::text::FontInstructions& pInstructions ) {
-
+void setFontSize( FT_Face& pFace, LoadFontMetrics& pFontMetrics, gui::text::FontInstructions& pInstructions ) 
+{
 	size_t dpi_x = 100;
 	size_t dpi_y = 100;
 	if ( pInstructions.flags & 1 ) {
@@ -110,7 +113,8 @@ void setFontSize( FT_Face& pFace, LoadFontMetrics& pFontMetrics, gui::text::Font
 
 }
 
-void loadAtlas( FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, LoadFontMetrics& pFontMetrics, LoadAtlas& pAtlas, std::vector<LoadGlyphMetrics>& pMetrics )
+void loadAtlas( FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, 
+        LoadFontMetrics& pFontMetrics, LoadAtlas& pAtlas, std::vector<LoadGlyphMetrics>& pMetrics )
 {
 	const size_t width_glyphs = ( size_t )ceil( sqrt( ( float )pFontInstructions.glyphCount ) );
 	size_t pad_pixels = 0;
@@ -175,7 +179,6 @@ void loadAtlas( FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, 
 		qud.maxX = qud.minX + tileSize.x;
 		qud.maxY = qud.minY + tileSize.y;
 
-
 		if ( pFontInstructions.flags & 1 ) {
 			
 			image<unsigned char> inImage( dtSize.x, dtSize.y );
@@ -200,7 +203,6 @@ void loadAtlas( FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, 
 					}
 				}
 			}
-
 
 			innerOutImg = *dt( &inImage, 0 );//perform distance transform for the glyph image
 			outerOutImg = *dt( &inImage, 1 );//once inner and outer DT, because we want 
@@ -227,7 +229,6 @@ void loadAtlas( FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, 
 			size_t bufpos = ( cursor.y + pad_pixels ) * preWidth + cursor.x + pad_pixels;
 			for ( size_t h = 0; h < dtSize.y; ++h ) {
 				for ( size_t w = 0; w < dtSize.x; ++w ) {
-
 					float outDist = std::min( spread_dist, std::sqrt( outerOutImg.data[h*dtSize.x + w] ) ); //values from 0 to outerMaxDistance
 					float inDist = std::min( spread_dist, std::sqrt( innerOutImg.data[h*dtSize.x + w] ) ); //values from 0 to innerMaxDistance
 
@@ -242,17 +243,14 @@ void loadAtlas( FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, 
 					size_t pos = ( size_t )( ( h*size_scale )*preWidth + ( w*size_scale ) );
 					buf[bufpos + pos] += ( unsigned char )( val *255.0f );
 				}
-
 			}
 			//endif FONT_LOAD_DT
 		}
 		else {//regular load
-
 			for ( size_t line = 0; line < gly->bitmap.rows; ++line ) {
 				std::memcpy( &buf[( ( line + qud.minY )*preWidth ) + qud.minX], &gly->bitmap.buffer[( line*gly->bitmap.width )], sizeof( unsigned char )*gly->bitmap.width );
 			}
 		}
-
 
 		//advance atlas cursor
 		cursor.x += ( tileSize.x + pad_pixels * 2 );
@@ -291,16 +289,13 @@ void loadFont( LoadFont& pFont )
 
 	FT_New_Face( ftLib, ( fontPath ).c_str(), 0, &ftface );
 
-
 	pFont.instructions.pointSize = font_instructions.pointSize;
 
 	setFontSize( ftface, pFont.fontMetrics, pFont.instructions );
 	loadAtlas( ftface, font_instructions, pFont.fontMetrics, pFont.atlas, pFont.metrics );
 	pFont.kerningMap = getKerningMap( ftface, font_instructions.startCode, font_instructions.glyphCount );
 
-
 	FT_Done_Face( ftface );
-
 }
 
 void gui::text::initializer::setFontInputDir( std::string pNewDirectory )
@@ -313,6 +308,7 @@ void gui::text::initializer::setFontStoreDir( std::string pNewDirectory )
 
 	font_store_directory = pNewDirectory;
 }
+
 void gui::text::initializer::initFreeType()
 {
 	if ( FT_Init_FreeType( &ftLib ) ) {
@@ -323,7 +319,8 @@ void gui::text::initializer::initFreeType()
 size_t gui::text::initializer::includeFont( std::string pFontFileName, size_t pPointSize, 
         size_t pStartCode, size_t pGlyphCount, int pFlags, size_t pUpsampling )
 {
-	return includeFont( pFontFileName, FontInstructions( pPointSize, pStartCode, pGlyphCount, pFlags, pUpsampling ) );
+	return includeFont( pFontFileName, 
+            FontInstructions( pPointSize, pStartCode, pGlyphCount, pFlags, pUpsampling ) );
 }
 void removeFileExtension( std::string& pFileName )
 {
@@ -336,7 +333,8 @@ void removeFileExtension( std::string& pFileName )
 	}
 	pFileName.resize( nameCharCount );
 }
-size_t gui::text::initializer::includeFont( std::string pFontFileName, FontInstructions pLoadInstructions = gui::text::FontInstructions() )
+size_t gui::text::initializer::includeFont( std::string pFontFileName, 
+        FontInstructions pLoadInstructions = gui::text::FontInstructions() )
 {
 	size_t sz = loadFontBuffer.size();
 	LoadFont font;
@@ -346,15 +344,19 @@ size_t gui::text::initializer::includeFont( std::string pFontFileName, FontInstr
 	loadFontBuffer.push_back( font );
 	return sz;
 }
-size_t gui::text::initializer::createFontInstructions( size_t pPointSize, size_t pStartCode, size_t pGlyphCount, int pFlags, size_t pUpsampling )
+
+size_t gui::text::initializer::createFontInstructions( size_t pPointSize, size_t pStartCode, 
+        size_t pGlyphCount, int pFlags, size_t pUpsampling )
 {
-	return createFontInstructions( gui::text::FontInstructions( pPointSize, pStartCode, pGlyphCount, pFlags, pUpsampling ) );
+	return createFontInstructions( gui::text::FontInstructions( pPointSize, pStartCode, 
+                pGlyphCount, pFlags, pUpsampling ) );
 }
 
 size_t gui::text::initializer::createFontInstructions( gui::text::FontInstructions pInstructions )
 {
 	size_t sz = allFontInstructions.size();
-	size_t i = std::find( allFontInstructions.begin(), allFontInstructions.end(), pInstructions ) - allFontInstructions.begin();
+	size_t i = std::find( allFontInstructions.begin(), 
+            allFontInstructions.end(), pInstructions ) - allFontInstructions.begin();
 	if ( i < sz ) {
 		return i;
 	}
@@ -380,9 +382,9 @@ void storeGlyphs( gui::text::Font& pFont, const LoadFont & pLoadFont )
 			( float )met.advanceX / ( ( float )gl::Viewport::current->width / 2.0f ), ( float )met.xBearing / ( ( float )gl::Viewport::current->width / 2.0f ), ( float )met.yBearing / ( ( float )gl::Viewport::current->height / 2.0f ) );
 		//allMetrics[pSize.metricOffset + g] = GlyphMetrics( ( float )met.width, ( float )met.height, ( float )met.advanceX, ( float )met.xBearing, ( float )met.yBearing );
 	}
-	pFont.glyphStorageIndex = vao::createStorage( "GlyphStorage", sizeof( gui::text::Glyph )*glyCount, &glyphs[0], 0 );
-	vao::bindStorage( GL_UNIFORM_BUFFER, pFont.glyphStorageIndex );
-
+	pFont.glyphStorage = gl::createStorage( "GlyphStorage", 
+            sizeof( gui::text::Glyph )*glyCount, 0, &glyphs[0] );
+	gl::setStorageTarget( pFont.glyphStorage, GL_UNIFORM_BUFFER );
 }
 
 std::pair<size_t, size_t> convertKerning( std::vector<int>& pKerningMap )
@@ -447,6 +449,4 @@ void gui::text::initializer::loadFonts()
 	loadFontBuffer.clear();
 }
 
-
 //TODO: Font Serialization
-

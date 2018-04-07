@@ -30,7 +30,7 @@ void texture::initGUIFBO() {
 	glCreateRenderbuffers( 1, &guiDepthRenderbuffer );
 
 	quadIndexTexture = get2DTextureID( createTexture2D( 
-                gl::getWidth(), gl::getHeight(), GL_R8UI, 
+                gl::getWidth(), gl::getHeight(), GL_R16UI, 
                 GL_RED_INTEGER, GL_UNSIGNED_BYTE, 0 ) );
 	fontColorTexture = get2DTextureID( createTexture2D( 
                 gl::getWidth(), gl::getHeight(), GL_RGBA8, 

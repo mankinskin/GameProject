@@ -3,6 +3,7 @@
 #include <string>
 #include <glm.hpp>
 #include "utils.h"
+#include "storage.h"
 
 namespace gl {
 
@@ -11,7 +12,7 @@ namespace gl {
     typedef utils::Itr<Color> ColorIt;
 
 	const unsigned int MAX_COLOR_COUNT = 100;
-	extern unsigned int colorBuffer;
+	extern Storage colorBuffer;
 
 	extern std::vector<Color> allColors;
 

@@ -17,8 +17,8 @@
 #include "app.h"
 #include "lights.h"
 #include "viewport.h"
-#include "hierarchy.h"
-#include "hierarchy_utils.h"
+#include "element.h"
+#include "element_utils.h"
 
 glm::vec2 gui::pixel_size;
 
@@ -175,9 +175,6 @@ void gui::initWidgets()
 
     Window::QuadIniter window_quad_initer( {  window_frame_initer, window_header_initer } );
 
-    Window::Quads window_quads(window_quad_initer );
-    utils::foreach( colorQuad, window_quads, window_colors );
-
 
     Window::Frame::MoveRule window_frame_move_policy(
         glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
@@ -204,8 +201,12 @@ void gui::initWidgets()
         window_frame_move_policy, window_header_move_policy
     );
     Window::ResizeRule window_resize_policy(
-        glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)
+        //glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)
+        window_frame_resize_policy, window_header_resize_policy
             );
+
+    Window::Quads window_quads( window_quad_initer );
+    utils::foreach( colorQuad, window_quads, window_colors );
 
     ButtonEvents<Event> header_button( 
             createEvent( QuadEvent( window_quads.element<1>().element<1>().index, 1 ) ), 
@@ -219,32 +220,32 @@ void gui::initWidgets()
 
     move_window_func.set_triggers( { header_lmb.hold } );
 
+    ButtonEvents<Event> right( 
+            createEvent( QuadEvent( window_quads.element<0>().element<5>().index, 1 ) ), 
+            createEvent( QuadEvent( window_quads.element<0>().element<5>().index, 0 ) ) );
+    gate<and_op, decltype( right.hold_evt ), decltype( lmb.on_evt )> 
+        right_press_evt( and_op(), right.hold_evt, lmb.on_evt );
+    ButtonEvents<decltype( right_press_evt ), decltype( lmb.off_evt )> right_and_lmb( 
+            right_press_evt, lmb.off_evt );
+
+    ButtonEvents<Event> bottom( 
+            createEvent( QuadEvent( window_quads.element<0>().element<7>().index, 1 ) ), 
+            createEvent( QuadEvent( window_quads.element<0>().element<7>().index, 0 ) ) );
+    gate<and_op, decltype( bottom.hold_evt ), decltype( lmb.on_evt )> bottom_press_evt( and_op(), 
+            bottom.hold_evt, lmb.on_evt );
+    ButtonEvents<decltype( bottom_press_evt ), decltype( lmb.off_evt )> bottom_and_lmb( 
+            bottom_press_evt, lmb.off_evt );
+
+    ButtonEvents<Event> bottom_right( 
+            createEvent( QuadEvent( window_quads.element<0>().element<8>().index, 1 ) ), 
+            createEvent( QuadEvent( window_quads.element<0>().element<8>().index, 0 ) ) );
+    gate<and_op, decltype( bottom_right.hold_evt ), decltype( lmb.on_evt )> bottom_right_press_evt( and_op(), bottom_right.hold_evt, lmb.on_evt );
+    ButtonEvents<decltype( bottom_right_press_evt ), decltype( lmb.off_evt )> bottom_right_and_lmb( bottom_right_press_evt, lmb.off_evt );
 
 
-    //ButtonEvents<Event> right( 
-    //        createEvent( QuadEvent( window.element<0>().element<5>().index, 1 ) ), 
-    //        createEvent( QuadEvent( window.element<0>().element<5>().index, 0 ) ) );
-    //gate<and_op, decltype( right.hold_evt ), decltype( lmb.on_evt )> 
-    //    right_press_evt( and_op(), right.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( right_press_evt ), decltype( lmb.off_evt )> right_and_lmb( 
-    //        right_press_evt, lmb.off_evt );
-
-    //ButtonEvents<Event> bottom( 
-    //        createEvent( QuadEvent( window.element<0>().element<7>().index, 1 ) ), 
-    //        createEvent( QuadEvent( window.element<0>().element<7>().index, 0 ) ) );
-    //gate<and_op, decltype( bottom.hold_evt ), decltype( lmb.on_evt )> bottom_press_evt( and_op(), 
-    //        bottom.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( bottom_press_evt ), decltype( lmb.off_evt )> bottom_and_lmb( 
-    //        bottom_press_evt, lmb.off_evt );
-
-    //ButtonEvents<Event> bottom_right( createEvent( QuadEvent( window.element<0>().element<8>().index, 1 ) ), createEvent( QuadEvent( window.element<0>().element<8>().index, 0 ) ) );
-    //gate<and_op, decltype( bottom_right.hold_evt ), decltype( lmb.on_evt )> bottom_right_press_evt( and_op(), bottom_right.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( bottom_right_press_evt ), decltype( lmb.off_evt )> bottom_right_and_lmb( bottom_right_press_evt, lmb.off_evt );
-
-
-    //FunctorRef<void, Window, glm::vec2&> resize_window_func = 
-    //    createFunctor<void, Window, glm::vec2&>( resize_widget<Window>, window, cursorFrameDelta );
-    //resize_window_func.set_triggers( { bottom_right_and_lmb.hold } );
+    auto resize_window_func = 
+        createFunctor<void, Window::Quads, Window::MoveRule, glm::vec2&>( resizeQuadsScaled, window_quads, window_move_policy, cursorFrameDelta );
+    resize_window_func.set_triggers( { bottom_right_and_lmb.hold } );
 
     //FunctorRef<void, Window, float&, float> resize_window_x_func = createFunctor<void, Window, float&, float>( resize_widget, window, cursorFrameDelta.x, 0.0f );
     //resize_window_x_func.set_triggers( { right_and_lmb.hold } );

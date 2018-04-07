@@ -97,22 +97,14 @@ void sequencer::initModules()
 
 	puts( "Widgets..." );
 	gui::initWidgets();
+
+        gl::updateColorBuffer();
+        gui::updateColorQuads();
 }
 
 void sequencer::fetchInput()
 {
-	input::fetchGLFWEvents();
-	input::updateMouse();
 
-	input::getCursorQuadEvents();
-	input::getMouseKeyEvents();
-	events::checkEvents();
-	signals::checkSignals();
-	functors::callFunctors();
-
-	events::resetEvents();
-	signals::resetSignals();
-	input::end();
 }
 
 void sequencer::clearFramebuffers()
@@ -130,16 +122,21 @@ void sequencer::frame()
 {
         clearFramebuffers();
 
+	    input::fetchGLFWEvents();
+	    input::updateMouse();
+
+	    input::getCursorQuadEvents();
+	    input::getMouseKeyEvents();
+	    events::checkEvents();
+	    signals::checkSignals();
+	    functors::callFunctors();
+
         camera::main_camera.look( input::cursorFrameDelta );
         camera::main_camera.update();
 
         gl::updateGeneralUniformBuffer();
-        gl::updateColorBuffer();
 
         gui::updateLineBuffers();
-
-        gui::updateQuadBuffer();
-        gui::updateColorQuads();
 
         glBindFramebuffer( GL_FRAMEBUFFER, texture::guiFBO );
         gui::rasterQuadIndices();
@@ -151,7 +148,11 @@ void sequencer::frame()
         gui::renderColorQuads();
 
         glfwSwapBuffers(app::mainWindow.window );
-        fetchInput();
+
+        events::resetEvents();
+        signals::resetSignals();
+        input::end();
+
         app::updateTime();
         app::limitFPS();
 
@@ -225,9 +226,6 @@ void sequencer::gameloop()
         //debug::printInfo();
     }
     gui::text::clearCharStorage();
-
-
-    gui::clearQuads();
     functors::clearFunctors();
     signals::clearSignals();
 }

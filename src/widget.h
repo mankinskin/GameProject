@@ -9,8 +9,8 @@
 #include "quad.h"
 #include "quadcolors.h"
 #include "utils.h"
-#include "hierarchy.h"
-#include "hierarchy_utils.h"
+#include "element.h"
+#include "element_utils.h"
 
 
 //-----Widgets
@@ -29,6 +29,7 @@ namespace gui {
         using QuadIniter = utils::gen_Element_t<glm::vec4, 2>;
 
         using Colors = utils::gen_Element_t<gl::ColorIt, 2>;
+        using ColorIniter = utils::gen_Element_t<glm::vec4, 2>;
 
         using MoveRule = utils::gen_Element_t<glm::vec2, 2>;
         using ResizeRule = utils::gen_Element_t<glm::vec4, 2>;
@@ -48,18 +49,7 @@ namespace gui {
             using ResizeRule = utils::gen_Element_t<glm::vec4, 9>;
         };
 
-        struct Header 
-        {
-            using Quads = utils::Element<Quad, Quad>;
-            using QuadIniter = utils::Element<glm::vec4, glm::vec4>;
-
-            using Colors = utils::Element<gl::ColorIt, gl::ColorIt>;
-            using ColorIniter = utils::Element<glm::vec4, glm::vec4>;
-
-            using MoveRule = utils::gen_Element_t<glm::vec2, 2>;
-            using ResizeRule = utils::gen_Element_t<glm::vec4, 2>;
-        };
-
+        using Header = Button;
         using Quads = utils::Element<Frame::Quads, Header::Quads>;
         using QuadIniter = utils::Element<Frame::QuadIniter, Header::QuadIniter>;
 
@@ -67,7 +57,7 @@ namespace gui {
         using ColorIniter = utils::Element<Frame::ColorIniter, Header::ColorIniter>;
 
         using MoveRule = utils::Element<Frame::MoveRule, Header::MoveRule>;//utils::gen_Element_t<glm::vec2, 2>;
-        using ResizeRule = utils::gen_Element_t<glm::vec4, 2>;
+        using ResizeRule = utils::Element<Frame::ResizeRule, Header::ResizeRule>;//utils::gen_Element_t<glm::vec4, 2>;
     };
 
     template<typename... Qs, typename Vec>
@@ -80,6 +70,18 @@ namespace gui {
         void moveQuadsScaled(const utils::Element<Qs...> elem, Vec v, Scal scale)
         {
             utils::foreach( gui::moveQuadScaled, elem, v, scale);
+        }
+
+    template<typename... Qs, typename Vec>
+        void resizeQuads(const utils::Element<Qs...> elem, Vec v)
+        {
+            utils::foreach( gui::resizeQuad, elem, v );
+        }
+
+    template<typename... Qs, typename Vec, typename Scal>
+        void resizeQuadsScaled(const utils::Element<Qs...> elem, Vec v, Scal scale)
+        {
+            utils::foreach( gui::resizeQuadScaled, elem, v, scale);
         }
 }
 

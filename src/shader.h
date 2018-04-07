@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <glm.hpp>
-#include "vao.h"
+#include "storage.h"
 #include <typeinfo>
 #include <gtc/type_ptr.hpp>
 
@@ -21,9 +21,7 @@ namespace shader {
     void addVertexAttribute( unsigned int pProgram, std::string pAttributeName, unsigned int pAttributeIndex );
     void addVertexAttribute( std::string pProgramName, std::string pAttributeName, unsigned int pAttributeIndex );
 
-    void bindUniformBufferToShader( std::string pProgramName, unsigned int pTargetStorageIndex, std::string pBlockName );
-    void bindUniformBufferToShader( unsigned int pProgram, unsigned int pTargetStorageIndex, std::string pBlockName );
-    void bindUniformBufferToShader( unsigned int pProgram, const vao::Storage& pStorage, std::string pBlockName );
+    void bindUniformBufferToShader( unsigned int pProgram, const gl::Storage& pStorage, std::string pBlockName );
     extern unsigned int currentShaderProgram;
 
     void setUniform( unsigned int pProgram, std::string pUniformName, int pValue );

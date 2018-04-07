@@ -1,19 +1,22 @@
-#ifndef FONT_LOADER_H
-#define FONT_LOADER_H
+#pragma once
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <glm.hpp>
 #include <string>
 
-namespace gui {
-	namespace text {
+namespace gui 
+{
+	namespace text 
+    {
 		struct FontInstructions;
-		namespace initializer {
-
+		namespace initializer 
+        {
 			void initFreeType();
 			size_t includeFont( std::string pFontFileName, FontInstructions pInstructions );
-			size_t includeFont( std::string pFontFileName, size_t pPointSize, size_t pStartCode, size_t pGlyphCount, int pFlags, size_t pUpsampling = 1 );
-			size_t createFontInstructions( size_t pPointSize, size_t pStartCode, size_t pGlyphCount, int pFlags, size_t pUpsampling = 1 );
+			size_t includeFont( std::string pFontFileName, size_t pPointSize, 
+                    size_t pStartCode, size_t pGlyphCount, int pFlags, size_t pUpsampling = 1 );
+			size_t createFontInstructions( size_t pPointSize, size_t pStartCode, 
+                    size_t pGlyphCount, int pFlags, size_t pUpsampling = 1 );
 			size_t createFontInstructions( FontInstructions pInstructions );
 
 			void loadFonts();
@@ -23,7 +26,3 @@ namespace gui {
 	}
 
 }
-
-
-
-#endif

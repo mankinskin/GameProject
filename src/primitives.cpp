@@ -1,12 +1,11 @@
 #include "primitives.h"
 #include "vao.h"
-
 #include <glm.hpp>
 
-unsigned int gl::quadVBO = 0;
-unsigned int gl::quadEBO = 0;
-unsigned int gl::cubeVBO = 0;
-unsigned int gl::cubeEBO = 0;
+gl::Storage gl::quadVBO;
+gl::Storage gl::quadEBO;
+gl::Storage gl::cubeVBO;
+gl::Storage gl::cubeEBO;
 
 void gl::initPrimitiveVBO()
 {
@@ -27,8 +26,8 @@ void gl::initPrimitiveVBO()
 	unsigned int iarr[6] = {
 		2, 0, 1, 1, 3, 2
 	};
-	quadVBO = vao::createStorage( "QuadVBO", sizeof( float ) * 4 * 2, &varr[0], 0 );
-	quadEBO = vao::createStorage( "QuadEBO", sizeof( unsigned int ) * 6, &iarr[0], 0 );
+	quadVBO = createStorage( "QuadVBO", sizeof( float ) * 4 * 2, 0, &varr[0] );
+	quadEBO = createStorage( "QuadEBO", sizeof( unsigned int ) * 6, 0, &iarr[0] );
 
 	float cube_width = 1.0f;
 	glm::vec3 cube_verts[8] = {
@@ -62,6 +61,7 @@ void gl::initPrimitiveVBO()
 		4, 6, 5,
 		4, 7, 6
 	};
-	cubeVBO = vao::createStorage( "CubeVBO", sizeof( glm::vec3 ) * 8, &cube_verts[0], 0 );
-	cubeEBO = vao::createStorage( "CubeEBO", sizeof( unsigned int ) * 36, &cube_inds[0], 0 );
+
+	cubeVBO = createStorage( "CubeVBO", sizeof( glm::vec3 ) * 8, 0, &cube_verts[0] );
+	cubeEBO = createStorage( "CubeEBO", sizeof( unsigned int ) * 36, 0, &cube_inds[0] );
 }

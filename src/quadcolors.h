@@ -6,12 +6,13 @@
 #include "gui.h"
 #include "utils.h"
 #include "color.h"
+#include "storage.h"
 
 namespace gui {
 
 	extern unsigned int colorQuadVAO;
 	extern unsigned int colorQuadShader;
-	extern unsigned int colorQuadBuffer;
+	extern gl::Storage colorQuadBuffer;
 
 	extern unsigned int quadColors[MAX_QUAD_COUNT];
 

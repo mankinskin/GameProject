@@ -13,7 +13,7 @@ unsigned int gui::quadColors[MAX_QUAD_COUNT] = {};
 
 unsigned int gui::colorQuadVAO;
 unsigned int gui::colorQuadShader;
-unsigned int gui::colorQuadBuffer;
+gl::Storage gui::colorQuadBuffer;
 
 void gui::initColorQuadVAO() 
 {
@@ -21,13 +21,13 @@ void gui::initColorQuadVAO()
     glCreateVertexArrays( 1, &colorQuadVAO );
     glBindVertexArray( colorQuadVAO );
 
-    glVertexArrayElementBuffer( colorQuadVAO, gl::quadEBO + 1 );
-    glVertexArrayVertexBuffer( colorQuadVAO, 0, gl::quadVBO + 1, 0, sizeof( glm::vec2 ) );
-    vao::setVertexAttrib( colorQuadVAO, 0, 0, 2, GL_FLOAT, 0 );
+    glVertexArrayElementBuffer( colorQuadVAO, gl::quadEBO.ID );
+    glVertexArrayVertexBuffer( colorQuadVAO, 0, gl::quadVBO.ID, 0, sizeof( glm::vec2 ) );
+    //gl::setVertexAttrib( colorQuadVAO, 0, 0, 2, GL_FLOAT, 0 );
 
-    colorQuadBuffer = vao::createStorage( "QuadColorBuffer", sizeof( unsigned int ) * MAX_QUAD_COUNT, 0, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS );
-    vao::createStream( colorQuadBuffer, GL_MAP_WRITE_BIT );
-    vao::bindStorage( GL_UNIFORM_BUFFER, colorQuadBuffer );
+    colorQuadBuffer = gl::createStorage( "QuadColorBuffer", sizeof( unsigned int ) * MAX_QUAD_COUNT, GL_MAP_WRITE_BIT | gl::MAP_PERSISTENT_FLAGS );
+    ////gl::createStream( colorQuadBuffer, GL_MAP_WRITE_BIT );
+    gl::setStorageTarget( colorQuadBuffer, GL_UNIFORM_BUFFER );
 
     glBindVertexArray( 0 );
 }
@@ -49,11 +49,8 @@ void gui::setupColorQuadShader()
 
 void gui::updateColorQuads()
 {
-    if( !allQuads.size() ){
-        return;
-    }
-    //printf( "Uploading %d bytes to storage %s...\n", sizeof( unsigned int )*MAX_QUAD_COUNT, vao::getStorage( colorQuadBuffer ).name.c_str() ); 
-    vao::uploadStorage( colorQuadBuffer, sizeof( unsigned int ) * MAX_QUAD_COUNT, &quadColors[0] );
+    //printf( "Uploading %d bytes to storage %s...\n", sizeof( unsigned int )*MAX_QUAD_COUNT, gl::getStorage( colorQuadBuffer ).name.c_str() ); 
+    //gl::uploadStorage( colorQuadBuffer, sizeof( unsigned int ) * MAX_QUAD_COUNT, &quadColors[0] );
 }
 
 void gui::renderColorQuads() 
@@ -70,5 +67,3 @@ void gui::renderColorQuads()
 
     glDepthFunc( GL_LESS );
 }
-
-

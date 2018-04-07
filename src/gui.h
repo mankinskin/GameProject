@@ -2,7 +2,8 @@
 #include "gl.h"
 #include <string>
 #include <unordered_map>
-namespace gui {
+namespace gui 
+{
 	const unsigned int MAX_QUAD_COUNT = 10000;
 	void init();
 	void initWidgets();

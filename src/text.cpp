@@ -121,7 +121,7 @@ unsigned int gui::text::createTextbox( unsigned int pPosIndex, unsigned int pSiz
 }
 
 unsigned int gui::text::createTextbox( unsigned int pQuad, unsigned int pMetrics, int pFlags, float pMarging ) {
-	glm::vec4 qd = allQuads[pQuad - 1];
+	glm::vec4 qd = getQuadData( pQuad );
 	return createTextbox( qd, pMetrics, pFlags, pMarging );
 }
 
@@ -209,7 +209,6 @@ void loadTextboxGlyphs( Textbox& pTextbox, TextboxMetrics& pTextMetrics, gui::te
 
 			cursor += met.advanceX * pTextMetrics.advanceScale;
 			++lineCharCount;
-			
 		}
 		else {
 			++str_nonCharCount;
@@ -227,6 +226,7 @@ void loadTextboxGlyphs( Textbox& pTextbox, TextboxMetrics& pTextMetrics, gui::te
 			lineCharCount = 0;
 		}
 	}//end loop over string chars
+
 	str_char_off += pTextbox.chars.count - str_nonCharCount;
 	thisLineSize.y = std::max( thisLineSize.y, thisLineGreatestAscend + thisLineGreatestDescend );
 	thisLineSize.x = cursor;
@@ -239,6 +239,7 @@ void loadTextboxGlyphs( Textbox& pTextbox, TextboxMetrics& pTextMetrics, gui::te
 	pGlyphs.glyphIndices.resize( str_char_off );
 	pGlyphs.quads.resize( str_char_off );
 }
+
 void transformTextboxGlyphs( Textbox& pTextbox, TextboxGlyphs& pGlyphs )
 {
 	glm::vec2 tb_pos = allTextboxPositions[pTextbox.pos];
@@ -314,9 +315,12 @@ void gui::text::loadTextboxes()
 	}
 	revalidateFontStringIndices();
 }
-void gui::text::setupGlyphShader() {
+
+void gui::text::setupGlyphShader() 
+{
 	shader::bindUniformBufferToShader( glyphShaderProgram, gl::generalUniformBuffer, "GeneralUniformBuffer" );
 }
+
 void gui::text::renderGlyphs()
 {
 	glBindVertexArray( fontVAO );
@@ -328,7 +332,7 @@ void gui::text::renderGlyphs()
 	for ( unsigned int fo = 0; fo < allFonts.size(); ++fo ) {
 		Font& font = allFonts[fo];
 		glBindTexture( GL_TEXTURE_2D, font.atlasID );
-		shader::bindUniformBufferToShader( glyphShaderProgram, font.glyphStorageIndex, "GlyphBuffer" );
+		shader::bindUniformBufferToShader( glyphShaderProgram, font.glyphStorage, "GlyphBuffer" );
 
 		for ( unsigned int s = 0; s < font.stringCount; ++s ) {
 			String& str = allFontStrings[font.stringOffset + s];
@@ -345,7 +349,8 @@ void gui::text::renderGlyphs()
 }
 
 gui::text::String::String( std::string pString )
-	:offset( allChars.size() ), count( pString.size() ) {
+	:offset( allChars.size() ), count( pString.size() ) 
+{
 	allChars.insert( allChars.end(), pString.begin(), pString.end() );
 }
 

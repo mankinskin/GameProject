@@ -4,6 +4,7 @@
 #include <vector>
 #include <glm.hpp>
 #include "contextwindow.h"
+#include "storage.h"
 
 namespace gl {
     
@@ -37,7 +38,7 @@ namespace gl {
 	extern std::vector<std::string> EXTENSION_LIST;
 	extern int EXTENSIONS_SUPPORTED_NUM;
 
-	extern unsigned int generalUniformBuffer;
+	extern Storage generalUniformBuffer;
 	extern unsigned int screenShaderProgram;
 	extern unsigned int screenQuadVAO;
 

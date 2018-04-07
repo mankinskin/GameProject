@@ -22,36 +22,41 @@ unsigned int mesh::meshShader = 0;
 unsigned int mesh::blendMeshShader = 0;
 unsigned int mesh::meshNormalShader = 0;
 unsigned int mesh::meshVAO = 0;
-unsigned int mesh::meshVBO = 0;
-unsigned int mesh::meshIBO = 0;
-unsigned int mesh::nodeIndexBuffer = 0;
+gl::Storage mesh::meshVBO;
+gl::Storage mesh::meshIBO;
+gl::Storage mesh::nodeIndexBuffer;
 unsigned int mesh::normalShaderProgram = 0;
 
 void mesh::initMeshVAO()
 {
 	glCreateVertexArrays( 1, &meshVAO );
-	meshVBO = vao::createStorage( "MeshVertexBuffer", sizeof( Vertex )*mesh::allStaticVertices.size(), &mesh::allStaticVertices[0], 0 );
-	meshIBO = vao::createStorage( "MeshIndexBuffer", sizeof( unsigned int )*mesh::allIndices.size(), &mesh::allIndices[0], 0 );
-	nodeIndexBuffer = vao::createStorage( "MeshNodeIndexBuffer", sizeof( unsigned int )*model::MAX_MODELS*model::MAX_MESHES_PER_MODEL, nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS );
-	vao::createStream( nodeIndexBuffer, GL_MAP_WRITE_BIT );
+	meshVBO = gl::createStorage( "MeshVertexBuffer", sizeof( Vertex )*mesh::allStaticVertices.size(), 
+            0, &mesh::allStaticVertices[0] );
+	meshIBO = gl::createStorage( "MeshIndexBuffer", sizeof( unsigned int )*mesh::allIndices.size(), 
+            0, &mesh::allIndices[0] );
+	nodeIndexBuffer = gl::createStorage( "MeshNodeIndexBuffer", 
+            sizeof( unsigned int )*model::MAX_MODELS*model::MAX_MESHES_PER_MODEL,
+            GL_MAP_WRITE_BIT | gl::MAP_PERSISTENT_FLAGS );
+	////gl::createStream( nodeIndexBuffer, GL_MAP_WRITE_BIT );
 	glBindVertexArray( meshVAO );
-	glVertexArrayElementBuffer( meshVAO, meshIBO + 1 );
-	glVertexArrayVertexBuffer( meshVAO, 0, meshVBO + 1, 0, sizeof( Vertex ) );
-	glVertexArrayVertexBuffer( meshVAO, 1, nodeIndexBuffer + 1, 0, sizeof( Vertex ) );
-	vao::setVertexArrayVertexStorage( meshVAO, 1, nodeIndexBuffer, sizeof( unsigned int ) );
+	glVertexArrayElementBuffer( meshVAO, meshIBO.ID );
+	glVertexArrayVertexBuffer( meshVAO, 0, meshVBO.ID, 0, sizeof( Vertex ) );
+	glVertexArrayVertexBuffer( meshVAO, 1, nodeIndexBuffer.ID, 0, sizeof( Vertex ) );
+	//gl::setVertexArrayVertexStorage( meshVAO, 1, nodeIndexBuffer, sizeof( unsigned int ) );
 
-	vao::setVertexAttrib( meshVAO, 0, 0, 3, GL_FLOAT, offsetof( Vertex, pos ) );
-	vao::setVertexAttrib( meshVAO, 0, 1, 3, GL_FLOAT, offsetof( Vertex, normal ) );
-	vao::setVertexAttrib( meshVAO, 0, 2, 2, GL_FLOAT, offsetof( Vertex, uv ) );
+	//gl::setVertexAttrib( meshVAO, 0, 0, 3, GL_FLOAT, offsetof( Vertex, pos ) );
+	//gl::setVertexAttrib( meshVAO, 0, 1, 3, GL_FLOAT, offsetof( Vertex, normal ) );
+	//gl::setVertexAttrib( meshVAO, 0, 2, 2, GL_FLOAT, offsetof( Vertex, uv ) );
 
-	vao::setVertexAttrib( meshVAO, 1, 3, 1, GL_UNSIGNED_INT, 0 );
+	//gl::setVertexAttrib( meshVAO, 1, 3, 1, GL_UNSIGNED_INT, 0 );
 	glVertexArrayBindingDivisor( meshVAO, 1, 1 );
 	glBindVertexArray( 0 );
 }
 
 void mesh::initMeshShader()
 {
-	meshShader = shader::newProgram( "meshShader", shader::createModule( "meshShader.vert" ), shader::createModule( "meshShader.frag" ) );
+	meshShader = shader::newProgram( "meshShader", shader::createModule( "meshShader.vert" ), 
+            shader::createModule( "meshShader.frag" ) );
 	shader::addVertexAttribute( meshShader, "pos", 0 );
 	shader::addVertexAttribute( meshShader, "normal", 1 );
 	shader::addVertexAttribute( meshShader, "uv", 2 );
@@ -60,7 +65,8 @@ void mesh::initMeshShader()
 
 void mesh::initMeshNormalShader()
 {
-	meshNormalShader = shader::newProgram( "meshNormalShader", shader::createModule( "meshNormalShader.vert" ), shader::createModule( "meshNormalShader.geo" ), shader::createModule( "meshNormalShader.frag" ) );
+	meshNormalShader = shader::newProgram( "meshNormalShader", shader::createModule( "meshNormalShader.vert" ), 
+            shader::createModule( "meshNormalShader.geo" ), shader::createModule( "meshNormalShader.frag" ) );
 	shader::addVertexAttribute( meshNormalShader, "pos", 0 );
 	shader::addVertexAttribute( meshNormalShader, "normal", 1 );
 	shader::addVertexAttribute( meshNormalShader, "transform", 3 );
@@ -68,7 +74,8 @@ void mesh::initMeshNormalShader()
 
 void mesh::initBlendMeshShader()
 {
-	blendMeshShader = shader::newProgram( "blendMeshShader", shader::createModule( "blendMeshShader.vert" ), shader::createModule( "blendMeshShader.frag" ) );
+	blendMeshShader = shader::newProgram( "blendMeshShader", shader::createModule( "blendMeshShader.vert" ), 
+            shader::createModule( "blendMeshShader.frag" ) );
 	shader::addVertexAttribute( blendMeshShader, "pos", 0 );
 	shader::addVertexAttribute( blendMeshShader, "normal", 1 );
 	shader::addVertexAttribute( blendMeshShader, "uv", 2 );
@@ -98,11 +105,12 @@ void mesh::renderMeshes()
 		glBindTexture( GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].spec_tex );
 		shader::setUniform( meshShader, "materialIndex", mesh.materialIndex );
 
-		glDrawElementsInstancedBaseInstance( GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, ( void* )( mesh.indexOffset * sizeof( unsigned int ) ), mesh.instanceCount, mesh.instanceOffset );
+		glDrawElementsInstancedBaseInstance( GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, 
+                ( void* )( mesh.indexOffset * sizeof( unsigned int ) ), 
+                mesh.instanceCount, mesh.instanceOffset );
 	}
 	shader::unuse();
 	glBindVertexArray( 0 );
-
 }
 
 void mesh::renderMeshNormals()
@@ -113,12 +121,13 @@ void mesh::renderMeshNormals()
 		shader::use( meshNormalShader );
 		for ( unsigned int m = 0; m < allMeshes.size(); ++m ) {
 			mesh::Mesh& mesh = mesh::allMeshes[m];
-			glDrawElementsInstancedBaseInstance( GL_POINTS, mesh.indexCount, GL_UNSIGNED_INT, ( void* )( mesh.indexOffset *sizeof( unsigned int ) ), mesh.instanceCount, mesh.instanceOffset );
+			glDrawElementsInstancedBaseInstance( GL_POINTS, mesh.indexCount, GL_UNSIGNED_INT, 
+                    ( void* )( mesh.indexOffset *sizeof( unsigned int ) ), 
+                    mesh.instanceCount, mesh.instanceOffset );
 		}
 		shader::unuse();
 		glBindVertexArray( 0 );
 	}
-
 }
 
 void mesh::renderBlendMeshes()
@@ -137,7 +146,9 @@ void mesh::renderBlendMeshes()
 		glBindTexture( GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].spec_tex );
 		shader::setUniform( meshShader, "materialIndex", mesh.materialIndex );
 
-		glDrawElementsInstancedBaseInstance( GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, ( void* )( mesh.indexOffset * sizeof( unsigned int ) ), mesh.instanceCount, mesh.instanceOffset );
+		glDrawElementsInstancedBaseInstance( GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, 
+                ( void* )( mesh.indexOffset * sizeof( unsigned int ) ), 
+                mesh.instanceCount, mesh.instanceOffset );
 	}
 	shader::unuse();
 	glBindVertexArray( 0 );
@@ -148,7 +159,8 @@ void mesh::renderBlendMeshes()
 void mesh::updateMeshBuffers()
 {
 	if ( allMeshInstancenode.size() ) {
-		vao::uploadStorage( nodeIndexBuffer, sizeof( unsigned int )*allMeshInstancenode.size(), &allMeshInstancenode[0] );
+		//gl::uploadStorage( nodeIndexBuffer, sizeof( unsigned int )*allMeshInstancenode.size(), 
+                //&allMeshInstancenode[0] );
 	}
 }
 
@@ -173,7 +185,8 @@ void mesh::addInstancesToMesh( unsigned int pMeshIndex, std::vector<unsigned int
 		msh.instanceOffset = allMeshInstancenode.size();
 	}
 	msh.instanceCount += pNodeIDs.size();
-	allMeshInstancenode.insert( allMeshInstancenode.begin() + msh.instanceOffset, pNodeIDs.begin(), pNodeIDs.end() );
+	allMeshInstancenode.insert( allMeshInstancenode.begin() + msh.instanceOffset, 
+            pNodeIDs.begin(), pNodeIDs.end() );
 }
 
 void mesh::revalidateMeshNodeOffsets()
@@ -185,25 +198,27 @@ void mesh::revalidateMeshNodeOffsets()
 	}
 }
 
-unsigned int mesh::createMesh( unsigned int pIndexOffset, unsigned int pIndexCount, unsigned int pVertexOffset, unsigned int pVertexCount, unsigned int pMaterialIndex )
+unsigned int mesh::createMesh( unsigned int pIndexOffset, unsigned int pIndexCount, 
+        unsigned int pVertexOffset, unsigned int pVertexCount, unsigned int pMaterialIndex )
 {
 	allMeshes.emplace_back( pIndexOffset, pIndexCount, pVertexOffset, pVertexCount, pMaterialIndex );
 	return allMeshes.size() - 1;
 }
 
-unsigned int mesh::createMesh( std::vector<Vertex> pVertices, std::vector<unsigned int> pIndices, unsigned int pMaterialIndex )
+unsigned int mesh::createMesh( std::vector<Vertex> pVertices, 
+        std::vector<unsigned int> pIndices, unsigned int pMaterialIndex )
 {
 	unsigned int indexOffset = allIndices.size();
 	unsigned int indexCount = pIndices.size();
 	unsigned int vertexOffset = allStaticVertices.size();
-	unsigned int ret_ = createMesh( indexOffset, indexCount, vertexOffset, pVertices.size(), pMaterialIndex );
+	unsigned int msh = createMesh( indexOffset, indexCount, vertexOffset, pVertices.size(), pMaterialIndex );
 
 	allIndices.resize( allIndices.size() + indexCount );
 	for ( unsigned int i = 0; i < pIndices.size(); ++i ) {
 		allIndices[indexOffset + i] = pIndices[i] + vertexOffset;
 	}
 	allStaticVertices.insert( allStaticVertices.end(), pVertices.begin(), pVertices.end() );
-	return ret_;
+	return msh;
 }
 
 void mesh::toggleNormals()
@@ -220,5 +235,3 @@ void mesh::toggleCullFace()
 	}
 	cull_face = !cull_face;
 }
-
-

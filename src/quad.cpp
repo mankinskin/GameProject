@@ -9,27 +9,27 @@
 #include "viewport.h"
 #include "primitives.h"
 
-std::vector<glm::vec4> gui::allQuads;
-unsigned int gui::quadBuffer;
 unsigned int gui::quadIndexShader;
 unsigned int gui::quadIndexVAO;
 std::vector<unsigned int> quadIndexMap;
 std::vector<float> quadDepthMap;
-unsigned int gui::quadIndexBuffer;
+gl::Storage gui::quadIndexBuffer;
+gl::Storage gui::quadBuffer;
 
+size_t quadCount = 0;
 
 void gui::updateQuadBuffer()
 {
-	if ( allQuads.size() ) 
+	if ( quadCount ) 
     {
-		vao::uploadStorage( quadBuffer, 
-                sizeof( glm::vec4 )*allQuads.size(), &allQuads[0] );
+		//gl::uploadStorage( quadBuffer, 
+        //        sizeof( glm::vec4 )*allQuads.size(), &allQuads[0] );
 	}
 }
 
 void gui::rasterQuadIndices()
 {
-	if ( allQuads.size() ) 
+	if ( quadCount ) 
     {
 		glDepthMask( 0 );
 		glDepthFunc( GL_LEQUAL );
@@ -37,7 +37,7 @@ void gui::rasterQuadIndices()
 		shader::use( quadIndexShader );
 
 		glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 
-                0, allQuads.size() );
+                0, quadCount );
 
 		shader::unuse();
 		glBindVertexArray( 0 );
@@ -49,37 +49,37 @@ void gui::rasterQuadIndices()
 unsigned int gui::createQuad( const float pPosX, const float pPosY, 
         const float pWidth, const float pHeight )
 {
-	allQuads.emplace_back( pPosX, pPosY, pWidth, pHeight );
-    printf( "Creating Quad %u: %f %f %f %f\n", 
-            allQuads.size(), pPosX, pPosY, pWidth, pHeight );
-	return allQuads.size();
+	return createQuad( glm::vec4( pPosX, pPosY, pWidth, pHeight ) );
 }
 
 unsigned int gui::createQuad( const glm::vec4 pQuad )
 {
-	allQuads.push_back( pQuad );
-    printf( "Creating Quad %u: %f %f %f %f\n", 
-            allQuads.size(), pQuad.x, pQuad.y, pQuad.z, pQuad.w );
-	return allQuads.size();
+    getQuadData( ++quadCount ) = pQuad;
+    printf( "Creating Quad %d ( %f, %f, %f, %f )\n", quadCount, 
+            getQuadData( quadCount ).x, getQuadData( quadCount ).y, 
+            getQuadData( quadCount ).z, getQuadData( quadCount ).w );
+	return quadCount;
 }
+
 void gui::reserveQuads( const unsigned int pCount )
 {
-	allQuads.reserve( allQuads.size() + pCount );
+	//allQuads.reserve( allQuads.size() + pCount );
 }
+
 void gui::initQuadBuffer()
 {
-	quadBuffer = vao::createStorage( "QuadBuffer", 
-            MAX_QUAD_COUNT * sizeof( glm::vec4 ), 0, 
-            GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS );
-	vao::createStream( quadBuffer, GL_MAP_WRITE_BIT );
-	vao::bindStorage( GL_UNIFORM_BUFFER, quadBuffer );
+	quadBuffer = gl::createStorage( "QuadBuffer", 
+            MAX_QUAD_COUNT * sizeof( glm::vec4 ), 
+            GL_MAP_WRITE_BIT | gl::MAP_PERSISTENT_FLAGS );
+	//gl::createStream( quadBuffer, GL_MAP_WRITE_BIT );
+	gl::setStorageTarget( quadBuffer, GL_UNIFORM_BUFFER );
 
 	glCreateVertexArrays( 1, &quadIndexVAO );
-	glVertexArrayElementBuffer( quadIndexVAO, gl::quadEBO + 1 );
+	glVertexArrayElementBuffer( quadIndexVAO, gl::quadEBO.ID );
 	glVertexArrayVertexBuffer( quadIndexVAO, 0, 
-            gl::quadVBO + 1, 0, sizeof( glm::vec2 ) );
+            gl::quadVBO.ID, 0, sizeof( glm::vec2 ) );
 
-	vao::setVertexAttrib( quadIndexVAO, 0, 0, 2, GL_FLOAT, 0 );
+	//gl::setVertexAttrib( quadIndexVAO, 0, 0, 2, GL_FLOAT, 0 );
 
     reserveQuads( MAX_QUAD_COUNT );
 	quadIndexMap.resize( gl::getWidth() * gl::getHeight() );
@@ -88,19 +88,18 @@ void gui::initQuadBuffer()
 
 void gui::initQuadIndexBuffer()
 {
-	quadIndexBuffer = vao::createStorage( "QuadIndexBuffer", 
-            gl::getWidth() * gl::getHeight() * sizeof( unsigned char ), 
-            nullptr, GL_MAP_READ_BIT | vao::MAP_PERSISTENT_FLAGS );
-	vao::bindStorage( GL_PIXEL_PACK_BUFFER, quadIndexBuffer );
-	vao::createStream( quadIndexBuffer, 
-            GL_MAP_READ_BIT | vao::MAP_PERSISTENT_FLAGS );
+	quadIndexBuffer = gl::createStorage( "QuadIndexBuffer", 
+            gl::getWidth() * gl::getHeight() * sizeof( unsigned int ), 
+            GL_MAP_READ_BIT | gl::MAP_PERSISTENT_FLAGS );
+	gl::setStorageTarget( quadIndexBuffer, GL_PIXEL_PACK_BUFFER );
+	//gl::createStream( quadIndexBuffer, GL_MAP_READ_BIT | gl::MAP_PERSISTENT_FLAGS );
 }
 
 void gui::readQuadIndexBuffer()
 {
-	glBindBuffer( GL_PIXEL_PACK_BUFFER, quadIndexBuffer + 1 );
+	glBindBuffer( GL_PIXEL_PACK_BUFFER, quadIndexBuffer.ID );
 	glReadPixels( 0, 0, gl::getWidth(), gl::getHeight(), 
-            GL_RED_INTEGER, GL_UNSIGNED_BYTE, 0 );
+            GL_RED_INTEGER, GL_UNSIGNED_INT, 0 );
 	glBindBuffer( GL_PIXEL_PACK_BUFFER, 0 );
 }
 
@@ -118,15 +117,10 @@ void gui::setupQuadIndexShader()
             quadBuffer, "QuadBuffer" );
 }
 
-void gui::clearQuads()
-{
-	allQuads.clear();
-}
-
 unsigned int gui::readQuadIndexMap( const unsigned int pPos )
 {
-	return *( ( unsigned char* )
-            vao::getMappedPtr( quadIndexBuffer ) + pPos );
+	return *( ( unsigned int* )
+            gl::getMappedPtr( quadIndexBuffer ) + pPos );
 }
 
 unsigned int gui::readQuadIndexMap( 
@@ -151,26 +145,33 @@ float gui::readQuadDepthMap( const unsigned int pXPos,
 void gui::moveQuad( const Quad pQuad, const glm::vec2 pOffset )
 {
     printf("Moving Quad %d\n", pQuad.index );
-	allQuads[pQuad.index - 1] += glm::vec4( pOffset.x, pOffset.y, 0.0f, 0.0f );
+	getQuadData( pQuad ) += glm::vec4( pOffset.x, pOffset.y, 0.0f, 0.0f );
 }
+
 void gui::moveQuadScaled( const Quad pQuad, const glm::vec2 pOffset, const glm::vec2 scale)
 {
-	allQuads[pQuad.index - 1] += glm::vec4( pOffset.x * scale.x, pOffset.y * scale.y, 0.0f, 0.0f );
+	moveQuad( pQuad, pOffset * scale );
 }
 
 void gui::resizeQuad( const Quad pQuad, const glm::vec2 pOffset )
 {
-	allQuads[pQuad.index - 1] += glm::vec4( 0.0f, 0.0f, pOffset.x, pOffset.y );
+	getQuadData( pQuad ) += glm::vec4( 0.0f, 0.0f, pOffset.x, pOffset.y );
+}
+void gui::resizeQuadScaled( const Quad pQuad, const glm::vec2 pOffset, const glm::vec2 scale)
+{
+    resizeQuad(pQuad, pOffset * scale );
 }
 
 void gui::setQuadPos( const Quad pQuad, const glm::vec2 pPos )
 {
-	std::memcpy( &allQuads[pQuad.index - 1], &pPos, sizeof( glm::vec2 ) );
+	std::memcpy( &getQuadData( pQuad ), &pPos, sizeof( glm::vec2 ) );
 }
-glm::vec4 gui::getQuadData( const Quad pQuad )
+
+glm::vec4& gui::getQuadData( const Quad pQuad )
 {
-    return allQuads[pQuad.index];
+    return *( (glm::vec4*)gl::getMappedPtr( quadBuffer ) + ( pQuad.index - 1 ) );
 }
+
 void gui::colorQuad( Quad pQuad, gl::ColorIt pColor )
 {
     printf( "Coloring Quad %u with color %u\n", pQuad.index, pColor.index );

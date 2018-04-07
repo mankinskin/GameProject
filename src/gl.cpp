@@ -33,7 +33,7 @@ std::string gl::GLSL_VERSION = "";
 std::string gl::SYSTEM_RENDERER = "";
 gl::Viewport screenViewport;
 int gl::MAX_TEXTURE_UNIT_COUNT;
-unsigned int gl::generalUniformBuffer = 0;
+gl::Storage gl::generalUniformBuffer;
 unsigned int gl::screenQuadVAO;
 unsigned int gl::screenShaderProgram;
 
@@ -50,9 +50,6 @@ void gl::init()
 	//lights::createLight( glm::vec4( 1.0f, 14.0f, 1.0f, 0.0f ), glm::vec4( 1.0f, 1.0f, 1.0f, 100.0f ) );
 	//lights::createLight( glm::vec4( 4.0f, -4.0f, 3.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 100.0f ) );
 	//lights::createLight( glm::vec4( 3.0f, 15.0f, -5.0f, 1.0f ), glm::vec4( 0.0f, 1.0f, 0.0f, 100.0f ) );
-
-
-
 
 	//puts( "Lighting..." );
 	//lights::initLighting();
@@ -95,11 +92,11 @@ void gl::getOpenGLInitValues()
 	glGetIntegeri_v( GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 1, &MAX_WORK_GROUP_SIZE.y );
 	glGetIntegeri_v( GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 2, &MAX_WORK_GROUP_SIZE.z );
 
-	glGetIntegerv( GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT, &vao::SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT );
-	glGetIntegerv( GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &vao::UNIFORM_BUFFER_OFFSET_ALIGNMENT );
-	glGetIntegerv( GL_MAX_UNIFORM_BUFFER_BINDINGS, &vao::MAX_UNIFORM_BUFFER_BINDINGS );
+	glGetIntegerv( GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT, &SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT );
+	glGetIntegerv( GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &UNIFORM_BUFFER_OFFSET_ALIGNMENT );
+	glGetIntegerv( GL_MAX_UNIFORM_BUFFER_BINDINGS, &MAX_UNIFORM_BUFFER_BINDINGS );
 	glGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &MAX_TEXTURE_UNIT_COUNT );
-	glGetIntegerv( GL_MIN_MAP_BUFFER_ALIGNMENT, &vao::MIN_MAP_BUFFER_ALIGNMENT );
+	glGetIntegerv( GL_MIN_MAP_BUFFER_ALIGNMENT, &MIN_MAP_BUFFER_ALIGNMENT );
     glGetIntegerv( GL_MAX_UNIFORM_BLOCK_SIZE, &MAX_UNIFORM_BLOCK_SIZE );
 
     printf( "Max Uniform Block Size:\t%d\n", MAX_UNIFORM_BLOCK_SIZE );
@@ -118,7 +115,8 @@ void gl::getOpenGLInitValues()
 	glEnable( GL_DEBUG_OUTPUT );
 }
 
-void gl::initGLEW() {
+void gl::initGLEW() 
+{
 	puts( "Initializing GLEW..." );
 	glewExperimental = true;
 	unsigned int glew = glewInit();
@@ -126,7 +124,8 @@ void gl::initGLEW() {
 
 		debug::pushError( std::string( "/napp::init() - Unable to initialize GLEW ( glewInit() return code: %i )/nGLEW Error Log/n %s"
 					+ glew ) + std::string( ( const char* )glewGetErrorString( glew ) ), debug::Error::Severity::Fatal );
-		while ( !getch() ) {}
+		while ( !getch() ) {
+        }
 		exit( glew );
 	}
 	printf( "GLEW %s\n", ( const char* )glewGetString( GLEW_VERSION ) );
@@ -138,9 +137,9 @@ void gl::initGeneralUniformBuffer()
 
 	unsigned int generalUniformDataSize = sizeof( float ) * ( 16 + 16 + 4 + 16 );
 
-	generalUniformBuffer = vao::createStorage( "GeneralUniformBuffer", generalUniformDataSize, nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS );
-	vao::bindStorage( GL_UNIFORM_BUFFER, generalUniformBuffer );
-	vao::createStream( generalUniformBuffer, GL_MAP_WRITE_BIT );
+	generalUniformBuffer = createStorage( "GeneralUniformBuffer", generalUniformDataSize, GL_MAP_WRITE_BIT | MAP_PERSISTENT_FLAGS );
+	setStorageTarget( generalUniformBuffer, GL_UNIFORM_BUFFER );
+	////gl::createStream( generalUniformBuffer, GL_MAP_WRITE_BIT );
 }
 
 void gl::updateGeneralUniformBuffer()
@@ -151,5 +150,5 @@ void gl::updateGeneralUniformBuffer()
 	std::memcpy( &generalUniformData[16], glm::value_ptr( camera::main_camera.getView() ), sizeof( float ) * 16 );
 	std::memcpy( &generalUniformData[32], glm::value_ptr( camera::main_camera.getPos() ), sizeof( float ) * 3 );
 	std::memcpy( &generalUniformData[36], glm::value_ptr( voxelization::projectionMatrix ), sizeof( float ) * 16 );
-	vao::uploadStorage( generalUniformBuffer, sizeof( float ) * 52, &generalUniformData[0] );
+	//uploadStorage( generalUniformBuffer, sizeof( float ) * 52, &generalUniformData[0] );
 }

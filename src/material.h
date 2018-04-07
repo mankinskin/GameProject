@@ -1,6 +1,7 @@
 #pragma once
 #include <glm.hpp>
 #include <vector>
+#include "storage.h"
 
 namespace mesh {
 	struct Material {
@@ -15,7 +16,7 @@ namespace mesh {
 	};
 	extern std::vector<Material> allMaterials;
 	extern std::vector<MaterialTextures> allMaterialTextures;
-	extern unsigned int materialUBO;
+	extern gl::Storage materialUBO;
 	void storeMaterials();
 
 }

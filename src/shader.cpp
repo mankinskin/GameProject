@@ -89,12 +89,7 @@ void shader::unuse()
     glUseProgram( 0 );
 }
 
-void shader::bindUniformBufferToShader( unsigned int pProgram, unsigned int pStorageIndex, std::string pBlockName )
-{
-    bindUniformBufferToShader( pProgram, vao::allStorages[pStorageIndex], pBlockName );
-}
-
-void shader::bindUniformBufferToShader( unsigned int pProgram, const vao::Storage& pStorage, std::string pBlockName )
+void shader::bindUniformBufferToShader( unsigned int pProgram, const gl::Storage& pStorage, std::string pBlockName )
 {
     int blockIndex = glGetUniformBlockIndex( pProgram, pBlockName.c_str() );
     if ( blockIndex < 0 ) {
@@ -102,16 +97,6 @@ void shader::bindUniformBufferToShader( unsigned int pProgram, const vao::Storag
         return;
     }
     glUniformBlockBinding( pProgram, blockIndex, pStorage.binding );
-}
-
-void shader::bindUniformBufferToShader( std::string pProgramName, unsigned int pTargetStorageIndex, std::string pBlockName )
-{
-    auto it = shaderProgramLookup.find( pProgramName );
-    if ( it == shaderProgramLookup.end() ) {
-        debug::pushError( "bindUniformBlockBuffer(): Tried to access invalid shader program!" );
-        return;
-    }
-    bindUniformBufferToShader( it->second, pTargetStorageIndex, pBlockName );
 }
 
 void shader::addVertexAttribute( unsigned int pProgramID, std::string pAttributeName, unsigned int pAttributeIndex )

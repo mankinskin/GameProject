@@ -10,21 +10,21 @@ std::vector<glm::vec3> entities::allScales;
 std::vector<glm::vec4> entities::allRotations;
 
 unsigned int entities::num_entities;
-unsigned int entities::entityMatrixBuffer;
+gl::Storage entities::entityMatrixBuffer;
 
 
 void entities::initEntityBuffers()
 {
-	entityMatrixBuffer = vao::createStorage( "EntityMatrixBuffer", sizeof( glm::mat4 )*MAX_ENTITIES, nullptr, GL_MAP_WRITE_BIT | vao::MAP_PERSISTENT_FLAGS );
+	entityMatrixBuffer = gl::createStorage( "EntityMatrixBuffer", sizeof( glm::mat4 )*MAX_ENTITIES, GL_MAP_WRITE_BIT | gl::MAP_PERSISTENT_FLAGS );
 	
-	vao::bindStorage( GL_UNIFORM_BUFFER, entityMatrixBuffer );
-	vao::createStream( entityMatrixBuffer, GL_MAP_WRITE_BIT );
+	gl::setStorageTarget( entityMatrixBuffer, GL_UNIFORM_BUFFER );
+	////gl::createStream( entityMatrixBuffer, GL_MAP_WRITE_BIT );
 }
 
 void entities::updateEntityBuffers()
 {
 	if( allMatrices.size() ){
-		vao::uploadStorage( entityMatrixBuffer, sizeof( glm::mat4 )*allMatrices.size(), &allMatrices[0] );
+		//gl::uploadStorage( entityMatrixBuffer, sizeof( glm::mat4 )*allMatrices.size(), &allMatrices[0] );
 	}
 }
 

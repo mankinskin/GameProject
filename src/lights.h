@@ -1,6 +1,7 @@
 #pragma once 
 #include <vector> 
 #include <glm.hpp>
+#include "storage.h"
 //Lights are a set of data used as a light source in a layered shading process
 //each light is either of type
 //  - point light/omnidirectional light
@@ -18,15 +19,14 @@ namespace lights {
 	};
 
 	void initLights();
-    unsigned int getMaxLightCount();
 
 	extern std::vector<glm::vec4> allLightData;
 	extern std::vector<LightIndexRange> allLightIndexRanges;
 	extern unsigned int lightVAO;
-	extern unsigned int lightIndexVBO;
-	extern unsigned int lightDataUBO;
+	extern gl::Storage lightIndexVBO;
+	extern gl::Storage lightDataUBO;
 	extern unsigned int lightShaderProgram;
-	extern unsigned int MAX_LIGHT_COUNT;
+	const unsigned int MAX_LIGHT_COUNT = 100;
 
 	void createLightVAO();
     void createLightVBO();

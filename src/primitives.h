@@ -1,10 +1,13 @@
 #pragma once
 #include <cstddef>
-namespace gl{
+#include "storage.h"
+
+namespace gl
+{
 	void initPrimitiveVBO();
 
-	extern unsigned int quadVBO;
-	extern unsigned int quadEBO;
-	extern unsigned int cubeVBO;
-	extern unsigned int cubeEBO;
+	extern Storage quadVBO;
+	extern Storage quadEBO;
+	extern Storage cubeVBO;
+	extern Storage cubeEBO;
 }

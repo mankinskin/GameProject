@@ -12,10 +12,9 @@
 std::vector<glm::vec4> lights::allLightData;
 std::vector<lights::LightIndexRange> lights::allLightIndexRanges;
 unsigned int lights::lightVAO = 0;
-unsigned int lights::lightIndexVBO = 0;
-unsigned int lights::lightDataUBO = 0;
+gl::Storage lights::lightIndexVBO;
+gl::Storage lights::lightDataUBO;
 unsigned int lights::lightShaderProgram = 0;
-unsigned int lights::MAX_LIGHT_COUNT = 100;
 
 void lights::initLights()
 {
@@ -24,50 +23,45 @@ void lights::initLights()
 	createLightDataBuffer();
 }
 
-unsigned int lights::getMaxLightCount(){
-    return MAX_LIGHT_COUNT;
-}
-
-void lights::createLightVBO() {
-	lightIndexVBO = vao::createStorage( "LightIndexBuffer", MAX_LIGHT_COUNT * sizeof( LightIndexRange ), 
-            0, vao::MAP_PERSISTENT_FLAGS | GL_MAP_WRITE_BIT );
-	vao::createStream( lightIndexVBO, GL_MAP_WRITE_BIT );
+void lights::createLightVBO() 
+{
+	lightIndexVBO = gl::createStorage( "LightIndexBuffer", MAX_LIGHT_COUNT * sizeof( LightIndexRange ), 
+            gl::MAP_PERSISTENT_FLAGS | GL_MAP_WRITE_BIT );
+	////gl::createStream( lightIndexVBO, GL_MAP_WRITE_BIT );
 }
 void lights::createLightVAO() 
 {
 	glCreateVertexArrays( 1, &lightVAO );
-	glVertexArrayVertexBuffer( lightVAO, 0, gl::quadVBO + 1, 0, sizeof( float ) * 2 );
-	glVertexArrayElementBuffer( lightVAO, gl::quadEBO + 1 );
+	glVertexArrayVertexBuffer( lightVAO, 0, gl::quadVBO.ID, 0, sizeof( float ) * 2 );
+	glVertexArrayElementBuffer( lightVAO, gl::quadEBO.ID );
     
-	vao::setVertexArrayVertexStorage( lightVAO, 1, lightIndexVBO, sizeof( unsigned int ) * 2 );
-	glVertexArrayVertexBuffer( lightVAO, 1, lightIndexVBO+1, 0, sizeof( unsigned int ) * 2 );
+	//gl::setVertexArrayVertexStorage( lightVAO, 1, lightIndexVBO.ID, sizeof( unsigned int ) * 2 );
+	glVertexArrayVertexBuffer( lightVAO, 1, lightIndexVBO.ID, 0, sizeof( unsigned int ) * 2 );
 
 	glVertexArrayBindingDivisor( lightVAO, 1, 1 );
 
-	vao::setVertexAttrib( lightVAO, 0, 0, 2, GL_FLOAT, 0 );
-	vao::setVertexAttrib( lightVAO, 1, 1, 2, GL_UNSIGNED_INT, 0 );
+	//gl::setVertexAttrib( lightVAO, 0, 0, 2, GL_FLOAT, 0 );
+	//gl::setVertexAttrib( lightVAO, 1, 1, 2, GL_UNSIGNED_INT, 0 );
 }
 
 void lights::createLightDataBuffer() 
 {
-	lightDataUBO = vao::createStorage( "LightDataBuffer", MAX_LIGHT_COUNT * sizeof( glm::vec4 ) * 3, 0, vao::MAP_PERSISTENT_FLAGS | GL_MAP_WRITE_BIT );
-	vao::createStream( lightDataUBO, GL_MAP_WRITE_BIT );
-	vao::bindStorage( GL_UNIFORM_BUFFER, lightDataUBO );
+	lightDataUBO = gl::createStorage( "LightDataBuffer", MAX_LIGHT_COUNT * sizeof( glm::vec4 ) * 3, gl::MAP_PERSISTENT_FLAGS | GL_MAP_WRITE_BIT );
+	////gl::createStream( lightDataUBO, GL_MAP_WRITE_BIT );
+	gl::setStorageTarget( lightDataUBO, GL_UNIFORM_BUFFER );
 }
 
 void lights::updateLightDataBuffer() 
 {
-	if ( allLightData.size() )
-	{
-		vao::uploadStorage( lightDataUBO, allLightData.size() * sizeof( glm::vec4 ), &allLightData[0] );
+	if ( allLightData.size() ) {
+		//gl::uploadStorage( lightDataUBO, allLightData.size() * sizeof( glm::vec4 ), &allLightData[0] );
 	}
 }
 
 void lights::updateLightIndexRangeBuffer() 
 {
-	if ( allLightIndexRanges.size() ) 
-	{
-		vao::uploadStorage( lightIndexVBO, allLightIndexRanges.size() * sizeof( LightIndexRange ), &allLightIndexRanges[0] );
+	if ( allLightIndexRanges.size() ) {
+		//gl::uploadStorage( lightIndexVBO, allLightIndexRanges.size() * sizeof( LightIndexRange ), &allLightIndexRanges[0] );
 	}
 }
 void lights::initLightShader()
@@ -139,25 +133,31 @@ void lights::renderLights()
 	glDepthMask( 1 ); 
 	glViewport( 0, 0, gl::Viewport::current->width, gl::Viewport::current->height );
 }
+
 void lights::setupLightShader()
 {
 	//shader::bindUniformBufferToShader( lightShaderProgram, lightDataUBO, "LightDataBuffer" );
 	shader::bindUniformBufferToShader( lightShaderProgram, gl::generalUniformBuffer, "GeneralUniformBuffer" );
 }
 
-void lights::setLightPos( unsigned int pLightIndex, glm::vec3& pPos ) {
+void lights::setLightPos( unsigned int pLightIndex, glm::vec3& pPos ) 
+{
 	std::memcpy( &allLightData[allLightIndexRanges[pLightIndex].offset], &pPos, sizeof( float ) * 3 );
 }
-void lights::setLightPos( unsigned int pLightIndex, glm::vec4& pPos ) {
+void lights::setLightPos( unsigned int pLightIndex, glm::vec4& pPos ) 
+{
 	std::memcpy( &allLightData[allLightIndexRanges[pLightIndex].offset], &pPos, sizeof( float ) * 4 );
 }
-void lights::setLightColor( unsigned int pLightIndex, glm::vec3& pColor ) {
+void lights::setLightColor( unsigned int pLightIndex, glm::vec3& pColor ) 
+{
 	std::memcpy( &allLightData[allLightIndexRanges[pLightIndex].offset + 1], &pColor, sizeof( float ) * 3 );
 }
-void lights::setLightColor( unsigned int pLightIndex, glm::vec4& pColor ) {
+void lights::setLightColor( unsigned int pLightIndex, glm::vec4& pColor )
+{
 	std::memcpy( &allLightData[allLightIndexRanges[pLightIndex].offset + 1], &pColor, sizeof( float ) * 4 );
 }
 
-glm::vec4& lights::getLightColor( unsigned int pLightIndex ) {
+glm::vec4& lights::getLightColor( unsigned int pLightIndex ) 
+{
 	return allLightData[allLightIndexRanges[pLightIndex].offset + 1];
 }
