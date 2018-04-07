@@ -58,27 +58,6 @@ namespace utils
             return element_constructor<Elems...>::func( initer );
         }
 
-
-    //template<typename T>
-    //    struct Single  
-    //    {
-    //        using initer_t = const T;
-    //        template<typename Ini>
-    //        Single( Ini initer )
-    //            :data( initer )
-    //        {}
-    //        Single( initer_t initer )
-    //            :data( initer )
-    //        {}
-
-    //        const T data;
-    //        template<size_t N>
-    //            const T& element() const 
-    //            {
-    //                return data;
-    //            }
-    //    };
-
     template<typename... Elems>
         struct Element 
         {
