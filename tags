@@ -120,7 +120,7 @@ KeySignal	src/keys.cpp	/^input::KeySignal::KeySignal( int pKey )$/;"	f	class:inp
 KeySignal	src/keys.h	/^        KeySignal()$/;"	f	struct:input::KeySignal
 KeySignal	src/keys.h	/^    struct KeySignal $/;"	s	namespace:input
 LightIndexRange	src/lights.h	/^		LightIndexRange( unsigned int pOffset, unsigned int pCount )$/;"	f	struct:lights::LightIndexRange
-LightIndexRange	src/lights.h	/^	struct LightIndexRange {$/;"	s	namespace:lights
+LightIndexRange	src/lights.h	/^	struct LightIndexRange $/;"	s	namespace:lights
 LineGroup	src/line.h	/^		LineGroup( unsigned int pLineOffset, unsigned int pLineCount )$/;"	f	struct:gui::LineGroup
 LineGroup	src/line.h	/^	struct LineGroup {$/;"	s	namespace:gui
 LinePointIt	src/line.h	/^    typedef utils::Itr<gl::Point3D> LinePointIt;$/;"	t	namespace:gui
@@ -134,7 +134,6 @@ Loader	src/model_loader.h	/^	namespace Loader {$/;"	n	namespace:model
 Loader	src/shader_loader.h	/^	namespace Loader {$/;"	n	namespace:shader
 LookPolicy	src/camera.h	/^		LookPolicy( size_t pXRotatorOffset, size_t pXRotationAxisOffset, float pXRotationFactor,$/;"	f	struct:camera::LookPolicy
 LookPolicy	src/camera.h	/^	struct LookPolicy {\/\/stores relative offsets of vectors in a camera object to be used to move the camera frustum$/;"	s	namespace:camera
-MAP_PERSISTENT_FLAGS	src/storage.h	/^	const int MAP_PERSISTENT_FLAGS = GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;$/;"	m	namespace:gl
 MAX_CHARS	src/font.cpp	/^unsigned int MAX_CHARS = 1000;$/;"	v
 MAX_COLOR_COUNT	src/color.h	/^	const unsigned int MAX_COLOR_COUNT = 100;$/;"	m	namespace:gl
 MAX_ENTITIES	src/entities.h	/^	const unsigned int MAX_ENTITIES = 1000;$/;"	m	namespace:entities
@@ -192,7 +191,7 @@ Quad	experimental/hierarchy.cpp	/^    Quad( size_t pQuad )$/;"	f	struct:Quad
 Quad	experimental/hierarchy.cpp	/^struct Quad$/;"	s	file:
 Quad	src/quad.h	/^        Quad( const unsigned int in )$/;"	f	struct:gui::Quad
 Quad	src/quad.h	/^        Quad( glm::vec4 pData ) $/;"	f	struct:gui::Quad
-Quad	src/quad.h	/^    struct Quad {$/;"	s	namespace:gui
+Quad	src/quad.h	/^    struct Quad $/;"	s	namespace:gui
 QuadEvent	src/mouse.h	/^        QuadEvent( unsigned int pQuad, int pEnter )$/;"	f	struct:input::QuadEvent
 QuadEvent	src/mouse.h	/^        QuadEvent()$/;"	f	struct:input::QuadEvent
 QuadEvent	src/mouse.h	/^    struct QuadEvent {\/\/events thrown when entering or leaving quads with the cursor$/;"	s	namespace:input
@@ -209,11 +208,12 @@ Signal	src/signal.h	/^	struct Signal {$/;"	s	namespace:signals
 Source	src/signal.h	/^		Source( bool pSrc )$/;"	f	struct:signals::Source
 Source	src/signal.h	/^	struct Source {$/;"	s	namespace:signals
 State	src/app.h	/^    enum State {$/;"	g	namespace:app
-Storage	src/storage.h	/^		Storage( std::string pName, unsigned int pID, unsigned int pCapacity, unsigned int pFlags)$/;"	f	struct:gl::Storage
-Storage	src/storage.h	/^		Storage()$/;"	f	struct:gl::Storage
 Storage	src/storage.h	/^	struct Storage $/;"	s	namespace:gl
-Stream	src/vao.h	/^		Stream() $/;"	f	struct:gl::Stream
-Stream	src/vao.h	/^	struct Stream $/;"	s	namespace:gl
+Storage	src/storage.h	/^        Storage( std::string pName, unsigned int pCapacity, $/;"	f	struct:gl::Storage
+Storage	src/storage.h	/^        Storage()$/;"	f	struct:gl::Storage
+StreamStorage	src/storage.h	/^		StreamStorage( std::string pName, unsigned int pCapacity, $/;"	f	struct:gl::StreamStorage
+StreamStorage	src/storage.h	/^		StreamStorage()$/;"	f	struct:gl::StreamStorage
+StreamStorage	src/storage.h	/^	struct StreamStorage $/;"	s	namespace:gl
 String	src/font.h	/^			String( unsigned int pOffset, unsigned int pCount )$/;"	f	struct:gui::text::String
 String	src/font.h	/^			String()$/;"	f	struct:gui::text::String
 String	src/font.h	/^		struct String $/;"	s	namespace:gui::text
@@ -270,6 +270,7 @@ _type	src/element_utils.h	/^    template<typename T> struct _type { using type =
 abs	dt/misc.h	/^inline T abs(const T &x) { return (x > 0 ? x : -x); };$/;"	f
 absoluteCursorPosition	src/mouse.cpp	/^glm::uvec2 input::absoluteCursorPosition;$/;"	m	class:input	file:
 access	dt/image.h	/^  T **access;$/;"	m	class:image
+access	src/storage.h	/^            T& access( size_t N )$/;"	f	struct:gl::StreamStorage
 action	src/keys.h	/^            int action;$/;"	m	class:input::KeyCondition
 addInstancesToMesh	src/mesh.cpp	/^void mesh::addInstancesToMesh( unsigned int pMeshIndex, std::vector<unsigned int> pNodeIDs )$/;"	f	class:mesh
 addVertexAttribute	src/shader.cpp	/^void shader::addVertexAttribute( std::string pProgramName, std::string pAttributeName, unsigned int pAttributeIndex )$/;"	f	class:shader
@@ -278,7 +279,6 @@ add_trigger	src/functor.h	/^        void add_trigger( unsigned int pSignal )$/;"
 advanceScale	src/text.cpp	/^	float advanceScale;$/;"	m	struct:TextboxMetrics	file:
 advanceX	src/font.h	/^			float advanceX;$/;"	m	struct:gui::text::GlyphMetrics
 advanceX	src/font_loader.cpp	/^	size_t advanceX;$/;"	m	struct:LoadGlyphMetrics	file:
-alignment	src/vao.h	/^		unsigned int alignment;$/;"	m	struct:gl::Stream
 all2DTextures	src/texture.cpp	/^std::vector<texture::Texture2D> texture::all2DTextures;$/;"	m	class:texture	file:
 allBoundingSpherenode	src/collision.cpp	/^std::vector<std::pair<unsigned int, unsigned int>> physics::allBoundingSpherenode;$/;"	m	class:physics	file:
 allBoundingSpheres	src/collision.cpp	/^std::vector<physics::BoundingSphere> physics::allBoundingSpheres;$/;"	m	class:physics	file:
@@ -315,7 +315,6 @@ allRotations	src/entities.cpp	/^std::vector<glm::vec4> entities::allRotations;$/
 allScales	src/entities.cpp	/^std::vector<glm::vec3> entities::allScales;$/;"	m	class:entities	file:
 allSignals	src/signal.cpp	/^std::vector<bool> signals::allSignals;$/;"	m	class:signals	file:
 allStaticVertices	src/mesh.cpp	/^std::vector<mesh::Vertex> mesh::allStaticVertices;$/;"	m	class:mesh	file:
-allStreams	src/vao.cpp	/^std::vector<gl::Stream> gl::allStreams;$/;"	m	class:gl	file:
 allStrings	src/font.cpp	/^std::vector<gui::text::String> allStrings;$/;"	v
 allTextColors	src/text.cpp	/^std::vector<glm::vec4> allTextColors;$/;"	v
 allTextStyles	src/font.cpp	/^std::vector<gui::text::TextStyle> allTextStyles;$/;"	v
@@ -364,7 +363,7 @@ change	src/keys.h	/^            KeyCondition change;$/;"	m	class:input::KeyEvent
 change	src/mouse.h	/^        KeyCondition change;$/;"	m	struct:input::MouseKeyEvent
 channels	src/texture.h	/^		int channels;$/;"	m	struct:texture::TextureBuffer
 charQuadBuffer	src/text.cpp	/^std::vector<gui::text::CharQuad> gui::text::charQuadBuffer;$/;"	m	class:gui::text	file:
-charStorage	src/font.cpp	/^gl::Storage charStorage;$/;"	v
+charStorage	src/font.cpp	/^gl::StreamStorage charStorage;$/;"	v
 char_Callback	src/keys.cpp	/^void input::char_Callback( GLFWwindow * window, unsigned int pCodepoint )$/;"	f	class:input
 charge	src/neural.h	/^		float charge;$/;"	m	struct:neural::Neuron
 chars	src/text.cpp	/^	gui::text::String chars;$/;"	m	struct:Textbox	file:
@@ -396,7 +395,7 @@ color	src/text.cpp	/^	glm::vec4 color = glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f );$/;"
 colorBuffer	src/color.cpp	/^gl::Storage gl::colorBuffer;$/;"	m	class:gl	file:
 colorNames	src/color.cpp	/^std::vector<std::string> colorNames;$/;"	v
 colorQuad	src/quad.cpp	/^void gui::colorQuad( Quad pQuad, gl::ColorIt pColor )$/;"	f	class:gui
-colorQuadBuffer	src/quadcolors.cpp	/^gl::Storage gui::colorQuadBuffer;$/;"	m	class:gui	file:
+colorQuadBuffer	src/quadcolors.cpp	/^gl::StreamStorage gui::colorQuadBuffer;$/;"	m	class:gui	file:
 colorQuadShader	src/quadcolors.cpp	/^unsigned int gui::colorQuadShader;$/;"	m	class:gui	file:
 colorQuadVAO	src/quadcolors.cpp	/^unsigned int gui::colorQuadVAO;$/;"	m	class:gui	file:
 compileAndLink	src/shader_loader.cpp	/^void shader::Loader::compileAndLink()$/;"	f	class:shader::Loader
@@ -416,7 +415,7 @@ createColor	src/color.cpp	/^gl::ColorIt gl::createColor( Color pColor, std::stri
 createDebugGeometry	src/gldebug.cpp	/^void glDebug::createDebugGeometry(){$/;"	f	class:glDebug
 createDefaultColors	src/color.cpp	/^void gl::createDefaultColors()$/;"	f	class:gl
 createEntities	src/entities.cpp	/^void entities::createEntities( unsigned int pCount, unsigned int * pEntityIDs )$/;"	f	class:entities
-createEntity	src/entities.cpp	/^void entities::createEntity( unsigned int* pNode ) {$/;"	f	class:entities
+createEntity	src/entities.cpp	/^void entities::createEntity( unsigned int* pNode )$/;"	f	class:entities
 createEvent	src/event.h	/^	Event createEvent( EventType pEvent ) {$/;"	f	namespace:events
 createFontInstructions	src/font_loader.cpp	/^size_t gui::text::initializer::createFontInstructions( gui::text::FontInstructions pInstructions )$/;"	f	class:gui::text::initializer
 createFontInstructions	src/font_loader.cpp	/^size_t gui::text::initializer::createFontInstructions( size_t pPointSize, size_t pStartCode, $/;"	f	class:gui::text::initializer
@@ -440,7 +439,6 @@ createProgram	src/shader.cpp	/^unsigned int shader::createProgram( std::string p
 createQuad	src/quad.cpp	/^unsigned int gui::createQuad( const float pPosX, const float pPosY, $/;"	f	class:gui
 createQuad	src/quad.cpp	/^unsigned int gui::createQuad( const glm::vec4 pQuad )$/;"	f	class:gui
 createSignal	src/signal.h	/^	unsigned int createSignal( Source pSource, bool pStartAs = false ) {$/;"	f	namespace:signals
-createStorage	src/storage.cpp	/^gl::Storage gl::createStorage( std::string pName, unsigned int pCapacity, unsigned int pFlags, void* pData )$/;"	f	class:gl
 createTextColor	src/text.cpp	/^unsigned int gui::text::createTextColor( glm::vec4 pColor )$/;"	f	class:gui::text
 createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( glm::vec2 pTopLeft, glm::vec2 pSize, unsigned int pMetrics, int pFlags, float pMarging )$/;"	f	class:gui::text
 createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( glm::vec4 pQuad, unsigned int pMetrics, int pFlags, float pMarging )$/;"	f	class:gui::text
@@ -486,9 +484,9 @@ element_generator	src/element_utils.h	/^        struct element_generator $/;"	s	
 element_generator	src/element_utils.h	/^        struct element_generator<0, Type, SubElements...> $/;"	s	namespace:utils
 end	src/input.cpp	/^void input::end()$/;"	f	class:input
 enter	src/mouse.h	/^        int enter;$/;"	m	struct:input::QuadEvent
-entities	src/entities.h	/^namespace entities {$/;"	n
+entities	src/entities.h	/^namespace entities $/;"	n
 entity	src/neural.h	/^		unsigned int entity;\/\/use this ID to get and set entity data$/;"	m	class:neural::Agent
-entityMatrixBuffer	src/entities.cpp	/^gl::Storage entities::entityMatrixBuffer;$/;"	m	class:entities	file:
+entityMatrixBuffer	src/entities.cpp	/^gl::StreamStorage entities::entityMatrixBuffer;$/;"	m	class:entities	file:
 errorBuffer	src/debug.cpp	/^std::vector<debug::Error> debug::errorBuffer;$/;"	m	class:debug	file:
 eulerian	src/camera.cpp	/^const float eulerian = 0.0001f;$/;"	v
 eval	src/gates.h	/^        static inline bool eval( bool lhs, bool rhs ) $/;"	f	struct:gates::and_op
@@ -564,7 +562,7 @@ gate	src/gates.h	/^        gate( Srcs... pSrcs) :op( Op() ), srcs( pSrcs... ) $/
 gate	src/gates.h	/^    struct gate $/;"	s	namespace:gates
 gates	src/gates.h	/^namespace gates {$/;"	n
 gaussian	dt/misc.h	/^inline double gaussian(double val, double sigma) {$/;"	f
-generalUniformBuffer	src/gl.cpp	/^gl::Storage gl::generalUniformBuffer;$/;"	m	class:gl	file:
+generalUniformBuffer	src/gl.cpp	/^gl::StreamStorage gl::generalUniformBuffer;$/;"	m	class:gl	file:
 generateDebugGrid	src/gldebug.cpp	/^unsigned int glDebug::generateDebugGrid( std::string pName, $/;"	f	class:glDebug
 generateMipMap	src/texture.cpp	/^unsigned int texture::generateMipMap( Texture2D& texture, $/;"	f	class:texture
 get2DTextureID	src/texture.cpp	/^unsigned int texture::get2DTextureID( unsigned int pTextureIndex )$/;"	f	class:texture
@@ -578,7 +576,6 @@ getKerningMap	src/font_loader.cpp	/^std::vector<int> getKerningMap( FT_Face pFac
 getLightColor	src/lights.cpp	/^glm::vec4& lights::getLightColor( unsigned int pLightIndex ) $/;"	f	class:lights
 getLineCount	src/line.cpp	/^unsigned int gui::getLineCount() $/;"	f	class:gui
 getLineVertexIndex	src/line.cpp	/^unsigned int getLineVertexIndex( unsigned int pLineIndex, unsigned int pVertex )$/;"	f
-getMappedPtr	src/vao.cpp	/^void* gl::getMappedPtr( Storage & pStorage )$/;"	f	class:gl
 getModel	src/model.cpp	/^model::Model& model::getModel( std::string pName )$/;"	f	class:model
 getModel	src/model.cpp	/^model::Model& model::getModel( unsigned int pID )$/;"	f	class:model
 getMouseKeyEvents	src/mouse.cpp	/^void input::getMouseKeyEvents()$/;"	f	class:input
@@ -612,7 +609,7 @@ gui	src/font_loader.h	/^namespace gui $/;"	n
 gui	src/gui.h	/^namespace gui $/;"	n
 gui	src/line.h	/^namespace gui$/;"	n
 gui	src/quad.h	/^namespace gui {$/;"	n
-gui	src/quadcolors.h	/^namespace gui {$/;"	n
+gui	src/quadcolors.h	/^namespace gui $/;"	n
 gui	src/text.h	/^namespace gui {$/;"	n
 gui	src/widget.h	/^namespace gui {$/;"	n
 guiDepthRenderbuffer	src/framebuffer.cpp	/^unsigned int texture::guiDepthRenderbuffer;$/;"	m	class:texture	file:
@@ -718,7 +715,6 @@ instanceOffset	src/mesh.h	/^		unsigned int instanceOffset = 0;$/;"	m	struct:mesh
 instructions	src/font.h	/^			unsigned int instructions;$/;"	m	struct:gui::text::Font
 instructions	src/font_loader.cpp	/^	gui::text::FontInstructions instructions;$/;"	m	struct:LoadFont	file:
 integrateFont	src/font_loader.cpp	/^gui::text::Font integrateFont( LoadFont& pFont )$/;"	f
-internal	src/lights.h	/^    namespace internal {$/;"	n	namespace:lights
 internalFormat	src/texture.h	/^		GLenum internalFormat;$/;"	m	struct:texture::Texture2D
 invoke	src/functor.h	/^		void invoke() const $/;"	f	class:functors::Functor
 invoker_index	src/functor.h	/^		static unsigned int invoker_index;$/;"	m	class:functors::Functor
@@ -752,19 +748,18 @@ key_w	src/input.cpp	/^input::KeySignal input::key_w;$/;"	m	class:input	file:
 key_z	src/input.cpp	/^input::KeySignal input::key_z;$/;"	m	class:input	file:
 lastFrameLimitedMS	src/app.cpp	/^double app::lastFrameLimitedMS = 0;$/;"	m	class:app	file:
 lastFrameMS	src/app.cpp	/^double app::lastFrameMS = 0;$/;"	m	class:app	file:
-lastUpdateSize	src/vao.h	/^		unsigned int lastUpdateSize;$/;"	m	struct:gl::Stream
 last_hovered_quad	src/mouse.cpp	/^unsigned int last_hovered_quad = 0;$/;"	v
 last_state	src/gates.h	/^        bool last_state;$/;"	m	struct:gates::clicker_gate
 left	src/camera.cpp	/^void camera::Camera::left()$/;"	f	class:camera::Camera
 left	src/camera.cpp	/^void camera::left( Camera & pCam )$/;"	f	class:camera
-lightDataUBO	src/lights.cpp	/^gl::Storage lights::lightDataUBO;$/;"	m	class:lights	file:
-lightIndexVBO	src/lights.cpp	/^gl::Storage lights::lightIndexVBO;$/;"	m	class:lights	file:
+lightDataUBO	src/lights.cpp	/^gl::StreamStorage lights::lightDataUBO;$/;"	m	class:lights	file:
+lightIndexVBO	src/lights.cpp	/^gl::StreamStorage lights::lightIndexVBO;$/;"	m	class:lights	file:
 lightShaderProgram	src/lights.cpp	/^unsigned int lights::lightShaderProgram = 0;$/;"	m	class:lights	file:
 lightVAO	src/lights.cpp	/^unsigned int lights::lightVAO = 0;$/;"	m	class:lights	file:
-lights	src/lights.h	/^namespace lights {$/;"	n
+lights	src/lights.h	/^namespace lights$/;"	n
 limitFPS	src/app.cpp	/^void app::limitFPS()$/;"	f	class:app
 lineCount	src/line.h	/^		unsigned int lineCount;$/;"	m	struct:gui::LineGroup
-lineEBO	src/line.cpp	/^gl::Storage lineEBO;$/;"	v
+lineEBO	src/line.cpp	/^gl::StreamStorage lineEBO;$/;"	v
 lineGap	src/font.h	/^			float lineGap;$/;"	m	struct:gui::text::FontMetric
 lineGap	src/font_loader.cpp	/^	size_t lineGap;$/;"	m	struct:LoadFontMetrics	file:
 lineGapScale	src/text.cpp	/^	float lineGapScale;$/;"	m	struct:TextboxMetrics	file:
@@ -772,7 +767,7 @@ lineGroupFlags	src/line.cpp	/^std::vector<int> lineGroupFlags;$/;"	v
 lineOffset	src/line.h	/^		unsigned int lineOffset;$/;"	m	struct:gui::LineGroup
 lineShader	src/line.cpp	/^unsigned int lineShader = 0;$/;"	v
 lineVAO	src/line.cpp	/^unsigned int lineVAO = 0;$/;"	v
-lineVBO	src/line.cpp	/^gl::Storage lineVBO;$/;"	v
+lineVBO	src/line.cpp	/^gl::StreamStorage lineVBO;$/;"	v
 line_sizes	src/text.cpp	/^	std::vector<glm::vec2> line_sizes;$/;"	m	struct:TextboxGlyphs	file:
 lines	src/text.cpp	/^	std::vector<gui::text::String> lines;$/;"	m	struct:TextboxGlyphs	file:
 linkNodeToBoundingSphere	src/collision.cpp	/^unsigned int physics::linkNodeToBoundingSphere( unsigned int pNodeIndex, BoundingSphere pBoundingSphere )$/;"	f	class:physics
@@ -807,8 +802,7 @@ main	src/main.cpp	/^int main() {$/;"	f
 mainWindow	src/app.cpp	/^app::Window app::mainWindow = app::Window();$/;"	m	class:app	file:
 main_camera	src/camera.cpp	/^camera::Camera camera::main_camera = camera::Camera( camera::CAMERA_MODES[1] );$/;"	m	class:camera	file:
 mainmenu	src/app.cpp	/^void app::mainmenu()$/;"	f	class:app
-mapFlags	src/vao.h	/^		unsigned int mapFlags;$/;"	m	struct:gl::Stream
-mappedPtr	src/vao.h	/^		void* mappedPtr;$/;"	m	struct:gl::Stream
+mappedPtr	src/storage.h	/^        void* mappedPtr;$/;"	m	struct:gl::StreamStorage
 marging	src/text.cpp	/^	float marging = 0.0f;$/;"	m	struct:Textbox	file:
 materialIndex	src/mesh.h	/^		unsigned int materialIndex = 0;$/;"	m	struct:mesh::Mesh
 materialUBO	src/material.cpp	/^gl::Storage mesh::materialUBO;$/;"	m	class:mesh	file:
@@ -873,7 +867,7 @@ newProgram	src/shader.cpp	/^unsigned int shader::newProgram( std::string pProgra
 next	src/gates.h	/^            static bool next( std::tuple<Srcs...>& pSrcs ) $/;"	f	struct:gates::gate::evaluator
 next	src/gates.h	/^            static bool next( std::tuple<Srcs...>& pSrcs )$/;"	f	struct:gates::gate::evaluator
 nextMode	src/camera.cpp	/^void camera::Camera::nextMode() {$/;"	f	class:camera::Camera
-nodeIndexBuffer	src/mesh.cpp	/^gl::Storage mesh::nodeIndexBuffer;$/;"	m	class:mesh	file:
+nodeIndexBuffer	src/mesh.cpp	/^gl::StreamStorage mesh::nodeIndexBuffer;$/;"	m	class:mesh	file:
 node_mov	src/app.cpp	/^glm::vec3 app::node_mov = glm::vec3();$/;"	m	class:app	file:
 nodes	src/voxelization.h	/^		std::vector<TreeNode> nodes[LevelCount];$/;"	m	struct:voxelization::Octree
 nor_op	src/gates.h	/^        nor_op() $/;"	f	struct:gates::nor_op
@@ -955,17 +949,17 @@ projectionMatrix	src/camera.h	/^		glm::mat4 projectionMatrix = {};$/;"	m	class:c
 projectionMatrix	src/voxelization.cpp	/^glm::mat4 voxelization::projectionMatrix;$/;"	m	class:voxelization	file:
 pushError	src/debug.cpp	/^void debug::pushError( std::string pMessage, Error::Severity errorSeverity )$/;"	f	class:debug
 pushEvent	src/event.h	/^	void pushEvent( EventType pEvent ) {$/;"	f	namespace:events
-quadBuffer	src/quad.cpp	/^gl::Storage gui::quadBuffer;$/;"	m	class:gui	file:
+quadBuffer	src/quad.cpp	/^gl::StreamStorage gui::quadBuffer;$/;"	m	class:gui	file:
 quadColors	src/quadcolors.cpp	/^unsigned int gui::quadColors[MAX_QUAD_COUNT] = {};$/;"	m	class:gui	file:
 quadCount	src/quad.cpp	/^size_t quadCount = 0;$/;"	v
 quadDepthMap	src/quad.cpp	/^std::vector<float> quadDepthMap;$/;"	v
 quadEBO	src/primitives.cpp	/^gl::Storage gl::quadEBO;$/;"	m	class:gl	file:
-quadIndexBuffer	src/quad.cpp	/^gl::Storage gui::quadIndexBuffer;$/;"	m	class:gui	file:
+quadIndexBuffer	src/quad.cpp	/^gl::StreamStorage gui::quadIndexBuffer;$/;"	m	class:gui	file:
 quadIndexMap	src/quad.cpp	/^std::vector<unsigned int> quadIndexMap;$/;"	v
 quadIndexShader	src/quad.cpp	/^unsigned int gui::quadIndexShader;$/;"	m	class:gui	file:
 quadIndexTexture	src/framebuffer.cpp	/^unsigned int texture::quadIndexTexture;$/;"	m	class:texture	file:
 quadIndexVAO	src/quad.cpp	/^unsigned int gui::quadIndexVAO;$/;"	m	class:gui	file:
-quadStorage	src/font.cpp	/^gl::Storage quadStorage;$/;"	v
+quadStorage	src/font.cpp	/^gl::StreamStorage quadStorage;$/;"	v
 quadVBO	src/primitives.cpp	/^gl::Storage gl::quadVBO;$/;"	m	class:gl	file:
 quad_index	src/mouse.h	/^        unsigned int quad_index;\/\/0 if none$/;"	m	struct:input::QuadEvent
 quads	src/font_loader.cpp	/^	std::vector<LoadGlyphQuad> quads;$/;"	m	struct:LoadAtlas	file:
@@ -1206,7 +1200,6 @@ updateLineBuffers	src/line.cpp	/^void gui::updateLineBuffers()$/;"	f	class:gui
 updateLinePositions	src/line.cpp	/^void gui::updateLinePositions()$/;"	f	class:gui
 updateMeshBuffers	src/mesh.cpp	/^void mesh::updateMeshBuffers()$/;"	f	class:mesh
 updateMouse	src/mouse.cpp	/^void input::updateMouse()$/;"	f	class:input
-updateOffset	src/vao.h	/^		unsigned int updateOffset;$/;"	m	struct:gl::Stream
 updateQuadBuffer	src/quad.cpp	/^void gui::updateQuadBuffer()$/;"	f	class:gui
 updateTime	src/app.cpp	/^void app::updateTime()$/;"	f	class:app
 updateTimeFactor	src/app.cpp	/^void app::updateTimeFactor() $/;"	f	class:app
@@ -1224,7 +1217,7 @@ vec4	experimental/hierarchy.cpp	/^struct vec4$/;"	s	file:
 vertex	src/line.h	/^        LinePointIt vertex;$/;"	m	struct:gui::LineVertex
 vertexCount	src/mesh.h	/^		unsigned int vertexCount = 0;$/;"	m	struct:mesh::Mesh
 vertexOffset	src/mesh.h	/^		unsigned int vertexOffset = 0;$/;"	m	struct:mesh::Mesh
-vertexPosBuffer	src/line.cpp	/^gl::Storage vertexPosBuffer;$/;"	v
+vertexPosBuffer	src/line.cpp	/^gl::StreamStorage vertexPosBuffer;$/;"	v
 vidModes	src/contextwindow.h	/^	    const GLFWvidmode* vidModes = nullptr;$/;"	m	struct:app::Monitor
 videoModeCount	src/contextwindow.h	/^	    int videoModeCount = 0;$/;"	m	struct:app::Monitor
 viewMatrix	src/camera.h	/^		glm::mat4 viewMatrix = {};$/;"	m	class:camera::Camera

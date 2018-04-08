@@ -13,15 +13,14 @@ unsigned int gui::quadIndexShader;
 unsigned int gui::quadIndexVAO;
 std::vector<unsigned int> quadIndexMap;
 std::vector<float> quadDepthMap;
-gl::Storage gui::quadIndexBuffer;
-gl::Storage gui::quadBuffer;
+gl::StreamStorage gui::quadIndexBuffer;
+gl::StreamStorage gui::quadBuffer;
 
 size_t quadCount = 0;
 
 void gui::updateQuadBuffer()
 {
-	if ( quadCount ) 
-    {
+	if ( quadCount ) {
 		//gl::uploadStorage( quadBuffer, 
         //        sizeof( glm::vec4 )*allQuads.size(), &allQuads[0] );
 	}
@@ -29,8 +28,7 @@ void gui::updateQuadBuffer()
 
 void gui::rasterQuadIndices()
 {
-	if ( quadCount ) 
-    {
+	if ( quadCount ) {
 		glDepthMask( 0 );
 		glDepthFunc( GL_LEQUAL );
 		glBindVertexArray( quadIndexVAO );
@@ -68,10 +66,9 @@ void gui::reserveQuads( const unsigned int pCount )
 
 void gui::initQuadBuffer()
 {
-	quadBuffer = gl::createStorage( "QuadBuffer", 
+	quadBuffer = gl::StreamStorage( "QuadBuffer", 
             MAX_QUAD_COUNT * sizeof( glm::vec4 ), 
-            GL_MAP_WRITE_BIT | gl::MAP_PERSISTENT_FLAGS );
-	//gl::createStream( quadBuffer, GL_MAP_WRITE_BIT );
+            GL_MAP_WRITE_BIT );
 	gl::setStorageTarget( quadBuffer, GL_UNIFORM_BUFFER );
 
 	glCreateVertexArrays( 1, &quadIndexVAO );
@@ -88,11 +85,10 @@ void gui::initQuadBuffer()
 
 void gui::initQuadIndexBuffer()
 {
-	quadIndexBuffer = gl::createStorage( "QuadIndexBuffer", 
+	quadIndexBuffer = gl::StreamStorage( "QuadIndexBuffer", 
             gl::getWidth() * gl::getHeight() * sizeof( unsigned int ), 
-            GL_MAP_READ_BIT | gl::MAP_PERSISTENT_FLAGS );
+            GL_MAP_READ_BIT );
 	gl::setStorageTarget( quadIndexBuffer, GL_PIXEL_PACK_BUFFER );
-	//gl::createStream( quadIndexBuffer, GL_MAP_READ_BIT | gl::MAP_PERSISTENT_FLAGS );
 }
 
 void gui::readQuadIndexBuffer()
@@ -119,8 +115,7 @@ void gui::setupQuadIndexShader()
 
 unsigned int gui::readQuadIndexMap( const unsigned int pPos )
 {
-	return *( ( unsigned int* )
-            gl::getMappedPtr( quadIndexBuffer ) + pPos );
+	return quadIndexBuffer.access<unsigned int>( pPos );
 }
 
 unsigned int gui::readQuadIndexMap( 
@@ -157,6 +152,7 @@ void gui::resizeQuad( const Quad pQuad, const glm::vec2 pOffset )
 {
 	getQuadData( pQuad ) += glm::vec4( 0.0f, 0.0f, pOffset.x, pOffset.y );
 }
+
 void gui::resizeQuadScaled( const Quad pQuad, const glm::vec2 pOffset, const glm::vec2 scale)
 {
     resizeQuad(pQuad, pOffset * scale );
@@ -169,7 +165,7 @@ void gui::setQuadPos( const Quad pQuad, const glm::vec2 pPos )
 
 glm::vec4& gui::getQuadData( const Quad pQuad )
 {
-    return *( (glm::vec4*)gl::getMappedPtr( quadBuffer ) + ( pQuad.index - 1 ) );
+    return quadBuffer.access<glm::vec4>( pQuad.index );
 }
 
 void gui::colorQuad( Quad pQuad, gl::ColorIt pColor )
@@ -177,3 +173,4 @@ void gui::colorQuad( Quad pQuad, gl::ColorIt pColor )
     printf( "Coloring Quad %u with color %u\n", pQuad.index, pColor.index );
     quadColors[pQuad.index - 1] = pColor.index;
 }
+

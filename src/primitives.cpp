@@ -26,8 +26,8 @@ void gl::initPrimitiveVBO()
 	unsigned int iarr[6] = {
 		2, 0, 1, 1, 3, 2
 	};
-	quadVBO = createStorage( "QuadVBO", sizeof( float ) * 4 * 2, 0, &varr[0] );
-	quadEBO = createStorage( "QuadEBO", sizeof( unsigned int ) * 6, 0, &iarr[0] );
+	quadVBO = Storage( "QuadVBO", sizeof( float ) * 4 * 2, 0, &varr[0] );
+	quadEBO = Storage( "QuadEBO", sizeof( unsigned int ) * 6, 0, &iarr[0] );
 
 	float cube_width = 1.0f;
 	glm::vec3 cube_verts[8] = {
@@ -62,6 +62,6 @@ void gl::initPrimitiveVBO()
 		4, 7, 6
 	};
 
-	cubeVBO = createStorage( "CubeVBO", sizeof( glm::vec3 ) * 8, 0, &cube_verts[0] );
-	cubeEBO = createStorage( "CubeEBO", sizeof( unsigned int ) * 36, 0, &cube_inds[0] );
+	cubeVBO = Storage( "CubeVBO", sizeof( glm::vec3 ) * 8, 0, &cube_verts[0] );
+	cubeEBO = Storage( "CubeEBO", sizeof( unsigned int ) * 36, 0, &cube_inds[0] );
 }

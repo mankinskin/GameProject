@@ -14,7 +14,8 @@ namespace gui {
 	unsigned int createQuad( const float pPosX, const float pPosY, const float pWidth, const float pHeight );
 	unsigned int createQuad( const glm::vec4 pQuad );
 
-    struct Quad {
+    struct Quad 
+    {
         const unsigned int index;
 
         Quad( const unsigned int in )
@@ -49,8 +50,8 @@ namespace gui {
 
     extern unsigned int quadIndexShader;
     extern unsigned int quadIndexVAO;
-	extern gl::Storage quadIndexBuffer;
-    extern gl::Storage quadBuffer;
+	extern gl::StreamStorage quadIndexBuffer;
+    extern gl::StreamStorage quadBuffer;
 
 }
 #endif //QUAD_H

@@ -9,9 +9,9 @@ std::vector<gl::Point3D> allLinePointData;
 std::vector<glm::uvec2> allLineVertices;//stores a vertex as the indices to its data ( pos & color )
 std::vector<glm::uvec2> allLines;//stores each line as 2 indices to its vertices
 unsigned int lineVAO = 0;
-gl::Storage lineVBO;
-gl::Storage lineEBO;
-gl::Storage vertexPosBuffer;
+gl::StreamStorage lineVBO;
+gl::StreamStorage lineEBO;
+gl::StreamStorage vertexPosBuffer;
 unsigned int lineShader = 0;
 std::vector<int> lineGroupFlags;
 
@@ -92,18 +92,12 @@ void gui::initLineVAO()
     allLines.reserve( MAX_LINE_COUNT );
     glCreateVertexArrays( 1, &lineVAO );
 
-    vertexPosBuffer = gl::createStorage( "LineVertexPosBuffer", sizeof( glm::vec4 ) * MAX_LINE_VERTEX_COUNT, 
-            gl::MAP_PERSISTENT_FLAGS|GL_MAP_WRITE_BIT );
+    vertexPosBuffer = gl::StreamStorage( "LineVertexPosBuffer", sizeof( glm::vec4 ) * MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
     gl::setStorageTarget( vertexPosBuffer, GL_UNIFORM_BUFFER );
-    ////gl::createStream( vertexPosBuffer, GL_MAP_WRITE_BIT );
 
-    lineVBO = gl::createStorage( "LineIndexBuffer", sizeof( glm::uvec2 ) * MAX_LINE_VERTEX_COUNT, 
-            gl::MAP_PERSISTENT_FLAGS | GL_MAP_WRITE_BIT );
-    ////gl::createStream( lineVBO, GL_MAP_WRITE_BIT );
+    lineVBO = gl::StreamStorage( "LineIndexBuffer", sizeof( glm::uvec2 ) * MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
 
-    lineEBO = gl::createStorage( "LineVertexIndexBuffer", sizeof( glm::uvec2 ) * MAX_LINE_VERTEX_COUNT, 
-            gl::MAP_PERSISTENT_FLAGS | GL_MAP_WRITE_BIT );
-    ////gl::createStream( lineEBO, GL_MAP_WRITE_BIT );
+    lineEBO = gl::StreamStorage( "LineVertexIndexBuffer", sizeof( glm::uvec2 ) * MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
 
     //gl::setVertexArrayVertexStorage( lineVAO, 0, lineVBO, sizeof( glm::uvec2 ) );
     glVertexArrayVertexBuffer( lineVAO, 0, lineVBO.ID, 0, sizeof( glm::uvec2 ) );

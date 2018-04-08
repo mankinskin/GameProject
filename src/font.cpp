@@ -4,8 +4,8 @@
 #include "primitives.h"
 
 unsigned int MAX_CHARS = 1000;
-gl::Storage quadStorage;
-gl::Storage charStorage;
+gl::StreamStorage quadStorage;
+gl::StreamStorage charStorage;
 std::vector<gui::text::String> allStrings;
 
 unsigned int styleStorage = 0;
@@ -29,13 +29,11 @@ void gui::text::initFontShader()
 
 void gui::text::initFontVAO() 
 {
-	quadStorage = gl::createStorage( "CharQuadBuffer", MAX_CHARS * sizeof( CharQuad ), 
-            GL_MAP_WRITE_BIT | gl::MAP_PERSISTENT_FLAGS );
-	charStorage = gl::createStorage( "CharBuffer", MAX_CHARS * sizeof( unsigned int ), 
-            GL_MAP_WRITE_BIT | gl::MAP_PERSISTENT_FLAGS );
-	////gl::createStream( quadStorage, GL_MAP_WRITE_BIT );
-	////gl::createStream( charStorage, GL_MAP_WRITE_BIT );
-    //
+	quadStorage = gl::StreamStorage( "CharQuadBuffer", MAX_CHARS * sizeof( CharQuad ), 
+            GL_MAP_WRITE_BIT );
+	charStorage = gl::StreamStorage( "CharBuffer", MAX_CHARS * sizeof( unsigned int ), 
+            GL_MAP_WRITE_BIT );
+
 	glCreateVertexArrays( 1, &fontVAO );
 
 	//gl::setVertexAttrib( fontVAO, 0, 0, 2, GL_FLOAT, 0 );
@@ -60,6 +58,7 @@ void gui::text::revalidateFontStringIndices()
 		off += fon.stringCount;
 	}
 }
+
 void gui::text::insertFontString( Font& pFont, String pString )
 {
 	if ( !pFont.stringCount ) {//if first textbox of this font
@@ -103,3 +102,4 @@ void gui::text::clearCharStorage()
 	allStrings.clear();
 	allFontStrings.clear();
 }
+

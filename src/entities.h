@@ -5,8 +5,8 @@
 
 //node
 //node hold the information about the transformation of an object. They store a position, an orientation and a scale.
-namespace entities {
-
+namespace entities 
+{
 	void initEntityBuffers();
 	void updateEntityBuffers();
 
@@ -23,7 +23,7 @@ namespace entities {
 	void translate( unsigned int pNodeID, glm::vec3 pPos );
 	
 
-	extern gl::Storage entityMatrixBuffer;
+	extern gl::StreamStorage entityMatrixBuffer;
 
 	const unsigned int MAX_ENTITIES = 1000;
 	extern unsigned int num_entities;

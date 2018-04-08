@@ -13,7 +13,7 @@ unsigned int gui::quadColors[MAX_QUAD_COUNT] = {};
 
 unsigned int gui::colorQuadVAO;
 unsigned int gui::colorQuadShader;
-gl::Storage gui::colorQuadBuffer;
+gl::StreamStorage gui::colorQuadBuffer;
 
 void gui::initColorQuadVAO() 
 {
@@ -25,8 +25,7 @@ void gui::initColorQuadVAO()
     glVertexArrayVertexBuffer( colorQuadVAO, 0, gl::quadVBO.ID, 0, sizeof( glm::vec2 ) );
     //gl::setVertexAttrib( colorQuadVAO, 0, 0, 2, GL_FLOAT, 0 );
 
-    colorQuadBuffer = gl::createStorage( "QuadColorBuffer", sizeof( unsigned int ) * MAX_QUAD_COUNT, GL_MAP_WRITE_BIT | gl::MAP_PERSISTENT_FLAGS );
-    ////gl::createStream( colorQuadBuffer, GL_MAP_WRITE_BIT );
+    colorQuadBuffer = gl::StreamStorage( "QuadColorBuffer", sizeof( unsigned int ) * MAX_QUAD_COUNT, GL_MAP_WRITE_BIT );
     gl::setStorageTarget( colorQuadBuffer, GL_UNIFORM_BUFFER );
 
     glBindVertexArray( 0 );
@@ -67,3 +66,4 @@ void gui::renderColorQuads()
 
     glDepthFunc( GL_LESS );
 }
+

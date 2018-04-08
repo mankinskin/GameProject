@@ -2,6 +2,7 @@
 #include <vector> 
 #include <glm.hpp>
 #include "storage.h"
+
 //Lights are a set of data used as a light source in a layered shading process
 //each light is either of type
 //  - point light/omnidirectional light
@@ -9,11 +10,14 @@
 //
 //Using the data rendered into the Geometry Framebuffer, each light can calculate its influence 
 //on every pixel on the screen
-namespace lights {
 
-	struct LightIndexRange {
+namespace lights
+{
+	struct LightIndexRange 
+    {
 		LightIndexRange( unsigned int pOffset, unsigned int pCount )
-			:offset( pOffset ), count( pCount ) {}
+			:offset( pOffset ), count( pCount ) 
+        {}
 		unsigned int offset;
 		unsigned int count;
 	};
@@ -23,8 +27,8 @@ namespace lights {
 	extern std::vector<glm::vec4> allLightData;
 	extern std::vector<LightIndexRange> allLightIndexRanges;
 	extern unsigned int lightVAO;
-	extern gl::Storage lightIndexVBO;
-	extern gl::Storage lightDataUBO;
+	extern gl::StreamStorage lightIndexVBO;
+	extern gl::StreamStorage lightDataUBO;
 	extern unsigned int lightShaderProgram;
 	const unsigned int MAX_LIGHT_COUNT = 100;
 
@@ -50,8 +54,5 @@ namespace lights {
 
 	void reserveLightSpace( unsigned int pCount );//reserves 3 vec4s and one index range for count
 	void reservePointLightSpace( unsigned int pCount );//reserves only 2 vec4 ( and one index range ) per light
-    namespace internal {
-        
-    }
 }
 

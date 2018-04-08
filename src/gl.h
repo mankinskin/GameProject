@@ -38,8 +38,7 @@ namespace gl {
 	extern std::vector<std::string> EXTENSION_LIST;
 	extern int EXTENSIONS_SUPPORTED_NUM;
 
-	extern Storage generalUniformBuffer;
+	extern StreamStorage generalUniformBuffer;
 	extern unsigned int screenShaderProgram;
 	extern unsigned int screenQuadVAO;
-
 }

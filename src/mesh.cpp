@@ -24,20 +24,19 @@ unsigned int mesh::meshNormalShader = 0;
 unsigned int mesh::meshVAO = 0;
 gl::Storage mesh::meshVBO;
 gl::Storage mesh::meshIBO;
-gl::Storage mesh::nodeIndexBuffer;
+gl::StreamStorage mesh::nodeIndexBuffer;
 unsigned int mesh::normalShaderProgram = 0;
 
 void mesh::initMeshVAO()
 {
 	glCreateVertexArrays( 1, &meshVAO );
-	meshVBO = gl::createStorage( "MeshVertexBuffer", sizeof( Vertex )*mesh::allStaticVertices.size(), 
+	meshVBO = gl::Storage( "MeshVertexBuffer", sizeof( Vertex )*mesh::allStaticVertices.size(), 
             0, &mesh::allStaticVertices[0] );
-	meshIBO = gl::createStorage( "MeshIndexBuffer", sizeof( unsigned int )*mesh::allIndices.size(), 
+	meshIBO = gl::Storage( "MeshIndexBuffer", sizeof( unsigned int )*mesh::allIndices.size(), 
             0, &mesh::allIndices[0] );
-	nodeIndexBuffer = gl::createStorage( "MeshNodeIndexBuffer", 
+	nodeIndexBuffer = gl::StreamStorage( "MeshNodeIndexBuffer", 
             sizeof( unsigned int )*model::MAX_MODELS*model::MAX_MESHES_PER_MODEL,
-            GL_MAP_WRITE_BIT | gl::MAP_PERSISTENT_FLAGS );
-	////gl::createStream( nodeIndexBuffer, GL_MAP_WRITE_BIT );
+            GL_MAP_WRITE_BIT );
 	glBindVertexArray( meshVAO );
 	glVertexArrayElementBuffer( meshVAO, meshIBO.ID );
 	glVertexArrayVertexBuffer( meshVAO, 0, meshVBO.ID, 0, sizeof( Vertex ) );

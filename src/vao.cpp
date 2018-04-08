@@ -5,9 +5,6 @@
 #include <gtc/type_ptr.hpp>
 #include <glew.h>
 
-std::vector<gl::Stream> gl::allStreams;
-
-
 //unsigned int vao::createStorage( std::string Name )
 //{
 //	Storage storage( Name );
@@ -33,7 +30,7 @@ std::vector<gl::Stream> gl::allStreams;
 //	stor.bufferFlags = pFlags;
 //}
 
-//unsigned int //gl::createStream( unsigned int pStorageIndex, unsigned int pMapFlags )
+//unsigned int gl::createStream( unsigned int pStorageIndex, unsigned int pMapFlags )
 //{
 //	Stream stream;
 //	unsigned int ind = allStreams.size();
@@ -62,7 +59,6 @@ std::vector<gl::Stream> gl::allStreams;
 //    printf( "Mapping Storage %s...\n", pStorage.name.c_str() );
 //	void* p = glMapNamedBufferRange( pStorage.ID, 0, pStorage.capacity, pFlags );
 //	if ( !p ) {
-//		debug::pushError( "Failed to map Storage " + pStorage.name + " !\n" );
 //	}
 //	return p;
 //}
@@ -103,11 +99,6 @@ std::vector<gl::Stream> gl::allStreams;
 //{
 //    return getStorage( storageIndex ).ID;
 //}
-
-void* gl::getMappedPtr( Storage & pStorage )
-{
-	return 0;//allStreams[pStorage.streamIndex].mappedPtr;
-}
 
 //void * vao::getMappedPtr( unsigned int pStorageIndex )
 //{

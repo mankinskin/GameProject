@@ -33,7 +33,7 @@ std::string gl::GLSL_VERSION = "";
 std::string gl::SYSTEM_RENDERER = "";
 gl::Viewport screenViewport;
 int gl::MAX_TEXTURE_UNIT_COUNT;
-gl::Storage gl::generalUniformBuffer;
+gl::StreamStorage gl::generalUniformBuffer;
 unsigned int gl::screenQuadVAO;
 unsigned int gl::screenShaderProgram;
 
@@ -136,9 +136,8 @@ void gl::initGeneralUniformBuffer()
 
     unsigned int generalUniformDataSize = sizeof( float ) * ( 16 + 16 + 4 + 16 );
 
-    generalUniformBuffer = createStorage( "GeneralUniformBuffer", generalUniformDataSize, GL_MAP_WRITE_BIT );
+    generalUniformBuffer = StreamStorage( "GeneralUniformBuffer", generalUniformDataSize, GL_MAP_WRITE_BIT );
     setStorageTarget( generalUniformBuffer, GL_UNIFORM_BUFFER );
-    //gl::createStream( generalUniformBuffer, GL_MAP_WRITE_BIT );
 }
 
 void gl::updateGeneralUniformBuffer()

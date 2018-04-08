@@ -244,7 +244,6 @@ void loadAtlas( FT_Face& pFace, gui::text::FontInstructions& pFontInstructions,
 					buf[bufpos + pos] += ( unsigned char )( val *255.0f );
 				}
 			}
-			//endif FONT_LOAD_DT
 		}
 		else {//regular load
 			for ( size_t line = 0; line < gly->bitmap.rows; ++line ) {
@@ -305,7 +304,6 @@ void gui::text::initializer::setFontInputDir( std::string pNewDirectory )
 
 void gui::text::initializer::setFontStoreDir( std::string pNewDirectory )
 {
-
 	font_store_directory = pNewDirectory;
 }
 
@@ -382,7 +380,7 @@ void storeGlyphs( gui::text::Font& pFont, const LoadFont & pLoadFont )
 			( float )met.advanceX / ( ( float )gl::Viewport::current->width / 2.0f ), ( float )met.xBearing / ( ( float )gl::Viewport::current->width / 2.0f ), ( float )met.yBearing / ( ( float )gl::Viewport::current->height / 2.0f ) );
 		//allMetrics[pSize.metricOffset + g] = GlyphMetrics( ( float )met.width, ( float )met.height, ( float )met.advanceX, ( float )met.xBearing, ( float )met.yBearing );
 	}
-	pFont.glyphStorage = gl::createStorage( "GlyphStorage", 
+	pFont.glyphStorage = gl::Storage( "GlyphStorage", 
             sizeof( gui::text::Glyph )*glyCount, 0, &glyphs[0] );
 	gl::setStorageTarget( pFont.glyphStorage, GL_UNIFORM_BUFFER );
 }

@@ -56,10 +56,8 @@ gl::ColorIt gl::getColor( std::string pColorName )
 
 void gl::initColorBuffer()
 {
-    colorBuffer = gl::createStorage( "ColorBuffer", sizeof( Color )*MAX_COLOR_COUNT, 
-            gl::MAP_PERSISTENT_FLAGS | GL_MAP_WRITE_BIT );
+    colorBuffer = StreamStorage( "ColorBuffer", sizeof( Color )*MAX_COLOR_COUNT, GL_MAP_WRITE_BIT );
     gl::setStorageTarget( colorBuffer, GL_UNIFORM_BUFFER );
-    ////gl::createStream( colorBuffer, GL_MAP_WRITE_BIT );
 }
 
 void gl::updateColorBuffer()
@@ -73,6 +71,7 @@ gl::Color gl::getColorData( ColorIt colorIndex )
 {
     return *colorIndex;
 }
+
 gl::Color gl::getColorData( std::string colorName )
 {
     return *getColor( colorName );

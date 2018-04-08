@@ -8,11 +8,11 @@
 #include "color.h"
 #include "storage.h"
 
-namespace gui {
-
+namespace gui 
+{
 	extern unsigned int colorQuadVAO;
 	extern unsigned int colorQuadShader;
-	extern gl::Storage colorQuadBuffer;
+	extern gl::StreamStorage colorQuadBuffer;
 
 	extern unsigned int quadColors[MAX_QUAD_COUNT];
 

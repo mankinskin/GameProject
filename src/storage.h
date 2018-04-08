@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <glew.h>
+#include "debug.h"
 
 namespace gl
 {
@@ -8,15 +9,18 @@ namespace gl
 	extern int UNIFORM_BUFFER_OFFSET_ALIGNMENT;
 	extern int MAX_UNIFORM_BUFFER_BINDINGS;
 	extern int MIN_MAP_BUFFER_ALIGNMENT;
-	const int MAP_PERSISTENT_FLAGS = GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;
 
 	struct Storage 
 	{
-		Storage()
-		{}
-		Storage( std::string pName, unsigned int pID, unsigned int pCapacity, unsigned int pFlags)
-			:name( pName ), ID( pID ), capacity( pCapacity ), flags( pFlags )
-		{}
+        Storage()
+        {}
+        Storage( std::string pName, unsigned int pCapacity, 
+                unsigned int pFlags, void* pData = nullptr )
+        {
+	        glCreateBuffers( 1, &ID );
+	        glNamedBufferStorage( ID, pCapacity, pData, pFlags );
+        }
+        
 		std::string name;
 		unsigned int ID;
 		unsigned int capacity;
@@ -25,6 +29,27 @@ namespace gl
 		unsigned int binding;
 	};
 
-	Storage createStorage( std::string pName, unsigned int pCapacity, unsigned int pFlags, void* pData = nullptr );
+	struct StreamStorage 
+        :public Storage
+	{
+		StreamStorage()
+        {} 
+		StreamStorage( std::string pName, unsigned int pCapacity, 
+                unsigned int pFlags, void* pData = nullptr )
+			:Storage( pName, pCapacity, pFlags, pData )
+		{
+            mappedPtr = glMapNamedBufferRange( ID, 0, capacity, flags | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT );
+            if ( !mappedPtr ) {
+                debug::pushError( "Failed to map Storage " + name + " !\n" );
+            }
+        }
+        template<typename T>
+            T& access( size_t N )
+            {
+                return *((T*)mappedPtr + N);
+            }
+        void* mappedPtr;
+	};
+
 	void setStorageTarget( Storage& pStorage, const unsigned int pTarget );
 }

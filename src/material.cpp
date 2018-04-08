@@ -10,7 +10,7 @@ gl::Storage mesh::materialUBO;
 
 void mesh::storeMaterials()
 {
-	materialUBO = gl::createStorage( "MaterialBuffer", sizeof( mesh::Material )*mesh::allMaterials.size(), 0, &mesh::allMaterials[0] );
+	materialUBO = gl::Storage( "MaterialBuffer", sizeof( mesh::Material )*mesh::allMaterials.size(), 0, &mesh::allMaterials[0] );
     gl::setStorageTarget( materialUBO, GL_UNIFORM_BUFFER );
 }
 

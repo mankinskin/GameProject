@@ -24,24 +24,23 @@ namespace gl {
 	//void initStorageData( unsigned int pStorage, unsigned int pCapacity, const void * pData, unsigned int pFlags );
 	//unsigned int createStorage( std::string Name, unsigned int pCapacity, const void* pData, unsigned int pFlags );
 
-	struct Stream 
-    {
-		Stream() 
-            :mapFlags( 0 ), mappedPtr( nullptr ), 
-            alignment( 0 ), updateOffset( 0 ), lastUpdateSize( 0 ) 
-        {}
-		unsigned int mapFlags;
-		void* mappedPtr;
-		unsigned int alignment;
-		unsigned int updateOffset;
-		unsigned int lastUpdateSize;
-	};
+	//struct Stream 
+    //{
+	//	Stream() 
+    //        :mapFlags( 0 ), mappedPtr( nullptr ), 
+    //        alignment( 0 ), updateOffset( 0 ), lastUpdateSize( 0 ) 
+    //    {}
+	//	unsigned int mapFlags;
+	//	void* mappedPtr;
+	//	unsigned int alignment;
+	//	unsigned int updateOffset;
+	//	unsigned int lastUpdateSize;
+	//};
 
 	//unsigned int createStream( unsigned int pStorageIndex, unsigned int pMapFlags );
 
 	//const Storage& getStorage( unsigned int pStorageIndex );
 	//unsigned int getStorageID( unsigned int pStorageIndex );
-	void *getMappedPtr( Storage& pStorage );
 	//void *getMappedPtr( unsigned int pStorageIndex );
 	//void uploadStorage( unsigned int pStorageIndex, unsigned int pUploadSize, void* pData );
 	//void uploadStorage( Storage& pStorage, unsigned int pUploadSize, void* pData );
@@ -56,5 +55,4 @@ namespace gl {
 	//void setVertexAttrib( unsigned int pVAO, unsigned int pBindingIndex, unsigned int pAttributeIndex, unsigned int pCount, unsigned int pType, unsigned int pOffset, unsigned int pNormalize = false );
 
 	//extern std::vector<Storage> allStorages;
-	extern std::vector<Stream> allStreams;
 }
