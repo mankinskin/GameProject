@@ -15,14 +15,14 @@ void app::initMonitors()
     allMonitors = glfwGetMonitors( &monitorCount );
     printf( "%d monitors detected.\n", monitorCount );
     if ( monitorCount > 0 ) {
-	primaryMonitor.monitor = allMonitors[0];
+        primaryMonitor.monitor = allMonitors[0];
     }
     else {
         printf( "Could not detect any monitors.\nAttempting to use primary monitor." );
-	primaryMonitor.monitor = glfwGetPrimaryMonitor();
+        primaryMonitor.monitor = glfwGetPrimaryMonitor();
     }
     if ( primaryMonitor.monitor == nullptr ) {
-	debug::pushError( "GLFW could not find any monitor!", debug::Error::Fatal );
+        debug::pushError( "GLFW could not find any monitor!", debug::Error::Fatal );
     }
 }
 
@@ -51,9 +51,9 @@ void app::Window::init()
     //sets up GLFW Window with OpenGL context
     if ( window != nullptr ) {
 #ifdef _DEBUG
-	puts( "\nDestroying current GLFW Window..." );
+        puts( "\nDestroying current GLFW Window..." );
 #endif
-	glfwDestroyWindow( window );
+        glfwDestroyWindow( window );
     }
 #ifdef _DEBUG
     printf( "\nGLFW Window Size:\nX: %i Y: %i\n", width, height );
@@ -66,7 +66,7 @@ void app::Window::init()
     glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 5 );
     glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, true );
 #ifdef _DEBUG
-    //glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, 1 );
+    glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, 1 );
     glfwWindowHint( GLFW_CONTEXT_NO_ERROR, 1 );
 #endif
     glfwWindowHint( GLFW_RESIZABLE, 1 );
@@ -77,7 +77,9 @@ void app::Window::init()
     //glfwWindowHint( GLFW_SAMPLES, 4 );
 
     window = glfwCreateWindow( width, height, name.c_str(), nullptr, nullptr );
-
+    if( window == nullptr ) {
+        debug::pushError( "Failed to create GLFW Window! window was nullptr!", debug::Error::Fatal );  
+    }
     glfwSetWindowPos( window, ( primaryMonitor.currentVideoMode->width / 2 ) - width / 2, ( primaryMonitor.currentVideoMode->height / 2 ) - height / 2 );
     glfwMakeContextCurrent( window );
     glfwSetWindowUserPointer( window, window );

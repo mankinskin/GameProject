@@ -39,8 +39,8 @@ unsigned int gl::screenShaderProgram;
 
 void gl::init()
 {
-	initGLEW();
 	puts( "Initializing OpenGL..." );
+	initGLEW();
 	glDebug::init();
 	getOpenGLInitValues();
 	screenViewport = Viewport( app::mainWindow );
@@ -121,9 +121,8 @@ void gl::initGLEW()
 	glewExperimental = true;
 	unsigned int glew = glewInit();
 	if ( glew != GLEW_OK ) {
-
-		debug::pushError( std::string( "/napp::init() - Unable to initialize GLEW ( glewInit() return code: %i )/nGLEW Error Log/n %s"
-					+ glew ) + std::string( ( const char* )glewGetErrorString( glew ) ), debug::Error::Severity::Fatal );
+		debug::pushError( "Unable to initialize GLEW ( glewInit() return code: " + std::to_string( glew ) + " )\nGLEW Error Log:\n"
+					+ ( const char* )glewGetErrorString( glew ), debug::Error::Severity::Fatal );
 		while ( !getch() ) {
         }
 		exit( glew );

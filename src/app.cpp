@@ -50,14 +50,14 @@ void app::init()
 	puts( "Hello" );
 	state = Running;
 	setMaxFPS( 50 );
-	initGLFW();
 	//Windows and gl Context
+	initGLFW();
 	initMonitors();
 	primaryMonitor.init();
 	mainWindow.setSize( 1600, 850 );
 	mainWindow.init();
-
 	gl::init();
+
     sequencer::initialize();
 	//gui::text::initStyleBuffer();
 
@@ -68,19 +68,18 @@ void app::init()
 	}
 }
 
-
-
-
 void app::initGLFW()
 {
-	std::puts( "Initializing GLFW...\n" );
+	std::puts( "Initializing GLFW..." );
 	unsigned int glfw = glfwInit();
 	if ( glfw != GLFW_TRUE ) {
-		debug::pushError( ( "\napp::init() - Unable to initialize GLFW ( glfwInit() return code: %i )\n" + glfw ), debug::Error::Severity::Fatal );
+		debug::pushError( ( "app::init() - Unable to initialize GLFW ( glfwInit() return code: %i )\n" + glfw ), debug::Error::Severity::Fatal );
 		//while ( !getch() ) {}
 		exit( glfw );
 	}
+	std::puts( "Initialized GLFW successfully." );
 }
+
 //--Global Time--
 void app::updateTime()
 {
@@ -98,7 +97,8 @@ void app::limitFPS()
 	}
 }
 
-void app::updateTimeFactor() {
+void app::updateTimeFactor() 
+{
 	timeFactor = 1.0f;
 }
 
@@ -107,11 +107,13 @@ void app::setMaxFPS( unsigned int pMaxFPS )
 	minFrameMS = ( unsigned int )( 1000.0f / ( float )pMaxFPS );
 }
 
-void app::run() {
+void app::run() 
+{
 	state = app::State::Running;
 }
 
-void app::quit() {
+void app::quit() 
+{
 	state = app::State::Exit;
 }
 
@@ -119,3 +121,4 @@ void app::mainmenu()
 {
 	state = app::State::MainMenu;
 }
+

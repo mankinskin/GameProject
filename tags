@@ -970,7 +970,7 @@ quadVBO	src/primitives.cpp	/^gl::Storage gl::quadVBO;$/;"	m	class:gl	file:
 quad_index	src/mouse.h	/^        unsigned int quad_index;\/\/0 if none$/;"	m	struct:input::QuadEvent
 quads	src/font_loader.cpp	/^	std::vector<LoadGlyphQuad> quads;$/;"	m	struct:LoadAtlas	file:
 quads	src/text.cpp	/^	std::vector<gui::text::CharQuad> quads;$/;"	m	struct:TextboxGlyphs	file:
-quit	src/app.cpp	/^void app::quit() {$/;"	f	class:app
+quit	src/app.cpp	/^void app::quit() $/;"	f	class:app
 r	dt/misc.h	/^typedef struct { uchar r, g, b; } rgb;$/;"	m	struct:__anon1
 radius	src/collision.h	/^		float radius;$/;"	m	struct:physics::BoundingSphere
 rasterQuadIndices	src/quad.cpp	/^void gui::rasterQuadIndices()$/;"	f	class:gui
@@ -1020,7 +1020,7 @@ right	src/camera.cpp	/^void camera::right( Camera & pCam )$/;"	f	class:camera
 right_factor	src/camera.h	/^		float right_factor;$/;"	m	struct:camera::MovementPolicy
 right_off	src/camera.h	/^		size_t right_off;$/;"	m	struct:camera::MovementPolicy
 rmb	src/input.cpp	/^events::ButtonEvents<events::Event> input::rmb;$/;"	m	class:input	file:
-run	src/app.cpp	/^void app::run() {$/;"	f	class:app
+run	src/app.cpp	/^void app::run() $/;"	f	class:app
 savePBM	dt/pnmfile.h	/^static void savePBM(image<uchar> *im, const char *name) {$/;"	f
 savePGM	dt/pnmfile.h	/^static void savePGM(image<uchar> *im, const char *name) {$/;"	f
 savePPM	dt/pnmfile.h	/^static void savePPM(image<rgb> *im, const char *name) {$/;"	f
@@ -1209,7 +1209,7 @@ updateMouse	src/mouse.cpp	/^void input::updateMouse()$/;"	f	class:input
 updateOffset	src/vao.h	/^		unsigned int updateOffset;$/;"	m	struct:gl::Stream
 updateQuadBuffer	src/quad.cpp	/^void gui::updateQuadBuffer()$/;"	f	class:gui
 updateTime	src/app.cpp	/^void app::updateTime()$/;"	f	class:app
-updateTimeFactor	src/app.cpp	/^void app::updateTimeFactor() {$/;"	f	class:app
+updateTimeFactor	src/app.cpp	/^void app::updateTimeFactor() $/;"	f	class:app
 upsampling	src/font.h	/^			unsigned int upsampling = 4;$/;"	m	struct:gui::text::FontInstructions
 upward_factor	src/camera.h	/^		float upward_factor;$/;"	m	struct:camera::MovementPolicy
 upward_off	src/camera.h	/^		size_t upward_off;$/;"	m	struct:camera::MovementPolicy
