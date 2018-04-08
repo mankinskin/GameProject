@@ -19,7 +19,8 @@ unsigned int getNewTargetBinding( const unsigned int pTarget )
 {
 	auto target_it = targetBindingCounts.find( pTarget );
 	if ( target_it == targetBindingCounts.end() ) {
-		target_it = targetBindingCounts.find( pTarget );
+        targetBindingCounts.insert( { pTarget, 1 } );
+        return 0;
 	}
 	return target_it->second++;
 }

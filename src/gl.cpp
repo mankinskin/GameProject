@@ -39,115 +39,116 @@ unsigned int gl::screenShaderProgram;
 
 void gl::init()
 {
-	puts( "Initializing OpenGL..." );
-	initGLEW();
-	glDebug::init();
-	getOpenGLInitValues();
-	screenViewport = Viewport( app::mainWindow );
+    puts( "Initializing OpenGL..." );
+    initGLEW();
+    glDebug::init();
+    getOpenGLInitValues();
+    screenViewport = Viewport( app::mainWindow );
     screenViewport.bind();
-	//lights::createLight( glm::vec4( 3.0f, 5.0f, -5.0f, 1.0f ), glm::vec4( 0.0f, 1.0f, 0.0f, 100.0f ) );
-	//lights::createLight( glm::vec4( -1.0f, 4.0f, 3.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 100.0f ) );
-	//lights::createLight( glm::vec4( 1.0f, 14.0f, 1.0f, 0.0f ), glm::vec4( 1.0f, 1.0f, 1.0f, 100.0f ) );
-	//lights::createLight( glm::vec4( 4.0f, -4.0f, 3.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 100.0f ) );
-	//lights::createLight( glm::vec4( 3.0f, 15.0f, -5.0f, 1.0f ), glm::vec4( 0.0f, 1.0f, 0.0f, 100.0f ) );
+    //lights::createLight( glm::vec4( 3.0f, 5.0f, -5.0f, 1.0f ), glm::vec4( 0.0f, 1.0f, 0.0f, 100.0f ) );
+    //lights::createLight( glm::vec4( -1.0f, 4.0f, 3.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 100.0f ) );
+    //lights::createLight( glm::vec4( 1.0f, 14.0f, 1.0f, 0.0f ), glm::vec4( 1.0f, 1.0f, 1.0f, 100.0f ) );
+    //lights::createLight( glm::vec4( 4.0f, -4.0f, 3.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 100.0f ) );
+    //lights::createLight( glm::vec4( 3.0f, 15.0f, -5.0f, 1.0f ), glm::vec4( 0.0f, 1.0f, 0.0f, 100.0f ) );
 
-	//puts( "Lighting..." );
-	//lights::initLighting();
+    //puts( "Lighting..." );
+    //lights::initLighting();
 
-	//puts( "Entities..." );
-	//entities::initEntityBuffers();
+    //puts( "Entities..." );
+    //entities::initEntityBuffers();
 
-	//puts( "Models..." );
-	//model::initModels();
-	//mesh::initMeshVAO();
-	//model::setupModels();
+    //puts( "Models..." );
+    //model::initModels();
+    //mesh::initMeshVAO();
+    //model::setupModels();
 
-	//entities::updateEntityMatrices();
-	//model::revalidateModelMeshOffsets();
-	//mesh::revalidateMeshEntityOffsets();
+    //entities::updateEntityMatrices();
+    //model::revalidateModelMeshOffsets();
+    //mesh::revalidateMeshEntityOffsets();
 
-	debug::printErrors();
+    debug::printErrors();
 }
 
 void gl::getOpenGLInitValues()
 {
-	glGetIntegerv( GL_MAJOR_VERSION, &OPENGL_VERSION[0] );
-	glGetIntegerv( GL_MINOR_VERSION, &OPENGL_VERSION[1] );
-	GLSL_VERSION = std::string( ( char* )glGetString( GL_SHADING_LANGUAGE_VERSION ) );
-	SYSTEM_RENDERER = std::string( ( char* )glGetString( GL_RENDERER ) );
+    glGetIntegerv( GL_MAJOR_VERSION, &OPENGL_VERSION[0] );
+    glGetIntegerv( GL_MINOR_VERSION, &OPENGL_VERSION[1] );
+    GLSL_VERSION = std::string( ( char* )glGetString( GL_SHADING_LANGUAGE_VERSION ) );
+    SYSTEM_RENDERER = std::string( ( char* )glGetString( GL_RENDERER ) );
 
-	printf( "OpenGL %s.%s\n", std::to_string( OPENGL_VERSION[0] ).c_str(), std::to_string( OPENGL_VERSION[1] ).c_str() );
-	printf( "GLSL %s\n", GLSL_VERSION.c_str() );
-	printf( "Renderer %s\n", SYSTEM_RENDERER.c_str() );
+    printf( "OpenGL %s.%s\n", std::to_string( OPENGL_VERSION[0] ).c_str(), std::to_string( OPENGL_VERSION[1] ).c_str() );
+    printf( "GLSL %s\n", GLSL_VERSION.c_str() );
+    printf( "Renderer %s\n", SYSTEM_RENDERER.c_str() );
 
-	glGetIntegerv( GL_NUM_EXTENSIONS, &EXTENSIONS_SUPPORTED_NUM );
-	printf( "%d Extensions found.\n", EXTENSIONS_SUPPORTED_NUM );
-	EXTENSION_LIST.resize( EXTENSIONS_SUPPORTED_NUM );
-	for ( int k = 0; k < EXTENSIONS_SUPPORTED_NUM; ++k ) {
-		EXTENSION_LIST[k] = std::string( ( const char* )glGetStringi( GL_EXTENSIONS, k ) );
-		//printf( "%s\n", EXTENSION_LIST[k].c_str() );
-	}
+    glGetIntegerv( GL_NUM_EXTENSIONS, &EXTENSIONS_SUPPORTED_NUM );
+    printf( "%d Extensions found.\n", EXTENSIONS_SUPPORTED_NUM );
+    EXTENSION_LIST.resize( EXTENSIONS_SUPPORTED_NUM );
+    for ( int k = 0; k < EXTENSIONS_SUPPORTED_NUM; ++k ) {
+        EXTENSION_LIST[k] = std::string( ( const char* )glGetStringi( GL_EXTENSIONS, k ) );
+        //printf( "%s\n", EXTENSION_LIST[k].c_str() );
+    }
 
-	glGetIntegeri_v( GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 0, &MAX_WORK_GROUP_SIZE.x );
-	glGetIntegeri_v( GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 1, &MAX_WORK_GROUP_SIZE.y );
-	glGetIntegeri_v( GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 2, &MAX_WORK_GROUP_SIZE.z );
+    glGetIntegeri_v( GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 0, &MAX_WORK_GROUP_SIZE.x );
+    glGetIntegeri_v( GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 1, &MAX_WORK_GROUP_SIZE.y );
+    glGetIntegeri_v( GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB, 2, &MAX_WORK_GROUP_SIZE.z );
 
-	glGetIntegerv( GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT, &SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT );
-	glGetIntegerv( GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &UNIFORM_BUFFER_OFFSET_ALIGNMENT );
-	glGetIntegerv( GL_MAX_UNIFORM_BUFFER_BINDINGS, &MAX_UNIFORM_BUFFER_BINDINGS );
-	glGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &MAX_TEXTURE_UNIT_COUNT );
-	glGetIntegerv( GL_MIN_MAP_BUFFER_ALIGNMENT, &MIN_MAP_BUFFER_ALIGNMENT );
+    glGetIntegerv( GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT, &SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT );
+    glGetIntegerv( GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &UNIFORM_BUFFER_OFFSET_ALIGNMENT );
+    glGetIntegerv( GL_MAX_UNIFORM_BUFFER_BINDINGS, &MAX_UNIFORM_BUFFER_BINDINGS );
+    glGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &MAX_TEXTURE_UNIT_COUNT );
+    glGetIntegerv( GL_MIN_MAP_BUFFER_ALIGNMENT, &MIN_MAP_BUFFER_ALIGNMENT );
     glGetIntegerv( GL_MAX_UNIFORM_BLOCK_SIZE, &MAX_UNIFORM_BLOCK_SIZE );
 
     printf( "Max Uniform Block Size:\t%d\n", MAX_UNIFORM_BLOCK_SIZE );
 
 
-	glClearColor( 0.2f, 0.2f, 0.2f, 1.0f );
-	glClearDepth( 1.0f );
-	glDepthRange( 0.0f, 1.0f );
-	glEnable( GL_CULL_FACE );
-	glEnable( GL_DEPTH_TEST );
-	glEnable( GL_ALPHA_TEST );
-	glEnable( GL_TEXTURE_3D );
-	glDepthFunc( GL_LESS );
-	glEnable( GL_BLEND );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	glEnable( GL_DEBUG_OUTPUT );
+    glClearColor( 0.2f, 0.2f, 0.2f, 1.0f );
+    glClearDepth( 1.0f );
+    glDepthRange( 0.0f, 1.0f );
+    glEnable( GL_CULL_FACE );
+    glEnable( GL_DEPTH_TEST );
+    glEnable( GL_ALPHA_TEST );
+    glEnable( GL_TEXTURE_3D );
+    glDepthFunc( GL_LESS );
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    glEnable( GL_DEBUG_OUTPUT );
 }
 
 void gl::initGLEW() 
 {
-	puts( "Initializing GLEW..." );
-	glewExperimental = true;
-	unsigned int glew = glewInit();
-	if ( glew != GLEW_OK ) {
-		debug::pushError( "Unable to initialize GLEW ( glewInit() return code: " + std::to_string( glew ) + " )\nGLEW Error Log:\n"
-					+ ( const char* )glewGetErrorString( glew ), debug::Error::Severity::Fatal );
-		while ( !getch() ) {
+    puts( "Initializing GLEW..." );
+    glewExperimental = true;
+    unsigned int glew = glewInit();
+    if ( glew != GLEW_OK ) {
+        debug::pushError( "Unable to initialize GLEW ( glewInit() return code: " + std::to_string( glew ) + " )\nGLEW Error Log:\n"
+                + ( const char* )glewGetErrorString( glew ), debug::Error::Severity::Fatal );
+        while ( !getch() ) {
         }
-		exit( glew );
-	}
-	printf( "GLEW %s\n", ( const char* )glewGetString( GLEW_VERSION ) );
+        exit( glew );
+    }
+    printf( "GLEW %s\n", ( const char* )glewGetString( GLEW_VERSION ) );
 }
 
 void gl::initGeneralUniformBuffer()
 {
-	//contains: projectionMatrix( mat4 ), viewMatrix( mat4 ), camera position( vec4 )( todo:remove ), voxelizationProjection
+    //contains: projectionMatrix( mat4 ), viewMatrix( mat4 ), camera position( vec4 )( todo:remove ), voxelizationProjection
 
-	unsigned int generalUniformDataSize = sizeof( float ) * ( 16 + 16 + 4 + 16 );
+    unsigned int generalUniformDataSize = sizeof( float ) * ( 16 + 16 + 4 + 16 );
 
-	generalUniformBuffer = createStorage( "GeneralUniformBuffer", generalUniformDataSize, GL_MAP_WRITE_BIT | MAP_PERSISTENT_FLAGS );
-	setStorageTarget( generalUniformBuffer, GL_UNIFORM_BUFFER );
-	////gl::createStream( generalUniformBuffer, GL_MAP_WRITE_BIT );
+    generalUniformBuffer = createStorage( "GeneralUniformBuffer", generalUniformDataSize, GL_MAP_WRITE_BIT );
+    setStorageTarget( generalUniformBuffer, GL_UNIFORM_BUFFER );
+    //gl::createStream( generalUniformBuffer, GL_MAP_WRITE_BIT );
 }
 
 void gl::updateGeneralUniformBuffer()
 {
-	std::vector<float> generalUniformData( 52 );
+    std::vector<float> generalUniformData( 52 );
 
-	std::memcpy( &generalUniformData[0], glm::value_ptr( camera::main_camera.getProjection() ), sizeof( float ) * 16 );
-	std::memcpy( &generalUniformData[16], glm::value_ptr( camera::main_camera.getView() ), sizeof( float ) * 16 );
-	std::memcpy( &generalUniformData[32], glm::value_ptr( camera::main_camera.getPos() ), sizeof( float ) * 3 );
-	std::memcpy( &generalUniformData[36], glm::value_ptr( voxelization::projectionMatrix ), sizeof( float ) * 16 );
-	//uploadStorage( generalUniformBuffer, sizeof( float ) * 52, &generalUniformData[0] );
+    std::memcpy( &generalUniformData[0], glm::value_ptr( camera::main_camera.getProjection() ), sizeof( float ) * 16 );
+    std::memcpy( &generalUniformData[16], glm::value_ptr( camera::main_camera.getView() ), sizeof( float ) * 16 );
+    std::memcpy( &generalUniformData[32], glm::value_ptr( camera::main_camera.getPos() ), sizeof( float ) * 3 );
+    std::memcpy( &generalUniformData[36], glm::value_ptr( voxelization::projectionMatrix ), sizeof( float ) * 16 );
+    //uploadStorage( generalUniformBuffer, sizeof( float ) * 52, &generalUniformData[0] );
 }
+
