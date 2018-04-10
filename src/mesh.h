@@ -82,8 +82,8 @@ namespace mesh
 	extern unsigned int blendMeshShader;
 	extern unsigned int meshNormalShader;
 	extern unsigned int meshVAO;
-	extern gl::Storage meshVBO;
-	extern gl::Storage meshIBO;
-	extern gl::StreamStorage nodeIndexBuffer;
+	extern gl::Storage<Vertex> meshVBO;
+	extern gl::Storage<unsigned int> meshIBO;
+	extern gl::StreamStorage<unsigned int> nodeIndexBuffer;
 	extern unsigned int normalShaderProgram;
 }

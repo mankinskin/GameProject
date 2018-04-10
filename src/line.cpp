@@ -1,24 +1,23 @@
 #include "line.h"
-#include "vao.h"
 #include "shader.h"
 
 const unsigned int MAX_LINE_VERTEX_COUNT = 500;
 const unsigned int MAX_LINE_COUNT = 1000;
 std::vector<gui::LineGroup> allLineGroups;
-std::vector<gl::Point3D> allLinePointData;
-std::vector<glm::uvec2> allLineVertices;//stores a vertex as the indices to its data ( pos & color )
-std::vector<glm::uvec2> allLines;//stores each line as 2 indices to its vertices
+size_t lineCount = 0;
+size_t lineVertexCount = 0;
+size_t vertexPosCount = 0;
 unsigned int lineVAO = 0;
-gl::StreamStorage lineVBO;
-gl::StreamStorage lineEBO;
-gl::StreamStorage vertexPosBuffer;
+gl::StreamStorage<glm::uvec2> lineVBO;
+gl::StreamStorage<glm::uvec2> lineEBO;
+gl::StreamStorage<glm::vec4> vertexPosBuffer;
 unsigned int lineShader = 0;
 std::vector<int> lineGroupFlags;
 
 
 unsigned int gui::getLineCount() 
 {
-    return allLines.size();
+    return lineCount;
 }
 
 unsigned int gui::createLineGroup( unsigned int pLineOffset, 
@@ -46,8 +45,8 @@ unsigned int gui::createLine( glm::vec4 pVertexAPos, glm::vec4 pVertexBPos, unsi
 
 unsigned int gui::createLine( unsigned int pVertexA, unsigned int pVertexB ) 
 {
-    allLines.push_back( glm::uvec2( pVertexA, pVertexB ) );
-    return allLines.size() - 1;
+	lineVBO[ lineCount ] = glm::uvec2( pVertexA, pVertexB );
+    return lineCount++;
 }
 
 unsigned int gui::createLineVertex( glm::vec4 pPos, unsigned int pColorIndex ) 
@@ -57,14 +56,14 @@ unsigned int gui::createLineVertex( glm::vec4 pPos, unsigned int pColorIndex )
 
 unsigned int gui::createLineVertex( LinePointIt vertex, unsigned int pColorIndex ) 
 {
-    allLineVertices.push_back( glm::uvec2( vertex.index, pColorIndex ) );
-    return allLineVertices.size() - 1;
+    lineEBO[ lineVertexCount ] = glm::uvec2( vertex.index, pColorIndex );
+    return lineVertexCount++;
 }
 
 gui::LinePointIt gui::createLineVertexPosition( glm::vec4 pPos ) 
 {
-    allLinePointData.push_back( pPos );
-    return LinePointIt( allLinePointData, allLinePointData.size()-1 );
+    vertexPosBuffer[ vertexPosCount ] = pPos;
+    return LinePointIt( vertexPosBuffer, vertexPosCount++ );
 }
 
 void gui::setLineColor( unsigned int pLineIndex, unsigned int pColorIndex ) 
@@ -75,29 +74,23 @@ void gui::setLineColor( unsigned int pLineIndex, unsigned int pColorIndex )
 
 unsigned int getLineVertexIndex( unsigned int pLineIndex, unsigned int pVertex )
 {
-    return *( unsigned int* )( &allLines[pLineIndex] + sizeof( unsigned int )*pVertex );
+    return *( unsigned int* )( &lineVBO[ pLineIndex ] + sizeof( unsigned int ) * pVertex );
 }
 
 void gui::setLineVertexColor( unsigned int pLineIndex, unsigned int pVertex, unsigned int pColorIndex )
 {
-    std::memcpy( 
-            &allLineVertices[getLineVertexIndex( pLineIndex, pVertex )].y, 
-            &pColorIndex, sizeof( unsigned int ) );
+    std::memcpy( &lineVBO[getLineVertexIndex( pLineIndex, pVertex )].y, &pColorIndex, sizeof( unsigned int ) );
 }
 
 void gui::initLineVAO() 
 {
-    allLinePointData.reserve( MAX_LINE_VERTEX_COUNT );
-    allLineVertices.reserve( MAX_LINE_COUNT );
-    allLines.reserve( MAX_LINE_COUNT );
     glCreateVertexArrays( 1, &lineVAO );
 
-    vertexPosBuffer = gl::StreamStorage( "LineVertexPosBuffer", sizeof( glm::vec4 ) * MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
+    vertexPosBuffer = gl::StreamStorage<glm::vec4>( "LineVertexPosBuffer", MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
     gl::setStorageTarget( vertexPosBuffer, GL_UNIFORM_BUFFER );
 
-    lineVBO = gl::StreamStorage( "LineIndexBuffer", sizeof( glm::uvec2 ) * MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
-
-    lineEBO = gl::StreamStorage( "LineVertexIndexBuffer", sizeof( glm::uvec2 ) * MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
+    lineVBO = gl::StreamStorage<glm::uvec2>( "LineIndexBuffer", MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
+    lineEBO = gl::StreamStorage<glm::uvec2>( "LineVertexIndexBuffer", MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
 
     //gl::setVertexArrayVertexStorage( lineVAO, 0, lineVBO, sizeof( glm::uvec2 ) );
     glVertexArrayVertexBuffer( lineVAO, 0, lineVBO.ID, 0, sizeof( glm::uvec2 ) );
@@ -113,7 +106,7 @@ void gui::updateLinePositions()
 
 void gui::updateLineBuffers()
 {
-    if ( !allLines.size() ) {
+    if ( !lineCount ) {
         return;
     }
         updateLinePositions();

@@ -4,8 +4,8 @@
 #include "primitives.h"
 
 unsigned int MAX_CHARS = 1000;
-gl::StreamStorage quadStorage;
-gl::StreamStorage charStorage;
+gl::StreamStorage<gui::text::CharQuad> quadStorage;
+gl::StreamStorage<unsigned int> charStorage;
 std::vector<gui::text::String> allStrings;
 
 unsigned int styleStorage = 0;
@@ -29,10 +29,10 @@ void gui::text::initFontShader()
 
 void gui::text::initFontVAO() 
 {
-	quadStorage = gl::StreamStorage( "CharQuadBuffer", MAX_CHARS * sizeof( CharQuad ), 
-            GL_MAP_WRITE_BIT );
-	charStorage = gl::StreamStorage( "CharBuffer", MAX_CHARS * sizeof( unsigned int ), 
-            GL_MAP_WRITE_BIT );
+	quadStorage = gl::StreamStorage<CharQuad>( "CharQuadBuffer", 
+			MAX_CHARS, GL_MAP_WRITE_BIT );
+	charStorage = gl::StreamStorage<unsigned int>( "CharBuffer", 
+			MAX_CHARS, GL_MAP_WRITE_BIT );
 
 	glCreateVertexArrays( 1, &fontVAO );
 

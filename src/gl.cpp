@@ -33,7 +33,7 @@ std::string gl::GLSL_VERSION = "";
 std::string gl::SYSTEM_RENDERER = "";
 gl::Viewport screenViewport;
 int gl::MAX_TEXTURE_UNIT_COUNT;
-gl::StreamStorage gl::generalUniformBuffer;
+gl::StreamStorage<glm::vec4> gl::generalUniformBuffer;
 unsigned int gl::screenQuadVAO;
 unsigned int gl::screenShaderProgram;
 
@@ -134,9 +134,9 @@ void gl::initGeneralUniformBuffer()
 {
     //contains: projectionMatrix( mat4 ), viewMatrix( mat4 ), camera position( vec4 )( todo:remove ), voxelizationProjection
 
-    unsigned int generalUniformDataSize = sizeof( float ) * ( 16 + 16 + 4 + 16 );
+    unsigned int dataCount = ( 16 + 16 + 4 + 16 );
 
-    generalUniformBuffer = StreamStorage( "GeneralUniformBuffer", generalUniformDataSize, GL_MAP_WRITE_BIT );
+    generalUniformBuffer = StreamStorage<glm::vec4>( "GeneralUniformBuffer", dataCount, GL_MAP_WRITE_BIT );
     setStorageTarget( generalUniformBuffer, GL_UNIFORM_BUFFER );
 }
 

@@ -380,8 +380,8 @@ void storeGlyphs( gui::text::Font& pFont, const LoadFont & pLoadFont )
 			( float )met.advanceX / ( ( float )gl::Viewport::current->width / 2.0f ), ( float )met.xBearing / ( ( float )gl::Viewport::current->width / 2.0f ), ( float )met.yBearing / ( ( float )gl::Viewport::current->height / 2.0f ) );
 		//allMetrics[pSize.metricOffset + g] = GlyphMetrics( ( float )met.width, ( float )met.height, ( float )met.advanceX, ( float )met.xBearing, ( float )met.yBearing );
 	}
-	pFont.glyphStorage = gl::Storage( "GlyphStorage", 
-            sizeof( gui::text::Glyph )*glyCount, 0, &glyphs[0] );
+	pFont.glyphStorage = gl::Storage<gui::text::Glyph>( "GlyphStorage", 
+            glyCount, 0, &glyphs[0] );
 	gl::setStorageTarget( pFont.glyphStorage, GL_UNIFORM_BUFFER );
 }
 

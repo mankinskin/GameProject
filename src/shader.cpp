@@ -89,15 +89,6 @@ void shader::unuse()
     glUseProgram( 0 );
 }
 
-void shader::bindUniformBufferToShader( unsigned int pProgram, const gl::Storage& pStorage, std::string pBlockName )
-{
-    int blockIndex = glGetUniformBlockIndex( pProgram, pBlockName.c_str() );
-    if ( blockIndex < 0 ) {
-        debug::pushError( "invalid uniform block name " + pBlockName + "!" );
-        return;
-    }
-    glUniformBlockBinding( pProgram, blockIndex, pStorage.binding );
-}
 
 void shader::addVertexAttribute( unsigned int pProgramID, std::string pAttributeName, unsigned int pAttributeIndex )
 {

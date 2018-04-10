@@ -4,10 +4,11 @@
 #include "gl.h"
 #include "color.h"
 #include "utils.h"
+#include "storage.h"
 
 namespace gui
 {
-    typedef utils::Itr<gl::Point3D> LinePointIt;
+    typedef utils::Itr<glm::vec4, gl::StreamStorage> LinePointIt;
 
 	struct LineGroup {
 		LineGroup( unsigned int pLineOffset, unsigned int pLineCount )

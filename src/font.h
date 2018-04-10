@@ -19,27 +19,6 @@ namespace gui
 			float underline_thickness;
 		};
 
-		struct Font 
-        {
-			Font() 
-                :instructions( 0 ), kerningOffset( 0 ), kerningCount( 0 ), 
-                metricOffset( 0 ), metricCount( 0 ), atlasID( 0 ), 
-                fontMetric( FontMetric() ), stringOffset( 0 ), stringCount( 0 ) 
-            {}
-			unsigned int atlasID;
-			FontMetric fontMetric;
-			unsigned int instructions;
-            gl::Storage glyphStorage;
-
-			unsigned int kerningOffset;
-			unsigned int kerningCount;
-			unsigned int metricOffset;
-			unsigned int metricCount;
-
-			unsigned int stringOffset;
-			unsigned int stringCount;
-		};
-
 		struct Glyph 
         {
 			Glyph() 
@@ -50,6 +29,27 @@ namespace gui
 			glm::vec2 min;
 			glm::vec2 max;
 		};
+		struct Font 
+        {
+			Font() 
+                :instructions( 0 ), kerningOffset( 0 ), kerningCount( 0 ), 
+                metricOffset( 0 ), metricCount( 0 ), atlasID( 0 ), 
+                fontMetric( FontMetric() ), stringOffset( 0 ), stringCount( 0 ) 
+            {}
+			unsigned int atlasID;
+			FontMetric fontMetric;
+			unsigned int instructions;
+            gl::Storage<Glyph> glyphStorage;
+
+			unsigned int kerningOffset;
+			unsigned int kerningCount;
+			unsigned int metricOffset;
+			unsigned int metricCount;
+
+			unsigned int stringOffset;
+			unsigned int stringCount;
+		};
+
 
 		struct GlyphMetrics 
         {

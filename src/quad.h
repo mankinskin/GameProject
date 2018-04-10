@@ -50,8 +50,8 @@ namespace gui {
 
     extern unsigned int quadIndexShader;
     extern unsigned int quadIndexVAO;
-	extern gl::StreamStorage quadIndexBuffer;
-    extern gl::StreamStorage quadBuffer;
+	extern gl::StreamStorage<unsigned int> quadIndexBuffer;
+    extern gl::StreamStorage<glm::vec4> quadBuffer;
 
 }
 #endif //QUAD_H

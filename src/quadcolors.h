@@ -12,7 +12,7 @@ namespace gui
 {
 	extern unsigned int colorQuadVAO;
 	extern unsigned int colorQuadShader;
-	extern gl::StreamStorage colorQuadBuffer;
+	extern gl::StreamStorage<unsigned int> colorQuadBuffer;
 
 	extern unsigned int quadColors[MAX_QUAD_COUNT];
 

@@ -10,16 +10,18 @@ namespace gl
 	extern int MAX_UNIFORM_BUFFER_BINDINGS;
 	extern int MIN_MAP_BUFFER_ALIGNMENT;
 
+	template<typename T>
 	struct Storage 
 	{
+		using size_type = size_t;
         Storage()
         {}
-        Storage( std::string pName, unsigned int pCapacity, 
+        Storage( std::string pName, unsigned int pSize, 
                 int pFlags, void* pData = nullptr )
-			:name( pName ), capacity( pCapacity ), flags( pFlags )
+			:name( pName ), capacity( pSize * sizeof(T) ), flags( pFlags )
         {
 	        glCreateBuffers( 1, &ID );
-	        glNamedBufferStorage( ID, pCapacity, pData, pFlags );
+	        glNamedBufferStorage( ID, capacity, pData, flags );
         }
         
 		std::string name;
@@ -30,27 +32,35 @@ namespace gl
 		unsigned int binding;
 	};
 
+	template<typename T>
 	struct StreamStorage 
-        :public Storage
-	{
+		: public Storage<T>
+    {
 		StreamStorage()
         {} 
-		StreamStorage( std::string pName, unsigned int pCapacity, 
+		StreamStorage( std::string pName, unsigned int pSize, 
                 int pFlags, void* pData = nullptr )
-			:Storage( pName, pCapacity, pFlags | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT, pData )
+			: Storage<T>( pName, pSize, pFlags | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT, pData )
 		{
-            mappedPtr = glMapNamedBufferRange( ID, 0, capacity, flags );
+            mappedPtr = glMapNamedBufferRange( Storage<T>::ID, 0, Storage<T>::capacity, Storage<T>::flags );
             if ( !mappedPtr ) {
-                debug::pushError( "Failed to map Storage " + name + " !\n" );
+                debug::pushError( "Failed to map Storage " + Storage<T>::name + " !\n" );
             }
         }
-        template<typename T>
-            T& access( size_t N )
-            {
-                return *((T*)mappedPtr + N);
-            }
+        constexpr T& operator[]( const typename Storage<T>::size_type N )
+        {
+            return *((T*)mappedPtr + N);
+        }
+
         void* mappedPtr;
 	};
 
-	void setStorageTarget( Storage& pStorage, const unsigned int pTarget );
+	unsigned int getNewTargetBinding( const unsigned int pTarget );
+	template<typename T>
+		void setStorageTarget( Storage<T>& pStorage, const unsigned int pTarget )
+		{
+			pStorage.target = pTarget;
+			pStorage.binding = getNewTargetBinding( pStorage.target );
+			glBindBufferBase( pStorage.target, pStorage.binding, pStorage.ID );	
+		}
 }

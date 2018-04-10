@@ -16,7 +16,7 @@ namespace mesh {
 	};
 	extern std::vector<Material> allMaterials;
 	extern std::vector<MaterialTextures> allMaterialTextures;
-	extern gl::Storage materialUBO;
+	extern gl::Storage<Material> materialUBO;
 	void storeMaterials();
 
 }

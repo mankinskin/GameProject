@@ -12,8 +12,8 @@
 std::vector<glm::vec4> lights::allLightData;
 std::vector<lights::LightIndexRange> lights::allLightIndexRanges;
 unsigned int lights::lightVAO = 0;
-gl::StreamStorage lights::lightIndexVBO;
-gl::StreamStorage lights::lightDataUBO;
+gl::StreamStorage<lights::LightIndexRange> lights::lightIndexVBO;
+gl::StreamStorage<glm::vec4> lights::lightDataUBO;
 unsigned int lights::lightShaderProgram = 0;
 
 void lights::initLights()
@@ -25,7 +25,7 @@ void lights::initLights()
 
 void lights::createLightVBO() 
 {
-	lightIndexVBO = gl::StreamStorage( "LightIndexBuffer", MAX_LIGHT_COUNT * sizeof( LightIndexRange ), GL_MAP_WRITE_BIT );
+	lightIndexVBO = gl::StreamStorage<LightIndexRange>( "LightIndexBuffer", MAX_LIGHT_COUNT, GL_MAP_WRITE_BIT );
 }
 void lights::createLightVAO() 
 {
@@ -44,7 +44,7 @@ void lights::createLightVAO()
 
 void lights::createLightDataBuffer() 
 {
-	lightDataUBO = gl::StreamStorage( "LightDataBuffer", MAX_LIGHT_COUNT * sizeof( glm::vec4 ) * 3, GL_MAP_WRITE_BIT );
+	lightDataUBO = gl::StreamStorage<glm::vec4>( "LightDataBuffer", MAX_LIGHT_COUNT * 3, GL_MAP_WRITE_BIT );
 	gl::setStorageTarget( lightDataUBO, GL_UNIFORM_BUFFER );
 }
 

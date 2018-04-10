@@ -13,8 +13,8 @@ unsigned int gui::quadIndexShader;
 unsigned int gui::quadIndexVAO;
 std::vector<unsigned int> quadIndexMap;
 std::vector<float> quadDepthMap;
-gl::StreamStorage gui::quadIndexBuffer;
-gl::StreamStorage gui::quadBuffer;
+gl::StreamStorage<unsigned int> gui::quadIndexBuffer;
+gl::StreamStorage<glm::vec4> gui::quadBuffer;
 
 size_t quadCount = 0;
 
@@ -66,9 +66,8 @@ void gui::reserveQuads( const unsigned int pCount )
 
 void gui::initQuadBuffer()
 {
-	quadBuffer = gl::StreamStorage( "QuadBuffer", 
-            MAX_QUAD_COUNT * sizeof( glm::vec4 ), 
-            GL_MAP_WRITE_BIT );
+	quadBuffer = gl::StreamStorage<glm::vec4>( "QuadBuffer", 
+            MAX_QUAD_COUNT, GL_MAP_WRITE_BIT );
 	gl::setStorageTarget( quadBuffer, GL_UNIFORM_BUFFER );
 
 	glCreateVertexArrays( 1, &quadIndexVAO );
@@ -85,9 +84,8 @@ void gui::initQuadBuffer()
 
 void gui::initQuadIndexBuffer()
 {
-	quadIndexBuffer = gl::StreamStorage( "QuadIndexBuffer", 
-            gl::getWidth() * gl::getHeight() * sizeof( unsigned int ), 
-            GL_MAP_READ_BIT );
+	quadIndexBuffer = gl::StreamStorage<unsigned int>( "QuadIndexBuffer", 
+            gl::getWidth() * gl::getHeight(), GL_MAP_READ_BIT );
 	gl::setStorageTarget( quadIndexBuffer, GL_PIXEL_PACK_BUFFER );
 }
 
@@ -115,7 +113,7 @@ void gui::setupQuadIndexShader()
 
 unsigned int gui::readQuadIndexMap( const unsigned int pPos )
 {
-	return quadIndexBuffer.access<unsigned int>( pPos );
+	return quadIndexBuffer[ pPos ];
 }
 
 unsigned int gui::readQuadIndexMap( 
@@ -165,7 +163,9 @@ void gui::setQuadPos( const Quad pQuad, const glm::vec2 pPos )
 
 glm::vec4& gui::getQuadData( const Quad pQuad )
 {
-    return quadBuffer.access<glm::vec4>( pQuad.index );
+	glm::vec4& r =quadBuffer[ pQuad.index ]; 
+	printf( "getQuadData : ( %f, %f, %f, %f )\n", r.x, r.y, r.z, r.w );
+    return r;
 }
 
 void gui::colorQuad( Quad pQuad, gl::ColorIt pColor )

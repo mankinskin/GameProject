@@ -6,7 +6,7 @@
 std::vector<gl::Color> gl::allColors;
 std::vector<std::string> colorNames;
 
-gl::Storage gl::colorBuffer;
+gl::Storage<gl::Color> gl::colorBuffer;
 
 void gl::initColors()
 {
@@ -56,7 +56,7 @@ gl::ColorIt gl::getColor( std::string pColorName )
 
 void gl::initColorBuffer()
 {
-    colorBuffer = StreamStorage( "ColorBuffer", sizeof( Color )*MAX_COLOR_COUNT, GL_MAP_WRITE_BIT );
+    colorBuffer = StreamStorage<Color>( "ColorBuffer", MAX_COLOR_COUNT, GL_MAP_WRITE_BIT );
     gl::setStorageTarget( colorBuffer, GL_UNIFORM_BUFFER );
 }
 

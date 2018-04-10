@@ -10,12 +10,12 @@ std::vector<glm::vec3> entities::allScales;
 std::vector<glm::vec4> entities::allRotations;
 
 unsigned int entities::num_entities;
-gl::StreamStorage entities::entityMatrixBuffer;
+gl::StreamStorage<glm::mat4> entities::entityMatrixBuffer;
 
 
 void entities::initEntityBuffers()
 {
-	entityMatrixBuffer = gl::StreamStorage( "EntityMatrixBuffer", sizeof( glm::mat4 )*MAX_ENTITIES, GL_MAP_WRITE_BIT );
+	entityMatrixBuffer = gl::StreamStorage<glm::mat4>( "EntityMatrixBuffer", MAX_ENTITIES, GL_MAP_WRITE_BIT );
 	gl::setStorageTarget( entityMatrixBuffer, GL_UNIFORM_BUFFER );
 }
 

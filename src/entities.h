@@ -23,7 +23,7 @@ namespace entities
 	void translate( unsigned int pNodeID, glm::vec3 pPos );
 	
 
-	extern gl::StreamStorage entityMatrixBuffer;
+	extern gl::StreamStorage<glm::mat4> entityMatrixBuffer;
 
 	const unsigned int MAX_ENTITIES = 1000;
 	extern unsigned int num_entities;

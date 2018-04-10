@@ -27,8 +27,8 @@ namespace lights
 	extern std::vector<glm::vec4> allLightData;
 	extern std::vector<LightIndexRange> allLightIndexRanges;
 	extern unsigned int lightVAO;
-	extern gl::StreamStorage lightIndexVBO;
-	extern gl::StreamStorage lightDataUBO;
+	extern gl::StreamStorage<LightIndexRange> lightIndexVBO;
+	extern gl::StreamStorage<glm::vec4> lightDataUBO;
 	extern unsigned int lightShaderProgram;
 	const unsigned int MAX_LIGHT_COUNT = 100;
 

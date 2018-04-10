@@ -12,7 +12,7 @@ namespace gl {
     typedef utils::Itr<Color> ColorIt;
 
 	const unsigned int MAX_COLOR_COUNT = 100;
-	extern Storage colorBuffer;
+	extern Storage<Color> colorBuffer;
 
 	extern std::vector<Color> allColors;
 
