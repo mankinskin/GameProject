@@ -15,7 +15,8 @@ namespace gl
         Storage()
         {}
         Storage( std::string pName, unsigned int pCapacity, 
-                unsigned int pFlags, void* pData = nullptr )
+                int pFlags, void* pData = nullptr )
+			:name( pName ), capacity( pCapacity ), flags( pFlags )
         {
 	        glCreateBuffers( 1, &ID );
 	        glNamedBufferStorage( ID, pCapacity, pData, pFlags );
@@ -24,7 +25,7 @@ namespace gl
 		std::string name;
 		unsigned int ID;
 		unsigned int capacity;
-		unsigned int flags;
+		int flags;
 		unsigned int target;
 		unsigned int binding;
 	};
@@ -35,10 +36,10 @@ namespace gl
 		StreamStorage()
         {} 
 		StreamStorage( std::string pName, unsigned int pCapacity, 
-                unsigned int pFlags, void* pData = nullptr )
-			:Storage( pName, pCapacity, pFlags, pData )
+                int pFlags, void* pData = nullptr )
+			:Storage( pName, pCapacity, pFlags | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT, pData )
 		{
-            mappedPtr = glMapNamedBufferRange( ID, 0, capacity, flags | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT );
+            mappedPtr = glMapNamedBufferRange( ID, 0, capacity, flags );
             if ( !mappedPtr ) {
                 debug::pushError( "Failed to map Storage " + name + " !\n" );
             }

@@ -515,7 +515,7 @@ fileName	src/shader_loader.h	/^		std::string fileName;$/;"	m	struct:shader::Modu
 filename	src/model_loader.h	/^			std::string filename;$/;"	m	struct:model::Loader::ModelLoadFile
 flags	src/font.h	/^			int flags = 0;$/;"	m	struct:gui::text::FontInstructions
 flags	src/font_loader.cpp	/^	int flags;$/;"	m	struct:LoadAtlas	file:
-flags	src/storage.h	/^		unsigned int flags;$/;"	m	struct:gl::Storage
+flags	src/storage.h	/^		int flags;$/;"	m	struct:gl::Storage
 flags	src/text.cpp	/^	unsigned int flags;$/;"	m	struct:Textbox	file:
 followCursor	src/camera.h	/^		bool followCursor = false;$/;"	m	class:camera::Camera
 font	src/text.cpp	/^	unsigned int font;$/;"	m	struct:TextboxMetrics	file:
