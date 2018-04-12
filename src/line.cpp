@@ -79,18 +79,17 @@ void gui::initLineVAO()
     lineVAO = gl::VAO( "lineVAO" );
     lineBuffer = gl::StreamStorage<glm::uvec2>( "LineIndexBuffer", 
             MAX_LINE_COUNT, GL_MAP_WRITE_BIT );
-    glVertexArrayVertexBuffer( lineVAO, 0, lineBuffer.ID, 0, sizeof( glm::uvec2 ) );
 
     lineVertexColorBuffer = gl::StreamStorage<glm::uvec2>( "LineVertexColorBuffer", 
             MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
-    glVertexArrayElementBuffer( lineVAO, lineVertexColorBuffer.ID );
 
     lineVertexBuffer = gl::StreamStorage<glm::vec4>( "LineVertexPosBuffer", 
             MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
     lineVertexBuffer.setTarget( GL_UNIFORM_BUFFER );
 
-    //gl::setVertexArrayVertexStorage( lineVAO, 0, lineBuffer.ID, sizeof( glm::uvec2 ) );
-    //gl::setVertexAttrib( lineVAO, 0, 0, 2, GL_UNSIGNED_INT, 0 );
+    lineVAO.vertexBuffer( lineBuffer.ID, sizeof( glm::uvec2 ) );
+    lineVAO.elementBuffer( lineVertexColorBuffer.ID );
+    lineVAO.vertexAttrib( 0, 0, 2, GL_UNSIGNED_INT, 0 );
 }
 
 void gui::updateLinePositions()
@@ -125,7 +124,7 @@ void gui::renderLines()
             glDrawElements( GL_LINES, 
                     lineGroup.lineCount * 2, 
                     GL_UNSIGNED_INT, 
-                    ( unsigned int* )( lineGroup.lineOffset * sizeof( glm::uvec2 ) ) );
+                    ( unsigned int* )( lineGroup.lineOffset * 2 * sizeof( unsigned int ) ) );
         }
     }
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );

@@ -18,7 +18,7 @@ gl::StreamStorage<unsigned int> gui::quadIndexBuffer;
 
 gl::StreamStorage<glm::vec4> gui::quadBuffer;
 std::array<glm::vec4, gui::MAX_QUAD_COUNT> allQuads;
-size_t quadCount = 0;
+size_t gui::quadCount = 0;
 
 
 gui::Quad::Quad( const unsigned int in )

@@ -479,6 +479,7 @@ dt	dt/dt.h	/^static float *dt(float *f, int n) {$/;"	f
 dt	dt/dt.h	/^static image<float> *dt(image<uchar> *im, uchar on = 1) {$/;"	f
 dt	dt/dt.h	/^static void dt(image<float> *im) {$/;"	f
 element	src/element.h	/^                constexpr auto element() const $/;"	f	struct:utils::Element
+elementBuffer	src/vao.cpp	/^void gl::VAO::elementBuffer( unsigned int pBuffer )$/;"	f	class:gl::VAO
 element_constructor	src/element.h	/^        struct element_constructor $/;"	s	namespace:utils
 element_generator	src/element_utils.h	/^        struct element_generator $/;"	s	namespace:utils
 element_generator	src/element_utils.h	/^        struct element_generator<0, Type, SubElements...> $/;"	s	namespace:utils
@@ -956,7 +957,7 @@ pushError	src/debug.cpp	/^void debug::pushError( std::string pMessage, Error::Se
 pushEvent	src/event.h	/^	void pushEvent( EventType pEvent ) {$/;"	f	namespace:events
 quadBuffer	src/quad.cpp	/^gl::StreamStorage<glm::vec4> gui::quadBuffer;$/;"	m	class:gui	file:
 quadColors	src/quadcolors.cpp	/^std::array<unsigned int, gui::MAX_QUAD_COUNT> quadColors;$/;"	v
-quadCount	src/quad.cpp	/^size_t quadCount = 0;$/;"	v
+quadCount	src/quad.cpp	/^size_t gui::quadCount = 0;$/;"	m	class:gui	file:
 quadDepthMap	src/quad.cpp	/^std::vector<float> quadDepthMap;$/;"	v
 quadEBO	src/primitives.cpp	/^gl::Storage<unsigned int> gl::quadEBO;$/;"	m	class:gl	file:
 quadIndexBuffer	src/quad.cpp	/^gl::StreamStorage<unsigned int> gui::quadIndexBuffer;$/;"	m	class:gui	file:
@@ -1220,6 +1221,9 @@ uv	src/mesh.h	/^		glm::vec2 uv;$/;"	m	struct:mesh::Vertex
 vec4	experimental/hierarchy.cpp	/^    vec4( float X, float Y, float Z, float W )$/;"	f	struct:vec4
 vec4	experimental/hierarchy.cpp	/^struct vec4$/;"	s	file:
 vertex	src/line.h	/^        LinePointIt vertex;$/;"	m	struct:gui::LineVertex
+vertexAttrib	src/vao.cpp	/^void gl::VAO::vertexAttrib( unsigned int pBindingIndex, unsigned int pAttributeIndex, unsigned int pCount, unsigned int pType, unsigned int pOffset, bool pNormalize ) $/;"	f	class:gl::VAO
+vertexBuffer	src/vao.cpp	/^void gl::VAO::vertexBuffer( unsigned int pBuffer, unsigned int pStride )$/;"	f	class:gl::VAO
+vertexBufferCount	src/vao.h	/^        unsigned int vertexBufferCount;$/;"	m	struct:gl::VAO
 vertexCount	src/mesh.h	/^		unsigned int vertexCount = 0;$/;"	m	struct:mesh::Mesh
 vertexOffset	src/mesh.h	/^		unsigned int vertexOffset = 0;$/;"	m	struct:mesh::Mesh
 vidModes	src/contextwindow.h	/^	    const GLFWvidmode* vidModes = nullptr;$/;"	m	struct:app::Monitor

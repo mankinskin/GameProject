@@ -46,5 +46,6 @@ namespace gui
     extern gl::VAO quadIndexVAO;
 	extern gl::StreamStorage<unsigned int> quadIndexBuffer;
     extern gl::StreamStorage<glm::vec4> quadBuffer;
+    extern size_t quadCount;
 }
 

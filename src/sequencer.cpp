@@ -137,6 +137,7 @@ void sequencer::frame()
     gl::updateGeneralUniformBuffer();
 
     gui::updateLineBuffers();
+    gui::updateQuadBuffer();
 
     // RENDERING
     //glBindFramebuffer( GL_FRAMEBUFFER, texture::guiFBO );
@@ -146,7 +147,7 @@ void sequencer::frame()
 
     gui::renderLines();
 
-    //gui::renderColorQuads();
+    gui::renderColorQuads();
 
     glfwSwapBuffers(app::mainWindow.window );
 
