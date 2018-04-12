@@ -3,10 +3,11 @@
 #include "vao.h"
 #include "gl.h"
 
-std::vector<gl::Color> gl::allColors;
-std::vector<std::string> colorNames;
+std::array<std::string, gl::MAX_COLOR_COUNT> colorNames;
+std::array<glm::vec4, gl::MAX_COLOR_COUNT> allColors;
+unsigned int colorCount = 0;
 
-gl::Storage<gl::Color> gl::colorBuffer;
+gl::StreamStorage<gl::Color> gl::colorBuffer;
 
 void gl::initColors()
 {
@@ -36,15 +37,15 @@ gl::ColorIt gl::createColor( Color pColor, std::string pColorName )
 {
     printf( "Creating Color: %s ( %f, %f, %f, %f )\n", 
             pColorName.c_str(), pColor.x, pColor.y, pColor.z, pColor.w );
-    allColors.push_back( pColor );
-    colorNames.push_back( pColorName );
-    return ColorIt( allColors, allColors.size() - 1 );
+    allColors[ colorCount ] = pColor;
+    colorNames[ colorCount ] = pColorName;
+    return ColorIt( allColors, colorCount++ );
 }
 
 gl::ColorIt gl::getColor( std::string pColorName )
 {
-    std::vector<std::string>::iterator nameIt = 
-        std::find( colorNames.begin(), colorNames.end(), pColorName ); 
+    auto nameIt = 
+        std::find( colorNames.begin(), colorNames.begin() + colorCount, pColorName ); 
     if ( nameIt == colorNames.end() ) {
         printf( "Color %s not found!\n", pColorName.c_str() );
         return ColorIt( allColors, 0 );
@@ -56,15 +57,13 @@ gl::ColorIt gl::getColor( std::string pColorName )
 
 void gl::initColorBuffer()
 {
-    colorBuffer = StreamStorage<Color>( "ColorBuffer", MAX_COLOR_COUNT, GL_MAP_WRITE_BIT );
-    gl::setStorageTarget( colorBuffer, GL_UNIFORM_BUFFER );
+    colorBuffer = StreamStorage<Color>( "ColorBuffer", MAX_COLOR_COUNT, 
+            GL_MAP_WRITE_BIT | GL_MAP_READ_BIT );
+    colorBuffer.setTarget( GL_UNIFORM_BUFFER );
 }
 
 void gl::updateColorBuffer()
 {
-    if( allColors.size() ){
-        //gl::uploadStorage( colorBuffer, allColors.size()*sizeof( Color ), &allColors[0] );
-    }
 }
 
 gl::Color gl::getColorData( ColorIt colorIndex )

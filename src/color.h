@@ -2,19 +2,18 @@
 #include <vector>
 #include <string>
 #include <glm.hpp>
+#include <array>
 #include "utils.h"
 #include "storage.h"
 
-namespace gl {
-
-    typedef glm::vec4 Color;
-
-    typedef utils::Itr<Color> ColorIt;
-
+namespace gl 
+{
 	const unsigned int MAX_COLOR_COUNT = 100;
-	extern Storage<Color> colorBuffer;
+    typedef glm::vec4 Color;
+    typedef utils::Itr<Color, std::array<Color, MAX_COLOR_COUNT>> ColorIt;
 
-	extern std::vector<Color> allColors;
+	extern StreamStorage<Color> colorBuffer;
+
 
     void initColors();
 	void createDefaultColors();
@@ -27,4 +26,4 @@ namespace gl {
     
     Color getColorData( ColorIt colorIndex );
     Color getColorData( std::string colorName );
-};
+}

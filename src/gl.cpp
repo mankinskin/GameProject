@@ -21,7 +21,6 @@
 #include "physics.h"
 #include "collision.h"
 #include "voxelization.h"
-#include "vao.h"
 
 int gl::MAX_UNIFORM_BLOCK_SIZE = 0;
 int gl::MAX_WORK_GROUP_COUNT = 0;
@@ -34,7 +33,7 @@ std::string gl::SYSTEM_RENDERER = "";
 gl::Viewport screenViewport;
 int gl::MAX_TEXTURE_UNIT_COUNT;
 gl::StreamStorage<glm::vec4> gl::generalUniformBuffer;
-unsigned int gl::screenQuadVAO;
+gl::VAO gl::screenQuadVAO;
 unsigned int gl::screenShaderProgram;
 
 void gl::init()
@@ -137,7 +136,7 @@ void gl::initGeneralUniformBuffer()
     unsigned int dataCount = ( 16 + 16 + 4 + 16 );
 
     generalUniformBuffer = StreamStorage<glm::vec4>( "GeneralUniformBuffer", dataCount, GL_MAP_WRITE_BIT );
-    setStorageTarget( generalUniformBuffer, GL_UNIFORM_BUFFER );
+    generalUniformBuffer.setTarget( GL_UNIFORM_BUFFER );
 }
 
 void gl::updateGeneralUniformBuffer()

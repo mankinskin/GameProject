@@ -63,7 +63,7 @@ void compileModuleSource( shader::Module& module )
 	std::ifstream moduleFile;
 	moduleFile.open( SHADER_DIR + module.fileName + ".txt" );
 	if ( moduleFile.fail() ) {
-		debug::pushError( "Failed to compile shader: Could not open " + SHADER_DIR + module.fileName + ".txt" + "!\n" );
+		debug::pushError( "Failed to compile shader: Could not open " + SHADER_DIR + module.fileName + ".txt" + "!\n", debug::Error::Fatal );
 		return;
 	}
 

@@ -16,7 +16,7 @@ gl::StreamStorage<glm::mat4> entities::entityMatrixBuffer;
 void entities::initEntityBuffers()
 {
 	entityMatrixBuffer = gl::StreamStorage<glm::mat4>( "EntityMatrixBuffer", MAX_ENTITIES, GL_MAP_WRITE_BIT );
-	gl::setStorageTarget( entityMatrixBuffer, GL_UNIFORM_BUFFER );
+	entityMatrixBuffer.setTarget( GL_UNIFORM_BUFFER );
 }
 
 void entities::updateEntityBuffers()

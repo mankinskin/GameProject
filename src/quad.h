@@ -1,32 +1,26 @@
-#ifndef QUAD_H
-#define QUAD_H
+#pragma once
 #include <cstring>
 #include <glm.hpp>
 #include <vector>
-#include "event.h"
 #include <tuple>
-#include "color.h"
-#include "quadcolors.h"
 #include "utils.h"
 #include "storage.h"
+#include "vao.h"
 
-namespace gui {
-	unsigned int createQuad( const float pPosX, const float pPosY, const float pWidth, const float pHeight );
-	unsigned int createQuad( const glm::vec4 pQuad );
-
+namespace gui 
+{
     struct Quad 
     {
-        const unsigned int index;
+        Quad( const unsigned int in );
+        Quad( glm::vec4 pData ); 
 
-        Quad( const unsigned int in )
-            :index( in )
-        {}
-        Quad( glm::vec4 pData ) 
-            :index( createQuad( pData ) )
-        {}
+        const unsigned int index;
     };
 
-    void colorQuad( Quad pQuad, gl::ColorIt pColor );
+	const unsigned int MAX_QUAD_COUNT = 10000;
+	unsigned int createQuad( const float pPosX, const float pPosY, 
+            const float pWidth, const float pHeight );
+	unsigned int createQuad( const glm::vec4 pQuadData );
     void moveQuad( const Quad pQuad, const glm::vec2 pOffset );
     void moveQuadScaled( const Quad pQuad, const glm::vec2 pOffset, const glm::vec2 scale );
     void resizeQuad( const Quad pQuad, const glm::vec2 pOffset );
@@ -49,9 +43,8 @@ namespace gui {
     void updateQuadBuffer();
 
     extern unsigned int quadIndexShader;
-    extern unsigned int quadIndexVAO;
+    extern gl::VAO quadIndexVAO;
 	extern gl::StreamStorage<unsigned int> quadIndexBuffer;
     extern gl::StreamStorage<glm::vec4> quadBuffer;
-
 }
-#endif //QUAD_H
+

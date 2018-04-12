@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "storage.h"
+#include "vao.h"
 
 namespace gui 
 {
@@ -126,7 +127,7 @@ namespace gui
 			glm::vec2 pos;
 			glm::vec2 size;
 		};
-		extern unsigned int fontVAO;
+		extern gl::VAO fontVAO;
 		extern unsigned int glyphShaderProgram;
 		extern std::vector<unsigned int> glyphIndexBuffer;
 		extern std::vector<Font> allFonts;

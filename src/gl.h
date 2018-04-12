@@ -5,6 +5,7 @@
 #include <glm.hpp>
 #include "contextwindow.h"
 #include "storage.h"
+#include "vao.h"
 
 namespace gl {
     
@@ -31,5 +32,5 @@ namespace gl {
 
 	extern StreamStorage<glm::vec4> generalUniformBuffer;
 	extern unsigned int screenShaderProgram;
-	extern unsigned int screenQuadVAO;
+	extern VAO screenQuadVAO;
 }

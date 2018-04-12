@@ -1,4 +1,6 @@
 #pragma once
+
+#include <array>
 #include <vector>
 #include <glm.hpp>
 #include "gl.h"
@@ -8,40 +10,42 @@
 
 namespace gui
 {
-    typedef utils::Itr<glm::vec4, gl::StreamStorage> LinePointIt;
+    const unsigned int MAX_LINE_VERTEX_COUNT = 500;
+    const unsigned int MAX_LINE_COUNT = 1000;
+    typedef utils::Itr<glm::vec4, std::array<glm::vec4, MAX_LINE_VERTEX_COUNT>> LinePointIt;
+    const int DEFAULT_LINE_GROUP_FLAGS = 1;
 
-	struct LineGroup {
-		LineGroup( unsigned int pLineOffset, unsigned int pLineCount )
-			:lineOffset( pLineOffset ), lineCount( pLineCount ){}
-		unsigned int lineOffset;
-		unsigned int lineCount;
-	};
+    struct LineGroup {
+        LineGroup( unsigned int pLineOffset, unsigned int pLineCount, 
+                int pFlags = DEFAULT_LINE_GROUP_FLAGS );
+        unsigned int lineOffset;
+        unsigned int lineCount;
+        int flags;
+    };
 
     struct LineVertex{
         LinePointIt vertex;
         gl::ColorIt color;
     };
 
+    void toggleLineGroup( unsigned int pLineGroup );
+    unsigned int getLineCount();
 
-	void toggleLineGroup( unsigned int pLineGroup );
-	unsigned int getLineCount();
+    unsigned int createLineGroup( unsigned int pLineOffset, 
+            unsigned int pLineCount, int pFlags = DEFAULT_LINE_GROUP_FLAGS );
+    unsigned int createLine( glm::vec4 pVertexAPos, glm::vec4 pVertexBPos );
+    unsigned int createLine( unsigned int pVertexA, unsigned int pVertexB );
+    LinePointIt createLineVertex( glm::vec4 pPos );
 
-	const int DEFAULT_FLAG = 1;
-	unsigned int createLineGroup( unsigned int pLineOffset, unsigned int pLineCount, int pFlag = DEFAULT_FLAG );
-	unsigned int createLine( glm::vec4 pVertexAPos, unsigned int pColorIndexA, glm::vec4 pVertexBPos, unsigned int pColorIndexB );
-	unsigned int createLine( glm::vec4 pVertexAPos, glm::vec4 pVertexBPos, unsigned int pColorIndex );
-	unsigned int createLine( unsigned int pVertexA, unsigned int pVertexB );
-	unsigned int createLineVertex( glm::vec4 pPos, unsigned int pColorIndex );
-	unsigned int createLineVertex( LinePointIt pPosIndex, unsigned int pColorIndex );
-	LinePointIt createLineVertexPosition( glm::vec4 pPos );
-	void setLineColor( unsigned int pLineIndex, unsigned int pColorIndex );
-	void setLineVertexColor( unsigned int pLineIndex, unsigned int pVertex, unsigned int pColorIndex );
+    void colorLine( unsigned int pLineIndex, unsigned int pColorIndex );
+    void colorLineVertex( unsigned int pVertex, unsigned int pColorIndex );
 
-	void initLineVAO();
-	void updateLinePositions();
-	void renderLines();
-	void initLineShader();
-	void updateLineBuffers();
-	void setupLineShader();
-
+    void initLineVAO();
+    void updateLinePositions();
+    void updateLineColors();
+    void renderLines();
+    void initLineShader();
+    void updateLineBuffers();
+    void setupLineShader();
 }
+

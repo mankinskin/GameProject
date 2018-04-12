@@ -1,117 +1,116 @@
 #include "line.h"
 #include "shader.h"
+#include "vao.h"
 
-const unsigned int MAX_LINE_VERTEX_COUNT = 500;
-const unsigned int MAX_LINE_COUNT = 1000;
 std::vector<gui::LineGroup> allLineGroups;
-size_t lineCount = 0;
-size_t lineVertexCount = 0;
-size_t vertexPosCount = 0;
-unsigned int lineVAO = 0;
-gl::StreamStorage<glm::uvec2> lineVBO;
-gl::StreamStorage<glm::uvec2> lineEBO;
-gl::StreamStorage<glm::vec4> vertexPosBuffer;
-unsigned int lineShader = 0;
-std::vector<int> lineGroupFlags;
 
+std::array<glm::uvec2, gui::MAX_LINE_COUNT> allLines;
+unsigned int lineCount = 0;
+std::array<glm::uvec2, gui::MAX_LINE_VERTEX_COUNT> allLineVertexColors;
+unsigned int lineVertexColorCount = 0;
+std::array<glm::vec4, gui::MAX_LINE_VERTEX_COUNT> allLineVertices;
+unsigned int lineVertexCount = 0;
+
+gl::StreamStorage<glm::uvec2> lineBuffer;
+gl::StreamStorage<glm::uvec2> lineVertexColorBuffer;
+gl::StreamStorage<glm::vec4> lineVertexBuffer;
+
+gl::VAO lineVAO;
+unsigned int lineShader = 0;
 
 unsigned int gui::getLineCount() 
 {
     return lineCount;
 }
 
-unsigned int gui::createLineGroup( unsigned int pLineOffset, 
-        unsigned int pLineCount, int pFlag ) 
+gui::LineGroup::LineGroup( unsigned int pLineOffset, 
+        unsigned int pLineCount, int pFlags )
+			:lineOffset( pLineOffset ), lineCount( pLineCount ), flags( 1 )
 {
-    allLineGroups.push_back( LineGroup( pLineOffset, pLineCount ) );
-    lineGroupFlags.push_back( pFlag );
+}
+
+unsigned int gui::createLineGroup( unsigned int pLineOffset, 
+        unsigned int pLineCount, int pFlags )
+{
+    allLineGroups.push_back( LineGroup( pLineOffset, pLineCount, pFlags ) );
     return allLineGroups.size() - 1;
 }
 
 void gui::toggleLineGroup( unsigned int pLineGroup ) 
 {
-    lineGroupFlags[pLineGroup] = !lineGroupFlags[pLineGroup];
+    allLineGroups[pLineGroup].flags = !allLineGroups[pLineGroup].flags;
 }
 
-unsigned int gui::createLine( glm::vec4 pVertexAPos, unsigned int pColorIndexA, glm::vec4 pVertexBPos, unsigned int pColorIndexB ) 
+unsigned int gui::createLine( glm::vec4 pVertexAPos, glm::vec4 pVertexBPos ) 
 {
-    return createLine( createLineVertex( pVertexAPos, pColorIndexA ), createLineVertex( pVertexBPos, pColorIndexB ) );
-}
-
-unsigned int gui::createLine( glm::vec4 pVertexAPos, glm::vec4 pVertexBPos, unsigned int pColorIndex ) 
-{
-    return createLine( createLineVertex( pVertexAPos, pColorIndex ), createLineVertex( pVertexBPos, pColorIndex ) );
+    return createLine( createLineVertex( pVertexAPos ), 
+            createLineVertex( pVertexBPos ) );
 }
 
 unsigned int gui::createLine( unsigned int pVertexA, unsigned int pVertexB ) 
 {
-	lineVBO[ lineCount ] = glm::uvec2( pVertexA, pVertexB );
+	allLines[ lineCount ] = glm::uvec2( pVertexA, pVertexB );
     return lineCount++;
 }
 
-unsigned int gui::createLineVertex( glm::vec4 pPos, unsigned int pColorIndex ) 
+gui::LinePointIt gui::createLineVertex( glm::vec4 pPos ) 
 {
-    return createLineVertex( createLineVertexPosition( pPos ), pColorIndex );
-}
-
-unsigned int gui::createLineVertex( LinePointIt vertex, unsigned int pColorIndex ) 
-{
-    lineEBO[ lineVertexCount ] = glm::uvec2( vertex.index, pColorIndex );
-    return lineVertexCount++;
-}
-
-gui::LinePointIt gui::createLineVertexPosition( glm::vec4 pPos ) 
-{
-    vertexPosBuffer[ vertexPosCount ] = pPos;
-    return LinePointIt( vertexPosBuffer, vertexPosCount++ );
-}
-
-void gui::setLineColor( unsigned int pLineIndex, unsigned int pColorIndex ) 
-{
-    setLineVertexColor( pLineIndex, 0, pColorIndex );
-    setLineVertexColor( pLineIndex, 1, pColorIndex );
+    allLineVertices[ lineVertexCount ] = pPos;
+    return LinePointIt( allLineVertices, lineVertexCount++ );
 }
 
 unsigned int getLineVertexIndex( unsigned int pLineIndex, unsigned int pVertex )
 {
-    return *( unsigned int* )( &lineVBO[ pLineIndex ] + sizeof( unsigned int ) * pVertex );
+    return allLines[ pLineIndex ][ pVertex ];
+}
+void gui::colorLine( unsigned int pLineIndex, unsigned int pColorIndex ) 
+{
+    colorLineVertex( getLineVertexIndex( pLineIndex, 0 ), pColorIndex );
+    colorLineVertex( getLineVertexIndex( pLineIndex, 1 ), pColorIndex );
 }
 
-void gui::setLineVertexColor( unsigned int pLineIndex, unsigned int pVertex, unsigned int pColorIndex )
+void gui::colorLineVertex( unsigned int pVertex, unsigned int pColorIndex )
 {
-    std::memcpy( &lineVBO[getLineVertexIndex( pLineIndex, pVertex )].y, &pColorIndex, sizeof( unsigned int ) );
+    allLineVertexColors[ pVertex ] = glm::uvec2( pVertex, pColorIndex );
 }
 
 void gui::initLineVAO() 
 {
-    glCreateVertexArrays( 1, &lineVAO );
+    lineVAO = gl::VAO( "lineVAO" );
+    lineBuffer = gl::StreamStorage<glm::uvec2>( "LineIndexBuffer", 
+            MAX_LINE_COUNT, GL_MAP_WRITE_BIT );
+    glVertexArrayVertexBuffer( lineVAO, 0, lineBuffer.ID, 0, sizeof( glm::uvec2 ) );
 
-    vertexPosBuffer = gl::StreamStorage<glm::vec4>( "LineVertexPosBuffer", MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
-    gl::setStorageTarget( vertexPosBuffer, GL_UNIFORM_BUFFER );
+    lineVertexColorBuffer = gl::StreamStorage<glm::uvec2>( "LineVertexColorBuffer", 
+            MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
+    glVertexArrayElementBuffer( lineVAO, lineVertexColorBuffer.ID );
 
-    lineVBO = gl::StreamStorage<glm::uvec2>( "LineIndexBuffer", MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
-    lineEBO = gl::StreamStorage<glm::uvec2>( "LineVertexIndexBuffer", MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
+    lineVertexBuffer = gl::StreamStorage<glm::vec4>( "LineVertexPosBuffer", 
+            MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
+    lineVertexBuffer.setTarget( GL_UNIFORM_BUFFER );
 
-    //gl::setVertexArrayVertexStorage( lineVAO, 0, lineVBO, sizeof( glm::uvec2 ) );
-    glVertexArrayVertexBuffer( lineVAO, 0, lineVBO.ID, 0, sizeof( glm::uvec2 ) );
+    //gl::setVertexArrayVertexStorage( lineVAO, 0, lineBuffer.ID, sizeof( glm::uvec2 ) );
     //gl::setVertexAttrib( lineVAO, 0, 0, 2, GL_UNSIGNED_INT, 0 );
-
-    glVertexArrayElementBuffer( lineVAO, lineEBO.ID );
 }
 
 void gui::updateLinePositions()
 {
-    //gl::uploadStorage( vertexPosBuffer, sizeof( glm::vec4 ) * allLinePointData.size(), &allLinePointData[0] );
+    gl::uploadStorage( lineVertexBuffer, sizeof( glm::vec4 ) * lineVertexCount, &allLineVertices[0] );
+}
+void gui::updateLineColors()
+{
+    gl::uploadStorage( lineVertexColorBuffer, sizeof( glm::uvec2 ) * lineVertexColorCount, &allLineVertexColors[0] );
 }
 
 void gui::updateLineBuffers()
 {
     if ( !lineCount ) {
+        puts( "No lines to update!" );
         return;
     }
-        updateLinePositions();
-        //gl::uploadStorage( lineVBO, sizeof( glm::uvec2 ) * allLineVertices.size(), &allLineVertices[0] );
-        //gl::uploadStorage( lineEBO, sizeof( glm::uvec2 ) * allLines.size(), &allLines[0] );
+    gl::uploadStorage( lineBuffer, sizeof( glm::uvec2 ) * lineCount, &allLines[0] );
+    updateLinePositions();
+    updateLineColors();
 }
 
 void gui::renderLines()
@@ -121,11 +120,12 @@ void gui::renderLines()
     glBlendFunc( GL_SRC_ALPHA, GL_DST_ALPHA );
     shader::use( lineShader );
     for ( unsigned int m = 0; m < allLineGroups.size(); ++m ) {
-        if ( lineGroupFlags[m] ) {
+        const LineGroup& lineGroup = allLineGroups[m];
+        if ( lineGroup.flags ) {
             glDrawElements( GL_LINES, 
-                    allLineGroups[m].lineCount * 2, 
+                    lineGroup.lineCount * 2, 
                     GL_UNSIGNED_INT, 
-                    ( unsigned int* )( allLineGroups[m].lineOffset * 2 * sizeof( unsigned int ) ) );
+                    ( unsigned int* )( lineGroup.lineOffset * sizeof( glm::uvec2 ) ) );
         }
     }
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -136,6 +136,7 @@ void gui::renderLines()
 
 void gui::initLineShader() 
 {
+    puts( "Creating lineShader..." );
     lineShader = shader::newProgram( "lineShader", 
             shader::createModule( "lineShader.vert" ), 
             shader::createModule( "lineShader.frag" ) );
@@ -144,7 +145,8 @@ void gui::initLineShader()
 
 void gui::setupLineShader() 
 {
+    puts( "Binding lineShader..." );
     shader::bindUniformBufferToShader( lineShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
     shader::bindUniformBufferToShader( lineShader, gl::colorBuffer, "ColorBuffer" );
-    shader::bindUniformBufferToShader( lineShader, vertexPosBuffer, "PosBuffer" );
+    shader::bindUniformBufferToShader( lineShader, lineVertexBuffer, "PosBuffer" );
 }

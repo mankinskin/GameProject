@@ -2,6 +2,7 @@
 #include <vector> 
 #include <glm.hpp>
 #include "storage.h"
+#include "vao.h"
 
 //Lights are a set of data used as a light source in a layered shading process
 //each light is either of type
@@ -26,7 +27,7 @@ namespace lights
 
 	extern std::vector<glm::vec4> allLightData;
 	extern std::vector<LightIndexRange> allLightIndexRanges;
-	extern unsigned int lightVAO;
+	extern gl::VAO lightVAO;
 	extern gl::StreamStorage<LightIndexRange> lightIndexVBO;
 	extern gl::StreamStorage<glm::vec4> lightDataUBO;
 	extern unsigned int lightShaderProgram;

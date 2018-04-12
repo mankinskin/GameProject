@@ -5,15 +5,15 @@ namespace utils {
     
     template<
         typename T, 
-        template<typename...>typename Container = std::vector >
+        typename Container = std::vector<T> >
     struct Itr {
-        Itr( Container<T>& arr, typename Container<T>::size_type i )
+        Itr( Container& arr, typename Container::size_type i )
             :container( arr ), index( i ){}
 
-        Container<T>& container; 
-        typename Container<T>::size_type index;
+        Container& container; 
+        typename Container::size_type index;
 
-        operator typename Container<T>::size_type() const
+        operator typename Container::size_type() const
         {
             return index;
         }
@@ -21,7 +21,7 @@ namespace utils {
             return container[index];
         }
 
-        Itr<T>& operator=( Itr<T>& other ){
+        Itr<T, Container>& operator=( Itr<T, Container>& other ){
             return other;
         }
 

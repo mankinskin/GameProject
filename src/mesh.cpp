@@ -21,7 +21,7 @@ std::vector<unsigned int> mesh::blendMeshList;
 unsigned int mesh::meshShader = 0;
 unsigned int mesh::blendMeshShader = 0;
 unsigned int mesh::meshNormalShader = 0;
-unsigned int mesh::meshVAO = 0;
+gl::VAO mesh::meshVAO;
 gl::Storage<mesh::Vertex> mesh::meshVBO;
 gl::Storage<unsigned int> mesh::meshIBO;
 gl::StreamStorage<unsigned int> mesh::nodeIndexBuffer;
@@ -29,7 +29,6 @@ unsigned int mesh::normalShaderProgram = 0;
 
 void mesh::initMeshVAO()
 {
-	glCreateVertexArrays( 1, &meshVAO );
 	meshVBO = gl::Storage<Vertex>( "MeshVertexBuffer", 
 			mesh::allStaticVertices.size(), 0, &mesh::allStaticVertices[0] );
 	meshIBO = gl::Storage<unsigned int>( "MeshIndexBuffer", 

@@ -3,6 +3,7 @@
 #include <assimp/scene.h>
 #include <glm.hpp>
 #include "storage.h"
+#include "vao.h"
 
 namespace mesh 
 {
@@ -81,7 +82,7 @@ namespace mesh
 	extern unsigned int meshShader;
 	extern unsigned int blendMeshShader;
 	extern unsigned int meshNormalShader;
-	extern unsigned int meshVAO;
+	extern gl::VAO meshVAO;
 	extern gl::Storage<Vertex> meshVBO;
 	extern gl::Storage<unsigned int> meshIBO;
 	extern gl::StreamStorage<unsigned int> nodeIndexBuffer;

@@ -382,7 +382,7 @@ void storeGlyphs( gui::text::Font& pFont, const LoadFont & pLoadFont )
 	}
 	pFont.glyphStorage = gl::Storage<gui::text::Glyph>( "GlyphStorage", 
             glyCount, 0, &glyphs[0] );
-	gl::setStorageTarget( pFont.glyphStorage, GL_UNIFORM_BUFFER );
+	pFont.glyphStorage.setTarget( GL_UNIFORM_BUFFER );
 }
 
 std::pair<size_t, size_t> convertKerning( std::vector<int>& pKerningMap )

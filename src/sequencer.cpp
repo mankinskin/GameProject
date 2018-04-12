@@ -92,14 +92,14 @@ void sequencer::initModules()
 	puts( "Debug Geometry..." );
     glDebug::createDebugGeometry();
 
-	puts( "GUI..." );
-	gui::init();
+    puts( "GUI..." );
+    gui::init();
 
-	puts( "Widgets..." );
-	gui::initWidgets();
+    puts( "Widgets..." );
+    gui::initWidgets();
 
-        gl::updateColorBuffer();
-        gui::updateColorQuads();
+    gl::updateColorBuffer();
+    gui::updateColorQuads();
 }
 
 void sequencer::fetchInput()
@@ -120,43 +120,44 @@ void sequencer::clearFramebuffers()
 }
 void sequencer::frame()
 {
-        clearFramebuffers();
+    clearFramebuffers();
 
-	    input::fetchGLFWEvents();
-	    input::updateMouse();
+    input::fetchGLFWEvents();
+    input::updateMouse();
 
-	    input::getCursorQuadEvents();
-	    input::getMouseKeyEvents();
-	    events::checkEvents();
-	    signals::checkSignals();
-	    functors::callFunctors();
+    input::getCursorQuadEvents();
+    input::getMouseKeyEvents();
+    events::checkEvents();
+    signals::checkSignals();
+    functors::callFunctors();
 
-        camera::main_camera.look( input::cursorFrameDelta );
-        camera::main_camera.update();
+    camera::main_camera.look( input::cursorFrameDelta );
+    camera::main_camera.update();
 
-        gl::updateGeneralUniformBuffer();
+    gl::updateGeneralUniformBuffer();
 
-        gui::updateLineBuffers();
+    gui::updateLineBuffers();
 
-        glBindFramebuffer( GL_FRAMEBUFFER, texture::guiFBO );
-        gui::rasterQuadIndices();
-        gui::readQuadIndexBuffer();
-        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    // RENDERING
+    //glBindFramebuffer( GL_FRAMEBUFFER, texture::guiFBO );
+    //gui::rasterQuadIndices();
+    //gui::readQuadIndexBuffer();
+    //glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
-        gui::renderLines();
+    gui::renderLines();
 
-        gui::renderColorQuads();
+    //gui::renderColorQuads();
 
-        glfwSwapBuffers(app::mainWindow.window );
+    glfwSwapBuffers(app::mainWindow.window );
 
-        events::resetEvents();
-        signals::resetSignals();
-        input::end();
+    events::resetEvents();
+    signals::resetSignals();
+    input::end();
 
-        app::updateTime();
-        app::limitFPS();
+    app::updateTime();
+    app::limitFPS();
 
-        debug::printErrors();
+    debug::printErrors();
 }
 void sequencer::gameloop()
 {	

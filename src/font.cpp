@@ -11,7 +11,7 @@ std::vector<gui::text::String> allStrings;
 unsigned int styleStorage = 0;
 std::vector<gui::text::TextStyle> allTextStyles;
 
-unsigned int gui::text::fontVAO = 0;
+gl::VAO gui::text::fontVAO;
 unsigned int gui::text::glyphShaderProgram = 0;
 std::vector<unsigned int> gui::text::glyphIndexBuffer;
 std::vector<gui::text::Font> gui::text::allFonts;
@@ -34,8 +34,7 @@ void gui::text::initFontVAO()
 	charStorage = gl::StreamStorage<unsigned int>( "CharBuffer", 
 			MAX_CHARS, GL_MAP_WRITE_BIT );
 
-	glCreateVertexArrays( 1, &fontVAO );
-
+    fontVAO = gl::VAO( "fontVAO" );
 	//gl::setVertexAttrib( fontVAO, 0, 0, 2, GL_FLOAT, 0 );
 	//gl::setVertexAttrib( fontVAO, 1, 1, 4, GL_FLOAT, 0 );
 	//gl::setVertexAttrib( fontVAO, 2, 2, 1, GL_UNSIGNED_INT, 0 );
