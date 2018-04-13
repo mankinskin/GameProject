@@ -92,13 +92,13 @@ void sequencer::initModules()
 	puts( "Debug Geometry..." );
     glDebug::createDebugGeometry();
 
-    puts( "GUI..." );
-    gui::init();
-
     puts( "Widgets..." );
     gui::initWidgets();
 
-    gl::updateColorBuffer();
+    puts( "GUI..." );
+    gui::init();
+
+
     gui::updateColorQuads();
 }
 
@@ -136,16 +136,17 @@ void sequencer::frame()
 
     gl::updateGeneralUniformBuffer();
 
-    gui::updateLineBuffers();
+    gl::updateColorBuffer();
     gui::updateQuadBuffer();
+    //gui::updateLineBuffers();
 
     // RENDERING
-    //glBindFramebuffer( GL_FRAMEBUFFER, texture::guiFBO );
-    //gui::rasterQuadIndices();
-    //gui::readQuadIndexBuffer();
-    //glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    glBindFramebuffer( GL_FRAMEBUFFER, texture::guiFBO );
+    gui::rasterQuadIndices();
+    gui::readQuadIndexBuffer();
+    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
-    gui::renderLines();
+    //gui::renderLines();
 
     gui::renderColorQuads();
 

@@ -31,8 +31,8 @@ gui::Quad::Quad( glm::vec4 pData )
 void gui::updateQuadBuffer()
 {
     if ( quadCount ) {
-        //gl::uploadStorage( quadBuffer, 
-        //        sizeof( glm::vec4 )*allQuads.size(), &allQuads[0] );
+        gl::uploadStorage( quadBuffer, 
+                sizeof( glm::vec4 )*quadCount, &allQuads[0] );
     }
 }
 
@@ -54,25 +54,18 @@ void gui::rasterQuadIndices()
     }
 }
 
-void gui::reserveQuads( const unsigned int pCount )
-{
-    //allQuads.reserve( allQuads.size() + pCount );
-}
-
 void gui::initQuadBuffer()
 {
     quadIndexVAO = gl::VAO( "quadIndexVAO" );
     quadBuffer = gl::StreamStorage<glm::vec4>( "QuadBuffer", 
-            MAX_QUAD_COUNT, GL_MAP_WRITE_BIT | GL_MAP_READ_BIT );
+            MAX_QUAD_COUNT, GL_MAP_WRITE_BIT, &allQuads[0] );
     quadBuffer.setTarget( GL_UNIFORM_BUFFER );
 
-    glVertexArrayElementBuffer( quadIndexVAO, gl::quadEBO.ID );
-    glVertexArrayVertexBuffer( quadIndexVAO, 0, 
-            gl::quadVBO.ID, 0, sizeof( glm::vec2 ) );
+    quadIndexVAO.elementBuffer( gl::quadEBO );
+    quadIndexVAO.vertexBuffer( gl::quadVBO );
 
-    //gl::setVertexAttrib( quadIndexVAO, 0, 0, 2, GL_FLOAT, 0 );
+    quadIndexVAO.vertexAttrib( 0, 0, 2, GL_FLOAT, 0 );
 
-    reserveQuads( MAX_QUAD_COUNT );
     quadIndexMap.resize( gl::getWidth() * gl::getHeight() );
     quadDepthMap.resize( gl::getWidth() * gl::getHeight() );
 }

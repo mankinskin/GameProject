@@ -68,12 +68,12 @@ void gui::initWidgets()
     puts( "Creating playbutton" );
     Button::Quads playButton_quads( button_initer );
 
-    //utils::foreach( colorQuad, quitButton_quads, buttonColors );
-    //utils::foreach( colorQuad, playButton_quads, buttonColors );
+    utils::foreach( colorQuad, quitButton_quads, buttonColors );
+    utils::foreach( colorQuad, playButton_quads, buttonColors );
 
 
-    //moveQuads( playButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.6f ) ) );
-    //moveQuads( quitButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.8f ) ) );
+    moveQuads( playButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.6f ) ) );
+    moveQuads( quitButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.8f ) ) );
 
     ButtonEvents<Event> play_button( 
             createEvent( QuadEvent( playButton_quads.element<1>().index, 1 ) ), 

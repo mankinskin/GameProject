@@ -141,12 +141,12 @@ void gl::initGeneralUniformBuffer()
 
 void gl::updateGeneralUniformBuffer()
 {
-    std::vector<float> generalUniformData( 52 );
+    static std::vector<float> generalUniformData( 52 );
 
     std::memcpy( &generalUniformData[0], glm::value_ptr( camera::main_camera.getProjection() ), sizeof( float ) * 16 );
     std::memcpy( &generalUniformData[16], glm::value_ptr( camera::main_camera.getView() ), sizeof( float ) * 16 );
     std::memcpy( &generalUniformData[32], glm::value_ptr( camera::main_camera.getPos() ), sizeof( float ) * 3 );
     std::memcpy( &generalUniformData[36], glm::value_ptr( voxelization::projectionMatrix ), sizeof( float ) * 16 );
-    //uploadStorage( generalUniformBuffer, sizeof( float ) * 52, &generalUniformData[0] );
+    uploadStorage( generalUniformBuffer, sizeof( float ) * 52, &generalUniformData[0] );
 }
 

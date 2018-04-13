@@ -12,7 +12,7 @@ namespace gl {
         VAO() 
         {}
         VAO( std::string pName )
-            :name( pName ), vertexBufferCount( 0 )
+            :name( pName )
         {
             printf( "Creating VAO: %s...\n", name.c_str() );
             glCreateVertexArrays( 1, &ID );
@@ -20,8 +20,21 @@ namespace gl {
         void vertexAttrib( unsigned int pBindingIndex, unsigned int pAttributeIndex, 
                 unsigned int pCount, unsigned int pType, 
                 unsigned int pOffset, bool pNormalize = false );
-        void vertexBuffer( unsigned int pBuffer, unsigned int pStride );
-        void elementBuffer( unsigned int pBuffer );
+        template<typename T>
+            void vertexBuffer( Storage<T>& pBuffer )
+            {
+                static unsigned int vertexBufferCount = 0;
+                pBuffer.setTarget( GL_ARRAY_BUFFER );
+                glVertexArrayVertexBuffer( ID, vertexBufferCount++, pBuffer.ID, 0, sizeof(T) );
+            } 
+        template<typename T>
+            void elementBuffer( Storage<T>& pBuffer )
+            {
+                pBuffer.setTarget( GL_ELEMENT_ARRAY_BUFFER );
+                glVertexArrayElementBuffer( ID, pBuffer.ID );
+            }
+
+        void attribDivisor( unsigned int pAttrib, unsigned int pDivisor );
 
         operator unsigned int()
         {
@@ -29,6 +42,5 @@ namespace gl {
         }
         std::string name;
         unsigned int ID;
-        unsigned int vertexBufferCount;
     };
 }

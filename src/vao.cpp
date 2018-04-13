@@ -17,13 +17,9 @@ void gl::VAO::vertexAttrib( unsigned int pBindingIndex, unsigned int pAttributeI
      glVertexArrayAttribBinding( ID, pAttributeIndex, pBindingIndex );
      glEnableVertexArrayAttrib( ID, pAttributeIndex );
 }
- 
-void gl::VAO::vertexBuffer( unsigned int pBuffer, unsigned int pStride )
-{
-    glVertexArrayVertexBuffer( ID, vertexBufferCount++, pBuffer, 0, pStride );
-} 
 
-void gl::VAO::elementBuffer( unsigned int pBuffer )
+void gl::VAO::attribDivisor( unsigned int pAttrib, unsigned int pDivisor )
 {
-    glVertexArrayElementBuffer( ID, pBuffer );
+    glVertexArrayBindingDivisor( ID, pAttrib, pDivisor );
 }
+

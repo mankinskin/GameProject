@@ -71,7 +71,14 @@ namespace gl
     template<typename T>
     void uploadStorage( const StreamStorage<T>& pStorage, unsigned int pByteSize, void* pData )
     {
-        std::memcpy( pStorage.mappedPtr, pData, pByteSize );
+        if( pByteSize ) {
+            if ( !pStorage.mappedPtr ) {
+                debug::pushError( "Attempted to upload to unmapped buffer!", debug::Error::Fatal );
+                return;
+            }
+            std::memcpy( pStorage.mappedPtr, pData, pByteSize );
+
+        }
     }
 }
 

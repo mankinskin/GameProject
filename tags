@@ -337,6 +337,7 @@ apply	src/camera.h	/^		void apply( Camera* pCam ) {$/;"	f	struct:camera::Movemen
 args	src/functor.h	/^		std::tuple<Args...> args;$/;"	m	class:functors::Functor
 atlas	src/font_loader.cpp	/^	LoadAtlas atlas;$/;"	m	struct:LoadFont	file:
 atlasID	src/font.h	/^			unsigned int atlasID;$/;"	m	struct:gui::text::Font
+attribDivisor	src/vao.cpp	/^void gl::VAO::attribDivisor( unsigned int pAttrib, unsigned int pDivisor )$/;"	f	class:gl::VAO
 axis_limits	src/camera.h	/^		glm::vec3 axis_limits;$/;"	m	struct:camera::LookPolicy
 b	dt/misc.h	/^typedef struct { uchar r, g, b; } rgb;$/;"	m	struct:__anon1
 back	src/camera.cpp	/^void camera::Camera::back()$/;"	f	class:camera::Camera
@@ -479,7 +480,7 @@ dt	dt/dt.h	/^static float *dt(float *f, int n) {$/;"	f
 dt	dt/dt.h	/^static image<float> *dt(image<uchar> *im, uchar on = 1) {$/;"	f
 dt	dt/dt.h	/^static void dt(image<float> *im) {$/;"	f
 element	src/element.h	/^                constexpr auto element() const $/;"	f	struct:utils::Element
-elementBuffer	src/vao.cpp	/^void gl::VAO::elementBuffer( unsigned int pBuffer )$/;"	f	class:gl::VAO
+elementBuffer	src/vao.h	/^            void elementBuffer( Storage<T>& pBuffer )$/;"	f	struct:gl::VAO
 element_constructor	src/element.h	/^        struct element_constructor $/;"	s	namespace:utils
 element_generator	src/element_utils.h	/^        struct element_generator $/;"	s	namespace:utils
 element_generator	src/element_utils.h	/^        struct element_generator<0, Type, SubElements...> $/;"	s	namespace:utils
@@ -994,7 +995,6 @@ reserveEntities	src/entities.cpp	/^void entities::reserveEntities( unsigned int 
 reserveKeySignals	src/keys.cpp	/^void input::reserveKeySignals( unsigned int pCount ) {$/;"	f	class:input
 reserveLightSpace	src/lights.cpp	/^void lights::reserveLightSpace( unsigned int pCount ) $/;"	f	class:lights
 reservePointLightSpace	src/lights.cpp	/^void lights::reservePointLightSpace( unsigned int pCount ) $/;"	f	class:lights
-reserveQuads	src/quad.cpp	/^void gui::reserveQuads( const unsigned int pCount )$/;"	f	class:gui
 reserveTextboxSpace	src/text.cpp	/^void gui::text::reserveTextboxSpace( unsigned int pCount ) {$/;"	f	class:gui::text
 reserve_functors	src/functor.h	/^	void reserve_functors( unsigned int pCount ) $/;"	f	namespace:functors
 reserve_slots	src/event.h	/^		static void reserve_slots( unsigned int pCount ) {$/;"	f	class:events::EventSlot
@@ -1222,8 +1222,7 @@ vec4	experimental/hierarchy.cpp	/^    vec4( float X, float Y, float Z, float W )
 vec4	experimental/hierarchy.cpp	/^struct vec4$/;"	s	file:
 vertex	src/line.h	/^        LinePointIt vertex;$/;"	m	struct:gui::LineVertex
 vertexAttrib	src/vao.cpp	/^void gl::VAO::vertexAttrib( unsigned int pBindingIndex, unsigned int pAttributeIndex, unsigned int pCount, unsigned int pType, unsigned int pOffset, bool pNormalize ) $/;"	f	class:gl::VAO
-vertexBuffer	src/vao.cpp	/^void gl::VAO::vertexBuffer( unsigned int pBuffer, unsigned int pStride )$/;"	f	class:gl::VAO
-vertexBufferCount	src/vao.h	/^        unsigned int vertexBufferCount;$/;"	m	struct:gl::VAO
+vertexBuffer	src/vao.h	/^            void vertexBuffer( Storage<T>& pBuffer )$/;"	f	struct:gl::VAO
 vertexCount	src/mesh.h	/^		unsigned int vertexCount = 0;$/;"	m	struct:mesh::Mesh
 vertexOffset	src/mesh.h	/^		unsigned int vertexOffset = 0;$/;"	m	struct:mesh::Mesh
 vidModes	src/contextwindow.h	/^	    const GLFWvidmode* vidModes = nullptr;$/;"	m	struct:app::Monitor

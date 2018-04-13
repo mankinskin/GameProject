@@ -20,11 +20,12 @@ void gui::initColorQuadVAO()
 {
     colorQuadVAO = gl::VAO( "colorQuadVAO" );
 
-    colorQuadVAO.elementBuffer( gl::quadEBO.ID );
-    colorQuadVAO.vertexBuffer( gl::quadVBO.ID, sizeof( glm::vec2 ) );
+    colorQuadVAO.elementBuffer( gl::quadEBO );
+    colorQuadVAO.vertexBuffer( gl::quadVBO );
     colorQuadVAO.vertexAttrib( 0, 0, 2, GL_FLOAT, 0 );
 
-    colorQuadBuffer = gl::StreamStorage<unsigned int>( "QuadColorBuffer", MAX_QUAD_COUNT, GL_MAP_WRITE_BIT );
+    colorQuadBuffer = gl::StreamStorage<unsigned int>( "QuadColorBuffer", 
+            MAX_QUAD_COUNT, GL_MAP_WRITE_BIT, &quadColors[0] );
     colorQuadBuffer.setTarget( GL_UNIFORM_BUFFER );
 }
 
@@ -45,7 +46,6 @@ void gui::setupColorQuadShader()
 
 void gui::updateColorQuads()
 {
-    //printf( "Uploading %d bytes to storage %s...\n", sizeof( unsigned int )*MAX_QUAD_COUNT, gl::getStorage( colorQuadBuffer ).name.c_str() ); 
     gl::uploadStorage( colorQuadBuffer, sizeof( unsigned int ) * quadCount, &quadColors[0] );
 }
 

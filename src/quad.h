@@ -34,7 +34,6 @@ namespace gui
     void initQuadIndexShader();
     void setupQuadIndexShader();
     void readQuadIndexBuffer();
-    void reserveQuads( const unsigned int pCount );
     unsigned int readQuadIndexMap( const unsigned int pPos );
     unsigned int readQuadIndexMap( const unsigned int pXPos, const unsigned int pYPos );
     float readQuadDepthMap( const unsigned int pPos );

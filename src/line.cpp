@@ -63,6 +63,7 @@ unsigned int getLineVertexIndex( unsigned int pLineIndex, unsigned int pVertex )
 {
     return allLines[ pLineIndex ][ pVertex ];
 }
+
 void gui::colorLine( unsigned int pLineIndex, unsigned int pColorIndex ) 
 {
     colorLineVertex( getLineVertexIndex( pLineIndex, 0 ), pColorIndex );
@@ -80,15 +81,15 @@ void gui::initLineVAO()
     lineBuffer = gl::StreamStorage<glm::uvec2>( "LineIndexBuffer", 
             MAX_LINE_COUNT, GL_MAP_WRITE_BIT );
 
-    lineVertexColorBuffer = gl::StreamStorage<glm::uvec2>( "LineVertexColorBuffer", 
-            MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
-
     lineVertexBuffer = gl::StreamStorage<glm::vec4>( "LineVertexPosBuffer", 
             MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
     lineVertexBuffer.setTarget( GL_UNIFORM_BUFFER );
 
-    lineVAO.vertexBuffer( lineBuffer.ID, sizeof( glm::uvec2 ) );
-    lineVAO.elementBuffer( lineVertexColorBuffer.ID );
+    lineVertexColorBuffer = gl::StreamStorage<glm::uvec2>( "LineVertexColorBuffer", 
+            MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
+
+    lineVAO.vertexBuffer( lineBuffer );
+    lineVAO.elementBuffer( lineVertexColorBuffer );
     lineVAO.vertexAttrib( 0, 0, 2, GL_UNSIGNED_INT, 0 );
 }
 
