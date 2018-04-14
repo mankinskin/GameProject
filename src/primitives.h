@@ -5,7 +5,7 @@
 
 namespace gl
 {
-	void initPrimitiveVBO();
+	void initPrimitives();
 
 	extern Storage<glm::vec2> quadVBO;
 	extern Storage<unsigned int> quadEBO;

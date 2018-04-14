@@ -51,10 +51,10 @@ void gui::initWidgets()
     glm::vec2 margin = gui::pixel_size * 3.0f;
 
     Button::QuadIniter button_initer( 
-            glm::vec4(0.0f, 0.0f, 0.5f, 0.3f ),
-            glm::vec4( 0.1f, -0.1f, 
-                    0.1f, 
-                    0.1f ) );
+            glm::vec4(0.0f, 0.0f, button_width, button_height ),
+            glm::vec4( margin.x, -margin.y, 
+                    button_width - margin.x*2.0f, 
+                    button_height - margin.y*2.0f ) );
 
     Button::MoveRule button_move_policy( 
             glm::vec2( 1.0f, 1.0f ), 
@@ -72,8 +72,8 @@ void gui::initWidgets()
     utils::foreach( colorQuad, playButton_quads, buttonColors );
 
 
-    moveQuads( playButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.6f ) ) );
-    moveQuads( quitButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.8f ) ) );
+    //moveQuads( playButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.6f ) ) );
+    //moveQuads( quitButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.8f ) ) );
 
     ButtonEvents<Event> play_button( 
             createEvent( QuadEvent( playButton_quads.element<1>().index, 1 ) ), 

@@ -1,5 +1,5 @@
 #version 450
-const uint MAX_QUAD_COUNT = 100;
+const uint MAX_QUAD_COUNT = 1000;
 
 layout(location = 0)in vec2 corner_pos;
 

@@ -186,7 +186,6 @@ Program	src/shader_loader.h	/^	struct Program {$/;"	s	namespace:shader
 ProgramType	src/shader_loader.h	/^	enum class ProgramType {$/;"	c	namespace:shader
 Quad	experimental/hierarchy.cpp	/^    Quad( size_t pQuad )$/;"	f	struct:Quad
 Quad	experimental/hierarchy.cpp	/^struct Quad$/;"	s	file:
-Quad	src/quad.cpp	/^gui::Quad::Quad( const unsigned int in )$/;"	f	class:gui::Quad
 Quad	src/quad.cpp	/^gui::Quad::Quad( glm::vec4 pData ) $/;"	f	class:gui::Quad
 Quad	src/quad.h	/^    struct Quad $/;"	s	namespace:gui
 QuadEvent	src/mouse.h	/^        QuadEvent( unsigned int pQuad, int pEnter )$/;"	f	struct:input::QuadEvent
@@ -208,7 +207,7 @@ State	src/app.h	/^    enum State {$/;"	g	namespace:app
 Storage	src/storage.h	/^            Storage( std::string pName, size_type pSize, $/;"	f	struct:gl::Storage
 Storage	src/storage.h	/^            Storage()$/;"	f	struct:gl::Storage
 Storage	src/storage.h	/^        struct Storage $/;"	s	namespace:gl
-StreamStorage	src/storage.h	/^            StreamStorage( std::string pName, unsigned int pSize, $/;"	f	struct:gl::StreamStorage
+StreamStorage	src/storage.h	/^            StreamStorage( std::string pName, typename Storage<T>::size_type pSize, $/;"	f	struct:gl::StreamStorage
 StreamStorage	src/storage.h	/^            StreamStorage()$/;"	f	struct:gl::StreamStorage
 StreamStorage	src/storage.h	/^        struct StreamStorage $/;"	s	namespace:gl
 String	src/font.h	/^			String( unsigned int pOffset, unsigned int pCount )$/;"	f	struct:gui::text::String
@@ -219,12 +218,12 @@ Synapse	src/neural.h	/^		Synapse( unsigned int pFrom, unsigned int pTo, float pI
 Synapse	src/neural.h	/^		Synapse() {}$/;"	f	struct:neural::Synapse
 Synapse	src/neural.h	/^	struct Synapse {$/;"	s	namespace:neural
 TEXTURE_DIR	src/texture.cpp	/^std::string texture::TEXTURE_DIR = DEFAULT_TEXTURE_DIRECTORY;$/;"	m	class:texture	file:
-TEXT_LAYOUT_BOUND_LEFT	src/text.h	5;"	d
-TEXT_LAYOUT_BOUND_RIGHT	src/text.h	6;"	d
-TEXT_LAYOUT_CENTER_BOTH	src/text.h	9;"	d
-TEXT_LAYOUT_CENTER_X	src/text.h	7;"	d
-TEXT_LAYOUT_CENTER_Y	src/text.h	8;"	d
-TEXT_LAYOUT_FREE_LINES	src/text.h	10;"	d
+TEXT_LAYOUT_BOUND_LEFT	src/text.h	6;"	d
+TEXT_LAYOUT_BOUND_RIGHT	src/text.h	7;"	d
+TEXT_LAYOUT_CENTER_BOTH	src/text.h	10;"	d
+TEXT_LAYOUT_CENTER_X	src/text.h	8;"	d
+TEXT_LAYOUT_CENTER_Y	src/text.h	9;"	d
+TEXT_LAYOUT_FREE_LINES	src/text.h	11;"	d
 TOP_DOWN_FRUSTUM	src/camera.h	/^	const Frustum TOP_DOWN_FRUSTUM = Frustum( glm::vec3( 0.0, 0.0, -1.0 ), glm::vec3( 0.0, -1.0, 0.0 ), 70.0f, 1600.0f, 850.0f, 1.0f, 1000.0f );$/;"	m	namespace:camera
 TOP_DOWN_LOOK	src/camera.h	/^	const LookPolicy TOP_DOWN_LOOK = LookPolicy( offsetof( Camera, normal ), offsetof( Camera, lookAt ), -1.0f, offsetof( Camera, normal ), offsetof( Camera, lookAt ), 0.0f, offsetof( Camera, normal ), glm::vec3( 0.0f, 0.0f, 0.0f ) );$/;"	m	namespace:camera
 TOP_DOWN_MOVEMENT	src/camera.h	/^	const MovementPolicy TOP_DOWN_MOVEMENT = MovementPolicy( offsetof( Camera, normal ), 1.0f, offsetof( Camera, cross ), 1.0f, offsetof( Camera, lookAt ), -1.0f );$/;"	m	namespace:camera
@@ -238,10 +237,10 @@ TextStyle	src/font.h	/^			TextStyle()$/;"	f	struct:gui::text::TextStyle
 TextStyle	src/font.h	/^		struct TextStyle $/;"	s	namespace:gui::text
 Textbox	src/text.cpp	/^	Textbox()$/;"	f	struct:Textbox
 Textbox	src/text.cpp	/^struct Textbox {$/;"	s	file:
-TextboxGlyphs	src/text.cpp	/^	TextboxGlyphs( unsigned int pGlyphCount ) {$/;"	f	struct:TextboxGlyphs
+TextboxGlyphs	src/text.cpp	/^	TextboxGlyphs( unsigned int pGlyphCount ) $/;"	f	struct:TextboxGlyphs
 TextboxGlyphs	src/text.cpp	/^struct TextboxGlyphs {$/;"	s	file:
-TextboxMetrics	src/text.cpp	/^	TextboxMetrics( unsigned int pFont, float pGlyphScaleX, float pGlyphScaleY, float pAdvanceScale, float pLineGapScale )$/;"	f	struct:TextboxMetrics
-TextboxMetrics	src/text.cpp	/^	TextboxMetrics( unsigned int pFont, glm::vec2 pGlyphScale, float pAdvanceScale, float pLineGapScale )$/;"	f	struct:TextboxMetrics
+TextboxMetrics	src/text.cpp	/^	TextboxMetrics( unsigned int pFont, float pGlyphScaleX, $/;"	f	struct:TextboxMetrics
+TextboxMetrics	src/text.cpp	/^	TextboxMetrics( unsigned int pFont, glm::vec2 pGlyphScale, $/;"	f	struct:TextboxMetrics
 TextboxMetrics	src/text.cpp	/^struct TextboxMetrics {$/;"	s	file:
 Texture2D	src/texture.cpp	/^texture::Texture2D::Texture2D( unsigned int pWidth, unsigned int pHeight, GLenum pInternalFormat, GLenum pFormat, GLenum pType )$/;"	f	class:texture::Texture2D
 Texture2D	src/texture.h	/^	struct Texture2D {$/;"	s	namespace:texture
@@ -345,6 +344,7 @@ back	src/camera.cpp	/^void camera::back( Camera & pCam )$/;"	f	class:camera
 backVolumeImage	src/voxelization.cpp	/^unsigned int voxelization::backVolumeImage = 0;$/;"	m	class:voxelization	file:
 bearingX	src/font.h	/^			float bearingX;$/;"	m	struct:gui::text::GlyphMetrics
 bearingY	src/font.h	/^			float bearingY;$/;"	m	struct:gui::text::GlyphMetrics
+bind	src/vao.h	/^        void bind() $/;"	f	struct:gl::VAO
 bind	src/viewport.cpp	/^void gl::Viewport::bind()$/;"	f	class:gl::Viewport
 bindUniformBufferToShader	src/shader.h	/^		void bindUniformBufferToShader( unsigned int pProgram, const gl::Storage<T>& pStorage, std::string pBlockName )$/;"	f	namespace:shader
 binding	src/storage.h	/^            unsigned int binding;$/;"	m	struct:gl::Storage
@@ -437,14 +437,12 @@ createMesh	src/mesh.cpp	/^unsigned int mesh::createMesh( unsigned int pIndexOffs
 createModel	src/model.cpp	/^unsigned int model::createModel( unsigned int pMeshOffset, unsigned int pMeshCount )$/;"	f	class:model
 createModule	src/shader.cpp	/^unsigned int shader::createModule( std::string pFileName )$/;"	f	class:shader
 createProgram	src/shader.cpp	/^unsigned int shader::createProgram( std::string pProgramName )$/;"	f	class:shader
-createQuad	src/quad.cpp	/^unsigned int gui::createQuad( const float pPosX, const float pPosY, $/;"	f	class:gui
-createQuad	src/quad.cpp	/^unsigned int gui::createQuad( const glm::vec4 pQuadData )$/;"	f	class:gui
 createSignal	src/signal.h	/^	unsigned int createSignal( Source pSource, bool pStartAs = false ) {$/;"	f	namespace:signals
 createTextColor	src/text.cpp	/^unsigned int gui::text::createTextColor( glm::vec4 pColor )$/;"	f	class:gui::text
-createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( glm::vec2 pTopLeft, glm::vec2 pSize, unsigned int pMetrics, int pFlags, float pMarging )$/;"	f	class:gui::text
-createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( glm::vec4 pQuad, unsigned int pMetrics, int pFlags, float pMarging )$/;"	f	class:gui::text
-createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( unsigned int pPosIndex, unsigned int pSizeIndex, unsigned int pMetrics, int pFlags, float pMarging ) {$/;"	f	class:gui::text
-createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( unsigned int pQuad, unsigned int pMetrics, int pFlags, float pMarging ) {$/;"	f	class:gui::text
+createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( Quad pQuad, unsigned int pMetrics, $/;"	f	class:gui::text
+createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( glm::vec2 pTopLeft, glm::vec2 pSize, $/;"	f	class:gui::text
+createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( glm::vec4 pQuad, unsigned int pMetrics, $/;"	f	class:gui::text
+createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( unsigned int pPosIndex, unsigned int pSizeIndex, $/;"	f	class:gui::text
 createTextboxMetrics	src/text.cpp	/^unsigned int gui::text::createTextboxMetrics( unsigned int pFont, float pGlyphScaleX, float pGlyphScaleY, float pAdvanceScale, float pLineGapScale )$/;"	f	class:gui::text
 createTexture2D	src/texture.cpp	/^unsigned int texture::createTexture2D( TextureBuffer pBuffer )$/;"	f	class:texture
 createTexture2D	src/texture.cpp	/^unsigned int texture::createTexture2D( std::string pFilename )$/;"	f	class:texture
@@ -594,7 +592,7 @@ gl	src/color.h	/^namespace gl $/;"	n
 gl	src/gl.h	/^namespace gl {$/;"	n
 gl	src/primitives.h	/^namespace gl$/;"	n
 gl	src/storage.h	/^namespace gl$/;"	n
-gl	src/vao.h	/^namespace gl {$/;"	n
+gl	src/vao.h	/^namespace gl $/;"	n
 gl	src/viewport.h	/^namespace gl {$/;"	n
 glDebug	src/gldebug.h	/^namespace glDebug {$/;"	n
 glerror_callback	src/gldebug.cpp	/^void APIENTRY glerror_callback( GLenum sourcei, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam ) {$/;"	f
@@ -613,6 +611,7 @@ gui	src/gui.h	/^namespace gui $/;"	n
 gui	src/line.h	/^namespace gui$/;"	n
 gui	src/quad.h	/^namespace gui $/;"	n
 gui	src/quadcolors.h	/^namespace gui $/;"	n
+gui	src/quadindex.h	/^namespace gui $/;"	n
 gui	src/text.h	/^namespace gui {$/;"	n
 gui	src/widget.h	/^namespace gui {$/;"	n
 guiDepthRenderbuffer	src/framebuffer.cpp	/^unsigned int texture::guiDepthRenderbuffer;$/;"	m	class:texture	file:
@@ -700,10 +699,10 @@ initMeshVAO	src/mesh.cpp	/^void mesh::initMeshVAO()$/;"	f	class:mesh
 initModels	src/model.cpp	/^void model::initModels()$/;"	f	class:model
 initModules	src/sequencer.cpp	/^void sequencer::initModules()$/;"	f	class:sequencer
 initMonitors	src/contextwindow.cpp	/^void app::initMonitors()$/;"	f	class:app
-initPrimitiveVBO	src/primitives.cpp	/^void gl::initPrimitiveVBO()$/;"	f	class:gl
+initPrimitives	src/primitives.cpp	/^void gl::initPrimitives()$/;"	f	class:gl
 initQuadBuffer	src/quad.cpp	/^void gui::initQuadBuffer()$/;"	f	class:gui
-initQuadIndexBuffer	src/quad.cpp	/^void gui::initQuadIndexBuffer()$/;"	f	class:gui
-initQuadIndexShader	src/quad.cpp	/^void gui::initQuadIndexShader()$/;"	f	class:gui
+initQuadIndexBuffer	src/quadindex.cpp	/^void gui::initQuadIndexBuffer()$/;"	f	class:gui
+initQuadIndexShader	src/quadindex.cpp	/^void gui::initQuadIndexShader()$/;"	f	class:gui
 initStyleBuffer	src/font.cpp	/^void gui::text::initStyleBuffer() $/;"	f	class:gui::text
 initWidgets	src/gui.cpp	/^void gui::initWidgets()$/;"	f	class:gui
 initialize	src/sequencer.cpp	/^void sequencer::initialize()$/;"	f	class:sequencer
@@ -794,7 +793,7 @@ loadModels	src/model_loader.cpp	/^void model::Loader::loadModels()$/;"	f	class:m
 loadPBM	dt/pnmfile.h	/^static image<uchar> *loadPBM(const char *name) {$/;"	f
 loadPGM	dt/pnmfile.h	/^static image<uchar> *loadPGM(const char *name) {$/;"	f
 loadPPM	dt/pnmfile.h	/^static image<rgb> *loadPPM(const char *name) {$/;"	f
-loadTextboxGlyphs	src/text.cpp	/^void loadTextboxGlyphs( Textbox& pTextbox, TextboxMetrics& pTextMetrics, gui::text::Font& pFont, TextboxGlyphs& pGlyphs )$/;"	f
+loadTextboxGlyphs	src/text.cpp	/^void loadTextboxGlyphs( Textbox& pTextbox, TextboxMetrics& pTextMetrics, $/;"	f
 loadTextboxes	src/text.cpp	/^void gui::text::loadTextboxes()$/;"	f	class:gui::text
 loadTextureBuffer	src/texture.cpp	/^void texture::loadTextureBuffer( TextureBuffer & pBuffer, std::string pFilename, int pForceChannels )$/;"	f	class:texture
 load_image	dt/pnmfile.h	/^void load_image(image<T> **im, const char *name) {$/;"	f
@@ -959,13 +958,13 @@ pushEvent	src/event.h	/^	void pushEvent( EventType pEvent ) {$/;"	f	namespace:ev
 quadBuffer	src/quad.cpp	/^gl::StreamStorage<glm::vec4> gui::quadBuffer;$/;"	m	class:gui	file:
 quadColors	src/quadcolors.cpp	/^std::array<unsigned int, gui::MAX_QUAD_COUNT> quadColors;$/;"	v
 quadCount	src/quad.cpp	/^size_t gui::quadCount = 0;$/;"	m	class:gui	file:
-quadDepthMap	src/quad.cpp	/^std::vector<float> quadDepthMap;$/;"	v
+quadDepthMap	src/quadindex.cpp	/^std::vector<float> quadDepthMap;$/;"	v
 quadEBO	src/primitives.cpp	/^gl::Storage<unsigned int> gl::quadEBO;$/;"	m	class:gl	file:
-quadIndexBuffer	src/quad.cpp	/^gl::StreamStorage<unsigned int> gui::quadIndexBuffer;$/;"	m	class:gui	file:
-quadIndexMap	src/quad.cpp	/^std::vector<unsigned int> quadIndexMap;$/;"	v
-quadIndexShader	src/quad.cpp	/^unsigned int gui::quadIndexShader;$/;"	m	class:gui	file:
+quadIndexBuffer	src/quadindex.cpp	/^gl::StreamStorage<unsigned int> gui::quadIndexBuffer;$/;"	m	class:gui	file:
+quadIndexMap	src/quadindex.cpp	/^std::vector<unsigned int> quadIndexMap;$/;"	v
+quadIndexShader	src/quadindex.cpp	/^unsigned int gui::quadIndexShader;$/;"	m	class:gui	file:
 quadIndexTexture	src/framebuffer.cpp	/^unsigned int texture::quadIndexTexture;$/;"	m	class:texture	file:
-quadIndexVAO	src/quad.cpp	/^gl::VAO gui::quadIndexVAO;$/;"	m	class:gui	file:
+quadIndexVAO	src/quadindex.cpp	/^gl::VAO gui::quadIndexVAO;$/;"	m	class:gui	file:
 quadStorage	src/font.cpp	/^gl::StreamStorage<gui::text::CharQuad> quadStorage;$/;"	v
 quadVBO	src/primitives.cpp	/^gl::Storage<glm::vec2> gl::quadVBO;$/;"	m	class:gl	file:
 quad_index	src/mouse.h	/^        unsigned int quad_index;\/\/0 if none$/;"	m	struct:input::QuadEvent
@@ -974,13 +973,13 @@ quads	src/text.cpp	/^	std::vector<gui::text::CharQuad> quads;$/;"	m	struct:Textb
 quit	src/app.cpp	/^void app::quit() $/;"	f	class:app
 r	dt/misc.h	/^typedef struct { uchar r, g, b; } rgb;$/;"	m	struct:__anon1
 radius	src/collision.h	/^		float radius;$/;"	m	struct:physics::BoundingSphere
-rasterQuadIndices	src/quad.cpp	/^void gui::rasterQuadIndices()$/;"	f	class:gui
+rasterQuadIndices	src/quadindex.cpp	/^void gui::rasterQuadIndices()$/;"	f	class:gui
 rating	src/neural.h	/^		float rating;$/;"	m	struct:neural::Synapse
-readQuadDepthMap	src/quad.cpp	/^float gui::readQuadDepthMap( const unsigned int pPos )$/;"	f	class:gui
-readQuadDepthMap	src/quad.cpp	/^float gui::readQuadDepthMap( const unsigned int pXPos, $/;"	f	class:gui
-readQuadIndexBuffer	src/quad.cpp	/^void gui::readQuadIndexBuffer()$/;"	f	class:gui
-readQuadIndexMap	src/quad.cpp	/^unsigned int gui::readQuadIndexMap( $/;"	f	class:gui
-readQuadIndexMap	src/quad.cpp	/^unsigned int gui::readQuadIndexMap( const unsigned int pPos )$/;"	f	class:gui
+readQuadDepthMap	src/quadindex.cpp	/^float gui::readQuadDepthMap( const unsigned int pPos )$/;"	f	class:gui
+readQuadDepthMap	src/quadindex.cpp	/^float gui::readQuadDepthMap( const unsigned int pXPos, $/;"	f	class:gui
+readQuadIndexBuffer	src/quadindex.cpp	/^void gui::readQuadIndexBuffer()$/;"	f	class:gui
+readQuadIndexMap	src/quadindex.cpp	/^unsigned int gui::readQuadIndexMap( $/;"	f	class:gui
+readQuadIndexMap	src/quadindex.cpp	/^unsigned int gui::readQuadIndexMap( const unsigned int pPos )$/;"	f	class:gui
 read_packed	dt/pnmfile.h	/^static void read_packed(unsigned char *data, int size, std::ifstream &f) {$/;"	f
 release	src/keys.h	/^        unsigned int release;$/;"	m	struct:input::KeySignal
 removeFileExtension	src/font_loader.cpp	/^void removeFileExtension( std::string& pFileName )$/;"	f
@@ -995,7 +994,7 @@ reserveEntities	src/entities.cpp	/^void entities::reserveEntities( unsigned int 
 reserveKeySignals	src/keys.cpp	/^void input::reserveKeySignals( unsigned int pCount ) {$/;"	f	class:input
 reserveLightSpace	src/lights.cpp	/^void lights::reserveLightSpace( unsigned int pCount ) $/;"	f	class:lights
 reservePointLightSpace	src/lights.cpp	/^void lights::reservePointLightSpace( unsigned int pCount ) $/;"	f	class:lights
-reserveTextboxSpace	src/text.cpp	/^void gui::text::reserveTextboxSpace( unsigned int pCount ) {$/;"	f	class:gui::text
+reserveTextboxSpace	src/text.cpp	/^void gui::text::reserveTextboxSpace( unsigned int pCount ) $/;"	f	class:gui::text
 reserve_functors	src/functor.h	/^	void reserve_functors( unsigned int pCount ) $/;"	f	namespace:functors
 reserve_slots	src/event.h	/^		static void reserve_slots( unsigned int pCount ) {$/;"	f	class:events::EventSlot
 reserve_slots	src/functor.h	/^		static void reserve_slots( unsigned int pCount ) $/;"	f	class:functors::Functor
@@ -1090,7 +1089,7 @@ setupLineShader	src/line.cpp	/^void gui::setupLineShader() $/;"	f	class:gui
 setupMeshNormalShader	src/mesh.cpp	/^void mesh::setupMeshNormalShader()$/;"	f	class:mesh
 setupMeshShader	src/mesh.cpp	/^void mesh::setupMeshShader()$/;"	f	class:mesh
 setupModels	src/model.cpp	/^void model::setupModels()$/;"	f	class:model
-setupQuadIndexShader	src/quad.cpp	/^void gui::setupQuadIndexShader()$/;"	f	class:gui
+setupQuadIndexShader	src/quadindex.cpp	/^void gui::setupQuadIndexShader()$/;"	f	class:gui
 setupShader	src/voxelization.cpp	/^void voxelization::setupShader()$/;"	f	class:voxelization
 severity	src/debug.h	/^		Severity severity;$/;"	m	struct:debug::Error
 shader	src/shader.h	/^namespace shader {$/;"	n
@@ -1185,6 +1184,7 @@ type	src/shader_loader.h	/^		ModuleType type;$/;"	m	struct:shader::Module
 type	src/shader_loader.h	/^		ProgramType type;$/;"	m	struct:shader::Program
 type	src/texture.h	/^		GLenum type;$/;"	m	struct:texture::Texture2D
 uchar	dt/misc.h	/^typedef unsigned char uchar;$/;"	t
+unbind	src/vao.h	/^        void unbind() $/;"	f	struct:gl::VAO
 underline_drop	src/font.h	/^			float underline_drop;$/;"	m	struct:gui::text::FontMetric
 underline_thickness	src/font.h	/^			float underline_thickness;$/;"	m	struct:gui::text::FontMetric
 unuse	src/shader.cpp	/^void shader::unuse()$/;"	f	class:shader
@@ -1208,7 +1208,7 @@ updateMouse	src/mouse.cpp	/^void input::updateMouse()$/;"	f	class:input
 updateQuadBuffer	src/quad.cpp	/^void gui::updateQuadBuffer()$/;"	f	class:gui
 updateTime	src/app.cpp	/^void app::updateTime()$/;"	f	class:app
 updateTimeFactor	src/app.cpp	/^void app::updateTimeFactor() $/;"	f	class:app
-uploadStorage	src/storage.h	/^    void uploadStorage( const StreamStorage<T>& pStorage, unsigned int pByteSize, void* pData )$/;"	f	namespace:gl
+uploadStorage	src/storage.h	/^    void uploadStorage( StreamStorage<T>& pStorage, unsigned int pByteSize, void* pData )$/;"	f	namespace:gl
 upsampling	src/font.h	/^			unsigned int upsampling = 4;$/;"	m	struct:gui::text::FontInstructions
 upward_factor	src/camera.h	/^		float upward_factor;$/;"	m	struct:camera::MovementPolicy
 upward_off	src/camera.h	/^		size_t upward_off;$/;"	m	struct:camera::MovementPolicy
@@ -1222,7 +1222,7 @@ vec4	experimental/hierarchy.cpp	/^    vec4( float X, float Y, float Z, float W )
 vec4	experimental/hierarchy.cpp	/^struct vec4$/;"	s	file:
 vertex	src/line.h	/^        LinePointIt vertex;$/;"	m	struct:gui::LineVertex
 vertexAttrib	src/vao.cpp	/^void gl::VAO::vertexAttrib( unsigned int pBindingIndex, unsigned int pAttributeIndex, unsigned int pCount, unsigned int pType, unsigned int pOffset, bool pNormalize ) $/;"	f	class:gl::VAO
-vertexBuffer	src/vao.h	/^            void vertexBuffer( Storage<T>& pBuffer )$/;"	f	struct:gl::VAO
+vertexBuffer	src/vao.h	/^            void vertexBuffer( unsigned int pBinding, Storage<T>& pBuffer )$/;"	f	struct:gl::VAO
 vertexCount	src/mesh.h	/^		unsigned int vertexCount = 0;$/;"	m	struct:mesh::Mesh
 vertexOffset	src/mesh.h	/^		unsigned int vertexOffset = 0;$/;"	m	struct:mesh::Mesh
 vidModes	src/contextwindow.h	/^	    const GLFWvidmode* vidModes = nullptr;$/;"	m	struct:app::Monitor

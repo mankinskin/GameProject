@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "event.h"
 #include <array>
-#include "quad.h"
+#include "quadindex.h"
 #include "gl.h"
 #include "viewport.h"
 

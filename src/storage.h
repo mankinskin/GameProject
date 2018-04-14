@@ -54,7 +54,7 @@ namespace gl
             StreamStorage()
             {
             }
-            StreamStorage( std::string pName, unsigned int pSize, 
+            StreamStorage( std::string pName, typename Storage<T>::size_type pSize, 
                     int pFlags, void* pData = nullptr )
                 : Storage<T>( pName, pSize, pFlags | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT, pData )
             {
@@ -69,7 +69,7 @@ namespace gl
         };
 
     template<typename T>
-    void uploadStorage( const StreamStorage<T>& pStorage, unsigned int pByteSize, void* pData )
+    void uploadStorage( StreamStorage<T>& pStorage, unsigned int pByteSize, void* pData )
     {
         if( pByteSize ) {
             if ( !pStorage.mappedPtr ) {
@@ -77,7 +77,6 @@ namespace gl
                 return;
             }
             std::memcpy( pStorage.mappedPtr, pData, pByteSize );
-
         }
     }
 }

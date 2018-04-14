@@ -18,6 +18,7 @@
 #include "debug.h"
 #include "text.h"
 #include "quad.h"
+#include "quadindex.h"
 #include "framebuffer.h"
 
 // Initialization
@@ -58,7 +59,7 @@ void sequencer::buildShaders()
 void sequencer::initializeVAOs()
 {
 	puts( "Primitives..." );
-    gl::initPrimitiveVBO();
+    gl::initPrimitives();
 
 	puts( "General Uniform Buffer..." );
     gl::initGeneralUniformBuffer();
@@ -92,14 +93,11 @@ void sequencer::initModules()
 	puts( "Debug Geometry..." );
     glDebug::createDebugGeometry();
 
-    puts( "Widgets..." );
-    gui::initWidgets();
-
     puts( "GUI..." );
     gui::init();
 
-
-    gui::updateColorQuads();
+    puts( "Widgets..." );
+    gui::initWidgets();
 }
 
 void sequencer::fetchInput()
@@ -138,7 +136,8 @@ void sequencer::frame()
 
     gl::updateColorBuffer();
     gui::updateQuadBuffer();
-    //gui::updateLineBuffers();
+    gui::updateColorQuads();
+    gui::updateLineBuffers();
 
     // RENDERING
     glBindFramebuffer( GL_FRAMEBUFFER, texture::guiFBO );
@@ -146,7 +145,7 @@ void sequencer::frame()
     gui::readQuadIndexBuffer();
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
-    //gui::renderLines();
+    gui::renderLines();
 
     gui::renderColorQuads();
 

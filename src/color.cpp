@@ -44,8 +44,8 @@ gl::ColorIt gl::createColor( Color pColor, std::string pColorName )
 
 gl::ColorIt gl::getColor( std::string pColorName )
 {
-    auto nameIt = 
-        std::find( colorNames.begin(), colorNames.begin() + colorCount, pColorName ); 
+    auto nameIt = std::find( colorNames.begin(), 
+            colorNames.begin() + colorCount, pColorName ); 
     if ( nameIt == colorNames.end() ) {
         printf( "Color %s not found!\n", pColorName.c_str() );
         return ColorIt( allColors, 0 );
@@ -58,12 +58,17 @@ gl::ColorIt gl::getColor( std::string pColorName )
 void gl::initColorBuffer()
 {
     colorBuffer = StreamStorage<Color>( "ColorBuffer", MAX_COLOR_COUNT, 
-            GL_MAP_WRITE_BIT | GL_MAP_READ_BIT );
+            GL_MAP_WRITE_BIT );
     colorBuffer.setTarget( GL_UNIFORM_BUFFER );
 }
 
 void gl::updateColorBuffer()
 {
+    //printf( "colorCount: %u\n", colorCount );
+    if ( colorCount ) {
+        gl::uploadStorage( colorBuffer, 
+                sizeof( glm::vec4 )*colorCount, &allColors[0] );
+    }
 }
 
 gl::Color gl::getColorData( ColorIt colorIndex )

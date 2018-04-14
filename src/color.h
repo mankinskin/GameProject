@@ -14,7 +14,6 @@ namespace gl
 
 	extern StreamStorage<Color> colorBuffer;
 
-
     void initColors();
 	void createDefaultColors();
 

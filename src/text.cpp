@@ -6,14 +6,19 @@
 #include "debug.h"
 #include <gtc/matrix_transform.hpp>
 #include "framebuffer.h"
-#include "quad.h"
 #include "font_loader.h"
 
 struct TextboxMetrics {
-	TextboxMetrics( unsigned int pFont, glm::vec2 pGlyphScale, float pAdvanceScale, float pLineGapScale )
-		:font( pFont ), glyphScale( pGlyphScale ), advanceScale( pAdvanceScale ), lineGapScale( pLineGapScale ) {}
-	TextboxMetrics( unsigned int pFont, float pGlyphScaleX, float pGlyphScaleY, float pAdvanceScale, float pLineGapScale )
-		:font( pFont ), glyphScale( glm::vec2( pGlyphScaleX, pGlyphScaleY ) ), advanceScale( pAdvanceScale ), lineGapScale( pLineGapScale ) {}
+	TextboxMetrics( unsigned int pFont, glm::vec2 pGlyphScale, 
+            float pAdvanceScale, float pLineGapScale )
+		:font( pFont ), glyphScale( pGlyphScale ), 
+        advanceScale( pAdvanceScale ), lineGapScale( pLineGapScale ) 
+    {}
+	TextboxMetrics( unsigned int pFont, float pGlyphScaleX, 
+            float pGlyphScaleY, float pAdvanceScale, float pLineGapScale )
+		:font( pFont ), glyphScale( glm::vec2( pGlyphScaleX, pGlyphScaleY ) ), 
+        advanceScale( pAdvanceScale ), lineGapScale( pLineGapScale ) 
+    {}
 	unsigned int font;
 	glm::vec2 glyphScale;
 	float advanceScale;
@@ -23,7 +28,9 @@ struct TextboxMetrics {
 
 struct Textbox {
 	Textbox()
-		:metrics( 0 ), chars( gui::text::String() ), pos( 0 ), size( 0 ), marging( 0.0f ), flags( 0 ) {}
+		:metrics( 0 ), chars( gui::text::String() ), 
+        pos( 0 ), size( 0 ), marging( 0.0f ), flags( 0 ) 
+    {}
 
 	gui::text::String chars;
 	unsigned int metrics;
@@ -33,22 +40,24 @@ struct Textbox {
 	unsigned int flags;
 };
 
-
-
 struct TextColor {
 	TextColor()
-		:color( glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) ) {}
+		:color( glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) ) 
+    {}
 	TextColor( float r, float g, float b, float a )
-		:color( glm::vec4( r, g, b, a ) ) {}
+		:color( glm::vec4( r, g, b, a ) ) 
+    {}
 	TextColor( glm::vec4& pColor )
-		:color( pColor ) {}
+		:color( pColor ) 
+    {}
 	glm::vec4 color = glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f );
 };
 
 
 
 struct TextboxGlyphs {
-	TextboxGlyphs( unsigned int pGlyphCount ) {
+	TextboxGlyphs( unsigned int pGlyphCount ) 
+    {
 		quads.resize( pGlyphCount );
 		glyphIndices.resize( pGlyphCount );
 		lines.reserve( pGlyphCount );
@@ -102,14 +111,17 @@ void gui::text::initFonts()
 	gui::text::initializer::loadFonts();
 }
 
-void gui::text::reserveTextboxSpace( unsigned int pCount ) {
+void gui::text::reserveTextboxSpace( unsigned int pCount ) 
+{
 
 	allTextboxes.reserve( pCount );
 	allTextboxPositions.reserve( pCount );
 	allTextboxSizes.reserve( pCount );
 }
 
-unsigned int gui::text::createTextbox( unsigned int pPosIndex, unsigned int pSizeIndex, unsigned int pMetrics, int pFlags, float pMarging ) {
+unsigned int gui::text::createTextbox( unsigned int pPosIndex, unsigned int pSizeIndex, 
+        unsigned int pMetrics, int pFlags, float pMarging ) 
+{
 	Textbox tb;
 	tb.pos = pPosIndex;
 	tb.size = pSizeIndex;
@@ -120,23 +132,29 @@ unsigned int gui::text::createTextbox( unsigned int pPosIndex, unsigned int pSiz
 	return allTextboxes.size() - 1;
 }
 
-unsigned int gui::text::createTextbox( unsigned int pQuad, unsigned int pMetrics, int pFlags, float pMarging ) {
+unsigned int gui::text::createTextbox( Quad pQuad, unsigned int pMetrics, 
+        int pFlags, float pMarging ) 
+{
 	glm::vec4 qd = getQuadData( pQuad );
 	return createTextbox( qd, pMetrics, pFlags, pMarging );
 }
 
-unsigned int gui::text::createTextbox( glm::vec4 pQuad, unsigned int pMetrics, int pFlags, float pMarging )
+unsigned int gui::text::createTextbox( glm::vec4 pQuad, unsigned int pMetrics, 
+        int pFlags, float pMarging )
 {
 	allTextboxPositions.emplace_back( pQuad.x, pQuad.y );
 	allTextboxSizes.emplace_back( pQuad.z, pQuad.w );
-	return createTextbox( allTextboxPositions.size() - 1, allTextboxSizes.size() - 1, pMetrics, pFlags, pMarging );
+	return createTextbox( allTextboxPositions.size() - 1, allTextboxSizes.size() - 1, 
+            pMetrics, pFlags, pMarging );
 }
 
-unsigned int gui::text::createTextbox( glm::vec2 pTopLeft, glm::vec2 pSize, unsigned int pMetrics, int pFlags, float pMarging )
+unsigned int gui::text::createTextbox( glm::vec2 pTopLeft, glm::vec2 pSize, 
+        unsigned int pMetrics, int pFlags, float pMarging )
 {
 	allTextboxPositions.push_back( pTopLeft );
 	allTextboxSizes.push_back( pSize );
-	return createTextbox( allTextboxPositions.size() - 1, allTextboxSizes.size() - 1, pMetrics, pFlags, pMarging );
+	return createTextbox( allTextboxPositions.size() - 1, allTextboxSizes.size() - 1, 
+            pMetrics, pFlags, pMarging );
 }
 
 void gui::text::setTextboxString( unsigned int pTextbox, String pString )
@@ -178,7 +196,8 @@ unsigned int gui::text::createTextColor( glm::vec4 pColor )
 }
 
 
-void loadTextboxGlyphs( Textbox& pTextbox, TextboxMetrics& pTextMetrics, gui::text::Font& pFont, TextboxGlyphs& pGlyphs )
+void loadTextboxGlyphs( Textbox& pTextbox, TextboxMetrics& pTextMetrics, 
+        gui::text::Font& pFont, TextboxGlyphs& pGlyphs )
 {
 	float cursor = 0.0f;
 	gui::text::FontInstructions& font_inst = gui::text::allFontInstructions[pFont.instructions];

@@ -1,6 +1,7 @@
 #pragma once
 #include "gl.h"
 #include "font.h"
+#include "quad.h"
 
 #define TEXT_LAYOUT_BOUND_LEFT 00000001
 #define TEXT_LAYOUT_BOUND_RIGHT 00000010
@@ -19,11 +20,16 @@ namespace gui {
 		void setStringStyle( unsigned int pStringIndex, unsigned int pStyleIndex );
 		//Interface
 		void reserveTextboxSpace( unsigned int pCount );
-		unsigned int createTextbox( unsigned int pQuadIndex, unsigned int pMetrics, int pFlags, float pMarging = 0.0f );
-		unsigned int createTextbox( unsigned int pPosIndex, unsigned int pSizeIndex, unsigned int pMetrics, int pFlags, float pMarging = 0.0f );
-		unsigned int createTextbox( glm::vec4 pQuad, unsigned int pMetrics, int pFlags, float pMarging );
-		unsigned int createTextbox( glm::vec2 pTopLeft, glm::vec2 pSize, unsigned int pMetrics, int pFlags, float pMarging = 0.0f );
-		unsigned int createTextboxMetrics( unsigned int pFont, float pGlyphScaleX, float pGlyphScaleY, float pAdvanceScale, float pLineGapScale );
+		unsigned int createTextbox( Quad pQuad, unsigned int pMetrics, 
+                int pFlags, float pMarging = 0.0f );
+		unsigned int createTextbox( unsigned int pPosIndex, unsigned int pSizeIndex, 
+                unsigned int pMetrics, int pFlags, float pMarging = 0.0f );
+		unsigned int createTextbox( glm::vec4 pQuad, unsigned int pMetrics, 
+                int pFlags, float pMarging );
+		unsigned int createTextbox( glm::vec2 pTopLeft, glm::vec2 pSize, 
+                unsigned int pMetrics, int pFlags, float pMarging = 0.0f );
+		unsigned int createTextboxMetrics( unsigned int pFont, float pGlyphScaleX, 
+                float pGlyphScaleY, float pAdvanceScale, float pLineGapScale );
 		void setTextboxString( unsigned int pTextbox, std::string pString );
 
 		void setTextboxString( unsigned int pTextbox, String pString );

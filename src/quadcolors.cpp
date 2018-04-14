@@ -21,11 +21,11 @@ void gui::initColorQuadVAO()
     colorQuadVAO = gl::VAO( "colorQuadVAO" );
 
     colorQuadVAO.elementBuffer( gl::quadEBO );
-    colorQuadVAO.vertexBuffer( gl::quadVBO );
+    colorQuadVAO.vertexBuffer( 0, gl::quadVBO );
     colorQuadVAO.vertexAttrib( 0, 0, 2, GL_FLOAT, 0 );
 
     colorQuadBuffer = gl::StreamStorage<unsigned int>( "QuadColorBuffer", 
-            MAX_QUAD_COUNT, GL_MAP_WRITE_BIT, &quadColors[0] );
+            MAX_QUAD_COUNT, GL_MAP_WRITE_BIT );
     colorQuadBuffer.setTarget( GL_UNIFORM_BUFFER );
 }
 
@@ -53,13 +53,13 @@ void gui::renderColorQuads()
 {
     glDepthFunc( GL_LEQUAL );
 
-    glBindVertexArray( colorQuadVAO );
+    colorQuadVAO.bind();
     shader::use( colorQuadShader );
 
-    glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, MAX_QUAD_COUNT );
+    glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, quadCount );
 
     shader::unuse();
-    glBindVertexArray( 0 );
+    colorQuadVAO.unbind();
 
     glDepthFunc( GL_LESS );
 }
@@ -67,6 +67,6 @@ void gui::renderColorQuads()
 void gui::colorQuad( Quad pQuad, gl::ColorIt pColor )
 {
     printf( "Coloring Quad %u with color %u\n", pQuad.index, pColor.index );
-    quadColors[pQuad.index - 1] = pColor.index;
+    quadColors[pQuad.index] = pColor.index;
 }
 

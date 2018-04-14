@@ -88,7 +88,7 @@ void gui::initLineVAO()
     lineVertexColorBuffer = gl::StreamStorage<glm::uvec2>( "LineVertexColorBuffer", 
             MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
 
-    lineVAO.vertexBuffer( lineBuffer );
+    lineVAO.vertexBuffer( 0, lineBuffer );
     lineVAO.elementBuffer( lineVertexColorBuffer );
     lineVAO.vertexAttrib( 0, 0, 2, GL_UNSIGNED_INT, 0 );
 }
