@@ -72,24 +72,23 @@ void gui::colorLine( unsigned int pLineIndex, unsigned int pColorIndex )
 
 void gui::colorLineVertex( unsigned int pVertex, unsigned int pColorIndex )
 {
-    allLineVertexColors[ pVertex ] = glm::uvec2( pVertex, pColorIndex );
+    allLineVertexColors[ lineVertexColorCount++ ] = glm::uvec2( pVertex, pColorIndex );
 }
 
 void gui::initLineVAO() 
 {
-    lineVAO = gl::VAO( "lineVAO" );
-    lineBuffer = gl::StreamStorage<glm::uvec2>( "LineIndexBuffer", 
-            MAX_LINE_COUNT, GL_MAP_WRITE_BIT );
-
     lineVertexBuffer = gl::StreamStorage<glm::vec4>( "LineVertexPosBuffer", 
             MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
     lineVertexBuffer.setTarget( GL_UNIFORM_BUFFER );
 
+    lineBuffer = gl::StreamStorage<glm::uvec2>( "LineIndexBuffer", 
+            MAX_LINE_COUNT, GL_MAP_WRITE_BIT );
     lineVertexColorBuffer = gl::StreamStorage<glm::uvec2>( "LineVertexColorBuffer", 
             MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
 
-    lineVAO.vertexBuffer( 0, lineBuffer );
-    lineVAO.elementBuffer( lineVertexColorBuffer );
+    lineVAO = gl::VAO( "lineVAO" );
+    lineVAO.vertexBuffer( 0, lineVertexColorBuffer );
+    lineVAO.elementBuffer( lineBuffer );
     lineVAO.vertexAttrib( 0, 0, 2, GL_UNSIGNED_INT, 0 );
 }
 
@@ -97,41 +96,36 @@ void gui::updateLinePositions()
 {
     gl::uploadStorage( lineVertexBuffer, sizeof( glm::vec4 ) * lineVertexCount, &allLineVertices[0] );
 }
+
 void gui::updateLineColors()
 {
     gl::uploadStorage( lineVertexColorBuffer, sizeof( glm::uvec2 ) * lineVertexColorCount, &allLineVertexColors[0] );
 }
 
-void gui::updateLineBuffers()
+void gui::updateLineBuffer()
 {
-    if ( !lineCount ) {
-        puts( "No lines to update!" );
-        return;
-    }
     gl::uploadStorage( lineBuffer, sizeof( glm::uvec2 ) * lineCount, &allLines[0] );
-    updateLinePositions();
-    updateLineColors();
 }
 
 void gui::renderLines()
 {
-    glBindVertexArray( lineVAO );
+    lineVAO.bind();
     glDepthFunc( GL_ALWAYS );
     glBlendFunc( GL_SRC_ALPHA, GL_DST_ALPHA );
     shader::use( lineShader );
-    for ( unsigned int m = 0; m < allLineGroups.size(); ++m ) {
-        const LineGroup& lineGroup = allLineGroups[m];
+    for ( unsigned int g = 0; g < allLineGroups.size(); ++g ) {
+        const LineGroup& lineGroup = allLineGroups[g];
         if ( lineGroup.flags ) {
             glDrawElements( GL_LINES, 
                     lineGroup.lineCount * 2, 
                     GL_UNSIGNED_INT, 
-                    ( unsigned int* )( lineGroup.lineOffset * 2 * sizeof( unsigned int ) ) );
+                    ( void* )( lineGroup.lineOffset * 2 * sizeof(unsigned int) ) );
         }
     }
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glDepthFunc( GL_LESS );
     shader::unuse();
-    glBindVertexArray( 0 );
+    lineVAO.unbind();
 }
 
 void gui::initLineShader() 
@@ -140,7 +134,7 @@ void gui::initLineShader()
     lineShader = shader::newProgram( "lineShader", 
             shader::createModule( "lineShader.vert" ), 
             shader::createModule( "lineShader.frag" ) );
-    shader::addVertexAttribute( lineShader, "vertex", 0 );
+    shader::addVertexAttribute( lineShader, "vertexColor", 0 );
 }
 
 void gui::setupLineShader() 

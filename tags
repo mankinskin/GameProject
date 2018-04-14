@@ -1200,7 +1200,7 @@ updateEntityMatrices	src/entities.cpp	/^void entities::updateEntityMatrices()$/;
 updateGeneralUniformBuffer	src/gl.cpp	/^void gl::updateGeneralUniformBuffer()$/;"	f	class:gl
 updateLightDataBuffer	src/lights.cpp	/^void lights::updateLightDataBuffer() $/;"	f	class:lights
 updateLightIndexRangeBuffer	src/lights.cpp	/^void lights::updateLightIndexRangeBuffer() $/;"	f	class:lights
-updateLineBuffers	src/line.cpp	/^void gui::updateLineBuffers()$/;"	f	class:gui
+updateLineBuffer	src/line.cpp	/^void gui::updateLineBuffer()$/;"	f	class:gui
 updateLineColors	src/line.cpp	/^void gui::updateLineColors()$/;"	f	class:gui
 updateLinePositions	src/line.cpp	/^void gui::updateLinePositions()$/;"	f	class:gui
 updateMeshBuffers	src/mesh.cpp	/^void mesh::updateMeshBuffers()$/;"	f	class:mesh
@@ -1222,7 +1222,7 @@ vec4	experimental/hierarchy.cpp	/^    vec4( float X, float Y, float Z, float W )
 vec4	experimental/hierarchy.cpp	/^struct vec4$/;"	s	file:
 vertex	src/line.h	/^        LinePointIt vertex;$/;"	m	struct:gui::LineVertex
 vertexAttrib	src/vao.cpp	/^void gl::VAO::vertexAttrib( unsigned int pBindingIndex, unsigned int pAttributeIndex, unsigned int pCount, unsigned int pType, unsigned int pOffset, bool pNormalize ) $/;"	f	class:gl::VAO
-vertexBuffer	src/vao.h	/^            void vertexBuffer( unsigned int pBinding, Storage<T>& pBuffer )$/;"	f	struct:gl::VAO
+vertexBuffer	src/vao.h	/^            void vertexBuffer( unsigned int pBinding, Storage<T>& pBuffer, $/;"	f	struct:gl::VAO
 vertexCount	src/mesh.h	/^		unsigned int vertexCount = 0;$/;"	m	struct:mesh::Mesh
 vertexOffset	src/mesh.h	/^		unsigned int vertexOffset = 0;$/;"	m	struct:mesh::Mesh
 vidModes	src/contextwindow.h	/^	    const GLFWvidmode* vidModes = nullptr;$/;"	m	struct:app::Monitor

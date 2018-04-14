@@ -21,10 +21,11 @@ namespace gl
                 unsigned int pCount, unsigned int pType, 
                 unsigned int pOffset, bool pNormalize = false );
         template<typename T>
-            void vertexBuffer( unsigned int pBinding, Storage<T>& pBuffer )
+            void vertexBuffer( unsigned int pBinding, Storage<T>& pBuffer, 
+                    unsigned int pStride = sizeof(T) )
             {
                 pBuffer.setTarget( GL_ARRAY_BUFFER );
-                glVertexArrayVertexBuffer( ID, pBinding, pBuffer.ID, 0, sizeof(T) );
+                glVertexArrayVertexBuffer( ID, pBinding, pBuffer.ID, 0, pStride );
             } 
         template<typename T>
             void elementBuffer( Storage<T>& pBuffer )

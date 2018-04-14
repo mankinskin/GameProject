@@ -45,7 +45,7 @@ namespace gui
     void updateLineColors();
     void renderLines();
     void initLineShader();
-    void updateLineBuffers();
+    void updateLineBuffer();
     void setupLineShader();
 }
 

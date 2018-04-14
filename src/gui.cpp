@@ -31,7 +31,6 @@ void gui::init()
             2.0f / gl::getWidth(), 
             2.0f / gl::getHeight() );
     //text::initFonts();
-    debug::printErrors();
 }
 
 void gui::initWidgets()
@@ -72,8 +71,8 @@ void gui::initWidgets()
     utils::foreach( colorQuad, playButton_quads, buttonColors );
 
 
-    //moveQuads( playButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.6f ) ) );
-    //moveQuads( quitButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.8f ) ) );
+    moveQuads( playButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.6f ) ) );
+    moveQuads( quitButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.8f ) ) );
 
     ButtonEvents<Event> play_button( 
             createEvent( QuadEvent( playButton_quads.element<1>().ID, 1 ) ), 
@@ -143,111 +142,111 @@ void gui::initWidgets()
 
     //Window
 
-    //Window::Frame::Colors window_frame_colors( { 
-    //        gl::getColor( "grey" ), gl::getColor( "grey" ),  gl::getColor( "grey" ),
-    //        gl::getColor( "grey" ),  gl::getColor( "white" ),  gl::getColor( "grey" ),
-    //        gl::getColor( "grey" ), gl::getColor( "grey" ), gl::getColor( "grey" ) } );
+    Window::Frame::Colors window_frame_colors( { 
+            gl::getColor( "grey" ), gl::getColor( "grey" ),  gl::getColor( "grey" ),
+            gl::getColor( "grey" ),  gl::getColor( "white" ),  gl::getColor( "grey" ),
+            gl::getColor( "grey" ), gl::getColor( "grey" ), gl::getColor( "grey" ) } );
 
-    //Window::Header::Colors window_header_colors( { gl::getColor( "grey" ), gl::getColor( "white" ) } );
-    //Window::Colors window_colors( { window_frame_colors, window_header_colors } );
+    Window::Header::Colors window_header_colors( { gl::getColor( "grey" ), gl::getColor( "white" ) } );
+    Window::Colors window_colors( { window_frame_colors, window_header_colors } );
 
-    //float window_width = gui::pixel_size.x * 300.0f;
-    //float window_height = gui::pixel_size.x * 235.0f;
-    //glm::vec2 border = gui::pixel_size * 4.0f;
+    float window_width = gui::pixel_size.x * 300.0f;
+    float window_height = gui::pixel_size.x * 235.0f;
+    glm::vec2 border = gui::pixel_size * 4.0f;
 
-    //Window::Frame::QuadIniter window_frame_initer( {
-    //        glm::vec4( 0.0f, 0.0f, border.x, border.y ),
-    //        glm::vec4( border.x, 0.0f, window_width - border.x*2.0f, border.y ),
-    //        glm::vec4( window_width - border.x, 0.0f, border.x, border.y ),
-    //        glm::vec4( 0.0f, -border.y, border.x, window_height - border.y*2.0f ),
-    //        glm::vec4( border.x, -border.y, window_width - border.x*2.0f, window_height - border.y*2.0f ),
-    //        glm::vec4( window_width - border.x, -border.y, border.x, window_height - border.y*2.0f ),
-    //        glm::vec4( 0.0f, -window_height + border.y, border.x, border.y ),
-    //        glm::vec4( border.x, -window_height + border.y, window_width - border.x*2.0f, border.y ),
-    //        glm::vec4( window_width - border.x, -window_height + border.y, border.x, border.y )
-    //        } );
+    Window::Frame::QuadIniter window_frame_initer( {
+            glm::vec4( 0.0f, 0.0f, border.x, border.y ),
+            glm::vec4( border.x, 0.0f, window_width - border.x*2.0f, border.y ),
+            glm::vec4( window_width - border.x, 0.0f, border.x, border.y ),
+            glm::vec4( 0.0f, -border.y, border.x, window_height - border.y*2.0f ),
+            glm::vec4( border.x, -border.y, window_width - border.x*2.0f, window_height - border.y*2.0f ),
+            glm::vec4( window_width - border.x, -border.y, border.x, window_height - border.y*2.0f ),
+            glm::vec4( 0.0f, -window_height + border.y, border.x, border.y ),
+            glm::vec4( border.x, -window_height + border.y, window_width - border.x*2.0f, border.y ),
+            glm::vec4( window_width - border.x, -window_height + border.y, border.x, border.y )
+            } );
 
-    //float header_height = gui::pixel_size.y * 25.0f;
-    //glm::vec2 header_border = gui::pixel_size * 4.0f;
+    float header_height = gui::pixel_size.y * 25.0f;
+    glm::vec2 header_border = gui::pixel_size * 4.0f;
 
-    //Window::Header::QuadIniter window_header_initer( {
-    //        glm::vec4( 0.0f, 0.0f, window_width, header_height ),
-    //        glm::vec4( header_border.x, -header_border.y, window_width - header_border.x*2.0f, header_height - header_border.y*2.0f )
-    //        } );
+    Window::Header::QuadIniter window_header_initer( {
+            glm::vec4( 0.0f, 0.0f, window_width, header_height ),
+            glm::vec4( header_border.x, -header_border.y, window_width - header_border.x*2.0f, header_height - header_border.y*2.0f )
+            } );
 
-    //Window::QuadIniter window_quad_initer( {  window_frame_initer, window_header_initer } );
-
-
-    //Window::Frame::MoveRule window_frame_move_policy(
-    //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
-    //        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
-    //        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-    //);
-    //Window::Frame::ResizeRule window_frame_resize_policy(
-    //        glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ), 
-    //        glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), 
-    //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ),
-    //        glm::vec4( 0.0f, 1.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 1.0f, 1.0f, 0.0f ), 
-    //        glm::vec4( 1.0f, 1.0f, 0.0f, 0.0f )
-    //        );
-
-    //Window::Header::MoveRule window_header_move_policy(
-    //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-    //);
-    //Window::Header::ResizeRule window_header_resize_policy(
-    //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f )
-    //        );
-
-    //Window::MoveRule window_move_policy(
-    //    //glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)
-    //    window_frame_move_policy, window_header_move_policy
-    //);
-    //Window::ResizeRule window_resize_policy(
-    //    //glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)
-    //    window_frame_resize_policy, window_header_resize_policy
-    //        );
-
-    //Window::Quads window_quads( window_quad_initer );
-    //utils::foreach( colorQuad, window_quads, window_colors );
-
-    //ButtonEvents<Event> header_button( 
-    //        createEvent( QuadEvent( window_quads.element<1>().element<1>().index, 1 ) ), 
-    //        createEvent( QuadEvent( window_quads.element<1>().element<1>().index, 0 ) ) );
-
-    //gate<and_op, decltype( header_button.hold_evt ), decltype( lmb.on_evt )> header_press_evt( and_op(), 
-    //        header_button.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( header_press_evt ), decltype( lmb.off_evt )> header_lmb( header_press_evt, lmb.off_evt );
-    //auto move_window_func = 
-    //    createFunctor<void, Window::Quads, Window::MoveRule, glm::vec2&>( moveQuadsScaled, window_quads, window_move_policy, cursorFrameDelta );
-
-    //move_window_func.set_triggers( { header_lmb.hold } );
-
-    //ButtonEvents<Event> right( 
-    //        createEvent( QuadEvent( window_quads.element<0>().element<5>().index, 1 ) ), 
-    //        createEvent( QuadEvent( window_quads.element<0>().element<5>().index, 0 ) ) );
-    //gate<and_op, decltype( right.hold_evt ), decltype( lmb.on_evt )> 
-    //    right_press_evt( and_op(), right.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( right_press_evt ), decltype( lmb.off_evt )> right_and_lmb( 
-    //        right_press_evt, lmb.off_evt );
-
-    //ButtonEvents<Event> bottom( 
-    //        createEvent( QuadEvent( window_quads.element<0>().element<7>().index, 1 ) ), 
-    //        createEvent( QuadEvent( window_quads.element<0>().element<7>().index, 0 ) ) );
-    //gate<and_op, decltype( bottom.hold_evt ), decltype( lmb.on_evt )> bottom_press_evt( and_op(), 
-    //        bottom.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( bottom_press_evt ), decltype( lmb.off_evt )> bottom_and_lmb( 
-    //        bottom_press_evt, lmb.off_evt );
-
-    //ButtonEvents<Event> bottom_right( 
-    //        createEvent( QuadEvent( window_quads.element<0>().element<8>().index, 1 ) ), 
-    //        createEvent( QuadEvent( window_quads.element<0>().element<8>().index, 0 ) ) );
-    //gate<and_op, decltype( bottom_right.hold_evt ), decltype( lmb.on_evt )> bottom_right_press_evt( and_op(), bottom_right.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( bottom_right_press_evt ), decltype( lmb.off_evt )> bottom_right_and_lmb( bottom_right_press_evt, lmb.off_evt );
+    Window::QuadIniter window_quad_initer( {  window_frame_initer, window_header_initer } );
 
 
-    //auto resize_window_func = 
-    //    createFunctor<void, Window::Quads, Window::MoveRule, glm::vec2&>( resizeQuadsScaled, window_quads, window_move_policy, cursorFrameDelta );
-    //resize_window_func.set_triggers( { bottom_right_and_lmb.hold } );
+    Window::Frame::MoveRule window_frame_move_policy(
+        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
+            glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
+            glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
+    );
+    Window::Frame::ResizeRule window_frame_resize_policy(
+            glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ), 
+            glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), 
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ),
+            glm::vec4( 0.0f, 1.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 1.0f, 1.0f, 0.0f ), 
+            glm::vec4( 1.0f, 1.0f, 0.0f, 0.0f )
+            );
+
+    Window::Header::MoveRule window_header_move_policy(
+        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
+    );
+    Window::Header::ResizeRule window_header_resize_policy(
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f )
+            );
+
+    Window::MoveRule window_move_policy(
+        //glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)
+        window_frame_move_policy, window_header_move_policy
+    );
+    Window::ResizeRule window_resize_policy(
+        //glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)
+        window_frame_resize_policy, window_header_resize_policy
+            );
+
+    Window::Quads window_quads( window_quad_initer );
+    utils::foreach( colorQuad, window_quads, window_colors );
+
+    ButtonEvents<Event> header_button( 
+            createEvent( QuadEvent( window_quads.element<1>().element<1>().ID, 1 ) ), 
+            createEvent( QuadEvent( window_quads.element<1>().element<1>().ID, 0 ) ) );
+
+    gate<and_op, decltype( header_button.hold_evt ), decltype( lmb.on_evt )> header_press_evt( and_op(), 
+            header_button.hold_evt, lmb.on_evt );
+    ButtonEvents<decltype( header_press_evt ), decltype( lmb.off_evt )> header_lmb( header_press_evt, lmb.off_evt );
+    auto move_window_func = 
+        createFunctor<void, Window::Quads, Window::MoveRule, glm::vec2&>( moveQuadsScaled, window_quads, window_move_policy, cursorFrameDelta );
+
+    move_window_func.set_triggers( { header_lmb.hold } );
+
+    ButtonEvents<Event> right( 
+            createEvent( QuadEvent( window_quads.element<0>().element<5>().ID, 1 ) ), 
+            createEvent( QuadEvent( window_quads.element<0>().element<5>().ID, 0 ) ) );
+    gate<and_op, decltype( right.hold_evt ), decltype( lmb.on_evt )> 
+        right_press_evt( and_op(), right.hold_evt, lmb.on_evt );
+    ButtonEvents<decltype( right_press_evt ), decltype( lmb.off_evt )> right_and_lmb( 
+            right_press_evt, lmb.off_evt );
+
+    ButtonEvents<Event> bottom( 
+            createEvent( QuadEvent( window_quads.element<0>().element<7>().ID, 1 ) ), 
+            createEvent( QuadEvent( window_quads.element<0>().element<7>().ID, 0 ) ) );
+    gate<and_op, decltype( bottom.hold_evt ), decltype( lmb.on_evt )> bottom_press_evt( and_op(), 
+            bottom.hold_evt, lmb.on_evt );
+    ButtonEvents<decltype( bottom_press_evt ), decltype( lmb.off_evt )> bottom_and_lmb( 
+            bottom_press_evt, lmb.off_evt );
+
+    ButtonEvents<Event> bottom_right( 
+            createEvent( QuadEvent( window_quads.element<0>().element<8>().ID, 1 ) ), 
+            createEvent( QuadEvent( window_quads.element<0>().element<8>().ID, 0 ) ) );
+    gate<and_op, decltype( bottom_right.hold_evt ), decltype( lmb.on_evt )> bottom_right_press_evt( and_op(), bottom_right.hold_evt, lmb.on_evt );
+    ButtonEvents<decltype( bottom_right_press_evt ), decltype( lmb.off_evt )> bottom_right_and_lmb( bottom_right_press_evt, lmb.off_evt );
+
+
+    auto resize_window_func = 
+        createFunctor<void, Window::Quads, Window::MoveRule, glm::vec2&>( resizeQuadsScaled, window_quads, window_move_policy, cursorFrameDelta );
+    resize_window_func.set_triggers( { bottom_right_and_lmb.hold } );
 
     //FunctorRef<void, Window, float&, float> resize_window_x_func = createFunctor<void, Window, float&, float>( resize_widget, window, cursorFrameDelta.x, 0.0f );
     //resize_window_x_func.set_triggers( { right_and_lmb.hold } );

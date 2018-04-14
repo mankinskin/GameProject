@@ -89,7 +89,6 @@ void shader::unuse()
     glUseProgram( 0 );
 }
 
-
 void shader::addVertexAttribute( unsigned int pProgramID, std::string pAttributeName, unsigned int pAttributeIndex )
 {
     //binds a in variable symbol out of a shader to an attribute index
