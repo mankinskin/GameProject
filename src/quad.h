@@ -13,7 +13,7 @@ namespace gui
     {
         Quad( glm::vec4 pData ); 
 
-        const unsigned int index;
+        const unsigned int ID;
     };
 
 	const unsigned int MAX_QUAD_COUNT = 10000;

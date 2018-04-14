@@ -12,9 +12,9 @@ size_t gui::quadCount = 0;
 
 
 gui::Quad::Quad( glm::vec4 pData ) 
-    :index( quadCount )
+    :ID( ++quadCount )
 {
-    allQuads[ quadCount++ ] = pData;
+    allQuads[ ID - 1 ] = pData;
 }
 
 void gui::initQuadBuffer()
@@ -38,7 +38,7 @@ void gui::updateQuadBuffer()
 
 void gui::moveQuad( const Quad pQuad, const glm::vec2 pOffset )
 {
-    printf("Moving Quad %d\n", pQuad.index );
+    printf("Moving Quad %d\n", pQuad.ID );
     getQuadData( pQuad ) += glm::vec4( pOffset.x, pOffset.y, 0.0f, 0.0f );
 }
 
@@ -64,6 +64,6 @@ void gui::setQuadPos( const Quad pQuad, const glm::vec2 pPos )
 
 glm::vec4& gui::getQuadData( const Quad pQuad )
 {
-    return allQuads[ pQuad.index ]; 
+    return allQuads[ pQuad.ID - 1 ]; 
 }
 

@@ -76,8 +76,8 @@ void gui::initWidgets()
     //moveQuads( quitButton_quads, gui::pixel_round( glm::vec2( -0.9f, -0.8f ) ) );
 
     ButtonEvents<Event> play_button( 
-            createEvent( QuadEvent( playButton_quads.element<1>().index, 1 ) ), 
-            createEvent( QuadEvent( playButton_quads.element<1>().index, 0 ) ) );
+            createEvent( QuadEvent( playButton_quads.element<1>().ID, 1 ) ), 
+            createEvent( QuadEvent( playButton_quads.element<1>().ID, 0 ) ) );
 
     gate<and_op, decltype( play_button.hold_evt ), decltype( lmb.on_evt )> play_press_evt( and_op(), 
             play_button.hold_evt, lmb.on_evt );
@@ -89,8 +89,8 @@ void gui::initWidgets()
 
 
     ButtonEvents<Event> quit_button( 
-            createEvent( QuadEvent( quitButton_quads.element<1>().index, 1 ) ), 
-            createEvent( QuadEvent( quitButton_quads.element<1>().index, 0 ) ) );
+            createEvent( QuadEvent( quitButton_quads.element<1>().ID, 1 ) ), 
+            createEvent( QuadEvent( quitButton_quads.element<1>().ID, 0 ) ) );
 
     gate<and_op, decltype( quit_button.hold_evt ), decltype( lmb.on_evt )> quit_press_evt( and_op(), 
             quit_button.hold_evt, lmb.on_evt );

@@ -66,7 +66,7 @@ void gui::renderColorQuads()
 
 void gui::colorQuad( Quad pQuad, gl::ColorIt pColor )
 {
-    printf( "Coloring Quad %u with color %u\n", pQuad.index, pColor.index );
-    quadColors[pQuad.index] = pColor.index;
+    printf( "Coloring Quad %u with color %u\n", pQuad.ID, pColor.index );
+    quadColors[ pQuad.ID - 1 ] = pColor.index;
 }
 

@@ -91,6 +91,7 @@ GlyphMetrics	src/font.h	/^			GlyphMetrics( float pWidth, float pHeight, float pA
 GlyphMetrics	src/font.h	/^			GlyphMetrics() $/;"	f	struct:gui::text::GlyphMetrics
 GlyphMetrics	src/font.h	/^		struct GlyphMetrics $/;"	s	namespace:gui::text
 H_FILES	Makefile	/^H_FILES=$(shell ls src | grep -e '\\.h')$/;"	m
+ID	src/quad.h	/^        const unsigned int ID;$/;"	m	struct:gui::Quad
 ID	src/shader_loader.h	/^		GLuint ID;$/;"	m	struct:shader::Module
 ID	src/shader_loader.h	/^		GLuint ID;$/;"	m	struct:shader::Program
 ID	src/storage.h	/^            unsigned int ID;$/;"	m	struct:gl::Storage
@@ -657,7 +658,6 @@ index	experimental/hierarchy.cpp	/^    Itr<size_t> index;$/;"	m	struct:Quad	file
 index	experimental/hierarchy.cpp	/^    Itr<vec4> index;$/;"	m	struct:Color	file:
 index	experimental/hierarchy.cpp	/^    size_t index;$/;"	m	struct:Itr	file:
 index	src/functor.h	/^		unsigned int index;$/;"	m	struct:functors::FunctorRef
-index	src/quad.h	/^        const unsigned int index;$/;"	m	struct:gui::Quad
 index	src/utils.h	/^        typename Container::size_type index;$/;"	m	struct:utils::Itr
 indexCount	src/mesh.h	/^		unsigned int indexCount = 0;$/;"	m	struct:mesh::Mesh
 indexOffset	src/mesh.h	/^		unsigned int indexOffset = 0;$/;"	m	struct:mesh::Mesh

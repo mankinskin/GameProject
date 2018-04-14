@@ -21,7 +21,6 @@ void gui::initQuadIndexBuffer()
 
     quadIndexBuffer = gl::StreamStorage<unsigned int>( "QuadIndexBuffer", 
             gl::getWidth() * gl::getHeight(), GL_MAP_READ_BIT );
-    //quadIndexBuffer.setTarget( GL_PIXEL_PACK_BUFFER );
 
     quadIndexMap.resize( gl::getWidth() * gl::getHeight() );
     quadDepthMap.resize( gl::getWidth() * gl::getHeight() );
@@ -69,7 +68,7 @@ void gui::readQuadIndexBuffer()
 
 unsigned int gui::readQuadIndexMap( const unsigned int pPos )
 {
-    return quadIndexMap[ pPos ];
+    return *((unsigned int*)quadIndexBuffer.mappedPtr + pPos);
 }
 
 unsigned int gui::readQuadIndexMap( 
