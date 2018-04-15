@@ -135,7 +135,7 @@ unsigned int gui::text::createTextbox( unsigned int pPosIndex, unsigned int pSiz
 unsigned int gui::text::createTextbox( Quad pQuad, unsigned int pMetrics, 
         int pFlags, float pMarging ) 
 {
-	glm::vec4 qd = getQuadData( pQuad );
+	glm::vec4 qd = getQuadData( pQuad.ID );
 	return createTextbox( qd, pMetrics, pFlags, pMarging );
 }
 
@@ -372,5 +372,4 @@ gui::text::String::String( std::string pString )
 {
 	allChars.insert( allChars.end(), pString.begin(), pString.end() );
 }
-
 

@@ -10,7 +10,6 @@ BUF_SIZE	dt/pnmfile.h	31;"	d
 Basic	src/shader_loader.h	/^		Basic,$/;"	m	class:shader::ProgramType
 BoundingSphere	src/collision.h	/^		BoundingSphere( glm::vec3 pLocalPos, float pRadius )$/;"	f	struct:physics::BoundingSphere
 BoundingSphere	src/collision.h	/^	struct BoundingSphere {$/;"	s	namespace:physics
-Button	src/widget.h	/^    struct Button $/;"	s	namespace:gui
 ButtonEvents	src/event.h	/^		ButtonEvents( OnType pOn, OffType pOff )$/;"	f	struct:events::ButtonEvents
 ButtonEvents	src/event.h	/^		ButtonEvents(){}$/;"	f	struct:events::ButtonEvents
 ButtonEvents	src/event.h	/^	struct ButtonEvents {$/;"	s	namespace:events
@@ -18,6 +17,7 @@ CAMERA_MODES	src/camera.h	/^	const CameraMode CAMERA_MODES[CAMERA_MODE_COUNT] = 
 CAMERA_MODE_COUNT	src/camera.h	/^	const size_t CAMERA_MODE_COUNT = 2;$/;"	m	namespace:camera
 CONV_H	dt/imconv.h	22;"	d
 COUNT	src/element.h	/^            static const size_t COUNT = sizeof...( Elems );$/;"	m	struct:utils::Element
+COUNT	src/widget.h	/^            static const size_t COUNT = sizeof...(Subs);$/;"	m	struct:gui::Widget
 CPLUS_INCLUDE_PATH	Makefile	/^CPLUS_INCLUDE_PATH=\/usr\/include\/c++$/;"	m
 C_INCLUDE_PATH	Makefile	/^C_INCLUDE_PATH=$/;"	m
 Camera	src/camera.h	/^		Camera( CameraMode pMode, CameraControls pControls = DEFAULT_CAMERA_CONTROLS )$/;"	f	class:camera::Camera
@@ -71,7 +71,6 @@ FontInstructions	src/font.h	/^		struct FontInstructions $/;"	s	namespace:gui::te
 FontMetric	src/font.h	/^			FontMetric() $/;"	f	struct:gui::text::FontMetric
 FontMetric	src/font.h	/^		struct FontMetric $/;"	s	namespace:gui::text
 Fragment	src/shader_loader.h	/^		Fragment,$/;"	m	class:shader::ModuleType
-Frame	src/widget.h	/^        struct Frame$/;"	s	struct:gui::Window
 Frustum	src/camera.h	/^		Frustum( glm::vec3 pUp, glm::vec3 pCenter, float pFOV, float pWidth, float pHeight, float pNearPlane, float pFarPlane )$/;"	f	struct:camera::Frustum
 Frustum	src/camera.h	/^	struct Frustum {$/;"	s	namespace:camera
 Functor	src/functor.h	/^		Functor( unsigned int pIndex, R( &pF )( Args... ), Args... pArgs )$/;"	f	class:functors::Functor
@@ -183,6 +182,8 @@ OBJ_TARGETS	Makefile	/^OBJ_TARGETS=$(patsubst %, build\/%, $(OBJ_FILES))$/;"	m
 OPENGL_VERSION	src/gl.cpp	/^int gl::OPENGL_VERSION[2] = {};$/;"	m	class:gl	file:
 Octree	src/voxelization.h	/^	struct Octree$/;"	s	namespace:voxelization
 PNM_FILE_H	dt/pnmfile.h	22;"	d
+Preset	src/widget.h	/^                Preset( Initer pIniter, Colors pColors, $/;"	f	struct:gui::Widget::Preset
+Preset	src/widget.h	/^            struct Preset$/;"	s	struct:gui::Widget
 Program	src/shader_loader.h	/^	struct Program {$/;"	s	namespace:shader
 ProgramType	src/shader_loader.h	/^	enum class ProgramType {$/;"	c	namespace:shader
 Quad	experimental/hierarchy.cpp	/^    Quad( size_t pQuad )$/;"	f	struct:Quad
@@ -262,8 +263,10 @@ Viewport	src/viewport.cpp	/^gl::Viewport::Viewport( app::Window window, float re
 Viewport	src/viewport.cpp	/^gl::Viewport::Viewport()$/;"	f	class:gl::Viewport
 Viewport	src/viewport.h	/^    struct Viewport{$/;"	s	namespace:gl
 Warning	src/debug.h	/^			Warning,$/;"	e	enum:debug::Error::Severity
+Widget	src/widget.h	/^            Widget( Initer pIniter, Colors pColors, $/;"	f	struct:gui::Widget
+Widget	src/widget.h	/^            Widget( Preset pPreset )$/;"	f	struct:gui::Widget
+Widget	src/widget.h	/^        struct Widget$/;"	s	namespace:gui
 Window	src/contextwindow.h	/^	struct Window {$/;"	s	namespace:app
-Window	src/widget.h	/^    struct Window$/;"	s	namespace:gui
 _USE_MATH_DEFINES	src/font_loader.cpp	2;"	d	file:
 _index	src/element_utils.h	/^    template<size_t I> struct _index { };$/;"	s	namespace:utils
 _type	src/element_utils.h	/^    template<typename T> struct _type { using type = T; };$/;"	s	namespace:utils
@@ -392,16 +395,23 @@ clear_slots	src/event.h	/^		static void clear_slots() {$/;"	f	class:events::Even
 clicker_gate	src/gates.h	/^        clicker_gate( Source pSource, bool pStartWith = false ) $/;"	f	struct:gates::clicker_gate
 clicker_gate	src/gates.h	/^    struct clicker_gate {\/\/fires once when the input changes$/;"	s	namespace:gates
 color	src/line.h	/^        gl::ColorIt color;$/;"	m	struct:gui::LineVertex
+color	src/quad.cpp	/^void gui::Quad::color( const gl::ColorIt pColor ) const$/;"	f	class:gui::Quad
 color	src/text.cpp	/^	glm::vec4 color = glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f );$/;"	m	struct:TextColor	file:
+color	src/widget.h	/^            void color( Colors pColors ) const$/;"	f	struct:gui::Widget
 colorBuffer	src/color.cpp	/^gl::StreamStorage<gl::Color> gl::colorBuffer;$/;"	m	class:gl	file:
 colorCount	src/color.cpp	/^unsigned int colorCount = 0;$/;"	v
 colorLine	src/line.cpp	/^void gui::colorLine( unsigned int pLineIndex, unsigned int pColorIndex ) $/;"	f	class:gui
 colorLineVertex	src/line.cpp	/^void gui::colorLineVertex( unsigned int pVertex, unsigned int pColorIndex )$/;"	f	class:gui
 colorNames	src/color.cpp	/^std::array<std::string, gl::MAX_COLOR_COUNT> colorNames;$/;"	v
-colorQuad	src/quadcolors.cpp	/^void gui::colorQuad( Quad pQuad, gl::ColorIt pColor )$/;"	f	class:gui
+colorQuad	src/quadcolors.cpp	/^void gui::colorQuad( const unsigned int pID, const gl::ColorIt pColor )$/;"	f	class:gui
 colorQuadBuffer	src/quadcolors.cpp	/^gl::StreamStorage<unsigned int> gui::colorQuadBuffer;$/;"	m	class:gui	file:
 colorQuadShader	src/quadcolors.cpp	/^unsigned int gui::colorQuadShader;$/;"	m	class:gui	file:
 colorQuadVAO	src/quadcolors.cpp	/^gl::VAO gui::colorQuadVAO;$/;"	m	class:gui	file:
+colorWidget	src/widget.h	/^        void colorWidget( Widget<Subs...> pWidget, $/;"	f	namespace:gui
+color_n	src/widget.h	/^                void color_n( utils::_index<N> i, Colors pColors ) const$/;"	f	struct:gui::Widget
+color_n	src/widget.h	/^            void color_n( utils::_index<0> i, Colors pColors ) const$/;"	f	struct:gui::Widget
+colors	src/widget.h	/^                const Colors colors;$/;"	m	struct:gui::Widget::Preset
+colors	src/widget.h	/^            const Colors colors;$/;"	m	struct:gui::Widget
 compileAndLink	src/shader_loader.cpp	/^void shader::Loader::compileAndLink()$/;"	f	class:shader::Loader
 compileModule	src/shader_loader.cpp	/^void shader::Loader::compileModule( unsigned int pModuleIndex )$/;"	f	class:shader::Loader
 compileModuleSource	src/shader_loader.cpp	/^void compileModuleSource( shader::Module& module )$/;"	f
@@ -478,7 +488,7 @@ drop_head_impl	src/element.h	/^                drop_head_impl( const std::index_
 dt	dt/dt.h	/^static float *dt(float *f, int n) {$/;"	f
 dt	dt/dt.h	/^static image<float> *dt(image<uchar> *im, uchar on = 1) {$/;"	f
 dt	dt/dt.h	/^static void dt(image<float> *im) {$/;"	f
-element	src/element.h	/^                constexpr auto element() const $/;"	f	struct:utils::Element
+element	src/element.h	/^                constexpr const auto& element() const$/;"	f	struct:utils::Element
 elementBuffer	src/vao.h	/^            void elementBuffer( Storage<T>& pBuffer )$/;"	f	struct:gl::VAO
 element_constructor	src/element.h	/^        struct element_constructor $/;"	s	namespace:utils
 element_generator	src/element_utils.h	/^        struct element_generator $/;"	s	namespace:utils
@@ -585,7 +595,7 @@ getNewTargetBinding	src/storage.cpp	/^unsigned int gl::getNewTargetBinding( cons
 getOpenGLInitValues	src/gl.cpp	/^void gl::getOpenGLInitValues()$/;"	f	class:gl
 getPos	src/camera.cpp	/^glm::vec3 & camera::Camera::getPos()$/;"	f	class:camera::Camera
 getProjection	src/camera.cpp	/^glm::mat4 & camera::Camera::getProjection()$/;"	f	class:camera::Camera
-getQuadData	src/quad.cpp	/^glm::vec4& gui::getQuadData( const Quad pQuad )$/;"	f	class:gui
+getQuadData	src/quad.cpp	/^glm::vec4& gui::getQuadData( const unsigned int pID )$/;"	f	class:gui
 getView	src/camera.cpp	/^glm::mat4 & camera::Camera::getView()$/;"	f	class:camera::Camera
 getWidth	src/viewport.cpp	/^unsigned int gl::getWidth()$/;"	f	class:gl
 get_slot	src/event.h	/^		static EventSlot<EventType>& get_slot( unsigned int index ) {$/;"	f	class:events::EventSlot
@@ -614,7 +624,7 @@ gui	src/quad.h	/^namespace gui $/;"	n
 gui	src/quadcolors.h	/^namespace gui $/;"	n
 gui	src/quadindex.h	/^namespace gui $/;"	n
 gui	src/text.h	/^namespace gui {$/;"	n
-gui	src/widget.h	/^namespace gui {$/;"	n
+gui	src/widget.h	/^namespace gui $/;"	n
 guiDepthRenderbuffer	src/framebuffer.cpp	/^unsigned int texture::guiDepthRenderbuffer;$/;"	m	class:texture	file:
 guiFBO	src/framebuffer.cpp	/^unsigned int texture::guiFBO;$/;"	m	class:texture	file:
 h	dt/image.h	/^  int w, h;$/;"	m	class:image
@@ -705,6 +715,7 @@ initQuadIndexBuffer	src/quadindex.cpp	/^void gui::initQuadIndexBuffer()$/;"	f	cl
 initQuadIndexShader	src/quadindex.cpp	/^void gui::initQuadIndexShader()$/;"	f	class:gui
 initStyleBuffer	src/font.cpp	/^void gui::text::initStyleBuffer() $/;"	f	class:gui::text
 initWidgets	src/gui.cpp	/^void gui::initWidgets()$/;"	f	class:gui
+initer	src/widget.h	/^                const Initer initer;$/;"	m	struct:gui::Widget::Preset
 initialize	src/sequencer.cpp	/^void sequencer::initialize()$/;"	f	class:sequencer
 initializeVAOs	src/sequencer.cpp	/^void sequencer::initializeVAOs()$/;"	f	class:sequencer
 initializer	src/font_loader.h	/^		namespace initializer $/;"	n	namespace:gui::text
@@ -844,17 +855,20 @@ mouseKey_Callback	src/mouse.cpp	/^void input::mouseKey_Callback( GLFWwindow * wi
 mouseKeys	src/mouse.cpp	/^std::array<input::KeyCondition, 3> mouseKeys;$/;"	v
 mov	src/camera.h	/^		glm::vec3 mov;$/;"	m	class:camera::Camera
 move	src/camera.cpp	/^void camera::Camera::move( glm::vec3 pDir ) {$/;"	f	class:camera::Camera
-moveQuad	src/quad.cpp	/^void gui::moveQuad( const Quad pQuad, const glm::vec2 pOffset )$/;"	f	class:gui
-moveQuadScaled	src/quad.cpp	/^void gui::moveQuadScaled( const Quad pQuad, const glm::vec2 pOffset, const glm::vec2 scale)$/;"	f	class:gui
-moveQuads	src/widget.h	/^        void moveQuads(const utils::Element<Qs...> elem, Vec v)$/;"	f	namespace:gui
-moveQuadsScaled	src/widget.h	/^        void moveQuadsScaled(const utils::Element<Qs...> elem, Vec v, Scal scale)$/;"	f	namespace:gui
+move	src/quad.cpp	/^void gui::Quad::move( const glm::vec2 pV ) const$/;"	f	class:gui::Quad
+move	src/widget.h	/^            void move( const glm::vec2 pV ) const$/;"	f	struct:gui::Widget
+moveWidget	src/widget.h	/^        void moveWidget( Widget<Subs...> pWidget, glm::vec2& pV )$/;"	f	namespace:gui
 move_backward_key	src/camera.h	/^		int move_backward_key;$/;"	m	struct:camera::CameraControls
 move_down_key	src/camera.h	/^		int move_down_key;$/;"	m	struct:camera::CameraControls
 move_forward_key	src/camera.h	/^		int move_forward_key;$/;"	m	struct:camera::CameraControls
 move_left_key	src/camera.h	/^		int move_left_key;$/;"	m	struct:camera::CameraControls
+move_n	src/widget.h	/^                void move_n( utils::_index<N> i, const glm::vec2 pV ) const$/;"	f	struct:gui::Widget
+move_n	src/widget.h	/^            void move_n( utils::_index<0> i, const glm::vec2 pV ) const$/;"	f	struct:gui::Widget
 move_right_key	src/camera.h	/^		int move_right_key;$/;"	m	struct:camera::CameraControls
 move_up_key	src/camera.h	/^		int move_up_key;$/;"	m	struct:camera::CameraControls
 movement	src/camera.h	/^		MovementPolicy movement;$/;"	m	struct:camera::CameraMode
+movepolicy	src/widget.h	/^                const MovePolicy movepolicy;$/;"	m	struct:gui::Widget::Preset
+movepolicy	src/widget.h	/^            const MovePolicy movepolicy;$/;"	m	struct:gui::Widget
 msg	src/debug.h	/^		std::string msg = "";$/;"	m	struct:debug::Error
 name	src/camera.h	/^		std::string name = "camera";$/;"	m	class:camera::Camera
 name	src/contextwindow.h	/^	    std::string name = "GLFW\/OpenGL Window";$/;"	m	struct:app::Window
@@ -1004,10 +1018,13 @@ resetMouse	src/mouse.cpp	/^void input::resetMouse()$/;"	f	class:input
 resetShaderDirectory	src/shader_loader.cpp	/^void shader::Loader::resetShaderDirectory()$/;"	f	class:shader::Loader
 resetSignals	src/signal.cpp	/^void signals::resetSignals()$/;"	f	class:signals
 resetTextureDirectory	src/texture.cpp	/^void texture::resetTextureDirectory()$/;"	f	class:texture
-resizeQuad	src/quad.cpp	/^void gui::resizeQuad( const Quad pQuad, const glm::vec2 pOffset )$/;"	f	class:gui
-resizeQuadScaled	src/quad.cpp	/^void gui::resizeQuadScaled( const Quad pQuad, const glm::vec2 pOffset, const glm::vec2 scale)$/;"	f	class:gui
-resizeQuads	src/widget.h	/^        void resizeQuads(const utils::Element<Qs...> elem, Vec v)$/;"	f	namespace:gui
-resizeQuadsScaled	src/widget.h	/^        void resizeQuadsScaled(const utils::Element<Qs...> elem, Vec v, Scal scale)$/;"	f	namespace:gui
+resize	src/quad.cpp	/^void gui::Quad::resize( const glm::vec2 pV ) const$/;"	f	class:gui::Quad
+resize	src/widget.h	/^            void resize( const glm::vec2 pV ) const$/;"	f	struct:gui::Widget
+resizeWidget	src/widget.h	/^        void resizeWidget( Widget<Subs...> pWidget, glm::vec2& pV )$/;"	f	namespace:gui
+resize_n	src/widget.h	/^                void resize_n( utils::_index<N> i, const glm::vec2 pV ) const$/;"	f	struct:gui::Widget
+resize_n	src/widget.h	/^            void resize_n( utils::_index<0> i, const glm::vec2 pV ) const$/;"	f	struct:gui::Widget
+resizepolicy	src/widget.h	/^                const ResizePolicy resizepolicy;$/;"	m	struct:gui::Widget::Preset
+resizepolicy	src/widget.h	/^            const ResizePolicy resizepolicy;$/;"	m	struct:gui::Widget
 resolution	src/viewport.h	/^        float resolution;$/;"	m	struct:gl::Viewport
 revalidateFontStringIndices	src/font.cpp	/^void gui::text::revalidateFontStringIndices()$/;"	f	class:gui::text
 revalidateMeshNodeOffsets	src/mesh.cpp	/^void mesh::revalidateMeshNodeOffsets()$/;"	f	class:mesh
@@ -1051,7 +1068,6 @@ setModelDirectory	src/model_loader.cpp	/^void model::Loader::setModelDirectory( 
 setModuleType	src/shader_loader.cpp	/^int setModuleType( shader::Module& module, std::string stagetype )$/;"	f
 setPos	src/entities.cpp	/^void entities::setPos( unsigned int pNodeID, glm::vec3 pPos )$/;"	f	class:entities
 setPosition	src/camera.cpp	/^void camera::Camera::setPosition( glm::vec3 pPos )$/;"	f	class:camera::Camera
-setQuadPos	src/quad.cpp	/^void gui::setQuadPos( const Quad pQuad, const glm::vec2 pPos )$/;"	f	class:gui
 setRotation	src/entities.cpp	/^void entities::setRotation( unsigned int pNodeID, glm::vec4 pRotation )$/;"	f	class:entities
 setScale	src/entities.cpp	/^void entities::setScale( unsigned int pNodeID, glm::vec3 pScale )$/;"	f	class:entities
 setSensitivity	src/camera.cpp	/^void camera::Camera::setSensitivity( float pNewSensitivity )$/;"	f	class:camera::Camera
@@ -1142,6 +1158,7 @@ stringOffset	src/font.h	/^			unsigned int stringOffset;$/;"	m	struct:gui::text::
 styleStorage	src/font.cpp	/^unsigned int styleStorage = 0;$/;"	v
 sub	src/element_utils.h	/^constexpr void utils::sub( rT(*func)(FArgTs...), $/;"	f	class:utils
 subelements	src/element.h	/^            const std::tuple<Elems...> subelements;$/;"	m	struct:utils::Element
+subwidgets	src/widget.h	/^            const SubWidgets subwidgets;$/;"	m	struct:gui::Widget
 swapVolumeBuffers	src/voxelization.cpp	/^void voxelization::swapVolumeBuffers() {$/;"	f	class:voxelization
 switch_gate	src/gates.h	/^        switch_gate( On pOnSource, Off pOffSource, bool pStartWith = false ) $/;"	f	struct:gates::switch_gate
 switch_gate	src/gates.h	/^        switch_gate() $/;"	f	struct:gates::switch_gate

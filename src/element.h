@@ -1,5 +1,4 @@
 #pragma once
-#include "quad.h"
 #include <tuple>
 
 namespace utils 
@@ -58,6 +57,9 @@ namespace utils
             return element_constructor<Elems...>::func( initer );
         }
 
+
+
+
     template<typename... Elems>
         struct Element 
         {
@@ -88,7 +90,7 @@ namespace utils
             const std::tuple<Elems...> subelements;
 
             template<size_t N>
-                constexpr auto element() const 
+                constexpr const auto& element() const
                 {
                     return std::get<N>( subelements );
                 }

@@ -5,6 +5,7 @@
 #include "gldebug.h"
 #include "framebuffer.h"
 #include "primitives.h"
+#include "quadcolors.h"
 
 gl::StreamStorage<glm::vec4> gui::quadBuffer;
 std::array<glm::vec4, gui::MAX_QUAD_COUNT> allQuads;
@@ -14,6 +15,7 @@ size_t gui::quadCount = 0;
 gui::Quad::Quad( glm::vec4 pData ) 
     :ID( ++quadCount )
 {
+    printf("Creating Quad %u\n", ID );
     allQuads[ ID - 1 ] = pData;
 }
 
@@ -36,34 +38,28 @@ void gui::updateQuadBuffer()
     }
 }
 
-void gui::moveQuad( const Quad pQuad, const glm::vec2 pOffset )
+void gui::Quad::move( const glm::vec2 pV ) const
 {
-    printf("Moving Quad %d\n", pQuad.ID );
-    getQuadData( pQuad ) += glm::vec4( pOffset.x, pOffset.y, 0.0f, 0.0f );
+    printf("Moving Quad %d\n", ID );
+    getQuadData( ID ) += glm::vec4( pV.x, pV.y, 0.0f, 0.0f );
 }
 
-void gui::moveQuadScaled( const Quad pQuad, const glm::vec2 pOffset, const glm::vec2 scale)
+void gui::Quad::resize( const glm::vec2 pV ) const
 {
-    moveQuad( pQuad, pOffset * scale );
+    getQuadData( ID ) += glm::vec4( 0.0f, 0.0f, pV.x, pV.y );
+}
+void gui::Quad::color( const gl::ColorIt pColor ) const
+{
+    colorQuad( ID, pColor );
 }
 
-void gui::resizeQuad( const Quad pQuad, const glm::vec2 pOffset )
-{
-    getQuadData( pQuad ) += glm::vec4( 0.0f, 0.0f, pOffset.x, pOffset.y );
-}
+//void gui::setQuadPos( const Quad pQuad, const glm::vec2 pPos )
+//{
+//    std::memcpy( &getQuadData( pQuad ), &pPos, sizeof( glm::vec2 ) );
+//}
 
-void gui::resizeQuadScaled( const Quad pQuad, const glm::vec2 pOffset, const glm::vec2 scale)
+glm::vec4& gui::getQuadData( const unsigned int pID )
 {
-    resizeQuad(pQuad, pOffset * scale );
-}
-
-void gui::setQuadPos( const Quad pQuad, const glm::vec2 pPos )
-{
-    std::memcpy( &getQuadData( pQuad ), &pPos, sizeof( glm::vec2 ) );
-}
-
-glm::vec4& gui::getQuadData( const Quad pQuad )
-{
-    return allQuads[ pQuad.ID - 1 ]; 
+    return allQuads[ pID - 1 ]; 
 }
 

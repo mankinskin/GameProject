@@ -24,6 +24,6 @@ namespace gui
 	void initColorQuadVAO();
 	void updateColorQuads();
 	void renderColorQuads();
-    void colorQuad( Quad pQuad, gl::ColorIt pColor );
+    void colorQuad( const unsigned int pID, const gl::ColorIt pColor );
 }
 
