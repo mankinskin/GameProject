@@ -6,7 +6,7 @@ std::vector<gui::LineGroup> allLineGroups;
 
 std::array<glm::uvec2, gui::MAX_LINE_COUNT> allLines;
 unsigned int lineCount = 0;
-std::array<glm::uvec2, gui::MAX_LINE_VERTEX_COUNT> allLineVertexColors;
+std::array<glm::uvec2, gui::MAX_LINE_VERTEX_COLOR_COUNT> allLineVertexColors;
 unsigned int lineVertexColorCount = 0;
 std::array<glm::vec4, gui::MAX_LINE_VERTEX_COUNT> allLineVertices;
 unsigned int lineVertexCount = 0;
@@ -17,6 +17,22 @@ gl::StreamStorage<glm::vec4> lineVertexBuffer;
 
 gl::VAO lineVAO;
 unsigned int lineShader = 0;
+
+// How line shading works
+//
+// lines are connections between dots
+// you create a dot (lineVertexPosition) using createLineVertex()
+// you connect these dots using createLine(), passing it the indices to two dots
+// you color a line using colorLine
+//
+// TO-DO:
+// the design still contains a lot of ambiguity. It assigns a color to a vertex position by 
+// creating an index pair containing first the index to a vertex position and second a color.
+// this creates a coloredVertex, which should be used to form the lines. right now the lines are referencing 
+// vertex positions, but this can not include color information, which is necessary for any shading
+//
+// Instead lines should reference coloredVertices (index pairs). the shader will use the lineBuffer as 
+// elementBuffer and coloredVertexBuffer as vertexBuffer. 
 
 unsigned int gui::getLineCount() 
 {
@@ -53,10 +69,10 @@ unsigned int gui::createLine( unsigned int pVertexA, unsigned int pVertexB )
     return lineCount++;
 }
 
-gui::LinePointIt gui::createLineVertex( glm::vec4 pPos ) 
+unsigned int gui::createLineVertex( glm::vec4 pPos ) 
 {
     allLineVertices[ lineVertexCount ] = pPos;
-    return LinePointIt( allLineVertices, lineVertexCount++ );
+    return lineVertexCount++;
 }
 
 unsigned int getLineVertexIndex( unsigned int pLineIndex, unsigned int pVertex )
@@ -81,14 +97,11 @@ void gui::initLineVAO()
             MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
     lineVertexBuffer.setTarget( GL_UNIFORM_BUFFER );
 
-    lineBuffer = gl::StreamStorage<glm::uvec2>( "LineIndexBuffer", 
-            MAX_LINE_COUNT, GL_MAP_WRITE_BIT );
     lineVertexColorBuffer = gl::StreamStorage<glm::uvec2>( "LineVertexColorBuffer", 
-            MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT );
+            MAX_LINE_VERTEX_COLOR_COUNT, GL_MAP_WRITE_BIT );
 
     lineVAO = gl::VAO( "lineVAO" );
-    lineVAO.vertexBuffer( 0, lineVertexColorBuffer );
-    lineVAO.elementBuffer( lineBuffer );
+    lineVAO.vertexBuffer( 0, lineVertexColorBuffer, sizeof(unsigned int) * 2);
     lineVAO.vertexAttrib( 0, 0, 2, GL_UNSIGNED_INT, 0 );
 }
 
@@ -102,11 +115,6 @@ void gui::updateLineColors()
     gl::uploadStorage( lineVertexColorBuffer, sizeof( glm::uvec2 ) * lineVertexColorCount, &allLineVertexColors[0] );
 }
 
-void gui::updateLineBuffer()
-{
-    gl::uploadStorage( lineBuffer, sizeof( glm::uvec2 ) * lineCount, &allLines[0] );
-}
-
 void gui::renderLines()
 {
     lineVAO.bind();
@@ -115,11 +123,11 @@ void gui::renderLines()
     shader::use( lineShader );
     for ( unsigned int g = 0; g < allLineGroups.size(); ++g ) {
         const LineGroup& lineGroup = allLineGroups[g];
+        printf("Drawing Line Group: %u %u\n", lineGroup.lineOffset, lineGroup.lineCount );
         if ( lineGroup.flags ) {
-            glDrawElements( GL_LINES, 
-                    lineGroup.lineCount * 2, 
-                    GL_UNSIGNED_INT, 
-                    ( void* )( lineGroup.lineOffset * 2 * sizeof(unsigned int) ) );
+            glDrawArrays( GL_LINES, 
+                    lineGroup.lineOffset * 2, 
+                    lineGroup.lineCount * 2); 
         }
     }
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
