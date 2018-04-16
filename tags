@@ -139,8 +139,9 @@ MAX_CHARS	src/font.cpp	/^unsigned int MAX_CHARS = 1000;$/;"	v
 MAX_COLOR_COUNT	src/color.h	/^	const unsigned int MAX_COLOR_COUNT = 100;$/;"	m	namespace:gl
 MAX_ENTITIES	src/entities.h	/^	const unsigned int MAX_ENTITIES = 1000;$/;"	m	namespace:entities
 MAX_LIGHT_COUNT	src/lights.h	/^	const unsigned int MAX_LIGHT_COUNT = 100;$/;"	m	namespace:lights
-MAX_LINE_COUNT	src/line.h	/^    const unsigned int MAX_LINE_COUNT = 1000;$/;"	m	namespace:gui
-MAX_LINE_VERTEX_COUNT	src/line.h	/^    const unsigned int MAX_LINE_VERTEX_COUNT = 500;$/;"	m	namespace:gui
+MAX_LINE_COUNT	src/line.h	/^    const unsigned int MAX_LINE_COUNT = 200;$/;"	m	namespace:gui
+MAX_LINE_VERTEX_COLOR_COUNT	src/line.h	/^    const unsigned int MAX_LINE_VERTEX_COLOR_COUNT = 400;$/;"	m	namespace:gui
+MAX_LINE_VERTEX_COUNT	src/line.h	/^    const unsigned int MAX_LINE_VERTEX_COUNT = 200;$/;"	m	namespace:gui
 MAX_MESHES_PER_MODEL	src/model.h	/^	const unsigned int MAX_MESHES_PER_MODEL = 10;$/;"	m	namespace:model
 MAX_MODELS	src/model.h	/^	const unsigned int MAX_MODELS = 100;$/;"	m	namespace:model
 MAX_QUAD_COUNT	src/quad.h	/^	const unsigned int MAX_QUAD_COUNT = 10000;$/;"	m	namespace:gui
@@ -296,7 +297,7 @@ allKerning	src/font.cpp	/^std::vector<float> gui::text::allKerning;$/;"	m	class:
 allLightData	src/lights.cpp	/^std::vector<glm::vec4> lights::allLightData;$/;"	m	class:lights	file:
 allLightIndexRanges	src/lights.cpp	/^std::vector<lights::LightIndexRange> lights::allLightIndexRanges;$/;"	m	class:lights	file:
 allLineGroups	src/line.cpp	/^std::vector<gui::LineGroup> allLineGroups;$/;"	v
-allLineVertexColors	src/line.cpp	/^std::array<glm::uvec2, gui::MAX_LINE_VERTEX_COUNT> allLineVertexColors;$/;"	v
+allLineVertexColors	src/line.cpp	/^std::array<glm::uvec2, gui::MAX_LINE_VERTEX_COLOR_COUNT> allLineVertexColors;$/;"	v
 allLineVertices	src/line.cpp	/^std::array<glm::vec4, gui::MAX_LINE_VERTEX_COUNT> allLineVertices;$/;"	v
 allLines	src/line.cpp	/^std::array<glm::uvec2, gui::MAX_LINE_COUNT> allLines;$/;"	v
 allMaterialTextures	src/material.cpp	/^std::vector<mesh::MaterialTextures> mesh::allMaterialTextures;$/;"	m	class:mesh	file:
@@ -442,7 +443,7 @@ createLightVBO	src/lights.cpp	/^void lights::createLightVBO() $/;"	f	class:light
 createLine	src/line.cpp	/^unsigned int gui::createLine( glm::vec4 pVertexAPos, glm::vec4 pVertexBPos ) $/;"	f	class:gui
 createLine	src/line.cpp	/^unsigned int gui::createLine( unsigned int pVertexA, unsigned int pVertexB ) $/;"	f	class:gui
 createLineGroup	src/line.cpp	/^unsigned int gui::createLineGroup( unsigned int pLineOffset, $/;"	f	class:gui
-createLineVertex	src/line.cpp	/^gui::LinePointIt gui::createLineVertex( glm::vec4 pPos ) $/;"	f	class:gui
+createLineVertex	src/line.cpp	/^unsigned int gui::createLineVertex( glm::vec4 pPos ) $/;"	f	class:gui
 createMesh	src/mesh.cpp	/^unsigned int mesh::createMesh( std::vector<Vertex> pVertices, $/;"	f	class:mesh
 createMesh	src/mesh.cpp	/^unsigned int mesh::createMesh( unsigned int pIndexOffset, unsigned int pIndexCount, $/;"	f	class:mesh
 createModel	src/model.cpp	/^unsigned int model::createModel( unsigned int pMeshOffset, unsigned int pMeshCount )$/;"	f	class:model
@@ -516,8 +517,6 @@ eventResetters	src/event.cpp	/^std::vector<void( * )()> events::eventResetters =
 event_signature	src/event.h	/^		EventType event_signature;$/;"	m	class:events::EventSlot
 events	src/event.h	/^namespace events {$/;"	n
 extractStageString	src/shader_loader.cpp	/^std::string extractStageString( std::string filename ) $/;"	f
-extract_count	src/element_utils.h	/^        constexpr size_t extract_count(const Elem& e)$/;"	f	namespace:utils
-extract_count	src/element_utils.h	/^        constexpr size_t extract_count(const Element<Elems...>& e)$/;"	f	namespace:utils
 farPlane	src/camera.h	/^		float farPlane = 1000.0f;$/;"	m	struct:camera::Frustum
 fetchGLFWEvents	src/input.cpp	/^void input::fetchGLFWEvents()$/;"	f	class:input
 fetchInput	src/sequencer.cpp	/^void sequencer::fetchInput()$/;"	f	class:sequencer
@@ -537,9 +536,6 @@ fontMetrics	src/font_loader.cpp	/^	LoadFontMetrics fontMetrics;$/;"	m	struct:Loa
 fontVAO	src/font.cpp	/^gl::VAO gui::text::fontVAO;$/;"	m	class:gui::text	file:
 font_input_directory	src/font_loader.cpp	/^std::string font_input_directory = DEFAULT_TTF_DIR;$/;"	v
 font_store_directory	src/font_loader.cpp	/^std::string font_store_directory = DEFAULT_STORE_DIR;$/;"	v
-foreach	src/element_utils.h	/^constexpr void utils::foreach(rT(*func)(FArgTs...), const Es... es)$/;"	f	class:utils
-foreach_imp	src/element_utils.h	/^constexpr void utils::foreach_imp( rT(*func)(FArgTs...), $/;"	f	class:utils
-foreach_imp	src/element_utils.h	/^constexpr void utils::foreach_imp(rT(*func)(Es...), const Es... es)$/;"	f	class:utils
 format	src/texture.h	/^		GLenum format;$/;"	m	struct:texture::Texture2D
 forward	src/camera.cpp	/^void camera::Camera::forward()$/;"	f	class:camera::Camera
 forward	src/camera.cpp	/^void camera::forward( Camera & pCam )$/;"	f	class:camera
@@ -1049,8 +1045,6 @@ screenViewport	src/gl.cpp	/^gl::Viewport screenViewport;$/;"	v
 screenViewport	src/viewport.cpp	/^gl::Viewport gl::screenViewport = gl::Viewport();$/;"	m	class:gl	file:
 scroll	src/mouse.cpp	/^int scroll = 0;$/;"	v
 scroll_Callback	src/mouse.cpp	/^void input::scroll_Callback( GLFWwindow * window, double pX, double pY )$/;"	f	class:input
-select	src/element_utils.h	/^        const T& select( const T& t)$/;"	f	namespace:utils
-select	src/element_utils.h	/^        const auto& select( const Element<Elems...>& t)$/;"	f	namespace:utils
 sensitivity	src/camera.h	/^		float sensitivity;$/;"	m	struct:camera::LookPolicy
 sequencer	src/sequencer.h	/^namespace sequencer {$/;"	n
 set	src/event.h	/^		void set() {$/;"	f	class:events::EventSlot
@@ -1156,7 +1150,6 @@ stream_neuron	src/neural.h	/^		unsigned int stream_neuron;$/;"	m	struct:neural::
 stringCount	src/font.h	/^			unsigned int stringCount;$/;"	m	struct:gui::text::Font
 stringOffset	src/font.h	/^			unsigned int stringOffset;$/;"	m	struct:gui::text::Font
 styleStorage	src/font.cpp	/^unsigned int styleStorage = 0;$/;"	v
-sub	src/element_utils.h	/^constexpr void utils::sub( rT(*func)(FArgTs...), $/;"	f	class:utils
 subelements	src/element.h	/^            const std::tuple<Elems...> subelements;$/;"	m	struct:utils::Element
 subwidgets	src/widget.h	/^            const SubWidgets subwidgets;$/;"	m	struct:gui::Widget
 swapVolumeBuffers	src/voxelization.cpp	/^void voxelization::swapVolumeBuffers() {$/;"	f	class:voxelization

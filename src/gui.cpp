@@ -142,72 +142,75 @@ void gui::initWidgets()
 
     //Window
 
-    //Window::Frame::Colors window_frame_colors( { 
-    //        gl::getColor( "grey" ), gl::getColor( "grey" ),  gl::getColor( "grey" ),
-    //        gl::getColor( "grey" ),  gl::getColor( "white" ),  gl::getColor( "grey" ),
-    //        gl::getColor( "grey" ), gl::getColor( "grey" ), gl::getColor( "grey" ) } );
+    using WindowHeader = Widget<Quad, Quad>;
+    using WindowFrame = Widget<Quad, Quad, Quad, Quad, Quad, Quad, Quad, Quad, Quad>;
+    using Window = Widget<WindowFrame, WindowHeader>;
 
-    //Window::Header::Colors window_header_colors( { gl::getColor( "grey" ), gl::getColor( "white" ) } );
-    //Window::Colors window_colors( { window_frame_colors, window_header_colors } );
+    WindowFrame::Colors window_frame_colors( { 
+            gl::getColor( "grey" ), gl::getColor( "grey" ),  gl::getColor( "grey" ),
+            gl::getColor( "grey" ),  gl::getColor( "white" ),  gl::getColor( "grey" ),
+            gl::getColor( "grey" ), gl::getColor( "grey" ), gl::getColor( "grey" ) } );
 
-    //float window_width = gui::pixel_size.x * 300.0f;
-    //float window_height = gui::pixel_size.x * 235.0f;
-    //glm::vec2 border = gui::pixel_size * 4.0f;
+    WindowHeader::Colors window_header_colors( { gl::getColor( "grey" ), gl::getColor( "white" ) } );
+    Window::Colors window_colors( { window_frame_colors, window_header_colors } );
 
-    //Window::Frame::QuadIniter window_frame_initer( {
-    //        glm::vec4( 0.0f, 0.0f, border.x, border.y ),
-    //        glm::vec4( border.x, 0.0f, window_width - border.x*2.0f, border.y ),
-    //        glm::vec4( window_width - border.x, 0.0f, border.x, border.y ),
-    //        glm::vec4( 0.0f, -border.y, border.x, window_height - border.y*2.0f ),
-    //        glm::vec4( border.x, -border.y, window_width - border.x*2.0f, window_height - border.y*2.0f ),
-    //        glm::vec4( window_width - border.x, -border.y, border.x, window_height - border.y*2.0f ),
-    //        glm::vec4( 0.0f, -window_height + border.y, border.x, border.y ),
-    //        glm::vec4( border.x, -window_height + border.y, window_width - border.x*2.0f, border.y ),
-    //        glm::vec4( window_width - border.x, -window_height + border.y, border.x, border.y )
-    //        } );
+    float window_width = gui::pixel_size.x * 300.0f;
+    float window_height = gui::pixel_size.x * 235.0f;
+    glm::vec2 border = gui::pixel_size * 4.0f;
 
-    //float header_height = gui::pixel_size.y * 25.0f;
-    //glm::vec2 header_border = gui::pixel_size * 4.0f;
+    WindowFrame::Initer window_frame_initer( {
+            glm::vec4( 0.0f, 0.0f, border.x, border.y ),
+            glm::vec4( border.x, 0.0f, window_width - border.x*2.0f, border.y ),
+            glm::vec4( window_width - border.x, 0.0f, border.x, border.y ),
+            glm::vec4( 0.0f, -border.y, border.x, window_height - border.y*2.0f ),
+            glm::vec4( border.x, -border.y, window_width - border.x*2.0f, window_height - border.y*2.0f ),
+            glm::vec4( window_width - border.x, -border.y, border.x, window_height - border.y*2.0f ),
+            glm::vec4( 0.0f, -window_height + border.y, border.x, border.y ),
+            glm::vec4( border.x, -window_height + border.y, window_width - border.x*2.0f, border.y ),
+            glm::vec4( window_width - border.x, -window_height + border.y, border.x, border.y )
+            } );
 
-    //Window::Header::QuadIniter window_header_initer( {
-    //        glm::vec4( 0.0f, 0.0f, window_width, header_height ),
-    //        glm::vec4( header_border.x, -header_border.y, window_width - header_border.x*2.0f, header_height - header_border.y*2.0f )
-    //        } );
+    float header_height = gui::pixel_size.y * 25.0f;
+    glm::vec2 header_border = gui::pixel_size * 4.0f;
 
-    //Window::QuadIniter window_quad_initer( {  window_frame_initer, window_header_initer } );
+    WindowHeader::Initer window_header_initer( {
+            glm::vec4( 0.0f, 0.0f, window_width, header_height ),
+            glm::vec4( header_border.x, -header_border.y, window_width - header_border.x*2.0f, header_height - header_border.y*2.0f )
+            } );
+
+    Window::Initer window_quad_initer( {  window_frame_initer, window_header_initer } );
 
 
-    //Window::Frame::MoveRule window_frame_move_policy(
-    //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
-    //        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
-    //        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-    //);
-    //Window::Frame::ResizeRule window_frame_resize_policy(
-    //        glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ), 
-    //        glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), 
-    //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ),
-    //        glm::vec4( 0.0f, 1.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 1.0f, 1.0f, 0.0f ), 
-    //        glm::vec4( 1.0f, 1.0f, 0.0f, 0.0f )
-    //        );
+    WindowFrame::MovePolicy window_frame_move_policy(
+        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
+            glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
+            glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
+    );
+    WindowFrame::ResizePolicy window_frame_resize_policy(
+            glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ), 
+            glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), 
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ),
+            glm::vec4( 0.0f, 1.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 1.0f, 1.0f, 0.0f ), 
+            glm::vec4( 1.0f, 1.0f, 0.0f, 0.0f )
+            );
 
-    //Window::Header::MoveRule window_header_move_policy(
-    //    glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-    //);
-    //Window::Header::ResizeRule window_header_resize_policy(
-    //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f )
-    //        );
+    WindowHeader::MovePolicy window_header_move_policy(
+        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
+    );
+    WindowHeader::ResizePolicy window_header_resize_policy(
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f )
+            );
 
-    //Window::MoveRule window_move_policy(
-    //    //glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)
-    //    window_frame_move_policy, window_header_move_policy
-    //);
-    //Window::ResizeRule window_resize_policy(
-    //    //glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)
-    //    window_frame_resize_policy, window_header_resize_policy
-    //        );
+    Window::MovePolicy window_move_policy(
+        glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)
+    );
+    Window::ResizePolicy window_resize_policy(
+        glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)
+            );
 
-    //Window::Quads window_quads( window_quad_initer );
-    //utils::foreach( colorQuad, window_quads, window_colors );
+    //Window window( window_quad_initer, window_colors, 
+    //        window_move_policy, window_resize_policy );
+    
 
     //ButtonEvents<Event> header_button( 
     //        createEvent( QuadEvent( window_quads.element<1>().element<1>().ID, 1 ) ), 
