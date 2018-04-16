@@ -122,6 +122,7 @@ void gui::updateLineBuffer()
 {
     gl::uploadStorage( lineBuffer, sizeof( glm::uvec2 ) * lineCount, &allLines[0] );
 }
+
 void gui::renderLines()
 {
     lineVAO.bind();
