@@ -71,9 +71,9 @@ unsigned int glDebug::generateDebugGrid( std::string pName,
 	//horizontals
 	for ( unsigned int y = 0; y < pTileCountY + 1; ++y ) {
 		for ( unsigned int x = 0; x < 2; ++x ) {
-			verts[y * 2 + x] = gui::createLineVertex( glm::vec4( xMin + pTileSizeX * ( pTileCountX ) * x, 0.0f, yMin + ( pTileSizeY ) * y, 1.0f ) );
+			verts[y * 2 + x] = gui::createLineVertexPos( glm::vec4( xMin + pTileSizeX * ( pTileCountX ) * x, 0.0f, yMin + ( pTileSizeY ) * y, 1.0f ) );
 		}
-        gui::colorLine( gui::createLine( verts[y * 2], verts[y * 2 + 1] ), grid_color ); 
+        gui::createLine( gui::createLineVertex( verts[y * 2], grid_color ), gui::createLineVertex( verts[y * 2 + 1], grid_color ) ); 
 		vertexCount += 2;
 	}
 	//vertical borders 
@@ -82,16 +82,16 @@ unsigned int glDebug::generateDebugGrid( std::string pName,
 	//verticals
 	for ( unsigned int x = 0; x < pTileCountX - 1; ++x ) {
 		for ( unsigned int y = 0; y < 2; ++y ) {
-			verts[vertexCount + x * 2 + y] = gui::createLineVertex( glm::vec4( 
+			verts[vertexCount + x * 2 + y] = gui::createLineVertexPos( glm::vec4( 
                         xMin + ( x+1 )*pTileSizeX, 0.0f, 
                         yMin + y * pTileSizeY * pTileCountY, 1.0f ) );
 		}
-        gui::colorLine( gui::createLine( verts[vertexCount + x * 2], 
-                    verts[vertexCount + x * 2 + 1] ), grid_color ); 
+        gui::createLine( gui::createLineVertex( verts[vertexCount + x * 2], grid_color ), 
+                    gui::createLineVertex( verts[vertexCount + x * 2 + 1] , grid_color ) ); 
 		v += 2;
 	}
-	gui::colorLine( gui::createLine( verts[0], verts[vertexCount - 2] ), grid_color );
-	gui::colorLine( gui::createLine( verts[1], verts[vertexCount - 1] ), grid_color );
+	gui::createLine( gui::createLineVertex( verts[0], grid_color ), gui::createLineVertex( verts[vertexCount - 2], grid_color ) );
+	gui::createLine( gui::createLineVertex( verts[1], grid_color ), gui::createLineVertex( verts[vertexCount - 1], grid_color ) );
 
 	return gui::createLineGroup( lineOffset, lineCount );
 }
@@ -101,16 +101,13 @@ unsigned int glDebug::initCoordinateSystem( std::string pName )
 	unsigned int lineOffset = gui::getLineCount();
 	unsigned int verts[7];
 
-	verts[0] = gui::createLineVertex( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ) );
-
-	verts[1] = gui::createLineVertex( glm::vec4( -50.0f, 0.0f, 0.0f, 1.0f ) );
-	verts[2] = gui::createLineVertex( glm::vec4( 50.0f, 0.0f, 0.0f, 1.0f ) );
-
-	verts[3] = gui::createLineVertex( glm::vec4( 0.0f, -50.0f, 0.0f, 1.0f ) );
-	verts[4] = gui::createLineVertex( glm::vec4( 0.0f, 50.0f, 0.0f, 1.0f ) );
-
-	verts[5] = gui::createLineVertex( glm::vec4( 0.0f, 0.0f, -50.0f, 1.0f ) );
-	verts[6] = gui::createLineVertex( glm::vec4( 0.0f, 0.0f, 50.0f, 1.0f ) );
+	verts[0] = gui::createLineVertexPos( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ) );
+	verts[1] = gui::createLineVertexPos( glm::vec4( -50.0f, 0.0f, 0.0f, 1.0f ) );
+	verts[2] = gui::createLineVertexPos( glm::vec4( 50.0f, 0.0f, 0.0f, 1.0f ) );
+	verts[3] = gui::createLineVertexPos( glm::vec4( 0.0f, -50.0f, 0.0f, 1.0f ) );
+	verts[4] = gui::createLineVertexPos( glm::vec4( 0.0f, 50.0f, 0.0f, 1.0f ) );
+	verts[5] = gui::createLineVertexPos( glm::vec4( 0.0f, 0.0f, -50.0f, 1.0f ) );
+	verts[6] = gui::createLineVertexPos( glm::vec4( 0.0f, 0.0f, 50.0f, 1.0f ) );
 
 	unsigned int red_color_i = gl::getColor( "red" );
 	unsigned int green_color_i = gl::getColor( "green" );
@@ -118,19 +115,12 @@ unsigned int glDebug::initCoordinateSystem( std::string pName )
 
 
     unsigned int lines[6];
-    lines[0] = gui::createLine( verts[0], verts[1] );
-    lines[1] = gui::createLine( verts[0], verts[2] );
-    lines[2] = gui::createLine( verts[0], verts[3] );
-    lines[3] = gui::createLine( verts[0], verts[4] );
-    lines[4] = gui::createLine( verts[0], verts[5] );
-    lines[5] = gui::createLine( verts[0], verts[6] );
-
-	gui::colorLine( lines[0], red_color_i );
-	gui::colorLine( lines[1], red_color_i );
-	gui::colorLine( lines[2], green_color_i );
-	gui::colorLine( lines[3], green_color_i );
-	gui::colorLine( lines[4], blue_color_i );
-	gui::colorLine( lines[5], blue_color_i );
+    lines[0] = gui::createLine( gui::createLineVertex( verts[0], red_color_i ), gui::createLineVertex( verts[1], red_color_i ) );
+    lines[1] = gui::createLine( gui::createLineVertex( verts[0], red_color_i ), gui::createLineVertex( verts[2], red_color_i ) );
+    lines[2] = gui::createLine( gui::createLineVertex( verts[0], green_color_i ), gui::createLineVertex( verts[3], green_color_i ) );
+    lines[3] = gui::createLine( gui::createLineVertex( verts[0], green_color_i ), gui::createLineVertex( verts[4], green_color_i ) );
+    lines[4] = gui::createLine( gui::createLineVertex( verts[0], blue_color_i ), gui::createLineVertex( verts[5], blue_color_i ) );
+    lines[5] = gui::createLine( gui::createLineVertex( verts[0], blue_color_i ), gui::createLineVertex( verts[6], blue_color_i ) );
 
 	return gui::createLineGroup( lineOffset, gui::getLineCount() - lineOffset );
 }

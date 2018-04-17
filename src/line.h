@@ -10,10 +10,9 @@
 
 namespace gui
 {
-    const unsigned int MAX_LINE_VERTEX_COUNT = 200;
-    const unsigned int MAX_LINE_VERTEX_COLOR_COUNT = 400;
+    const unsigned int MAX_LINE_VERTEX_COUNT = 400;
+    const unsigned int MAX_LINE_VERTEX_POSITION_COUNT = 200;
     const unsigned int MAX_LINE_COUNT = 200;
-    typedef utils::Itr<glm::vec4, std::array<glm::vec4, MAX_LINE_VERTEX_COUNT>> LinePointIt;
     const int DEFAULT_LINE_GROUP_FLAGS = 1;
 
     struct LineGroup {
@@ -24,23 +23,23 @@ namespace gui
         int flags;
     };
 
-    struct LineVertex{
-        LinePointIt vertex;
-        gl::ColorIt color;
-    };
-
     void toggleLineGroup( unsigned int pLineGroup );
-    unsigned int getLineCount();
-
     unsigned int createLineGroup( unsigned int pLineOffset, 
             unsigned int pLineCount, int pFlags = DEFAULT_LINE_GROUP_FLAGS );
-    unsigned int createLine( glm::vec4 pVertexAPos, glm::vec4 pVertexBPos );
+    //struct LineVertex{
+    //    LinePointIt vertex;
+    //    gl::ColorIt color;
+    //};
+
+
+    unsigned int createLineVertexPos( glm::vec4 pPos );
+    unsigned int createLineVertex( unsigned int pVertex, unsigned int pColor = 0 );
     unsigned int createLine( unsigned int pVertexA, unsigned int pVertexB );
-    unsigned int createLineVertex( glm::vec4 pPos );
+	void colorLine( unsigned int pLine, unsigned int pColor );
+	void setLineVertexColor( unsigned int pVertex, unsigned int pColor );
 
-    void colorLine( unsigned int pLineIndex, unsigned int pColorIndex );
-    void colorLineVertex( unsigned int pVertex, unsigned int pColorIndex );
 
+    unsigned int getLineCount();
     void initLineVAO();
     void updateLinePositions();
     void updateLineColors();

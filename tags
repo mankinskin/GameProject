@@ -124,8 +124,6 @@ LightIndexRange	src/lights.h	/^		LightIndexRange( unsigned int pOffset, unsigned
 LightIndexRange	src/lights.h	/^	struct LightIndexRange $/;"	s	namespace:lights
 LineGroup	src/line.cpp	/^gui::LineGroup::LineGroup( unsigned int pLineOffset, $/;"	f	class:gui::LineGroup
 LineGroup	src/line.h	/^    struct LineGroup {$/;"	s	namespace:gui
-LinePointIt	src/line.h	/^    typedef utils::Itr<glm::vec4, std::array<glm::vec4, MAX_LINE_VERTEX_COUNT>> LinePointIt;$/;"	t	namespace:gui
-LineVertex	src/line.h	/^    struct LineVertex{$/;"	s	namespace:gui
 LoadAtlas	src/font_loader.cpp	/^struct LoadAtlas $/;"	s	file:
 LoadFont	src/font_loader.cpp	/^struct LoadFont $/;"	s	file:
 LoadFontMetrics	src/font_loader.cpp	/^struct LoadFontMetrics $/;"	s	file:
@@ -140,8 +138,8 @@ MAX_COLOR_COUNT	src/color.h	/^	const unsigned int MAX_COLOR_COUNT = 100;$/;"	m	n
 MAX_ENTITIES	src/entities.h	/^	const unsigned int MAX_ENTITIES = 1000;$/;"	m	namespace:entities
 MAX_LIGHT_COUNT	src/lights.h	/^	const unsigned int MAX_LIGHT_COUNT = 100;$/;"	m	namespace:lights
 MAX_LINE_COUNT	src/line.h	/^    const unsigned int MAX_LINE_COUNT = 200;$/;"	m	namespace:gui
-MAX_LINE_VERTEX_COLOR_COUNT	src/line.h	/^    const unsigned int MAX_LINE_VERTEX_COLOR_COUNT = 400;$/;"	m	namespace:gui
-MAX_LINE_VERTEX_COUNT	src/line.h	/^    const unsigned int MAX_LINE_VERTEX_COUNT = 200;$/;"	m	namespace:gui
+MAX_LINE_VERTEX_COUNT	src/line.h	/^    const unsigned int MAX_LINE_VERTEX_COUNT = 400;$/;"	m	namespace:gui
+MAX_LINE_VERTEX_POSITION_COUNT	src/line.h	/^    const unsigned int MAX_LINE_VERTEX_POSITION_COUNT = 200;$/;"	m	namespace:gui
 MAX_MESHES_PER_MODEL	src/model.h	/^	const unsigned int MAX_MESHES_PER_MODEL = 10;$/;"	m	namespace:model
 MAX_MODELS	src/model.h	/^	const unsigned int MAX_MODELS = 100;$/;"	m	namespace:model
 MAX_QUAD_COUNT	src/quad.h	/^	const unsigned int MAX_QUAD_COUNT = 10000;$/;"	m	namespace:gui
@@ -297,8 +295,8 @@ allKerning	src/font.cpp	/^std::vector<float> gui::text::allKerning;$/;"	m	class:
 allLightData	src/lights.cpp	/^std::vector<glm::vec4> lights::allLightData;$/;"	m	class:lights	file:
 allLightIndexRanges	src/lights.cpp	/^std::vector<lights::LightIndexRange> lights::allLightIndexRanges;$/;"	m	class:lights	file:
 allLineGroups	src/line.cpp	/^std::vector<gui::LineGroup> allLineGroups;$/;"	v
-allLineVertexColors	src/line.cpp	/^std::array<glm::uvec2, gui::MAX_LINE_VERTEX_COLOR_COUNT> allLineVertexColors;$/;"	v
-allLineVertices	src/line.cpp	/^std::array<glm::vec4, gui::MAX_LINE_VERTEX_COUNT> allLineVertices;$/;"	v
+allLineVertexPositions	src/line.cpp	/^std::array<glm::vec4, gui::MAX_LINE_VERTEX_POSITION_COUNT> allLineVertexPositions;$/;"	v
+allLineVertices	src/line.cpp	/^std::array<glm::uvec2, gui::MAX_LINE_VERTEX_COUNT> allLineVertices;$/;"	v
 allLines	src/line.cpp	/^std::array<glm::uvec2, gui::MAX_LINE_COUNT> allLines;$/;"	v
 allMaterialTextures	src/material.cpp	/^std::vector<mesh::MaterialTextures> mesh::allMaterialTextures;$/;"	m	class:mesh	file:
 allMaterials	src/material.cpp	/^std::vector<mesh::Material> mesh::allMaterials;$/;"	m	class:mesh	file:
@@ -395,14 +393,12 @@ clear_events	src/event.h	/^		static void clear_events() {$/;"	f	class:events::Ev
 clear_slots	src/event.h	/^		static void clear_slots() {$/;"	f	class:events::EventSlot
 clicker_gate	src/gates.h	/^        clicker_gate( Source pSource, bool pStartWith = false ) $/;"	f	struct:gates::clicker_gate
 clicker_gate	src/gates.h	/^    struct clicker_gate {\/\/fires once when the input changes$/;"	s	namespace:gates
-color	src/line.h	/^        gl::ColorIt color;$/;"	m	struct:gui::LineVertex
 color	src/quad.cpp	/^void gui::Quad::color( const gl::ColorIt pColor ) const$/;"	f	class:gui::Quad
 color	src/text.cpp	/^	glm::vec4 color = glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f );$/;"	m	struct:TextColor	file:
 color	src/widget.h	/^            void color( Colors pColors ) const$/;"	f	struct:gui::Widget
 colorBuffer	src/color.cpp	/^gl::StreamStorage<gl::Color> gl::colorBuffer;$/;"	m	class:gl	file:
 colorCount	src/color.cpp	/^unsigned int colorCount = 0;$/;"	v
-colorLine	src/line.cpp	/^void gui::colorLine( unsigned int pLineIndex, unsigned int pColorIndex ) $/;"	f	class:gui
-colorLineVertex	src/line.cpp	/^void gui::colorLineVertex( unsigned int pVertex, unsigned int pColorIndex )$/;"	f	class:gui
+colorLine	src/line.cpp	/^void gui::colorLine( unsigned int pLine, unsigned int pColor )$/;"	f	class:gui
 colorNames	src/color.cpp	/^std::array<std::string, gl::MAX_COLOR_COUNT> colorNames;$/;"	v
 colorQuad	src/quadcolors.cpp	/^void gui::colorQuad( const unsigned int pID, const gl::ColorIt pColor )$/;"	f	class:gui
 colorQuadBuffer	src/quadcolors.cpp	/^gl::StreamStorage<unsigned int> gui::colorQuadBuffer;$/;"	m	class:gui	file:
@@ -440,10 +436,10 @@ createLight	src/lights.cpp	/^unsigned int lights::createLight( glm::vec4 pPos, g
 createLightDataBuffer	src/lights.cpp	/^void lights::createLightDataBuffer() $/;"	f	class:lights
 createLightVAO	src/lights.cpp	/^void lights::createLightVAO() $/;"	f	class:lights
 createLightVBO	src/lights.cpp	/^void lights::createLightVBO() $/;"	f	class:lights
-createLine	src/line.cpp	/^unsigned int gui::createLine( glm::vec4 pVertexAPos, glm::vec4 pVertexBPos ) $/;"	f	class:gui
 createLine	src/line.cpp	/^unsigned int gui::createLine( unsigned int pVertexA, unsigned int pVertexB ) $/;"	f	class:gui
 createLineGroup	src/line.cpp	/^unsigned int gui::createLineGroup( unsigned int pLineOffset, $/;"	f	class:gui
-createLineVertex	src/line.cpp	/^unsigned int gui::createLineVertex( glm::vec4 pPos ) $/;"	f	class:gui
+createLineVertex	src/line.cpp	/^unsigned int gui::createLineVertex( unsigned int pPos, unsigned int pColor )$/;"	f	class:gui
+createLineVertexPos	src/line.cpp	/^unsigned int gui::createLineVertexPos( glm::vec4 pPos ) $/;"	f	class:gui
 createMesh	src/mesh.cpp	/^unsigned int mesh::createMesh( std::vector<Vertex> pVertices, $/;"	f	class:mesh
 createMesh	src/mesh.cpp	/^unsigned int mesh::createMesh( unsigned int pIndexOffset, unsigned int pIndexCount, $/;"	f	class:mesh
 createModel	src/model.cpp	/^unsigned int model::createModel( unsigned int pMeshOffset, unsigned int pMeshCount )$/;"	f	class:model
@@ -583,7 +579,7 @@ getHeight	src/viewport.cpp	/^unsigned int gl::getHeight()$/;"	f	class:gl
 getKerningMap	src/font_loader.cpp	/^std::vector<int> getKerningMap( FT_Face pFace, size_t pStartCode, size_t pGlyphCount )$/;"	f
 getLightColor	src/lights.cpp	/^glm::vec4& lights::getLightColor( unsigned int pLightIndex ) $/;"	f	class:lights
 getLineCount	src/line.cpp	/^unsigned int gui::getLineCount() $/;"	f	class:gui
-getLineVertexIndex	src/line.cpp	/^unsigned int getLineVertexIndex( unsigned int pLineIndex, unsigned int pVertex )$/;"	f
+getLineVertex	src/line.cpp	/^unsigned int getLineVertex( unsigned int pLineIndex, unsigned int pVertex )$/;"	f
 getModel	src/model.cpp	/^model::Model& model::getModel( std::string pName )$/;"	f	class:model
 getModel	src/model.cpp	/^model::Model& model::getModel( unsigned int pID )$/;"	f	class:model
 getMouseKeyEvents	src/mouse.cpp	/^void input::getMouseKeyEvents()$/;"	f	class:input
@@ -776,10 +772,10 @@ lineGapScale	src/text.cpp	/^	float lineGapScale;$/;"	m	struct:TextboxMetrics	fil
 lineOffset	src/line.h	/^        unsigned int lineOffset;$/;"	m	struct:gui::LineGroup
 lineShader	src/line.cpp	/^unsigned int lineShader = 0;$/;"	v
 lineVAO	src/line.cpp	/^gl::VAO lineVAO;$/;"	v
-lineVertexBuffer	src/line.cpp	/^gl::StreamStorage<glm::vec4> lineVertexBuffer;$/;"	v
-lineVertexColorBuffer	src/line.cpp	/^gl::StreamStorage<glm::uvec2> lineVertexColorBuffer;$/;"	v
-lineVertexColorCount	src/line.cpp	/^unsigned int lineVertexColorCount = 0;$/;"	v
+lineVertexBuffer	src/line.cpp	/^gl::StreamStorage<glm::uvec2> lineVertexBuffer;$/;"	v
 lineVertexCount	src/line.cpp	/^unsigned int lineVertexCount = 0;$/;"	v
+lineVertexPositionBuffer	src/line.cpp	/^gl::StreamStorage<glm::vec4> lineVertexPositionBuffer;$/;"	v
+lineVertexPositionCount	src/line.cpp	/^unsigned int lineVertexPositionCount = 0;$/;"	v
 line_sizes	src/text.cpp	/^	std::vector<glm::vec2> line_sizes;$/;"	m	struct:TextboxGlyphs	file:
 lines	src/text.cpp	/^	std::vector<gui::text::String> lines;$/;"	m	struct:TextboxGlyphs	file:
 linkNodeToBoundingSphere	src/collision.cpp	/^unsigned int physics::linkNodeToBoundingSphere( unsigned int pNodeIndex, BoundingSphere pBoundingSphere )$/;"	f	class:physics
@@ -1055,6 +1051,7 @@ setLightColor	src/lights.cpp	/^void lights::setLightColor( unsigned int pLightIn
 setLightColor	src/lights.cpp	/^void lights::setLightColor( unsigned int pLightIndex, glm::vec4& pColor )$/;"	f	class:lights
 setLightPos	src/lights.cpp	/^void lights::setLightPos( unsigned int pLightIndex, glm::vec3& pPos ) $/;"	f	class:lights
 setLightPos	src/lights.cpp	/^void lights::setLightPos( unsigned int pLightIndex, glm::vec4& pPos ) $/;"	f	class:lights
+setLineVertexColor	src/line.cpp	/^void gui::setLineVertexColor( unsigned int pVertex, unsigned int pColor )$/;"	f	class:gui
 setMaxFPS	src/app.cpp	/^void app::setMaxFPS( unsigned int pMaxFPS )$/;"	f	class:app
 setMode	src/camera.cpp	/^void camera::Camera::setMode( CameraMode pMode )$/;"	f	class:camera::Camera
 setMode	src/camera.cpp	/^void camera::setMode( Camera & pCam, CameraMode pMode )$/;"	f	class:camera
@@ -1230,7 +1227,6 @@ utils	src/utils.h	/^namespace utils {$/;"	n
 uv	src/mesh.h	/^		glm::vec2 uv;$/;"	m	struct:mesh::Vertex
 vec4	experimental/hierarchy.cpp	/^    vec4( float X, float Y, float Z, float W )$/;"	f	struct:vec4
 vec4	experimental/hierarchy.cpp	/^struct vec4$/;"	s	file:
-vertex	src/line.h	/^        LinePointIt vertex;$/;"	m	struct:gui::LineVertex
 vertexAttrib	src/vao.cpp	/^void gl::VAO::vertexAttrib( unsigned int pBindingIndex, unsigned int pAttributeIndex, unsigned int pCount, unsigned int pType, unsigned int pOffset, bool pNormalize ) $/;"	f	class:gl::VAO
 vertexBuffer	src/vao.h	/^            void vertexBuffer( unsigned int pBinding, Storage<T>& pBuffer, $/;"	f	struct:gl::VAO
 vertexCount	src/mesh.h	/^		unsigned int vertexCount = 0;$/;"	m	struct:mesh::Mesh
