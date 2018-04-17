@@ -49,6 +49,15 @@ unsigned int gui::createLineVertex( unsigned int pPos, unsigned int pColor )
 	return lineVertexCount++;
 }
 
+glm::uvec2 gui::createLine( unsigned int pPosA, unsigned int pPosB, unsigned int pColorA, unsigned int pColorB )
+{
+	return glm::uvec2( createLineVertex( pPosA, pColorA ), createLineVertex( pPosB, pColorB ) );
+}
+glm::uvec2 gui::createLine( unsigned int pPosA, unsigned int pPosB, unsigned int pColor )
+{
+	return createLine( pPosA, pPosB, pColor, pColor );
+}
+
 void gui::initLineVAO() 
 {
     lineVertexPositionBuffer = gl::StreamStorage<glm::vec4>( "LineVertexPositonBuffer", 

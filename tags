@@ -433,6 +433,8 @@ createLight	src/lights.cpp	/^unsigned int lights::createLight( glm::vec4 pPos, g
 createLightDataBuffer	src/lights.cpp	/^void lights::createLightDataBuffer() $/;"	f	class:lights
 createLightVAO	src/lights.cpp	/^void lights::createLightVAO() $/;"	f	class:lights
 createLightVBO	src/lights.cpp	/^void lights::createLightVBO() $/;"	f	class:lights
+createLine	src/line.cpp	/^glm::uvec2 gui::createLine( unsigned int pPosA, unsigned int pPosB, unsigned int pColor )$/;"	f	class:gui
+createLine	src/line.cpp	/^glm::uvec2 gui::createLine( unsigned int pPosA, unsigned int pPosB, unsigned int pColorA, unsigned int pColorB )$/;"	f	class:gui
 createLineGroup	src/line.cpp	/^unsigned int gui::createLineGroup( unsigned int pLineOffset, $/;"	f	class:gui
 createLineVertex	src/line.cpp	/^unsigned int gui::createLineVertex( unsigned int pPos, unsigned int pColor )$/;"	f	class:gui
 createLineVertexPos	src/line.cpp	/^unsigned int gui::createLineVertexPos( glm::vec4 pPos ) $/;"	f	class:gui

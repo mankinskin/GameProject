@@ -31,6 +31,8 @@ namespace gui
     //};
 
 
+	glm::uvec2 createLine( unsigned int pPosA, unsigned int pPosB, unsigned int pColorA, unsigned int pColorB );
+	glm::uvec2 createLine( unsigned int pPosA, unsigned int pPosB, unsigned int pColor );
     unsigned int createLineVertexPos( glm::vec4 pPos );
     unsigned int createLineVertex( unsigned int pVertex, unsigned int pColor = 0 );
 	void setLineVertexColor( unsigned int pVertex, unsigned int pColor );
