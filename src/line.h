@@ -12,7 +12,6 @@ namespace gui
 {
     const unsigned int MAX_LINE_VERTEX_COUNT = 400;
     const unsigned int MAX_LINE_VERTEX_POSITION_COUNT = 200;
-    const unsigned int MAX_LINE_COUNT = 200;
     const int DEFAULT_LINE_GROUP_FLAGS = 1;
 
     struct LineGroup {
@@ -34,18 +33,15 @@ namespace gui
 
     unsigned int createLineVertexPos( glm::vec4 pPos );
     unsigned int createLineVertex( unsigned int pVertex, unsigned int pColor = 0 );
-    unsigned int createLine( unsigned int pVertexA, unsigned int pVertexB );
-	void colorLine( unsigned int pLine, unsigned int pColor );
 	void setLineVertexColor( unsigned int pVertex, unsigned int pColor );
 
 
-    unsigned int getLineCount();
     void initLineVAO();
     void updateLinePositions();
     void updateLineColors();
     void renderLines();
     void initLineShader();
-    void updateLineBuffer();
     void setupLineShader();
+	unsigned int getLineCount();
 }
 

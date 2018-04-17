@@ -137,7 +137,7 @@ void sequencer::frame()
     gl::updateColorBuffer();
     gui::updateQuadBuffer();
     gui::updateColorQuads();
-    gui::updateLineBuffer();
+
     gui::updateLinePositions();
     gui::updateLineColors();
 
