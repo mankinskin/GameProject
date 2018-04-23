@@ -1,31 +1,32 @@
 #pragma once
 #include <vector>
-#include <glm\glm.hpp>
+#include <glm.hpp>
+#include "storage.h"
 
 //node
 //node hold the information about the transformation of an object. They store a position, an orientation and a scale.
-namespace entities {
-
+namespace entities 
+{
 	void initEntityBuffers();
 	void updateEntityBuffers();
 
 	void updateEntityMatrices();
-	void createEntities(size_t pCount, size_t* pEntityIDs);
-	void createEntity(size_t* pEntityID);
-	void newEntityID(size_t & pNode);
-	void reserveEntities(size_t pCount);
+	void createEntities( unsigned int pCount, unsigned int* pEntityIDs );
+	void createEntity( unsigned int* pEntityID );
+	void newEntityID( unsigned int & pNode );
+	void reserveEntities( unsigned int pCount );
 
-	void setPos(size_t pNodeID, glm::vec3 pPos);
-	void setRotation(size_t pNodeID, glm::vec4 pRotation);
-	void setScale(size_t pNodeID, glm::vec3 pScale);
+	void setPos( unsigned int pNodeID, glm::vec3 pPos );
+	void setRotation( unsigned int pNodeID, glm::vec4 pRotation );
+	void setScale( unsigned int pNodeID, glm::vec3 pScale );
 
-	void translate(size_t pNodeID, glm::vec3 pPos);
+	void translate( unsigned int pNodeID, glm::vec3 pPos );
 	
 
-	extern size_t entityMatrixBuffer;
+	extern gl::StreamStorage<glm::mat4> entityMatrixBuffer;
 
-	const size_t MAX_ENTITIES = 1000;
-	extern size_t num_entities;
+	const unsigned int MAX_ENTITIES = 1000;
+	extern unsigned int num_entities;
 
 	extern std::vector<glm::vec3> allPositions;
 	extern std::vector<glm::vec3> allNormals;

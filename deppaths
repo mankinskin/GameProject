@@ -1,12 +1,16 @@
-LIBGLFW_DIR=/lib/i386-linux-gnu/
+LIBGLFW_DIR=/usr/lib/x86_64-linux-gnu/
 LIBFREETYPE_DIR=/lib/i386-linux-gnu/
 LIBGL_DIR=/lib/i386-linux-gnu/
-LIBGLU_DIR=/lib/i386-linux-gnu/
-LIBGLEW_DIR=/lib/i386-linux-gnu/
-
-
+LIBGLUT_DIR=/usr/lib/x86_64-linux-gnu/
+LIBGLEW_DIR=/usr/lib/x86_64-linux-gnu/
+LIBASSIMP_DIR=/usr/lib/x86_64-linux-gnu/
+LIBSOIL_DIR=/usr/lib/
 
 INCLUDE_GLEW_DIR=/usr/include/GLEW/
 INCLUDE_GL_DIR=/usr/include/GL/
 INCLUDE_FREETYPE_DIR=/usr/include/freetype2/
-INCLUDE_GLM_DIR=/usr/include/GLM
+INCLUDE_GLM_DIR=/usr/include/glm
+INCLUDE_GLFW_DIR=/usr/include/GLFW
+INCLUDE_FREETYPE_DIR=/usr/include/freetype2
+INCLUDE_ASSIMP_DIR=/usr/include
+INCLUDE_SOIL_DIR=/usr/include/SOIL

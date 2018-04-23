@@ -1,29 +1,28 @@
 #include "Debug.h"
 #include "app.h"
-#include <conio.h>
+#include <ncurses.h>
+#include <curses.h>
 #include <cstdio>
 #include <algorithm>
 
-int debug::shouldPrintInfo;
+bool debug::shouldPrintInfo = true;
 std::vector<debug::Error> debug::errorBuffer;
 
-void debug::pushError(std::string pMessage, Error::Severity errorSeverity)
+void debug::pushError( std::string pMessage, Error::Severity errorSeverity )
 {
-	errorBuffer.emplace_back(pMessage, errorSeverity);
+	errorBuffer.emplace_back( pMessage, errorSeverity );
 }
 
 void debug::printErrors()
 {
 	int fatal = 0;
-	size_t errorCount = errorBuffer.size();
-#ifdef _DEBUG
-	if (errorCount) {
-		printf("\n%i Error(s) or Warning(s) occured.\n", errorCount);
+	unsigned int errorCount = errorBuffer.size();
+	if ( errorCount ) {
+		printf( "\n%i Error( s ) or Warning( s ) occured.\n", errorCount );
 	}
-#endif
-	for (Error& err : errorBuffer) {
+	for ( Error& err : errorBuffer ) {
 		std::string severityString;
-		switch (err.severity) {
+		switch ( err.severity ) {
 		case Error::Severity::Warning:
 			severityString = "Warning";
 			break;
@@ -37,16 +36,13 @@ void debug::printErrors()
 			severityString = "Fatal Error";
 			break;
 		}
-#ifdef _DEBUG
-		printf("%s: %s\n", severityString.c_str(), err.msg.c_str());
-#endif
+		printf( "%s: %s\n", severityString.c_str(), err.msg.c_str() );
 	}
 	errorBuffer.clear();
-	if (fatal) {
-		//break program
+	if ( fatal ) {
 		app::state = app::State::Exit;
-		puts("Press any key to quit...");
-		while (!_getch()) {};
+		puts( "Press any key to quit..." );
+		while ( !getch() ) {};
 	}
 
 }
@@ -57,11 +53,9 @@ void debug::togglePrintInfo() {
 
 void debug::printInfo()
 {
-	if (shouldPrintInfo) {
-		app::lastFrameMS = std::max(1.0, app::lastFrameMS);
-		//system("CLS");
-		printf("\nlastFrameMS %i\n", (int)app::lastFrameMS);
-		printf("FPS\nActual %i\nPotential %i\n", (int)(1000 / (std::max(app::minFrameMS, app::lastFrameMS))), (int)(1000 / (app::lastFrameMS)));
-
+	if ( shouldPrintInfo ) {
+		app::lastFrameMS = std::max( 1.0, app::lastFrameMS );
+		printf( "\nlastFrameMS %i\n", ( int )app::lastFrameMS );
+		printf( "FPS\nActual %i\nPotential %i\n", ( int )( 1000 / ( std::max( app::minFrameMS, app::lastFrameMS ) ) ), ( int )( 1000 / ( app::lastFrameMS ) ) );
 	}
 }

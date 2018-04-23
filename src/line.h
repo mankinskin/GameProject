@@ -1,31 +1,49 @@
 #pragma once
+
+#include <array>
 #include <vector>
-#include <glm\glm.hpp>
+#include <glm.hpp>
+#include "gl.h"
+#include "color.h"
+#include "utils.h"
+#include "storage.h"
 
 namespace gui
 {
+	const unsigned int MAX_LINE_VERTEX_COUNT = 400;
+	const unsigned int MAX_LINE_VERTEX_POSITION_COUNT = 200;
+	const int DEFAULT_LINE_GROUP_FLAGS = 1;
+
 	struct LineGroup {
-		LineGroup(size_t pLineOffset, size_t pLineCount)
-			:lineOffset(pLineOffset), lineCount(pLineCount){}
-		size_t lineOffset;
-		size_t lineCount;
+		LineGroup( unsigned int pLineOffset, unsigned int pLineCount, 
+				int pFlags = DEFAULT_LINE_GROUP_FLAGS );
+		unsigned int lineOffset;
+		unsigned int lineCount;
+		int flags;
 	};
-	const int DEFAULT_FLAG = 1;
-	void toggleLineGroup(size_t pLineGroup);
-	size_t getLineCount();
-	size_t createLineGroup(size_t pLineOffset, size_t pLineCount, int pFlag = DEFAULT_FLAG);
-	size_t createLine(glm::vec4 pVertexAPos, size_t pColorIndexA, glm::vec4 pVertexBPos, size_t pColorIndexB);
-	size_t createLine(glm::vec4 pVertexAPos, glm::vec4 pVertexBPos, size_t pColorIndex);
-	size_t createLine(size_t pVertexA, size_t pVertexB);
-	size_t createLineVertex(glm::vec4 pPos, size_t pColorIndex);
-	size_t createLineVertex(size_t pPosIndex, size_t pColorIndex);
-	size_t createLineVertexPosition(glm::vec4 pPos);
-	void setLineColor(size_t pLineIndex, size_t pColorIndex);
-	void setLineVertexColor(size_t pLineIndex, size_t pVertex, size_t pColorIndex);
+
+	void toggleLineGroup( unsigned int pLineGroup );
+	unsigned int createLineGroup( unsigned int pLineOffset, 
+			unsigned int pLineCount, int pFlags = DEFAULT_LINE_GROUP_FLAGS );
+	//struct LineVertex{
+	//    LinePointIt vertex;
+	//    gl::ColorIt color;
+	//};
+
+
+	glm::uvec2 createLine( unsigned int pPosA, unsigned int pPosB, unsigned int pColorA, unsigned int pColorB );
+	glm::uvec2 createLine( unsigned int pPosA, unsigned int pPosB, unsigned int pColor );
+	unsigned int createLineVertexPos( glm::vec4 pPos );
+	unsigned int createLineVertex( unsigned int pVertex, unsigned int pColor = 0 );
+	void setLineVertexColor( unsigned int pVertex, unsigned int pColor );
+
+
 	void initLineVAO();
 	void updateLinePositions();
+	void updateLineColors();
 	void renderLines();
 	void initLineShader();
-	void updateLineBuffers();
 	void setupLineShader();
+	unsigned int getLineCount();
 }
+

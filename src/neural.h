@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <stddef.h>
 namespace neural {
 
 	void setup();
@@ -12,7 +13,7 @@ namespace neural {
 	struct ExtSense {
 		
 
-		size_t stream_neuron;
+		unsigned int stream_neuron;
 	};
 
 
@@ -33,16 +34,16 @@ namespace neural {
 
 	struct Synapse {
 		Synapse() {}
-		Synapse(size_t pFrom, size_t pTo, float pInitialRating = 0.0f)
-			:from(pFrom), to(pTo), rating(pInitialRating){}
-		size_t from;
-		size_t to;
+		Synapse( unsigned int pFrom, unsigned int pTo, float pInitialRating = 0.0f )
+			:from( pFrom ), to( pTo ), rating( pInitialRating ){}
+		unsigned int from;
+		unsigned int to;
 		float rating;
 	};
 
 	struct Circuit {
 		void step();
-		void stepSynapse(size_t n, size_t s);
+		void stepSynapse( unsigned int n, unsigned int s );
 
 		std::vector<Neuron> neurons;
 		std::vector<std::vector<Synapse>> synapses;
@@ -50,7 +51,7 @@ namespace neural {
 
 	class Agent {
 	public:
-		size_t entity;//use this ID to get and set entity data
+		unsigned int entity;//use this ID to get and set entity data
 		Circuit circuit;
 	};
 }

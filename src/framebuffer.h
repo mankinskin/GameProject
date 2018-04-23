@@ -14,10 +14,8 @@ namespace texture {
 	extern size_t gDepthRenderbuffer;
 
 	void initGUIFBO();
-	extern size_t guiFBO;
-	extern size_t quadIndexBuffer;
-	extern size_t quadIndexTexture;
-	extern size_t fontColorTexture;
-	extern size_t guiDepthRenderbuffer;
+	extern unsigned int guiFBO;
+	extern unsigned int quadIndexTexture;
+	extern unsigned int fontColorTexture;
+	extern unsigned int guiDepthRenderbuffer;
 }
-

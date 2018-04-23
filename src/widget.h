@@ -1,284 +1,132 @@
 #pragma once
-#include "Quad.h"
+#include <array>
 #include <tuple>
 #include <utility>
-#include "Colorings.h"
-#include <glm\glm.hpp>
 #include <vector>
-#include <array>
+#include <glm.hpp>
+#include "color.h"
+#include "quad.h"
+#include "quadcolors.h"
+#include "utils.h"
+#include "element.h"
+#include "element_utils.h"
+
+
 //-----Widgets
-//- Widgets are used to control collections of 2D Quads in an object based manner
-namespace gui {
+// This class is rather complex. It also does a little too many things in one place.
+// However it provides a very efficient and stable, yet extremely flexible foundation for a class hierarchy
+//
+// To create a Widget composed of 2D quads you have to provide some data:
+// - the initial data to be loaded into each element(quad) of the widget
+// - the policies about how the element should pass an input command to its subelements
 
+namespace gui 
+{
+    template<typename... Subs>
+        struct Widget
+        {
+        public:
+            static const size_t COUNT = sizeof...(Subs);
+            using SubWidgets = utils::Element<Subs...>;
+            using Colors = utils::Element<typename Subs::Colors...>;
+            using MovePolicy = utils::gen_Element_t<glm::vec2, COUNT>;
+            using ResizePolicy = utils::gen_Element_t<glm::vec4, COUNT>;
+            using Initer = utils::Element<typename Subs::Initer...>;
+            
+            struct Preset
+            {
+                Preset( Initer pIniter, Colors pColors, 
+                        MovePolicy pMovePolicy, ResizePolicy pResizePolicy )
+                    :initer( pIniter ), 
+                    colors( pColors ),
+                    movepolicy( pMovePolicy ), 
+                    resizepolicy( pResizePolicy )
+                {
+                }
+                const Initer initer;
+                const Colors colors;
+                const MovePolicy movepolicy;
+                const ResizePolicy resizepolicy;
+            }; 
+            const SubWidgets subwidgets;
+            const Colors colors;
+            const MovePolicy movepolicy;
+            const ResizePolicy resizepolicy;
 
-	template<typename Wid>
-	struct WidgetMovePolicy {
-		WidgetMovePolicy() {	}
-		WidgetMovePolicy(std::array<glm::vec2, Wid::ELEMENT_COUNT> pPolicyMatrix)
-			:matrix(pPolicyMatrix){}
-		std::array<glm::vec2, Wid::ELEMENT_COUNT> matrix;
-	};
+            Widget( Preset pPreset )
+                :subwidgets( pPreset.initer ), 
+                colors( pPreset.colors ),
+                 movepolicy( pPreset.movepolicy ), 
+                 resizepolicy( pPreset.resizepolicy )
+            {
+                color( colors );
+            }
 
-	template<typename Wid>
-	struct WidgetResizePolicy {
-		WidgetResizePolicy() {	}
-		WidgetResizePolicy(std::array<glm::vec4, Wid::ELEMENT_COUNT> pPolicyMatrix)
-			:matrix(pPolicyMatrix) {}
-		std::array<glm::vec4, Wid::ELEMENT_COUNT> matrix;
-	};
+            Widget( Initer pIniter, Colors pColors, 
+                    MovePolicy pMovePolicy, ResizePolicy pResizePolicy )
+                :subwidgets( pIniter ), 
+                colors( pColors ),
+                movepolicy( pMovePolicy ), 
+                resizepolicy( pResizePolicy )
+            {
+                color( colors );
+            }
 
+            void move_n( utils::_index<0> i, const glm::vec2 pV ) const
+            {
+            }
+            template<size_t N>
+                void move_n( utils::_index<N> i, const glm::vec2 pV ) const
+                {
+                    move_n( utils::_index<N-1>(), pV );
+                    std::get<N-1>( subwidgets.subelements ).move( pV * std::get<N - 1>( movepolicy.subelements ) );
+                }
+            void resize_n( utils::_index<0> i, const glm::vec2 pV ) const
+            {
+            }
+            template<size_t N>
+                void resize_n( utils::_index<N> i, const glm::vec2 pV ) const
+                {
+                    resize_n( utils::_index<N-1>(), pV );
+                    std::get<N-1>( subwidgets.subelements ).resize( pV * std::get<N - 1>( resizepolicy.subelements ) );
+                }
+            void color_n( utils::_index<0> i, Colors pColors ) const
+            {
+            }
+            template<size_t N>
+                void color_n( utils::_index<N> i, Colors pColors ) const
+                {
+                    color_n( utils::_index<N-1>(), pColors );
+                    std::get<N - 1>(subwidgets.subelements).color( std::get<N - 1>(pColors.subelements) );
+                }
+            void move( const glm::vec2 pV ) const
+            {
+                move_n( utils::_index<COUNT>(), pV );   
+            }
+            void resize( const glm::vec2 pV ) const
+            {
+                resize_n( utils::_index<COUNT>(), pV );   
+            }
+            void color( Colors pColors ) const
+            {
+                color_n( utils::_index<COUNT>(), pColors );   
+            }
+        };
 
-	template<typename Wid>
-	struct WidgetSetup {
-		WidgetSetup(typename Wid::initer_t pIniter, WidgetMovePolicy<Wid> pMovePolicy, WidgetResizePolicy<Wid> pResizePolicy)
-			:move_policy(pMovePolicy), resize_policy(pResizePolicy), initer(pIniter) {}
-
-		typename Wid::initer_t initer;
-		WidgetMovePolicy<Wid> move_policy;
-		WidgetResizePolicy<Wid> resize_policy;
-		operator Wid() {
-			return Wid(initer, move_policy, resize_policy);
-		}
-	};
-	template<>
-	struct WidgetSetup<Quad> {
-		WidgetSetup(glm::vec4 pIniter)
-			:initer(pIniter) {}
-
-		glm::vec4 initer;
-		operator Quad() {
-			return Quad(initer);
-		}
-	};
-	template<class... Colors>
-	struct WidgetColors {
-		WidgetColors(Colors... pColors)
-			:colors(pColors...) {}
-		std::tuple<Colors...> colors;
-	};
-
-
-	extern std::vector<glm::vec2> allWidgetPositions;
-	extern std::vector<glm::vec2> allWidgetSizes;
-
-	template<class ...Elems>
-	class Widget {
-	public:
-		static const size_t ELEMENT_COUNT = sizeof...(Elems);
-		template<size_t N, typename ...Initers>
-		struct extract_initers {
-			typedef typename std::tuple_element_t<N - 1, std::tuple<Elems...>>::initer_t element_initializer_t;
-			typedef typename extract_initers<N - 1, element_initializer_t, Initers...>::result result;
-		};
-		template<typename ...Rest>
-		struct extract_initers<0, Rest...> {
-			typedef typename std::tuple<WidgetSetup<Rest>...> result;
-		};
-		typedef typename std::tuple<WidgetSetup<Elems>...> initer_t;
-
-
-		template<size_t N>
-		struct construct_all {
-
-			static std::tuple<Elems...> func(typename Widget<Elems...>::initer_t pIniter) {
-				std::tuple<Elems...> re = construct_all<N - 1>::func(pIniter);
-				std::get<N - 1>(re) = std::get<N - 1>(pIniter);
-				return re;
-			}
-
-		};
-		template<>
-		struct construct_all<0> {
-			static std::tuple<Elems...> func(typename Widget<Elems...>::initer_t pIniter) {
-				return std::tuple<Elems...>();
-			}
-		};
-		Widget() {	}
-		Widget(Elems... pElements)
-			:elements({ pElements... })
-		{	}
-		Widget(std::tuple<Elems...> pElements)
-			:elements(pElements)
-		{	}
-		Widget(initer_t pIniter)
-			:elements(construct_all<ELEMENT_COUNT>::func(pIniter))
-		{	}
-		Widget(typename Widget<Elems...>::initer_t pIniter, WidgetMovePolicy<Widget<Elems...>> pMovePolicy, WidgetResizePolicy<Widget<Elems...>> pResizePolicy)
-			:move_policy(pMovePolicy), resize_policy(pResizePolicy), elements(construct_all<ELEMENT_COUNT>::func(pIniter))
-		{
-			pos_index = allWidgetPositions.size();
-			size_index = allWidgetSizes.size();
-			allWidgetPositions.push_back(glm::vec2());
-			allWidgetSizes.push_back(glm::vec2());
-		}
-		template<size_t N>
-		auto element() {
-			return std::get<N>(elements);
-		}
-		glm::vec2& get_pos() {
-			return allWidgetPositions[pos_index];
-		}
-		glm::vec2& get_size() {
-			return allWidgetSizes[size_index];
-		}
-		void set_pos(glm::vec2 pNewPos) {
-			set_all_pos<ELEMENT_COUNT>(pNewPos);
-			allWidgetPositions[pos_index] = pNewPos;
-		}
-		template<size_t N>
-		void set_element_pos(glm::vec2 pNewPos) {
-			std::get<N>(elements).set_pos(pNewPos);
-		}
-
-		void move(glm::vec2 pOffset) {
-			move_all<ELEMENT_COUNT>(pOffset);
-			allWidgetPositions[pos_index] += pOffset;
-		}
-		void move(float pOffsetX, float pOffsetY) {
-			move(glm::vec2(pOffsetX, pOffsetY));
-		}
-		template<size_t N>
-		void move_element(glm::vec2& pOffset) {
-			std::get<N>(elements).move(pOffset * move_policy.matrix[N]);
-		}
-
-		void move_to(glm::vec2 pNewPos) {
-			move_all<ELEMENT_COUNT>((pNewPos - pos) * move_policy.matrix[N]);
-			allWidgetPositions[pos_index] = pNewPos;
-		}
-		template<size_t N>
-		void move_element_to(glm::vec2& pNewPos) {
-			std::get<N>(elements).move((pNewPos - pos) * move_policy.matrix[N]);
-		}
-
-		void resize(glm::vec2& pOffset) {
-			resize_all<ELEMENT_COUNT>(pOffset);
-		}
-		template<size_t N>
-		void resize_element(glm::vec2& pOffset) {
-			std::get<N>(elements).resize(pOffset * glm::vec2(resize_policy.matrix[N].z, resize_policy.matrix[N].w));
-		}
-
-		template<class... Colors>
-		void color(WidgetColors<Colors...> pColors) {
-			static_assert(sizeof...(Colors) == sizeof...(Elems), "Color count does not match the element count of Widget");
-			col<Colors...>::color_elements<sizeof...(Elems)>::func(elements, pColors);
-		}
-		
-	private:
-
-		std::tuple<Elems...> elements;
-		size_t pos_index;
-		size_t size_index;
-		WidgetMovePolicy<Widget<Elems...>> move_policy;
-		WidgetResizePolicy<Widget<Elems...>> resize_policy;
-
-
-		template<size_t N>
-		void move_all(glm::vec2& pOffset) {//move all elements
-			move_all<N - 1>(pOffset);
-			move_element<N - 1>(pOffset);
-		}
-		template<>
-		void move_all<0>(glm::vec2& pOffset) {}
-
-		template<size_t N>
-		void set_all_pos(glm::vec2& pNewPos) {//move all elements
-			set_all_pos<N - 1>(pNewPos);
-			set_element_pos<N - 1>(pNewPos);
-		}
-		template<>
-		void set_all_pos<0>(glm::vec2& pNewPos) {}
-
-		template<size_t N>
-		void resize_all(glm::vec2& pOffset) {//move all elements
-			resize_all<N - 1>(pOffset);
-
-			move_element<N - 1>(pOffset * glm::vec2(resize_policy.matrix[N - 1].x, resize_policy.matrix[N - 1].y));
-			resize_element<N - 1>(pOffset);//resize matrix is applied later to size
-		}
-		template<>
-		void resize_all<0>(glm::vec2& pOffset) {}
-
-		template<class... Colors>
-		struct col {
-			template<size_t I>
-			struct color_elements {
-				static void func(std::tuple<Elems...>& pElems, WidgetColors<Colors...>& pColors) {
-					color_elements<I - 1>::func(pElems, pColors);
-					std::get<I - 1>(pElems).color(std::get<I - 1>(pColors.colors));
-				}
-			};
-			template<>
-			struct color_elements<0> {
-				static void func(std::tuple<Elems...>& pElems, WidgetColors<Colors...>& pColors) {				}
-			};
-
-		};
-
-
-	};
-
-
-	template<class Widget>
-	void move_widget(Widget pWidget, glm::vec2& pOffset) {
-		pWidget.move(pOffset);
-	}
-	template<class Widget, typename A, typename B>
-	void move_widget(Widget pWidget, A pOffsetX, B pOffsetY) {
-		pWidget.move(glm::vec2(pOffsetX, pOffsetY));
-	}
-	template<class Widget, size_t N>
-	void move_widget_element(Widget pWidget, float pOffsetX, float pOffsetY) {
-		pWidget.move.element<N>(glm::vec2(pOffsetX, pOffsetY));
-	}
-	template<class Widget>
-	void resize_widget(Widget pWidget, glm::vec2& pOffset) {
-		pWidget.resize(pOffset);
-	}
-	template<class Widget, typename A, typename B>
-	void resize_widget(Widget pWidget, A pDirX, B pDirY) {
-		pWidget.resize(glm::vec2(pDirX, pDirY));
-	}
-
-	//generate Widget with N Quads 
-	template<size_t N, typename ...Quads>
-	struct gen_quad_group {//MAY BE SLOW TO COMPILE
-
-		typedef typename gen_quad_group<N - 1, Quad, Quads...>::type type;
-	};
-	template<typename ...Quads>
-	struct gen_quad_group<0, Quads...> {//MAY BE SLOW TO COMPILE
-
-		typedef typename Widget<Quads...> type;
-	};
-
-	template<size_t QuadCount>
-	using QuadGroup = typename gen_quad_group<QuadCount>::type;
-
-
-	//generate Widget with N Quads 
-	template<size_t N, typename Color, typename ...Colors>
-	struct gen_color_group {
-
-		typedef typename gen_color_group<N - 1, Color, Color, Colors...>::type type;
-	};
-	template<typename Color, typename ...Colors>
-	struct gen_color_group<0, Color, Colors...> {
-
-		typedef typename WidgetColors<Colors...> type;
-	};
-
-	template<size_t ColorCount, typename Color = ConstColor>
-	using ColorGroup = typename gen_color_group<ColorCount, Color>::type;
-
+    template<typename... Subs>
+        void moveWidget( Widget<Subs...> pWidget, glm::vec2& pV )
+        {
+            pWidget.move( pV );
+        }
+    template<typename... Subs>
+        void resizeWidget( Widget<Subs...> pWidget, glm::vec2& pV )
+        {
+            pWidget.resize( pV );
+        }
+    template<typename... Subs>
+        void colorWidget( Widget<Subs...> pWidget, 
+                typename Widget<Subs...>::Colors& pColors )
+        {
+            pWidget.color( pColors );
+        }
 }
-
-
-
-
-
-
-
-
-

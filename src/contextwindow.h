@@ -4,7 +4,6 @@
 #include <GLFW\glfw3.h>
 
 namespace app {
-    namespace ContextWindow {
 
 	struct Monitor {
 	    //structure to wrap glfw monitor functionality
@@ -14,8 +13,8 @@ namespace app {
 	    const GLFWvidmode* vidModes = nullptr;
 	    const GLFWvidmode* currentVideoMode = nullptr;
 	    int xpos, ypos = 0;
-	    size_t dpi_x;
-	    size_t dpi_y;
+	    unsigned int dpi_x;
+	    unsigned int dpi_y;
 	    int physical_width;
 	    int physical_height;
 	    int pixels_x;
@@ -29,18 +28,17 @@ namespace app {
 
 	struct Window {
 
-	    void setSize(size_t pWidth, size_t pHeight);
+	    void setSize( unsigned int pWidth, unsigned int pHeight );
 	    void init();
 
-	    GLFWwindow* operator=(const Window& obj) {
+	    GLFWwindow* operator=( const Window& obj ) {
 		return window;
 	    }
 
 	    GLFWwindow* window = nullptr;
-	    size_t width = 1000;
-	    size_t height = 7000;
+	    unsigned int width = 1000;
+	    unsigned int height = 7000;
 	    std::string name = "GLFW/OpenGL Window";
 	    int fullscreen = 0;;
 	};
-    }
 }

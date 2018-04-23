@@ -3,41 +3,47 @@
 #include <GL\glew.h>
 #include <string>
 #include <unordered_map>
-#include <glm\glm.hpp>
-#include "VAO.h"
+#include <glm.hpp>
+#include "storage.h"
+#include <typeinfo>
+#include <gtc/type_ptr.hpp>
 
-namespace shader {
-	void loadShaders();
-	size_t createModule(std::string pFileName);
-	size_t createProgram(std::string pProgramName);
-	size_t newProgram(std::string pProgramName, size_t pVertexModuleIndex, size_t pFragmentModuleIndex);
-	size_t newProgram(std::string pProgramName, size_t pVertexModuleIndex, size_t pFragmentModuleIndex, size_t pGeometryModuleIndex);
-	size_t newProgram(std::string pProgramName, size_t pComputeModuleIndex);
-	void use(std::string pProgramName);
-	void use(size_t pID);
+namespace shader 
+{
+
+	unsigned int createModule( std::string pFileName );
+	unsigned int createProgram( std::string pProgramName );
+	unsigned int newProgram( std::string pProgramName, unsigned int pVertexModuleIndex, unsigned int pFragmentModuleIndex );
+	unsigned int newProgram( std::string pProgramName, unsigned int pVertexModuleIndex, unsigned int pFragmentModuleIndex, unsigned int pGeometryModuleIndex );
+	unsigned int newProgram( std::string pProgramName, unsigned int pComputeModuleIndex );
+	void use( std::string pProgramName );
+	void use( unsigned int pID );
 	void unuse();
-	void addVertexAttribute(size_t pProgram, std::string pAttributeName, size_t pAttributeIndex);
-	void addVertexAttribute(std::string pProgramName, std::string pAttributeName, size_t pAttributeIndex);
+	void addVertexAttribute( unsigned int pProgram, std::string pAttributeName, unsigned int pAttributeIndex );
+	void addVertexAttribute( std::string pProgramName, std::string pAttributeName, unsigned int pAttributeIndex );
 
-	void bindUniformBufferToShader(std::string pProgramName, size_t pTargetStorageIndex, std::string pBlockName);
-	void bindUniformBufferToShader(size_t pProgram, size_t pTargetStorageIndex, std::string pBlockName);
-	void bindUniformBufferToShader(size_t pProgram, vao::Storage& pStorage, std::string pBlockName);
-
-	void setUniform(size_t& pProgram, std::string& pUniformName, int& pValue);
-	void setUniform(size_t& pProgram, std::string& pUniformName, size_t& pValue);
-	void setUniform(size_t& pProgram, std::string& pUniformName, float& pValue);
-	void setUniform(size_t& pProgram, std::string& pUniformName, glm::ivec3& pValue);
-	void setUniform(size_t& pProgram, std::string& pUniformName, glm::uvec3& pValue);
-	void setUniform(size_t& pProgram, std::string& pUniformName, glm::vec3& pValue);
-	void setUniform(size_t& pProgram, std::string& pUniformName, glm::mat3& pValue, bool pTranspose = 0);
-	void setUniform(size_t& pProgram, std::string& pUniformName, glm::ivec4& pValue);
-	void setUniform(size_t& pProgram, std::string& pUniformName, glm::uvec4& pValue);
-	void setUniform(size_t& pProgram, std::string& pUniformName, glm::vec4& pValue);
-	void setUniform(size_t& pProgram, std::string& pUniformName, glm::mat4& pValue, bool pTranspose = 0);
 	template<typename T>
-	void setUniform(size_t& pProgram, std::string pUniformName, T pValue)
-	{
-		setUniform(pProgram, pUniformName, pValue);
-	}
+		void bindUniformBufferToShader( unsigned int pProgram, const gl::Storage<T>& pStorage, std::string pBlockName )
+		{
+			int blockIndex = glGetUniformBlockIndex( pProgram, pBlockName.c_str() );
+			if ( blockIndex < 0 ) {
+				debug::pushError( "invalid uniform block name " + pBlockName + "!" );
+				return;
+			}
+			glUniformBlockBinding( pProgram, blockIndex, pStorage.binding );
+		}
+	extern unsigned int currentShaderProgram;
 
+	void setUniform( unsigned int pProgram, std::string pUniformName, int pValue );
+	void setUniform( unsigned int pProgram, std::string pUniformName, unsigned int pValue );
+	void setUniform( unsigned int pProgram, std::string pUniformName, float pValue );
+	void setUniform( unsigned int pProgram, std::string pUniformName, glm::vec3 pValue );
+	void setUniform( unsigned int pProgram, std::string pUniformName, glm::vec4 pValue ); 
+	void setUniform( unsigned int pProgram, std::string pUniformName, glm::uvec4 pValue );
+	void setUniform( unsigned int pProgram, std::string pUniformName, glm::uvec3 pValue );
+	void setUniform( unsigned int pProgram, std::string pUniformName, glm::ivec4 pValue );
+	void setUniform( unsigned int pProgram, std::string pUniformName, glm::ivec3 pValue );
+	void setUniform( unsigned int pProgram, std::string pUniformName, glm::mat4 pValue, bool pTranspose );
+	void setUniform( unsigned int pProgram, std::string pUniformName, glm::mat3 pValue, bool pTranspose );
 }
+

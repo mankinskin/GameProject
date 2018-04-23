@@ -2,61 +2,54 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <glew.h>
+#include "storage.h"
 
-namespace vao {
-	extern int MIN_MAP_BUFFER_ALIGNMENT;
-	extern int MAP_PERSISTENT_FLAGS;
-	extern int UNIFORM_BUFFER_OFFSET_ALIGNMENT;
-	extern int SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT;
-	extern int MAX_UNIFORM_BUFFER_BINDINGS;
-	struct Storage {
-		Storage() {}
-		size_t ID = 0;
-		size_t capacity = 0;
-		size_t bufferFlags = 0;
-		size_t streamIndex = 0;
-		size_t target = 0;
-		size_t binding = 0;
+namespace gl 
+{
+    struct VAO
+    {
+        VAO() 
+        {}
+        VAO( std::string pName )
+            :name( pName )
+        {
+            printf( "Creating VAO: %s...\n", name.c_str() );
+            glCreateVertexArrays( 1, &ID );
+        }
+        void vertexAttrib( unsigned int pBindingIndex, unsigned int pAttributeIndex, 
+                unsigned int pCount, unsigned int pType, 
+                unsigned int pOffset, bool pNormalize = false );
+        template<typename T>
+            void vertexBuffer( unsigned int pBinding, Storage<T>& pBuffer, 
+                    unsigned int pStride = sizeof(T) )
+            {
+                pBuffer.setTarget( GL_ARRAY_BUFFER );
+                glVertexArrayVertexBuffer( ID, pBinding, pBuffer.ID, 0, pStride );
+            } 
+        template<typename T>
+            void elementBuffer( Storage<T>& pBuffer )
+            {
+                pBuffer.setTarget( GL_ELEMENT_ARRAY_BUFFER );
+                glVertexArrayElementBuffer( ID, pBuffer.ID );
+            }
 
-		size_t vaoID = 0;
-		size_t stride = UNIFORM_BUFFER_OFFSET_ALIGNMENT;
-	};
+        void attribDivisor( unsigned int pAttrib, unsigned int pDivisor );
 
-	size_t createStorage();
-	void initStorageData(size_t pStorage, size_t pCapacity, const void * pData, size_t pFlags);
-	size_t createStorage(size_t pCapacity, const void* pData, size_t pFlags);
-
-	struct Stream {
-		Stream() : mapFlags(0), mappedPtr(nullptr), alignment(UNIFORM_BUFFER_OFFSET_ALIGNMENT), updateOffset(0), lastUpdateSize(0) {}
-		size_t mapFlags;
-		void* mappedPtr;
-		size_t alignment;
-		size_t updateOffset;
-		size_t lastUpdateSize;
-	};
-
-	size_t createStream(size_t pStorageIndex, size_t pMapFlags);
-
-
-	size_t getStorageID(size_t pStorageIndex);
-	void* getMappedPtr(Storage& pStorage);
-	void* getMappedPtr(size_t pStorageIndex);
-	void uploadStorage(size_t pStorageIndex, size_t pUploadSize, void * pData);
-	void uploadStorage(Storage& pStorage, size_t pUploadSize, void * pData);
-	void * mapStorage(size_t pStorageIndex, size_t pFlags);
-	void * mapStorage(Storage& pStorage, size_t pFlags);
-	void bindStorage(size_t pTarget, size_t pStorageIndex);
-	void bindStorage(size_t pTarget, Storage& pStorage);
-	void bindStorageRange(Storage& pStorage, size_t pOffset, size_t pSize);
-	void bindStorageRange(size_t pStorageIndex, size_t pOffset, size_t pSize);
-	void setVertexArrayVertexStorage(size_t pVAO, size_t pBinding, size_t pStorageIndex, size_t pStride);
-	void setVertexArrayVertexStorage(size_t pVAO, size_t pBinding, Storage& pStorage, size_t pStride);
-	void setVertexAttrib(size_t pVAO, size_t pBindingIndex, size_t pAttributeIndex, size_t pCount, size_t pType, size_t pOffset, size_t pNormalize = false);
-
-
-	extern std::unordered_map<size_t, size_t> bufferTargetBinds;
-	extern std::vector<Storage> allStorages;
-	extern std::vector<Stream> allStreams;
-
+        void bind() 
+        {
+            glBindVertexArray( ID );
+        }
+        void unbind() 
+        {
+            glBindVertexArray( 0 );
+        }
+        operator unsigned int()
+        {
+            return ID;
+        }
+        std::string name;
+        unsigned int ID;
+    };
 
 }
