@@ -1,7 +1,7 @@
 #pragma once
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include <glm\glm.hpp>
+#include <glm.hpp>
 #include <string>
 
 namespace gui 

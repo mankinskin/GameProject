@@ -6,9 +6,9 @@
 #include <gtc/type_ptr.hpp>
 #include "app.h"
 #include <math.h>
-#include "glDebug.h"
+#include "gldebug.h"
 #include <algorithm>
-#include "Mouse.h"
+#include "mouse.h"
 
 const float yRestrictionAngle = 3.0f;
 const float eulerian = 0.0001f;

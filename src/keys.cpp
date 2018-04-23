@@ -1,7 +1,7 @@
-#include "Keys.h"
-#include "Signal.h"
-#include "Event.h"
-#include "Gates.h"
+#include "keys.h"
+#include "signal.h"
+#include "event.h"
+#include "gates.h"
 
 using namespace signals;
 using namespace events;

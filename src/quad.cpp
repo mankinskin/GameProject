@@ -1,6 +1,6 @@
-#include "Quad.h"
+#include "quad.h"
 #include "shader.h"
-#include "VAO.h"
+#include "vao.h"
 #include <algorithm>
 #include "gldebug.h"
 #include "framebuffer.h"

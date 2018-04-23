@@ -1,9 +1,9 @@
 #pragma once
-#include <gl\glew.h>
+#include <glew.h>
 #include <string>
 #include <vector>
 #include <unordered_map>
-namespace shader {
+namespace Shader {
 	enum class ModuleType {
 		Vertex,
 		Fragment,
@@ -22,7 +22,7 @@ namespace shader {
 		std::string name;
 		ProgramType type;
 		unsigned int stages[4];
-		unsigned int shaderCount;
+		unsigned int ShaderCount;
 	};
 
 	struct Module {
@@ -34,7 +34,7 @@ namespace shader {
 	};
 	
 	extern std::vector<Program> allPrograms;
-	extern std::unordered_map<std::string, unsigned int> shaderProgramLookup;
+	extern std::unordered_map<std::string, unsigned int> ShaderProgramLookup;
 	extern std::vector<Module> allModules;
 	extern std::unordered_map<std::string, unsigned int> moduleLookup;
 

@@ -1,8 +1,8 @@
-#include "Mouse.h"
+#include "mouse.h"
 #include "app.h"
-#include "ContextWindow.h"
+#include "contextwindow.h"
 #include <algorithm>
-#include "Event.h"
+#include "event.h"
 #include <array>
 #include "quadindex.h"
 #include "gl.h"

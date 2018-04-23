@@ -1,13 +1,12 @@
 #include "gl.h"
-#include "Debug.h"
-#include <conio.h>
-#include "App.h"
+#include "debug.h"
+#include "app.h"
 #include <array>
 #include "viewport.h"
 #include "primitives.h"
 #include "camera.h"
-#include "glDebug.h"
-#include <glm\gtc\type_ptr.hpp>
+#include "gldebug.h"
+#include <gtc\type_ptr.hpp>
 #include "texture.h"
 #include "font_loader.h"
 #include "quad.h"
@@ -19,7 +18,7 @@
 #include "entities.h"
 #include "mesh.h"
 #include "physics.h"
-#include "Collision.h"
+#include "collision.h"
 #include "voxelization.h"
 
 int gl::MAX_UNIFORM_BLOCK_SIZE = 0;

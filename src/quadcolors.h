@@ -13,11 +13,11 @@
 namespace gui 
 {
 	extern gl::VAO colorQuadVAO;
-	extern unsigned int colorQuadShader;
+	extern unsigned int colorquadShader;
 	extern gl::StreamStorage<unsigned int> colorQuadBuffer;
 
-	void initColorQuadShader();
-	void setupColorQuadShader();
+	void initColorquadShader();
+	void setupColorquadShader();
 
 	void renderColorQuads();
 

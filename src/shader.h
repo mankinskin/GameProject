@@ -1,6 +1,6 @@
 #pragma once
 #include "gl.h"
-#include <GL\glew.h>
+#include <glew.h>
 #include <string>
 #include <unordered_map>
 #include <glm.hpp>
@@ -8,7 +8,7 @@
 #include <typeinfo>
 #include <gtc/type_ptr.hpp>
 
-namespace shader 
+namespace Shader 
 {
 
 	unsigned int createModule( std::string pFileName );

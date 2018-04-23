@@ -1,11 +1,11 @@
-#include "Font_Loader.h"
+#include "font_loader.h"
 #define _USE_MATH_DEFINES
 #include "shader.h"
 #include "texture.h"
-#include "glDebug.h"
+#include "gldebug.h"
 #include "camera.h"
-#include "VAO.h"
-#include "Debug.h"
+#include "vao.h"
+#include "debug.h"
 #include <algorithm>
 #include "../dt/dt.h"
 #include "../dt/image.h"

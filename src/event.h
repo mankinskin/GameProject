@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include "Signal.h"
-#include "Gates.h"
+#include "signal.h"
+#include "gates.h"
 
 namespace events {
 

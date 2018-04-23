@@ -1,10 +1,12 @@
-#include "Colorings.h"
+#include "colorings.h"
 #include "gui.h"
-#include "VAO.h"
+#include "vao.h"
 #include "shader.h"
 #include "gl.h"
-#include "glDebug.h"
+#include "gldebug.h"
 #include "texture.h"
+
+#include <algorithm>
 
 
 size_t guiTextureAtlas;
@@ -40,15 +42,15 @@ void gui::initConstColorVAO() {
 }
 
 void gui::initConstColorShader() {
-	constColorShader = shader::newProgram("constColorQuadShader", shader::createModule("constColorQuadShader.vert"), shader::createModule("constColorQuadShader.frag"));
-	shader::addVertexAttribute(constColorShader, "corner_pos", 0);
+	constColorShader = Shader::newProgram("constColorquadShader", Shader::createModule("constColorquadShader.vert"), Shader::createModule("constColorquadShader.frag"));
+	Shader::addVertexAttribute(constColorShader, "corner_pos", 0);
 }
 
 
 void gui::setupConstColorShader() {
-	shader::bindUniformBufferToShader(constColorShader, quadBuffer, "QuadBuffer");
-	shader::bindUniformBufferToShader(constColorShader, constColoringBuffer, "ColoringBuffer");
-	shader::bindUniformBufferToShader(constColorShader, constColorBuffer, "ColorBuffer");
+	Shader::bindUniformBufferToShader(constColorShader, quadBuffer, "QuadBuffer");
+	Shader::bindUniformBufferToShader(constColorShader, constColoringBuffer, "ColoringBuffer");
+	Shader::bindUniformBufferToShader(constColorShader, constColorBuffer, "ColorBuffer");
 }
 
 void gui::updateConstColors()
@@ -81,11 +83,11 @@ size_t gui::getConstColor(std::string pColorName)
 
 void gui::renderConstColors() {
 	glBindVertexArray(constColorVAO);
-	shader::use(constColorShader);
+	Shader::use(constColorShader);
 
 	glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, allQuads.size());
 
-	shader::unuse();
+	Shader::unuse();
 	glBindVertexArray(0);
 }
 

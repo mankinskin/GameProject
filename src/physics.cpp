@@ -1,6 +1,6 @@
 #include "physics.h"
-#include "Collision.h"
-#include "Entities.h"
+#include "collision.h"
+#include "entities.h"
 float physics::gravity_force = 9.81f;//m/s²
 
 void physics::step()

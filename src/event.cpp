@@ -1,4 +1,4 @@
-#include "Event.h"
+#include "event.h"
 
 std::vector<bool> events::allEventStates;
 std::vector<void( * )()> events::eventCheckers = std::vector<void( * )()>();

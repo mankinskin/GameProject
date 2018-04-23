@@ -1,6 +1,6 @@
 #include "text.h"
 #include "shader.h"
-#include "glDebug.h"
+#include "gldebug.h"
 #include <algorithm>
 #include "camera.h"
 #include "debug.h"
@@ -338,13 +338,13 @@ void gui::text::loadTextboxes()
 
 void gui::text::setupGlyphShader() 
 {
-	shader::bindUniformBufferToShader( glyphShaderProgram, gl::generalUniformBuffer, "GeneralUniformBuffer" );
+	Shader::bindUniformBufferToShader( glyphShaderProgram, gl::generalUniformBuffer, "GeneralUniformBuffer" );
 }
 
 void gui::text::renderGlyphs()
 {
 	glBindVertexArray( fontVAO );
-	shader::use( glyphShaderProgram );
+	Shader::use( glyphShaderProgram );
 	float ref = 0.5f;
 	glDisable( GL_DEPTH_TEST );
 	glAlphaFunc( GL_GREATER, ref );
@@ -352,11 +352,11 @@ void gui::text::renderGlyphs()
 	for ( unsigned int fo = 0; fo < allFonts.size(); ++fo ) {
 		Font& font = allFonts[fo];
 		glBindTexture( GL_TEXTURE_2D, font.atlasID );
-		shader::bindUniformBufferToShader( glyphShaderProgram, font.glyphStorage, "GlyphBuffer" );
+		Shader::bindUniformBufferToShader( glyphShaderProgram, font.glyphStorage, "GlyphBuffer" );
 
 		for ( unsigned int s = 0; s < font.stringCount; ++s ) {
 			String& str = allFontStrings[font.stringOffset + s];
-			shader::setUniform( glyphShaderProgram, "styleIndex", ( unsigned int )0 );
+			Shader::setUniform( glyphShaderProgram, "styleIndex", ( unsigned int )0 );
 
 			glDrawElementsInstancedBaseInstance( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, str.count, str.offset );
 
@@ -364,7 +364,7 @@ void gui::text::renderGlyphs()
 	}
 	glEnable( GL_DEPTH_TEST );
 	glAlphaFunc( GL_ALWAYS, 0.0f );
-	shader::unuse();
+	Shader::unuse();
 	glBindVertexArray( 0 );
 }
 

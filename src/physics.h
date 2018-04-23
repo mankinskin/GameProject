@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <glm\glm.hpp>
+#include <glm.hpp>
 namespace physics {
 	extern float gravity_force;
 

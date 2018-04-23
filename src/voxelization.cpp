@@ -1,5 +1,5 @@
 #include "voxelization.h"
-#include "Shader.h"
+#include "shader.h"
 #include "texture.h"
 #include "mesh.h"
 #include "material.h"
@@ -14,10 +14,10 @@ unsigned int voxelization::backVolumeImage = 0;
 glm::mat4 voxelization::projectionMatrix;
 glm::vec4* volume = new glm::vec4[200*200*200];
 void voxelization::init() {
-	voxelizationShader = shader::newProgram( "voxelizationShader", shader::createModule( "voxelizationShader.vert" ), shader::createModule( "voxelizationShader.frag" ) );
-	shader::addVertexAttribute( voxelizationShader, "pos", 0 );
-	shader::addVertexAttribute( voxelizationShader, "normal", 1 );
-	shader::addVertexAttribute( voxelizationShader, "transform", 3 );
+	voxelizationShader = Shader::newProgram( "voxelizationShader", Shader::createModule( "voxelizationShader.vert" ), Shader::createModule( "voxelizationShader.frag" ) );
+	Shader::addVertexAttribute( voxelizationShader, "pos", 0 );
+	Shader::addVertexAttribute( voxelizationShader, "normal", 1 );
+	Shader::addVertexAttribute( voxelizationShader, "transform", 3 );
 
 	projectionMatrix = glm::perspective( 70.0, 1.0, 1.0, 200.0 );
 
@@ -54,7 +54,7 @@ void voxelization::voxelizeMeshes()
 	float fity = 1.0f;
 	glViewport( 0, 0, frustum_size.x*fitx, frustum_size.y*fity );
 	//glViewport( 0, 0, gl::Viewport::current->width, gl::Viewport::current->height );
-	shader::use( voxelizationShader );
+	Shader::use( voxelizationShader );
 	glBindVertexArray( mesh::meshVAO );
 
 	glActiveTexture( GL_TEXTURE0 );
@@ -68,15 +68,15 @@ void voxelization::voxelizeMeshes()
 	glBindImageTexture( 0, 0, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RGBA16F );
 	glBindTexture( GL_TEXTURE_3D, 0 );
 	glBindVertexArray( 0 );
-	shader::unuse();
+	Shader::unuse();
 	//swapVolumeBuffers();
 	glViewport( 0, 0, gl::Viewport::current->width, gl::Viewport::current->height );
 }
 
 void voxelization::setupShader()
 {
-	shader::bindUniformBufferToShader( voxelizationShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
-	shader::bindUniformBufferToShader( voxelizationShader, entities::entityMatrixBuffer, "NodeMatrixBuffer" );
+	Shader::bindUniformBufferToShader( voxelizationShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
+	Shader::bindUniformBufferToShader( voxelizationShader, entities::entityMatrixBuffer, "NodeMatrixBuffer" );
 }
 
 void voxelization::clearVolumeTexture()

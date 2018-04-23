@@ -1,8 +1,8 @@
 #include "Model_Loader.h"
-#include "Debug.h"
+#include "debug.h"
 #include <assimp\postprocess.h>
 #include "model.h"
-#include "Mesh.h"
+#include "mesh.h"
 #include "Material.h"
 #include "Texture.h"
 #define DEFAULT_MODEL_DIR "assets//models//"

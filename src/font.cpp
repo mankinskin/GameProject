@@ -1,4 +1,4 @@
-#include "Font.h"
+#include "font.h"
 #include "text.h"
 #include "shader.h"
 #include "primitives.h"
@@ -19,12 +19,12 @@ std::vector<gui::text::FontInstructions> gui::text::allFontInstructions;
 std::vector<gui::text::GlyphMetrics> gui::text::allMetrics;
 std::vector<float> gui::text::allKerning;
 
-void gui::text::initFontShader()
+void gui::text::initfontShader()
 {
-	glyphShaderProgram = shader::newProgram( "glyphShapeShader", shader::createModule( "glyphShapeShader.vert" ), shader::createModule( "glyphShapeShader.frag" ) );
-	shader::addVertexAttribute( glyphShaderProgram, "pos", 0 );
-	shader::addVertexAttribute( glyphShaderProgram, "quad", 1 );
-	shader::addVertexAttribute( glyphShaderProgram, "index", 2 );
+	glyphShaderProgram = Shader::newProgram( "glyphShapeShader", Shader::createModule( "glyphShapeShader.vert" ), Shader::createModule( "glyphShapeShader.frag" ) );
+	Shader::addVertexAttribute( glyphShaderProgram, "pos", 0 );
+	Shader::addVertexAttribute( glyphShaderProgram, "quad", 1 );
+	Shader::addVertexAttribute( glyphShaderProgram, "index", 2 );
 }
 
 void gui::text::initFontVAO() 
@@ -78,7 +78,7 @@ void gui::text::initStyleBuffer()
 	//createTextStyle( 1.2f, 0.8f );
 	//styleStorage = gl::createStorage( "FontStyleBuffer", sizeof( TextStyle )*allTextStyles.size(), 0, &allTextStyles[0] );
 
-	//shader::bindUniformBufferToShader( glyphShaderProgram, styleStorage, "StyleBuffer" );
+	//Shader::bindUniformBufferToShader( glyphShaderProgram, styleStorage, "StyleBuffer" );
 }
 
 void gui::text::updateCharStorage()

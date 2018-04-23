@@ -48,12 +48,12 @@ namespace mesh
 
 
 	void initMeshVAO();
-	void initMeshShader();
-	void setupMeshShader();
+	void initmeshShader();
+	void setupmeshShader();
 	void initMeshNormalShader();
 	void setupMeshNormalShader();
-	void initBlendMeshShader();
-	void setupBlendMeshShader();
+	void initBlendmeshShader();
+	void setupBlendmeshShader();
 	unsigned int createMesh( unsigned int pIndexOffset, unsigned int pIndexCount, unsigned int pVertexOffset, 
 			unsigned int pVertexCount, unsigned int pMaterialIndex );
 	unsigned int createMesh( std::vector<Vertex> pVertices, std::vector<unsigned int> pIndices, 
@@ -80,7 +80,7 @@ namespace mesh
 	extern bool draw_normals;
 	extern bool cull_face;
 	extern unsigned int meshShader;
-	extern unsigned int blendMeshShader;
+	extern unsigned int blendmeshShader;
 	extern unsigned int meshNormalShader;
 	extern gl::VAO meshVAO;
 	extern gl::Storage<Vertex> meshVBO;

@@ -1,7 +1,7 @@
 #pragma once
-#include "Mesh.h"
+#include "mesh.h"
 #include "physics.h"
-#include <glm\glm.hpp>
+#include <glm.hpp>
 
 namespace physics {
 	struct BoundingSphere {

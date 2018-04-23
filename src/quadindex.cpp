@@ -28,15 +28,15 @@ void gui::initQuadIndexBuffer()
 
 void gui::initQuadIndexShader()
 {
-    quadIndexShader = shader::newProgram( "quadIndexShader", 
-            shader::createModule( "quadIndexShader.vert" ), 
-            shader::createModule( "quadIndexShader.frag" ) );
-    shader::addVertexAttribute( quadIndexShader, "corner_pos", 0 );
+    quadIndexShader = Shader::newProgram( "quadIndexShader", 
+            Shader::createModule( "quadIndexShader.vert" ), 
+            Shader::createModule( "quadIndexShader.frag" ) );
+    Shader::addVertexAttribute( quadIndexShader, "corner_pos", 0 );
 }
 
 void gui::setupQuadIndexShader()
 {
-    shader::bindUniformBufferToShader( quadIndexShader, 
+    Shader::bindUniformBufferToShader( quadIndexShader, 
             quadBuffer, "QuadBuffer" );
 }
 
@@ -46,12 +46,12 @@ void gui::rasterQuadIndices()
         glDepthMask( 0 );
         glDepthFunc( GL_LEQUAL );
         quadIndexVAO.bind();
-        shader::use( quadIndexShader );
+        Shader::use( quadIndexShader );
 
         glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 
                 0, quadCount );
 
-        shader::unuse();
+        Shader::unuse();
         quadIndexVAO.unbind();
         glDepthFunc( GL_LESS );
         glDepthMask( 1 );

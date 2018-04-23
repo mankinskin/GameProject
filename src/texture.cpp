@@ -1,6 +1,6 @@
 #include "texture.h"
-#include "glDebug.h"
-#include "Debug.h"
+#include "gldebug.h"
+#include "debug.h"
 #include <SOIL/SOIL.h>
 #define DEFAULT_TEXTURE_DIRECTORY "assets//textures//"
 std::vector<texture::Texture2D> texture::all2DTextures;

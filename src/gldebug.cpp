@@ -1,5 +1,5 @@
-﻿#include "glDebug.h"
-#include "Debug.h"
+﻿#include "gldebug.h"
+#include "debug.h"
 #include "shader.h"
 #include "camera.h"
 #include "vao.h"

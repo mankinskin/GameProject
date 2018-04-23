@@ -3,11 +3,11 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+!_TAG_PROGRAM_VERSION	5.8	//
 Agent	src/neural.h	/^	class Agent {$/;"	c	namespace:neural
 BLUE_WEIGHT	dt/imconv.h	31;"	d
 BUF_SIZE	dt/pnmfile.h	31;"	d
-Basic	src/shader_loader.h	/^		Basic,$/;"	m	class:shader::ProgramType
+Basic	src/shader_loader.h	/^		Basic,$/;"	m	class:Shader::ProgramType
 BoundingSphere	src/collision.h	/^		BoundingSphere( glm::vec3 pLocalPos, float pRadius )$/;"	f	struct:physics::BoundingSphere
 BoundingSphere	src/collision.h	/^	struct BoundingSphere {$/;"	s	namespace:physics
 ButtonEvents	src/event.h	/^		ButtonEvents( OnType pOn, OffType pOff )$/;"	f	struct:events::ButtonEvents
@@ -35,8 +35,12 @@ Color	experimental/hierarchy.cpp	/^    Color( vec4 pColor )$/;"	f	struct:Color
 Color	experimental/hierarchy.cpp	/^struct Color$/;"	s	file:
 Color	src/color.h	/^    typedef glm::vec4 Color;$/;"	t	namespace:gl
 ColorIt	src/color.h	/^    typedef utils::Itr<Color, std::array<Color, MAX_COLOR_COUNT>> ColorIt;$/;"	t	namespace:gl
+ConstColor	src/colorings.cpp	/^gui::ConstColor::ConstColor(std::string pColorName) {$/;"	f	class:gui::ConstColor
+ConstColor	src/colorings.h	/^		ConstColor():color_index(0)$/;"	f	struct:gui::ConstColor
+ConstColor	src/colorings.h	/^		ConstColor(size_t pIndex)$/;"	f	struct:gui::ConstColor
+ConstColor	src/colorings.h	/^	struct ConstColor $/;"	s	namespace:gui
 DEFAULT_CAMERA_CONTROLS	src/camera.h	/^	const CameraControls DEFAULT_CAMERA_CONTROLS = CameraControls( GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_Y );$/;"	m	namespace:camera
-DEFAULT_LINE_GROUP_FLAGS	src/line.h	/^    const int DEFAULT_LINE_GROUP_FLAGS = 1;$/;"	m	namespace:gui
+DEFAULT_LINE_GROUP_FLAGS	src/line.h	/^	const int DEFAULT_LINE_GROUP_FLAGS = 1;$/;"	m	namespace:gui
 DEFAULT_MODEL_DIR	src/model_loader.cpp	8;"	d	file:
 DEFAULT_SHADER_DIRECTORY	src/shader_loader.cpp	8;"	d	file:
 DEFAULT_STORE_DIR	src/font_loader.cpp	17;"	d	file:
@@ -70,7 +74,7 @@ FontInstructions	src/font.h	/^			FontInstructions()$/;"	f	struct:gui::text::Font
 FontInstructions	src/font.h	/^		struct FontInstructions $/;"	s	namespace:gui::text
 FontMetric	src/font.h	/^			FontMetric() $/;"	f	struct:gui::text::FontMetric
 FontMetric	src/font.h	/^		struct FontMetric $/;"	s	namespace:gui::text
-Fragment	src/shader_loader.h	/^		Fragment,$/;"	m	class:shader::ModuleType
+Fragment	src/shader_loader.h	/^		Fragment,$/;"	m	class:Shader::ModuleType
 Frustum	src/camera.h	/^		Frustum( glm::vec3 pUp, glm::vec3 pCenter, float pFOV, float pWidth, float pHeight, float pNearPlane, float pFarPlane )$/;"	f	struct:camera::Frustum
 Frustum	src/camera.h	/^	struct Frustum {$/;"	s	namespace:camera
 Functor	src/functor.h	/^		Functor( unsigned int pIndex, R( &pF )( Args... ), Args... pArgs )$/;"	f	class:functors::Functor
@@ -81,8 +85,8 @@ GCC	Makefile	/^GCC=g++$/;"	m
 GLM_ENABLE_EXPERIMENTAL	src/camera.cpp	4;"	d	file:
 GLSL_VERSION	src/gl.cpp	/^std::string gl::GLSL_VERSION = "";$/;"	m	class:gl	file:
 GREEN_WEIGHT	dt/imconv.h	30;"	d
-Geometry	src/shader_loader.h	/^		Geometry,$/;"	m	class:shader::ModuleType
-Geometry	src/shader_loader.h	/^		Geometry,$/;"	m	class:shader::ProgramType
+Geometry	src/shader_loader.h	/^		Geometry,$/;"	m	class:Shader::ModuleType
+Geometry	src/shader_loader.h	/^		Geometry,$/;"	m	class:Shader::ProgramType
 Glyph	src/font.h	/^			Glyph( float minX, float minY, float maxX, float maxY )$/;"	f	struct:gui::text::Glyph
 Glyph	src/font.h	/^			Glyph() $/;"	f	struct:gui::text::Glyph
 Glyph	src/font.h	/^		struct Glyph $/;"	s	namespace:gui::text
@@ -90,9 +94,9 @@ GlyphMetrics	src/font.h	/^			GlyphMetrics( float pWidth, float pHeight, float pA
 GlyphMetrics	src/font.h	/^			GlyphMetrics() $/;"	f	struct:gui::text::GlyphMetrics
 GlyphMetrics	src/font.h	/^		struct GlyphMetrics $/;"	s	namespace:gui::text
 H_FILES	Makefile	/^H_FILES=$(shell ls src | grep -e '\\.h')$/;"	m
-ID	src/quad.h	/^        const unsigned int ID;$/;"	m	struct:gui::Quad
-ID	src/shader_loader.h	/^		GLuint ID;$/;"	m	struct:shader::Module
-ID	src/shader_loader.h	/^		GLuint ID;$/;"	m	struct:shader::Program
+ID	src/quad.h	/^		const unsigned int ID;$/;"	m	struct:gui::Quad
+ID	src/shader_loader.h	/^		GLuint ID;$/;"	m	struct:Shader::Module
+ID	src/shader_loader.h	/^		GLuint ID;$/;"	m	struct:Shader::Program
 ID	src/storage.h	/^            unsigned int ID;$/;"	m	struct:gl::Storage
 ID	src/texture.h	/^		unsigned int ID = 0;$/;"	m	struct:texture::Texture2D
 ID	src/vao.h	/^        unsigned int ID;$/;"	m	struct:gl::VAO
@@ -123,22 +127,23 @@ KeySignal	src/keys.h	/^    struct KeySignal $/;"	s	namespace:input
 LightIndexRange	src/lights.h	/^		LightIndexRange( unsigned int pOffset, unsigned int pCount )$/;"	f	struct:lights::LightIndexRange
 LightIndexRange	src/lights.h	/^	struct LightIndexRange $/;"	s	namespace:lights
 LineGroup	src/line.cpp	/^gui::LineGroup::LineGroup( unsigned int pLineOffset, $/;"	f	class:gui::LineGroup
-LineGroup	src/line.h	/^    struct LineGroup {$/;"	s	namespace:gui
+LineGroup	src/line.h	/^	struct LineGroup {$/;"	s	namespace:gui
 LoadAtlas	src/font_loader.cpp	/^struct LoadAtlas $/;"	s	file:
 LoadFont	src/font_loader.cpp	/^struct LoadFont $/;"	s	file:
 LoadFontMetrics	src/font_loader.cpp	/^struct LoadFontMetrics $/;"	s	file:
 LoadGlyphMetrics	src/font_loader.cpp	/^struct LoadGlyphMetrics $/;"	s	file:
 LoadGlyphQuad	src/font_loader.cpp	/^struct LoadGlyphQuad $/;"	s	file:
 Loader	src/model_loader.h	/^	namespace Loader {$/;"	n	namespace:model
-Loader	src/shader_loader.h	/^	namespace Loader {$/;"	n	namespace:shader
+Loader	src/shader_loader.h	/^	namespace Loader {$/;"	n	namespace:Shader
 LookPolicy	src/camera.h	/^		LookPolicy( size_t pXRotatorOffset, size_t pXRotationAxisOffset, float pXRotationFactor,$/;"	f	struct:camera::LookPolicy
 LookPolicy	src/camera.h	/^	struct LookPolicy {\/\/stores relative offsets of vectors in a camera object to be used to move the camera frustum$/;"	s	namespace:camera
 MAX_CHARS	src/font.cpp	/^unsigned int MAX_CHARS = 1000;$/;"	v
 MAX_COLOR_COUNT	src/color.h	/^	const unsigned int MAX_COLOR_COUNT = 100;$/;"	m	namespace:gl
+MAX_CONST_COLOR_COUNT	src/colorings.h	/^	const size_t MAX_CONST_COLOR_COUNT = 100;$/;"	m	namespace:gui
 MAX_ENTITIES	src/entities.h	/^	const unsigned int MAX_ENTITIES = 1000;$/;"	m	namespace:entities
 MAX_LIGHT_COUNT	src/lights.h	/^	const unsigned int MAX_LIGHT_COUNT = 100;$/;"	m	namespace:lights
-MAX_LINE_VERTEX_COUNT	src/line.h	/^    const unsigned int MAX_LINE_VERTEX_COUNT = 400;$/;"	m	namespace:gui
-MAX_LINE_VERTEX_POSITION_COUNT	src/line.h	/^    const unsigned int MAX_LINE_VERTEX_POSITION_COUNT = 200;$/;"	m	namespace:gui
+MAX_LINE_VERTEX_COUNT	src/line.h	/^	const unsigned int MAX_LINE_VERTEX_COUNT = 400;$/;"	m	namespace:gui
+MAX_LINE_VERTEX_POSITION_COUNT	src/line.h	/^	const unsigned int MAX_LINE_VERTEX_POSITION_COUNT = 200;$/;"	m	namespace:gui
 MAX_MESHES_PER_MODEL	src/model.h	/^	const unsigned int MAX_MESHES_PER_MODEL = 10;$/;"	m	namespace:model
 MAX_MODELS	src/model.h	/^	const unsigned int MAX_MODELS = 100;$/;"	m	namespace:model
 MAX_QUAD_COUNT	src/quad.h	/^	const unsigned int MAX_QUAD_COUNT = 10000;$/;"	m	namespace:gui
@@ -162,15 +167,15 @@ Model	src/model.h	/^		Model()$/;"	f	struct:model::Model
 Model	src/model.h	/^	struct Model {$/;"	s	namespace:model
 ModelLoadFile	src/model_loader.h	/^			ModelLoadFile( std::string pFilename, std::string pModelname )$/;"	f	struct:model::Loader::ModelLoadFile
 ModelLoadFile	src/model_loader.h	/^		struct ModelLoadFile {$/;"	s	namespace:model::Loader
-Module	src/shader_loader.h	/^		Module( std::string& pFileName ) :fileName( pFileName ), content( "" ), ID( 0 ), type( ModuleType::Vertex ) {}$/;"	f	struct:shader::Module
-Module	src/shader_loader.h	/^	struct Module {$/;"	s	namespace:shader
-ModuleType	src/shader_loader.h	/^	enum class ModuleType {$/;"	c	namespace:shader
+Module	src/shader_loader.h	/^		Module( std::string& pFileName ) :fileName( pFileName ), content( "" ), ID( 0 ), type( ModuleType::Vertex ) {}$/;"	f	struct:Shader::Module
+Module	src/shader_loader.h	/^	struct Module {$/;"	s	namespace:Shader
+ModuleType	src/shader_loader.h	/^	enum class ModuleType {$/;"	c	namespace:Shader
 Monitor	src/contextwindow.h	/^	struct Monitor {$/;"	s	namespace:app
-Mouse	src/mouse.h	/^    class Mouse {\/\/TODO$/;"	c	namespace:input
-MouseKeyEvent	src/mouse.h	/^        MouseKeyEvent( int pKey, KeyCondition pChange )$/;"	f	struct:input::MouseKeyEvent
-MouseKeyEvent	src/mouse.h	/^        MouseKeyEvent( int pKey, int pAction )$/;"	f	struct:input::MouseKeyEvent
-MouseKeyEvent	src/mouse.h	/^        MouseKeyEvent()$/;"	f	struct:input::MouseKeyEvent
-MouseKeyEvent	src/mouse.h	/^    struct MouseKeyEvent {\/\/events thrown when a mouse key changes$/;"	s	namespace:input
+Mouse	src/mouse.h	/^	class Mouse {\/\/TODO$/;"	c	namespace:input
+MouseKeyEvent	src/mouse.h	/^		MouseKeyEvent( int pKey, KeyCondition pChange )$/;"	f	struct:input::MouseKeyEvent
+MouseKeyEvent	src/mouse.h	/^		MouseKeyEvent( int pKey, int pAction )$/;"	f	struct:input::MouseKeyEvent
+MouseKeyEvent	src/mouse.h	/^		MouseKeyEvent()$/;"	f	struct:input::MouseKeyEvent
+MouseKeyEvent	src/mouse.h	/^	struct MouseKeyEvent {\/\/events thrown when a mouse key changes$/;"	s	namespace:input
 MovementPolicy	src/camera.h	/^		MovementPolicy( $/;"	f	struct:camera::MovementPolicy
 MovementPolicy	src/camera.h	/^	struct MovementPolicy {\/\/stores relative offsets of vectors in a camera to be used to move the camera$/;"	s	namespace:camera
 NEURON_COUNT	src/neural.cpp	/^unsigned int NEURON_COUNT = 100;$/;"	v
@@ -182,23 +187,27 @@ Octree	src/voxelization.h	/^	struct Octree$/;"	s	namespace:voxelization
 PNM_FILE_H	dt/pnmfile.h	22;"	d
 Preset	src/widget.h	/^                Preset( Initer pIniter, Colors pColors, $/;"	f	struct:gui::Widget::Preset
 Preset	src/widget.h	/^            struct Preset$/;"	s	struct:gui::Widget
-Program	src/shader_loader.h	/^	struct Program {$/;"	s	namespace:shader
-ProgramType	src/shader_loader.h	/^	enum class ProgramType {$/;"	c	namespace:shader
+Program	src/shader_loader.h	/^	struct Program {$/;"	s	namespace:Shader
+ProgramType	src/shader_loader.h	/^	enum class ProgramType {$/;"	c	namespace:Shader
 Quad	experimental/hierarchy.cpp	/^    Quad( size_t pQuad )$/;"	f	struct:Quad
 Quad	experimental/hierarchy.cpp	/^struct Quad$/;"	s	file:
 Quad	src/quad.cpp	/^gui::Quad::Quad( glm::vec4 pData ) $/;"	f	class:gui::Quad
-Quad	src/quad.h	/^    struct Quad $/;"	s	namespace:gui
-QuadEvent	src/mouse.h	/^        QuadEvent( unsigned int pQuad, int pEnter )$/;"	f	struct:input::QuadEvent
-QuadEvent	src/mouse.h	/^        QuadEvent()$/;"	f	struct:input::QuadEvent
-QuadEvent	src/mouse.h	/^    struct QuadEvent {\/\/events thrown when entering or leaving quads with the cursor$/;"	s	namespace:input
+Quad	src/quad.h	/^	struct Quad $/;"	s	namespace:gui
+QuadEvent	src/mouse.h	/^		QuadEvent( unsigned int pQuad, int pEnter )$/;"	f	struct:input::QuadEvent
+QuadEvent	src/mouse.h	/^		QuadEvent()$/;"	f	struct:input::QuadEvent
+QuadEvent	src/mouse.h	/^	struct QuadEvent {\/\/events thrown when entering or leaving quads with the cursor$/;"	s	namespace:input
 RED_WEIGHT	dt/imconv.h	29;"	d
 RangeVision	src/neural.h	/^	struct RangeVision {$/;"	s	namespace:neural
 Running	src/app.h	/^	Running,$/;"	e	enum:app::State
-SHADER_DIR	src/shader_loader.cpp	/^std::string shader::Loader::SHADER_DIR = DEFAULT_SHADER_DIRECTORY;$/;"	m	class:shader::Loader	file:
+SHADER_DIR	src/shader_loader.cpp	/^std::string Shader::Loader::SHADER_DIR = DEFAULT_SHADER_DIRECTORY;$/;"	m	class:Shader::Loader	file:
 SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT	src/storage.cpp	/^int gl::SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT = 0;$/;"	m	class:gl	file:
 SRC_FILES	Makefile	/^SRC_FILES=$(shell ls src | grep -e '\\.cpp')$/;"	m
 SYSTEM_RENDERER	src/gl.cpp	/^std::string gl::SYSTEM_RENDERER = "";$/;"	m	class:gl	file:
 Severity	src/debug.h	/^		enum Severity {$/;"	g	struct:debug::Error
+Shader	src/shader.h	/^namespace Shader $/;"	n
+Shader	src/shader_loader.h	/^namespace Shader {$/;"	n
+ShaderCount	src/shader_loader.h	/^		unsigned int ShaderCount;$/;"	m	struct:Shader::Program
+ShaderProgramLookup	src/shader.cpp	/^std::unordered_map<std::string, unsigned int> Shader::ShaderProgramLookup;$/;"	m	class:Shader	file:
 Signal	src/signal.h	/^		Signal( unsigned int pSignal, Source pSource )$/;"	f	struct:signals::Signal
 Signal	src/signal.h	/^	struct Signal {$/;"	s	namespace:signals
 Source	src/signal.h	/^		Source( bool pSrc )$/;"	f	struct:signals::Source
@@ -231,17 +240,17 @@ TexData2D	src/texture.h	/^	struct TexData2D {$/;"	s	namespace:texture
 TextColor	src/text.cpp	/^	TextColor( float r, float g, float b, float a )$/;"	f	struct:TextColor
 TextColor	src/text.cpp	/^	TextColor( glm::vec4& pColor )$/;"	f	struct:TextColor
 TextColor	src/text.cpp	/^	TextColor()$/;"	f	struct:TextColor
-TextColor	src/text.cpp	/^struct TextColor {$/;"	s	file:
+TextColor	src/text.cpp	/^struct TextColor $/;"	s	file:
 TextStyle	src/font.h	/^			TextStyle( float pThickness, float pHardness )$/;"	f	struct:gui::text::TextStyle
 TextStyle	src/font.h	/^			TextStyle()$/;"	f	struct:gui::text::TextStyle
 TextStyle	src/font.h	/^		struct TextStyle $/;"	s	namespace:gui::text
 Textbox	src/text.cpp	/^	Textbox()$/;"	f	struct:Textbox
-Textbox	src/text.cpp	/^struct Textbox {$/;"	s	file:
+Textbox	src/text.cpp	/^struct Textbox $/;"	s	file:
 TextboxGlyphs	src/text.cpp	/^	TextboxGlyphs( unsigned int pGlyphCount ) $/;"	f	struct:TextboxGlyphs
-TextboxGlyphs	src/text.cpp	/^struct TextboxGlyphs {$/;"	s	file:
+TextboxGlyphs	src/text.cpp	/^struct TextboxGlyphs $/;"	s	file:
 TextboxMetrics	src/text.cpp	/^	TextboxMetrics( unsigned int pFont, float pGlyphScaleX, $/;"	f	struct:TextboxMetrics
 TextboxMetrics	src/text.cpp	/^	TextboxMetrics( unsigned int pFont, glm::vec2 pGlyphScale, $/;"	f	struct:TextboxMetrics
-TextboxMetrics	src/text.cpp	/^struct TextboxMetrics {$/;"	s	file:
+TextboxMetrics	src/text.cpp	/^struct TextboxMetrics $/;"	s	file:
 Texture2D	src/texture.cpp	/^texture::Texture2D::Texture2D( unsigned int pWidth, unsigned int pHeight, GLenum pInternalFormat, GLenum pFormat, GLenum pType )$/;"	f	class:texture::Texture2D
 Texture2D	src/texture.h	/^	struct Texture2D {$/;"	s	namespace:texture
 TextureBuffer	src/texture.h	/^		TextureBuffer() :data( nullptr ), width( 0 ), height( 0 ), channels( 0 ) {}$/;"	f	struct:texture::TextureBuffer
@@ -256,7 +265,7 @@ Vertex	src/mesh.h	/^		Vertex( float pPosX, float pPosY, float pPosZ, $/;"	f	stru
 Vertex	src/mesh.h	/^		Vertex( glm::vec3 pPos, $/;"	f	struct:mesh::Vertex
 Vertex	src/mesh.h	/^		Vertex() $/;"	f	struct:mesh::Vertex
 Vertex	src/mesh.h	/^	struct Vertex $/;"	s	namespace:mesh
-Vertex	src/shader_loader.h	/^		Vertex,$/;"	m	class:shader::ModuleType
+Vertex	src/shader_loader.h	/^		Vertex,$/;"	m	class:Shader::ModuleType
 Viewport	src/viewport.cpp	/^gl::Viewport::Viewport( app::Window window, float res ) $/;"	f	class:gl::Viewport
 Viewport	src/viewport.cpp	/^gl::Viewport::Viewport()$/;"	f	class:gl::Viewport
 Viewport	src/viewport.h	/^    struct Viewport{$/;"	s	namespace:gl
@@ -273,13 +282,14 @@ absoluteCursorPosition	src/mouse.cpp	/^glm::uvec2 input::absoluteCursorPosition;
 access	dt/image.h	/^  T **access;$/;"	m	class:image
 action	src/keys.h	/^            int action;$/;"	m	class:input::KeyCondition
 addInstancesToMesh	src/mesh.cpp	/^void mesh::addInstancesToMesh( unsigned int pMeshIndex, std::vector<unsigned int> pNodeIDs )$/;"	f	class:mesh
-addVertexAttribute	src/shader.cpp	/^void shader::addVertexAttribute( std::string pProgramName, std::string pAttributeName, unsigned int pAttributeIndex )$/;"	f	class:shader
-addVertexAttribute	src/shader.cpp	/^void shader::addVertexAttribute( unsigned int pProgramID, std::string pAttributeName, unsigned int pAttributeIndex )$/;"	f	class:shader
+addVertexAttribute	src/shader.cpp	/^void Shader::addVertexAttribute( std::string pProgramName, std::string pAttributeName, unsigned int pAttributeIndex )$/;"	f	class:Shader
+addVertexAttribute	src/shader.cpp	/^void Shader::addVertexAttribute( unsigned int pProgramID, std::string pAttributeName, unsigned int pAttributeIndex )$/;"	f	class:Shader
 add_trigger	src/functor.h	/^        void add_trigger( unsigned int pSignal )$/;"	f	class:functors::Functor
 advanceScale	src/text.cpp	/^	float advanceScale;$/;"	m	struct:TextboxMetrics	file:
 advanceX	src/font.h	/^			float advanceX;$/;"	m	struct:gui::text::GlyphMetrics
 advanceX	src/font_loader.cpp	/^	size_t advanceX;$/;"	m	struct:LoadGlyphMetrics	file:
 all2DTextures	src/texture.cpp	/^std::vector<texture::Texture2D> texture::all2DTextures;$/;"	m	class:texture	file:
+allAtlasUVs	src/colorings.cpp	/^std::vector<glm::vec4> allAtlasUVs;$/;"	v
 allBoundingSpherenode	src/collision.cpp	/^std::vector<std::pair<unsigned int, unsigned int>> physics::allBoundingSpherenode;$/;"	m	class:physics	file:
 allBoundingSpheres	src/collision.cpp	/^std::vector<physics::BoundingSphere> physics::allBoundingSpheres;$/;"	m	class:physics	file:
 allChars	src/text.cpp	/^std::vector<unsigned char> gui::text::allChars;$/;"	m	class:gui::text	file:
@@ -304,11 +314,11 @@ allMeshes	src/mesh.cpp	/^std::vector<mesh::Mesh> mesh::allMeshes;$/;"	m	class:me
 allMetrics	src/font.cpp	/^std::vector<gui::text::GlyphMetrics> gui::text::allMetrics;$/;"	m	class:gui::text	file:
 allModelNames	src/model.cpp	/^std::vector<std::string> model::allModelNames;$/;"	m	class:model	file:
 allModels	src/model.cpp	/^std::vector<model::Model> model::allModels;$/;"	m	class:model	file:
-allModules	src/shader.cpp	/^std::vector<shader::Module> shader::allModules;$/;"	m	class:shader	file:
+allModules	src/shader.cpp	/^std::vector<Shader::Module> Shader::allModules;$/;"	m	class:Shader	file:
 allMonitors	src/contextwindow.cpp	/^GLFWmonitor** app::allMonitors = nullptr;$/;"	m	class:app	file:
 allNormals	src/entities.cpp	/^std::vector<glm::vec3> entities::allNormals;$/;"	m	class:entities	file:
 allPositions	src/entities.cpp	/^std::vector<glm::vec3> entities::allPositions;$/;"	m	class:entities	file:
-allPrograms	src/shader.cpp	/^std::vector<shader::Program> shader::allPrograms;$/;"	m	class:shader	file:
+allPrograms	src/shader.cpp	/^std::vector<Shader::Program> Shader::allPrograms;$/;"	m	class:Shader	file:
 allQuads	experimental/hierarchy.cpp	/^std::vector<size_t> allQuads;$/;"	v
 allQuads	src/quad.cpp	/^std::array<glm::vec4, gui::MAX_QUAD_COUNT> allQuads;$/;"	v
 allRotations	src/entities.cpp	/^std::vector<glm::vec4> entities::allRotations;$/;"	m	class:entities	file:
@@ -347,13 +357,13 @@ bearingX	src/font.h	/^			float bearingX;$/;"	m	struct:gui::text::GlyphMetrics
 bearingY	src/font.h	/^			float bearingY;$/;"	m	struct:gui::text::GlyphMetrics
 bind	src/vao.h	/^        void bind() $/;"	f	struct:gl::VAO
 bind	src/viewport.cpp	/^void gl::Viewport::bind()$/;"	f	class:gl::Viewport
-bindUniformBufferToShader	src/shader.h	/^		void bindUniformBufferToShader( unsigned int pProgram, const gl::Storage<T>& pStorage, std::string pBlockName )$/;"	f	namespace:shader
+bindUniformBufferToShader	src/shader.h	/^		void bindUniformBufferToShader( unsigned int pProgram, const gl::Storage<T>& pStorage, std::string pBlockName )$/;"	f	namespace:Shader
 binding	src/storage.h	/^            unsigned int binding;$/;"	m	struct:gl::Storage
 blendMeshList	src/mesh.cpp	/^std::vector<unsigned int> mesh::blendMeshList;$/;"	m	class:mesh	file:
-blendMeshShader	src/mesh.cpp	/^unsigned int mesh::blendMeshShader = 0;$/;"	m	class:mesh	file:
+blendmeshShader	src/mesh.cpp	/^unsigned int mesh::blendmeshShader = 0;$/;"	m	class:mesh	file:
 bound	dt/misc.h	/^inline T bound(const T &x, const T &min, const T &max) {$/;"	f
 buffer	src/font_loader.cpp	/^	std::vector<unsigned char> buffer;$/;"	m	struct:LoadAtlas	file:
-buildShaderPrograms	src/shader_loader.cpp	/^void shader::Loader::buildShaderPrograms()$/;"	f	class:shader::Loader
+buildShaderPrograms	src/shader_loader.cpp	/^void Shader::Loader::buildShaderPrograms()$/;"	f	class:Shader::Loader
 buildShaders	src/sequencer.cpp	/^void sequencer::buildShaders()$/;"	f	class:sequencer
 call	src/functor.h	/^		static void call( unsigned int pFunc ) $/;"	f	class:functors::Functor
 callFunctors	src/functor.cpp	/^void functors::callFunctors()$/;"	f	class:functors
@@ -361,7 +371,7 @@ camera	src/camera.h	/^namespace camera {$/;"	n
 capacity	src/storage.h	/^            size_type capacity;$/;"	m	struct:gl::Storage
 center	src/camera.h	/^		glm::vec3 center;$/;"	m	struct:camera::Frustum
 change	src/keys.h	/^            KeyCondition change;$/;"	m	class:input::KeyEvent
-change	src/mouse.h	/^        KeyCondition change;$/;"	m	struct:input::MouseKeyEvent
+change	src/mouse.h	/^		KeyCondition change;$/;"	m	struct:input::MouseKeyEvent
 channels	src/texture.h	/^		int channels;$/;"	m	struct:texture::TextureBuffer
 charQuadBuffer	src/text.cpp	/^std::vector<gui::text::CharQuad> gui::text::charQuadBuffer;$/;"	m	class:gui::text	file:
 charStorage	src/font.cpp	/^gl::StreamStorage<unsigned int> charStorage;$/;"	v
@@ -397,30 +407,41 @@ color	src/widget.h	/^            void color( Colors pColors ) const$/;"	f	struct
 colorBuffer	src/color.cpp	/^gl::StreamStorage<gl::Color> gl::colorBuffer;$/;"	m	class:gl	file:
 colorCount	src/color.cpp	/^unsigned int colorCount = 0;$/;"	v
 colorNames	src/color.cpp	/^std::array<std::string, gl::MAX_COLOR_COUNT> colorNames;$/;"	v
+colorQuad	src/colorings.h	/^void gui::colorQuad(size_t pQuadID, ColorType pColor) $/;"	f	class:gui
 colorQuad	src/quadcolors.cpp	/^void gui::colorQuad( const unsigned int pID, const gl::ColorIt pColor )$/;"	f	class:gui
 colorQuadBuffer	src/quadcolors.cpp	/^gl::StreamStorage<unsigned int> gui::colorQuadBuffer;$/;"	m	class:gui	file:
-colorQuadShader	src/quadcolors.cpp	/^unsigned int gui::colorQuadShader;$/;"	m	class:gui	file:
 colorQuadVAO	src/quadcolors.cpp	/^gl::VAO gui::colorQuadVAO;$/;"	m	class:gui	file:
 colorWidget	src/widget.h	/^        void colorWidget( Widget<Subs...> pWidget, $/;"	f	namespace:gui
+color_index	src/colorings.h	/^		size_t color_index;$/;"	m	struct:gui::ConstColor
 color_n	src/widget.h	/^                void color_n( utils::_index<N> i, Colors pColors ) const$/;"	f	struct:gui::Widget
 color_n	src/widget.h	/^            void color_n( utils::_index<0> i, Colors pColors ) const$/;"	f	struct:gui::Widget
+colorings	src/colorings.cpp	/^ColorType gui::colorings[gui::MAX_QUAD_COUNT];\/\/one index into constColors for each quad$/;"	m	class:gui	file:
+colorquadShader	src/quadcolors.cpp	/^unsigned int gui::colorquadShader;$/;"	m	class:gui	file:
 colors	src/widget.h	/^                const Colors colors;$/;"	m	struct:gui::Widget::Preset
 colors	src/widget.h	/^            const Colors colors;$/;"	m	struct:gui::Widget
-compileAndLink	src/shader_loader.cpp	/^void shader::Loader::compileAndLink()$/;"	f	class:shader::Loader
-compileModule	src/shader_loader.cpp	/^void shader::Loader::compileModule( unsigned int pModuleIndex )$/;"	f	class:shader::Loader
-compileModuleSource	src/shader_loader.cpp	/^void compileModuleSource( shader::Module& module )$/;"	f
+compileAndLink	src/shader_loader.cpp	/^void Shader::Loader::compileAndLink()$/;"	f	class:Shader::Loader
+compileModule	src/shader_loader.cpp	/^void Shader::Loader::compileModule( unsigned int pModuleIndex )$/;"	f	class:Shader::Loader
+compileModuleSource	src/shader_loader.cpp	/^void compileModuleSource( Shader::Module& module )$/;"	f
+constColorBuffer	src/colorings.cpp	/^size_t gui::constColorBuffer;$/;"	m	class:gui	file:
+constColorNames	src/colorings.cpp	/^std::vector<std::string> constColorNames;$/;"	v
+constColorShader	src/colorings.cpp	/^size_t gui::constColorShader;$/;"	m	class:gui	file:
+constColorVAO	src/colorings.cpp	/^size_t gui::constColorVAO;$/;"	m	class:gui	file:
+constColoringBuffer	src/colorings.cpp	/^size_t gui::constColoringBuffer;$/;"	m	class:gui	file:
+constColors	src/colorings.cpp	/^std::vector<glm::vec4> gui::constColors;$/;"	m	class:gui	file:
 construct	src/element.h	/^        construct( const std::tuple<Initers...> initer )$/;"	f	namespace:utils
 container	experimental/hierarchy.cpp	/^    std::vector<T>& container;$/;"	m	struct:Itr	file:
 container	src/utils.h	/^        Container& container; $/;"	m	struct:utils::Itr
-content	src/shader_loader.h	/^		std::string content;$/;"	m	struct:shader::Module
+content	src/shader_loader.h	/^		std::string content;$/;"	m	struct:Shader::Module
 controls	src/camera.h	/^		CameraControls controls;$/;"	m	class:camera::Camera
 convertKerning	src/font_loader.cpp	/^std::pair<size_t, size_t> convertKerning( std::vector<int>& pKerningMap )$/;"	f
 coord_line_group	src/gldebug.cpp	/^unsigned int coord_line_group;$/;"	v
 copy	dt/image.h	/^image<T> *image<T>::copy() const {$/;"	f	class:image
 count	src/font.h	/^			unsigned int count;$/;"	m	struct:gui::text::String
 count	src/lights.h	/^		unsigned int count;$/;"	m	struct:lights::LightIndexRange
+createAtlasUVRange	src/colorings.cpp	/^size_t gui::createAtlasUVRange(glm::vec4 pUVRange)$/;"	f	class:gui
 createBoundingSphere	src/collision.cpp	/^unsigned int physics::createBoundingSphere( BoundingSphere pBoundingSphere )$/;"	f	class:physics
 createColor	src/color.cpp	/^gl::ColorIt gl::createColor( Color pColor, std::string pColorName ) $/;"	f	class:gl
+createConstColor	src/colorings.cpp	/^gui::ConstColor gui::createConstColor(glm::vec4 pColor, std::string pColorName)$/;"	f	class:gui
 createDebugGeometry	src/gldebug.cpp	/^void glDebug::createDebugGeometry(){$/;"	f	class:glDebug
 createDefaultColors	src/color.cpp	/^void gl::createDefaultColors()$/;"	f	class:gl
 createEntities	src/entities.cpp	/^void entities::createEntities( unsigned int pCount, unsigned int * pEntityIDs )$/;"	f	class:entities
@@ -441,8 +462,8 @@ createLineVertexPos	src/line.cpp	/^unsigned int gui::createLineVertexPos( glm::v
 createMesh	src/mesh.cpp	/^unsigned int mesh::createMesh( std::vector<Vertex> pVertices, $/;"	f	class:mesh
 createMesh	src/mesh.cpp	/^unsigned int mesh::createMesh( unsigned int pIndexOffset, unsigned int pIndexCount, $/;"	f	class:mesh
 createModel	src/model.cpp	/^unsigned int model::createModel( unsigned int pMeshOffset, unsigned int pMeshCount )$/;"	f	class:model
-createModule	src/shader.cpp	/^unsigned int shader::createModule( std::string pFileName )$/;"	f	class:shader
-createProgram	src/shader.cpp	/^unsigned int shader::createProgram( std::string pProgramName )$/;"	f	class:shader
+createModule	src/shader.cpp	/^unsigned int Shader::createModule( std::string pFileName )$/;"	f	class:Shader
+createProgram	src/shader.cpp	/^unsigned int Shader::createProgram( std::string pProgramName )$/;"	f	class:Shader
 createSignal	src/signal.h	/^	unsigned int createSignal( Source pSource, bool pStartAs = false ) {$/;"	f	namespace:signals
 createTextColor	src/text.cpp	/^unsigned int gui::text::createTextColor( glm::vec4 pColor )$/;"	f	class:gui::text
 createTextbox	src/text.cpp	/^unsigned int gui::text::createTextbox( Quad pQuad, unsigned int pMetrics, $/;"	f	class:gui::text
@@ -460,7 +481,7 @@ cubeVBO	src/primitives.cpp	/^gl::Storage<glm::vec3> gl::cubeVBO;$/;"	m	class:gl	
 cull_face	src/mesh.cpp	/^bool mesh::cull_face = true;$/;"	m	class:mesh	file:
 current	src/viewport.cpp	/^gl::Viewport* gl::Viewport::current = nullptr;$/;"	m	class:gl::Viewport	file:
 current	src/viewport.h	/^        static Viewport* current;$/;"	m	struct:gl::Viewport
-currentShaderProgram	src/shader.cpp	/^unsigned int shader::currentShaderProgram;$/;"	m	class:shader	file:
+currentShaderProgram	src/shader.cpp	/^unsigned int Shader::currentShaderProgram;$/;"	m	class:Shader	file:
 currentVideoMode	src/contextwindow.h	/^	    const GLFWvidmode* currentVideoMode = nullptr;$/;"	m	struct:app::Monitor
 cursorEnter_Callback	src/mouse.cpp	/^void input::cursorEnter_Callback( GLFWwindow* window, int pEntered )$/;"	f	class:input
 cursorFrameDelta	src/mouse.cpp	/^glm::vec2 input::cursorFrameDelta;$/;"	m	class:input	file:
@@ -489,7 +510,7 @@ element_constructor	src/element.h	/^        struct element_constructor $/;"	s	na
 element_generator	src/element_utils.h	/^        struct element_generator $/;"	s	namespace:utils
 element_generator	src/element_utils.h	/^        struct element_generator<0, Type, SubElements...> $/;"	s	namespace:utils
 end	src/input.cpp	/^void input::end()$/;"	f	class:input
-enter	src/mouse.h	/^        int enter;$/;"	m	struct:input::QuadEvent
+enter	src/mouse.h	/^		int enter;$/;"	m	struct:input::QuadEvent
 entities	src/entities.h	/^namespace entities $/;"	n
 entity	src/neural.h	/^		unsigned int entity;\/\/use this ID to get and set entity data$/;"	m	class:neural::Agent
 entityMatrixBuffer	src/entities.cpp	/^gl::StreamStorage<glm::mat4> entities::entityMatrixBuffer;$/;"	m	class:entities	file:
@@ -515,11 +536,11 @@ farPlane	src/camera.h	/^		float farPlane = 1000.0f;$/;"	m	struct:camera::Frustum
 fetchGLFWEvents	src/input.cpp	/^void input::fetchGLFWEvents()$/;"	f	class:input
 fetchInput	src/sequencer.cpp	/^void sequencer::fetchInput()$/;"	f	class:sequencer
 fileName	src/font_loader.cpp	/^	std::string fileName;$/;"	m	struct:LoadFont	file:
-fileName	src/shader_loader.h	/^		std::string fileName;$/;"	m	struct:shader::Module
+fileName	src/shader_loader.h	/^		std::string fileName;$/;"	m	struct:Shader::Module
 filename	src/model_loader.h	/^			std::string filename;$/;"	m	struct:model::Loader::ModelLoadFile
 flags	src/font.h	/^			int flags = 0;$/;"	m	struct:gui::text::FontInstructions
 flags	src/font_loader.cpp	/^	int flags;$/;"	m	struct:LoadAtlas	file:
-flags	src/line.h	/^        int flags;$/;"	m	struct:gui::LineGroup
+flags	src/line.h	/^		int flags;$/;"	m	struct:gui::LineGroup
 flags	src/storage.h	/^            int flags;$/;"	m	struct:gl::Storage
 flags	src/text.cpp	/^	unsigned int flags;$/;"	m	struct:Textbox	file:
 followCursor	src/camera.h	/^		bool followCursor = false;$/;"	m	class:camera::Camera
@@ -572,6 +593,7 @@ getAspectRatio	src/viewport.cpp	/^float gl::getAspectRatio()$/;"	f	class:gl
 getColor	src/color.cpp	/^gl::ColorIt gl::getColor( std::string pColorName )$/;"	f	class:gl
 getColorData	src/color.cpp	/^gl::Color gl::getColorData( ColorIt colorIndex )$/;"	f	class:gl
 getColorData	src/color.cpp	/^gl::Color gl::getColorData( std::string colorName )$/;"	f	class:gl
+getConstColor	src/colorings.cpp	/^size_t gui::getConstColor(std::string pColorName)$/;"	f	class:gui
 getCursorQuadEvents	src/mouse.cpp	/^void input::getCursorQuadEvents()$/;"	f	class:input
 getHeight	src/viewport.cpp	/^unsigned int gl::getHeight()$/;"	f	class:gl
 getKerningMap	src/font_loader.cpp	/^std::vector<int> getKerningMap( FT_Face pFace, size_t pStartCode, size_t pGlyphCount )$/;"	f
@@ -601,10 +623,11 @@ glyphIndexBuffer	src/font.cpp	/^std::vector<unsigned int> gui::text::glyphIndexB
 glyphIndices	src/text.cpp	/^	std::vector<unsigned int> glyphIndices;$/;"	m	struct:TextboxGlyphs	file:
 glyphScale	src/text.cpp	/^	glm::vec2 glyphScale;$/;"	m	struct:TextboxMetrics	file:
 glyphShaderProgram	src/font.cpp	/^unsigned int gui::text::glyphShaderProgram = 0;$/;"	m	class:gui::text	file:
-glyphStorage	src/font.h	/^            gl::Storage<Glyph> glyphStorage;$/;"	m	struct:gui::text::Font
+glyphStorage	src/font.h	/^			gl::Storage<Glyph> glyphStorage;$/;"	m	struct:gui::text::Font
 gravity_force	src/physics.cpp	/^float physics::gravity_force = 9.81f;\/\/m\/s²$/;"	m	class:physics	file:
 grid_1_line_group	src/gldebug.cpp	/^unsigned int grid_1_line_group;$/;"	v
 grid_2_line_group	src/gldebug.cpp	/^unsigned int grid_2_line_group;$/;"	v
+gui	src/colorings.h	/^namespace gui $/;"	n
 gui	src/font.h	/^namespace gui $/;"	n
 gui	src/font_loader.h	/^namespace gui $/;"	n
 gui	src/gui.h	/^namespace gui $/;"	n
@@ -616,6 +639,7 @@ gui	src/text.h	/^namespace gui {$/;"	n
 gui	src/widget.h	/^namespace gui $/;"	n
 guiDepthRenderbuffer	src/framebuffer.cpp	/^unsigned int texture::guiDepthRenderbuffer;$/;"	m	class:texture	file:
 guiFBO	src/framebuffer.cpp	/^unsigned int texture::guiFBO;$/;"	m	class:texture	file:
+guiTextureAtlas	src/colorings.cpp	/^size_t guiTextureAtlas;$/;"	v
 h	dt/image.h	/^  int w, h;$/;"	m	class:image
 hardness	src/font.h	/^			float hardness = 1.0f;$/;"	m	struct:gui::text::TextStyle
 height	dt/image.h	/^  int height() const { return h; }$/;"	f	class:image
@@ -671,14 +695,17 @@ init	src/gldebug.cpp	/^void glDebug::init()$/;"	f	class:glDebug
 init	src/gui.cpp	/^void gui::init()$/;"	f	class:gui
 init	src/input.cpp	/^void input::init()$/;"	f	class:input
 init	src/voxelization.cpp	/^void voxelization::init() {$/;"	f	class:voxelization
-initBlendMeshShader	src/mesh.cpp	/^void mesh::initBlendMeshShader()$/;"	f	class:mesh
+initBlendmeshShader	src/mesh.cpp	/^void mesh::initBlendmeshShader()$/;"	f	class:mesh
 initColorBuffer	src/color.cpp	/^void gl::initColorBuffer()$/;"	f	class:gl
-initColorQuadShader	src/quadcolors.cpp	/^void gui::initColorQuadShader() $/;"	f	class:gui
 initColorQuadVAO	src/quadcolors.cpp	/^void gui::initColorQuadVAO() $/;"	f	class:gui
+initColoringShaders	src/colorings.cpp	/^void gui::initColoringShaders()$/;"	f	class:gui
+initColoringVAOs	src/colorings.cpp	/^void gui::initColoringVAOs()$/;"	f	class:gui
+initColorquadShader	src/quadcolors.cpp	/^void gui::initColorquadShader() $/;"	f	class:gui
 initColors	src/color.cpp	/^void gl::initColors()$/;"	f	class:gl
+initConstColorShader	src/colorings.cpp	/^void gui::initConstColorShader() {$/;"	f	class:gui
+initConstColorVAO	src/colorings.cpp	/^void gui::initConstColorVAO() {$/;"	f	class:gui
 initCoordinateSystem	src/gldebug.cpp	/^unsigned int glDebug::initCoordinateSystem( std::string pName )$/;"	f	class:glDebug
 initEntityBuffers	src/entities.cpp	/^void entities::initEntityBuffers()$/;"	f	class:entities
-initFontShader	src/font.cpp	/^void gui::text::initFontShader()$/;"	f	class:gui::text
 initFontVAO	src/font.cpp	/^void gui::text::initFontVAO() $/;"	f	class:gui::text
 initFonts	src/text.cpp	/^void gui::text::initFonts()$/;"	f	class:gui::text
 initFramebuffers	src/framebuffer.cpp	/^void texture::initFramebuffers()$/;"	f	class:texture
@@ -693,7 +720,6 @@ initLights	src/lights.cpp	/^void lights::initLights()$/;"	f	class:lights
 initLineShader	src/line.cpp	/^void gui::initLineShader() $/;"	f	class:gui
 initLineVAO	src/line.cpp	/^void gui::initLineVAO() $/;"	f	class:gui
 initMeshNormalShader	src/mesh.cpp	/^void mesh::initMeshNormalShader()$/;"	f	class:mesh
-initMeshShader	src/mesh.cpp	/^void mesh::initMeshShader()$/;"	f	class:mesh
 initMeshVAO	src/mesh.cpp	/^void mesh::initMeshVAO()$/;"	f	class:mesh
 initModels	src/model.cpp	/^void model::initModels()$/;"	f	class:model
 initModules	src/sequencer.cpp	/^void sequencer::initModules()$/;"	f	class:sequencer
@@ -705,9 +731,11 @@ initQuadIndexShader	src/quadindex.cpp	/^void gui::initQuadIndexShader()$/;"	f	cl
 initStyleBuffer	src/font.cpp	/^void gui::text::initStyleBuffer() $/;"	f	class:gui::text
 initWidgets	src/gui.cpp	/^void gui::initWidgets()$/;"	f	class:gui
 initer	src/widget.h	/^                const Initer initer;$/;"	m	struct:gui::Widget::Preset
+initfontShader	src/font.cpp	/^void gui::text::initfontShader()$/;"	f	class:gui::text
 initialize	src/sequencer.cpp	/^void sequencer::initialize()$/;"	f	class:sequencer
 initializeVAOs	src/sequencer.cpp	/^void sequencer::initializeVAOs()$/;"	f	class:sequencer
 initializer	src/font_loader.h	/^		namespace initializer $/;"	n	namespace:gui::text
+initmeshShader	src/mesh.cpp	/^void mesh::initmeshShader()$/;"	f	class:mesh
 input	src/input.h	/^namespace input {$/;"	n
 input	src/keys.h	/^namespace input $/;"	n
 input	src/mouse.h	/^namespace input {$/;"	n
@@ -725,7 +753,7 @@ kerningCount	src/font.h	/^			unsigned int kerningCount;$/;"	m	struct:gui::text::
 kerningMap	src/font_loader.cpp	/^	std::vector<int> kerningMap;$/;"	m	struct:LoadFont	file:
 kerningOffset	src/font.h	/^			unsigned int kerningOffset;$/;"	m	struct:gui::text::Font
 key	src/keys.h	/^            int key;$/;"	m	class:input::KeyEvent
-key	src/mouse.h	/^        int key;$/;"	m	struct:input::MouseKeyEvent
+key	src/mouse.h	/^		int key;$/;"	m	struct:input::MouseKeyEvent
 key_Callback	src/keys.cpp	/^void input::key_Callback( GLFWwindow * window, int pKey, int pScancode, int pAction, int pMods )$/;"	f	class:input
 key_a	src/input.cpp	/^input::KeySignal input::key_a;$/;"	m	class:input	file:
 key_c	src/input.cpp	/^input::KeySignal input::key_c;$/;"	m	class:input	file:
@@ -760,11 +788,11 @@ lightShaderProgram	src/lights.cpp	/^unsigned int lights::lightShaderProgram = 0;
 lightVAO	src/lights.cpp	/^gl::VAO lights::lightVAO;$/;"	m	class:lights	file:
 lights	src/lights.h	/^namespace lights$/;"	n
 limitFPS	src/app.cpp	/^void app::limitFPS()$/;"	f	class:app
-lineCount	src/line.h	/^        unsigned int lineCount;$/;"	m	struct:gui::LineGroup
+lineCount	src/line.h	/^		unsigned int lineCount;$/;"	m	struct:gui::LineGroup
 lineGap	src/font.h	/^			float lineGap;$/;"	m	struct:gui::text::FontMetric
 lineGap	src/font_loader.cpp	/^	size_t lineGap;$/;"	m	struct:LoadFontMetrics	file:
 lineGapScale	src/text.cpp	/^	float lineGapScale;$/;"	m	struct:TextboxMetrics	file:
-lineOffset	src/line.h	/^        unsigned int lineOffset;$/;"	m	struct:gui::LineGroup
+lineOffset	src/line.h	/^		unsigned int lineOffset;$/;"	m	struct:gui::LineGroup
 lineShader	src/line.cpp	/^unsigned int lineShader = 0;$/;"	v
 lineVAO	src/line.cpp	/^gl::VAO lineVAO;$/;"	v
 lineVertexBuffer	src/line.cpp	/^gl::StreamStorage<glm::uvec2> lineVertexBuffer;$/;"	v
@@ -775,7 +803,7 @@ line_sizes	src/text.cpp	/^	std::vector<glm::vec2> line_sizes;$/;"	m	struct:Textb
 lines	src/text.cpp	/^	std::vector<gui::text::String> lines;$/;"	m	struct:TextboxGlyphs	file:
 linkNodeToBoundingSphere	src/collision.cpp	/^unsigned int physics::linkNodeToBoundingSphere( unsigned int pNodeIndex, BoundingSphere pBoundingSphere )$/;"	f	class:physics
 linkNodeToBoundingSphere	src/collision.cpp	/^unsigned int physics::linkNodeToBoundingSphere( unsigned int pNodeIndex, unsigned int pBoundingSphereIndex )$/;"	f	class:physics
-linkProgram	src/shader_loader.cpp	/^void shader::Loader::linkProgram( unsigned int pProgramIndex )$/;"	f	class:shader::Loader
+linkProgram	src/shader_loader.cpp	/^void Shader::Loader::linkProgram( unsigned int pProgramIndex )$/;"	f	class:Shader::Loader
 lmb	src/input.cpp	/^events::ButtonEvents<events::Event> input::lmb;$/;"	m	class:input	file:
 loadAtlas	src/font_loader.cpp	/^void loadAtlas( FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, $/;"	f
 loadFont	src/font_loader.cpp	/^void loadFont( LoadFont& pFont )$/;"	f
@@ -835,7 +863,7 @@ model	src/model.h	/^namespace model {$/;"	n
 model	src/model_loader.h	/^namespace model {$/;"	n
 modelLoadBuffer	src/model_loader.cpp	/^std::vector<model::Loader::ModelLoadFile> modelLoadBuffer;$/;"	v
 modelname	src/model_loader.h	/^			std::string modelname;$/;"	m	struct:model::Loader::ModelLoadFile
-moduleLookup	src/shader.cpp	/^std::unordered_map<std::string, unsigned int> shader::moduleLookup;$/;"	m	class:shader	file:
+moduleLookup	src/shader.cpp	/^std::unordered_map<std::string, unsigned int> Shader::moduleLookup;$/;"	m	class:Shader	file:
 monitor	src/contextwindow.h	/^	    GLFWmonitor* monitor;$/;"	m	struct:app::Monitor
 monitorCount	src/contextwindow.cpp	/^int app::monitorCount = 0;$/;"	m	class:app	file:
 mouseKey_Callback	src/mouse.cpp	/^void input::mouseKey_Callback( GLFWwindow * window, int pKey, int pAction, int pMods )$/;"	f	class:input
@@ -859,7 +887,7 @@ movepolicy	src/widget.h	/^            const MovePolicy movepolicy;$/;"	m	struct:
 msg	src/debug.h	/^		std::string msg = "";$/;"	m	struct:debug::Error
 name	src/camera.h	/^		std::string name = "camera";$/;"	m	class:camera::Camera
 name	src/contextwindow.h	/^	    std::string name = "GLFW\/OpenGL Window";$/;"	m	struct:app::Window
-name	src/shader_loader.h	/^		std::string name;$/;"	m	struct:shader::Program
+name	src/shader_loader.h	/^		std::string name;$/;"	m	struct:Shader::Program
 name	src/storage.h	/^            std::string name;$/;"	m	struct:gl::Storage
 name	src/vao.h	/^        std::string name;$/;"	m	struct:gl::VAO
 nand_op	src/gates.h	/^        nand_op() $/;"	f	struct:gates::nand_op
@@ -868,9 +896,9 @@ nearPlane	src/camera.h	/^		float nearPlane = 1.0f;$/;"	m	struct:camera::Frustum
 neural	src/neural.h	/^namespace neural {$/;"	n
 neurons	src/neural.h	/^		std::vector<Neuron> neurons;$/;"	m	struct:neural::Circuit
 newEntityID	src/entities.cpp	/^void entities::newEntityID( unsigned int& pNode )$/;"	f	class:entities
-newProgram	src/shader.cpp	/^unsigned int shader::newProgram( std::string pProgramName, unsigned int pComputeShaderIndex )$/;"	f	class:shader
-newProgram	src/shader.cpp	/^unsigned int shader::newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex )$/;"	f	class:shader
-newProgram	src/shader.cpp	/^unsigned int shader::newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex, unsigned int pGeometryShaderIndex )$/;"	f	class:shader
+newProgram	src/shader.cpp	/^unsigned int Shader::newProgram( std::string pProgramName, unsigned int pComputeShaderIndex )$/;"	f	class:Shader
+newProgram	src/shader.cpp	/^unsigned int Shader::newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex )$/;"	f	class:Shader
+newProgram	src/shader.cpp	/^unsigned int Shader::newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex, unsigned int pGeometryShaderIndex )$/;"	f	class:Shader
 next	src/gates.h	/^            static bool next( std::tuple<Srcs...>& pSrcs ) $/;"	f	struct:gates::gate::evaluator
 next	src/gates.h	/^            static bool next( std::tuple<Srcs...>& pSrcs )$/;"	f	struct:gates::gate::evaluator
 nextMode	src/camera.cpp	/^void camera::Camera::nextMode() {$/;"	f	class:camera::Camera
@@ -920,8 +948,8 @@ operator ==	src/gates.h	/^    inline bool operator==( switch_gate<On, Off> const
 operator ==	src/gates.h	/^    inline bool operator==( toggle_gate<Source> const & l, toggle_gate<Source> const& r ) $/;"	f	namespace:gates
 operator ==	src/keys.h	/^    inline bool operator==( KeyCondition const & l, KeyCondition const& r )$/;"	f	namespace:input
 operator ==	src/keys.h	/^    inline bool operator==( KeyEvent const & l, KeyEvent const& r ) $/;"	f	namespace:input
-operator ==	src/mouse.h	/^    inline bool operator==( MouseKeyEvent const & l, MouseKeyEvent const& r ) {$/;"	f	namespace:input
-operator ==	src/mouse.h	/^    inline bool operator==( QuadEvent const & l, QuadEvent const& r ) {$/;"	f	namespace:input
+operator ==	src/mouse.h	/^	inline bool operator==( MouseKeyEvent const & l, MouseKeyEvent const& r ) {$/;"	f	namespace:input
+operator ==	src/mouse.h	/^	inline bool operator==( QuadEvent const & l, QuadEvent const& r ) {$/;"	f	namespace:input
 operator typename Container::size_type	src/utils.h	/^        operator typename Container::size_type() const$/;"	f	struct:utils::Itr
 operator unsigned int	src/vao.h	/^        operator unsigned int()$/;"	f	struct:gl::VAO
 or_op	src/gates.h	/^        or_op() $/;"	f	struct:gates::or_op
@@ -968,7 +996,7 @@ quadIndexTexture	src/framebuffer.cpp	/^unsigned int texture::quadIndexTexture;$/
 quadIndexVAO	src/quadindex.cpp	/^gl::VAO gui::quadIndexVAO;$/;"	m	class:gui	file:
 quadStorage	src/font.cpp	/^gl::StreamStorage<gui::text::CharQuad> quadStorage;$/;"	v
 quadVBO	src/primitives.cpp	/^gl::Storage<glm::vec2> gl::quadVBO;$/;"	m	class:gl	file:
-quad_index	src/mouse.h	/^        unsigned int quad_index;\/\/0 if none$/;"	m	struct:input::QuadEvent
+quad_index	src/mouse.h	/^		unsigned int quad_index;\/\/0 if none$/;"	m	struct:input::QuadEvent
 quads	src/font_loader.cpp	/^	std::vector<LoadGlyphQuad> quads;$/;"	m	struct:LoadAtlas	file:
 quads	src/text.cpp	/^	std::vector<gui::text::CharQuad> quads;$/;"	m	struct:TextboxGlyphs	file:
 quit	src/app.cpp	/^void app::quit() $/;"	f	class:app
@@ -986,13 +1014,15 @@ release	src/keys.h	/^        unsigned int release;$/;"	m	struct:input::KeySignal
 removeFileExtension	src/font_loader.cpp	/^void removeFileExtension( std::string& pFileName )$/;"	f
 renderBlendMeshes	src/mesh.cpp	/^void mesh::renderBlendMeshes()$/;"	f	class:mesh
 renderColorQuads	src/quadcolors.cpp	/^void gui::renderColorQuads() $/;"	f	class:gui
+renderColorings	src/colorings.cpp	/^void gui::renderColorings()$/;"	f	class:gui
+renderConstColors	src/colorings.cpp	/^void gui::renderConstColors() {$/;"	f	class:gui
 renderGlyphs	src/text.cpp	/^void gui::text::renderGlyphs()$/;"	f	class:gui::text
 renderLights	src/lights.cpp	/^void lights::renderLights()$/;"	f	class:lights
 renderLines	src/line.cpp	/^void gui::renderLines()$/;"	f	class:gui
 renderMeshNormals	src/mesh.cpp	/^void mesh::renderMeshNormals()$/;"	f	class:mesh
 renderMeshes	src/mesh.cpp	/^void mesh::renderMeshes()$/;"	f	class:mesh
 reserveEntities	src/entities.cpp	/^void entities::reserveEntities( unsigned int pCount )$/;"	f	class:entities
-reserveKeySignals	src/keys.cpp	/^void input::reserveKeySignals( unsigned int pCount ) {$/;"	f	class:input
+reserveKeySignals	src/keys.cpp	/^void input::reserveKeySignals( unsigned int pCount ) $/;"	f	class:input
 reserveLightSpace	src/lights.cpp	/^void lights::reserveLightSpace( unsigned int pCount ) $/;"	f	class:lights
 reservePointLightSpace	src/lights.cpp	/^void lights::reservePointLightSpace( unsigned int pCount ) $/;"	f	class:lights
 reserveTextboxSpace	src/text.cpp	/^void gui::text::reserveTextboxSpace( unsigned int pCount ) $/;"	f	class:gui::text
@@ -1002,7 +1032,7 @@ reserve_slots	src/functor.h	/^		static void reserve_slots( unsigned int pCount )
 resetEvents	src/event.cpp	/^void events::resetEvents() {$/;"	f	class:events
 resetModelDirectory	src/model_loader.cpp	/^void model::Loader::resetModelDirectory()$/;"	f	class:model::Loader
 resetMouse	src/mouse.cpp	/^void input::resetMouse()$/;"	f	class:input
-resetShaderDirectory	src/shader_loader.cpp	/^void shader::Loader::resetShaderDirectory()$/;"	f	class:shader::Loader
+resetShaderDirectory	src/shader_loader.cpp	/^void Shader::Loader::resetShaderDirectory()$/;"	f	class:Shader::Loader
 resetSignals	src/signal.cpp	/^void signals::resetSignals()$/;"	f	class:signals
 resetTextureDirectory	src/texture.cpp	/^void texture::resetTextureDirectory()$/;"	f	class:texture
 resize	src/quad.cpp	/^void gui::Quad::resize( const glm::vec2 pV ) const$/;"	f	class:gui::Quad
@@ -1050,14 +1080,14 @@ setMaxFPS	src/app.cpp	/^void app::setMaxFPS( unsigned int pMaxFPS )$/;"	f	class:
 setMode	src/camera.cpp	/^void camera::Camera::setMode( CameraMode pMode )$/;"	f	class:camera::Camera
 setMode	src/camera.cpp	/^void camera::setMode( Camera & pCam, CameraMode pMode )$/;"	f	class:camera
 setModelDirectory	src/model_loader.cpp	/^void model::Loader::setModelDirectory( std::string&& pDirectory )$/;"	f	class:model::Loader
-setModuleType	src/shader_loader.cpp	/^int setModuleType( shader::Module& module, std::string stagetype )$/;"	f
+setModuleType	src/shader_loader.cpp	/^int setModuleType( Shader::Module& module, std::string stagetype )$/;"	f
 setPos	src/entities.cpp	/^void entities::setPos( unsigned int pNodeID, glm::vec3 pPos )$/;"	f	class:entities
 setPosition	src/camera.cpp	/^void camera::Camera::setPosition( glm::vec3 pPos )$/;"	f	class:camera::Camera
 setRotation	src/entities.cpp	/^void entities::setRotation( unsigned int pNodeID, glm::vec4 pRotation )$/;"	f	class:entities
 setScale	src/entities.cpp	/^void entities::setScale( unsigned int pNodeID, glm::vec3 pScale )$/;"	f	class:entities
 setSensitivity	src/camera.cpp	/^void camera::Camera::setSensitivity( float pNewSensitivity )$/;"	f	class:camera::Camera
 setSensitivity	src/camera.cpp	/^void camera::setSensitivity( Camera & pCam, float pSensitivity )$/;"	f	class:camera
-setShaderDirectory	src/shader_loader.cpp	/^void shader::Loader::setShaderDirectory( std::string& pDirectory )$/;"	f	class:shader::Loader
+setShaderDirectory	src/shader_loader.cpp	/^void Shader::Loader::setShaderDirectory( std::string& pDirectory )$/;"	f	class:Shader::Loader
 setSize	src/contextwindow.cpp	/^void app::Window::setSize( unsigned int pWidth, unsigned int pHeight )$/;"	f	class:app::Window
 setSpeed	src/camera.cpp	/^void camera::Camera::setSpeed( float pNewSpeed )$/;"	f	class:camera::Camera
 setSpeed	src/camera.cpp	/^void camera::setSpeed( Camera & pCam, float pSpeed )$/;"	f	class:camera
@@ -1067,36 +1097,34 @@ setTextboxString	src/text.cpp	/^void gui::text::setTextboxString( unsigned int p
 setTextureDirectory	src/texture.cpp	/^void texture::setTextureDirectory( std::string& pDirectory )$/;"	f	class:texture
 setTextureFilter	src/texture.cpp	/^void texture::setTextureFilter( unsigned int pTextureIndex, unsigned int pMagFilter, unsigned int pMinFilter )$/;"	f	class:texture
 setTextureWrapping	src/texture.cpp	/^void texture::setTextureWrapping( unsigned int pTextureIndex, unsigned int pWrapS, unsigned int pWrapT )$/;"	f	class:texture
-setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, float pValue ) {$/;"	f	class:shader
-setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::ivec3 pValue ) {$/;"	f	class:shader
-setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::ivec4 pValue ) {$/;"	f	class:shader
-setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::mat3 pValue, bool pTranspose ) {$/;"	f	class:shader
-setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::mat4 pValue, bool pTranspose ) {$/;"	f	class:shader
-setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::uvec3 pValue ) {$/;"	f	class:shader
-setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::uvec4 pValue ) {$/;"	f	class:shader
-setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::vec3 pValue ) {$/;"	f	class:shader
-setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::vec4 pValue ) {$/;"	f	class:shader
-setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, int pValue ) {$/;"	f	class:shader
-setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, unsigned int pValue ) {$/;"	f	class:shader
+setUniform	src/shader.cpp	/^void Shader::setUniform( unsigned int pProgram, std::string pUniformName, float pValue ) {$/;"	f	class:Shader
+setUniform	src/shader.cpp	/^void Shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::ivec3 pValue ) {$/;"	f	class:Shader
+setUniform	src/shader.cpp	/^void Shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::ivec4 pValue ) {$/;"	f	class:Shader
+setUniform	src/shader.cpp	/^void Shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::mat3 pValue, bool pTranspose ) {$/;"	f	class:Shader
+setUniform	src/shader.cpp	/^void Shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::mat4 pValue, bool pTranspose ) {$/;"	f	class:Shader
+setUniform	src/shader.cpp	/^void Shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::uvec3 pValue ) {$/;"	f	class:Shader
+setUniform	src/shader.cpp	/^void Shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::uvec4 pValue ) {$/;"	f	class:Shader
+setUniform	src/shader.cpp	/^void Shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::vec3 pValue ) {$/;"	f	class:Shader
+setUniform	src/shader.cpp	/^void Shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::vec4 pValue ) {$/;"	f	class:Shader
+setUniform	src/shader.cpp	/^void Shader::setUniform( unsigned int pProgram, std::string pUniformName, int pValue ) {$/;"	f	class:Shader
+setUniform	src/shader.cpp	/^void Shader::setUniform( unsigned int pProgram, std::string pUniformName, unsigned int pValue ) {$/;"	f	class:Shader
 set_triggers	src/functor.h	/^		void set_triggers( std::initializer_list<unsigned int> pSet ) $/;"	f	class:functors::Functor
 set_triggers	src/functor.h	/^		void set_triggers( std::initializer_list<unsigned int> pSet ) $/;"	f	struct:functors::FunctorRef
 setup	src/neural.cpp	/^void neural::setup() {$/;"	f	class:neural
-setupBlendMeshShader	src/mesh.cpp	/^void mesh::setupBlendMeshShader()$/;"	f	class:mesh
-setupColorQuadShader	src/quadcolors.cpp	/^void gui::setupColorQuadShader() $/;"	f	class:gui
+setupBlendmeshShader	src/mesh.cpp	/^void mesh::setupBlendmeshShader()$/;"	f	class:mesh
+setupColoringShaders	src/colorings.cpp	/^void gui::setupColoringShaders()$/;"	f	class:gui
+setupColorquadShader	src/quadcolors.cpp	/^void gui::setupColorquadShader() $/;"	f	class:gui
+setupConstColorShader	src/colorings.cpp	/^void gui::setupConstColorShader() {$/;"	f	class:gui
 setupControls	src/input.cpp	/^void input::setupControls()$/;"	f	class:input
 setupGlyphShader	src/text.cpp	/^void gui::text::setupGlyphShader() $/;"	f	class:gui::text
 setupLightShader	src/lights.cpp	/^void lights::setupLightShader()$/;"	f	class:lights
 setupLineShader	src/line.cpp	/^void gui::setupLineShader() $/;"	f	class:gui
 setupMeshNormalShader	src/mesh.cpp	/^void mesh::setupMeshNormalShader()$/;"	f	class:mesh
-setupMeshShader	src/mesh.cpp	/^void mesh::setupMeshShader()$/;"	f	class:mesh
 setupModels	src/model.cpp	/^void model::setupModels()$/;"	f	class:model
 setupQuadIndexShader	src/quadindex.cpp	/^void gui::setupQuadIndexShader()$/;"	f	class:gui
 setupShader	src/voxelization.cpp	/^void voxelization::setupShader()$/;"	f	class:voxelization
+setupmeshShader	src/mesh.cpp	/^void mesh::setupmeshShader()$/;"	f	class:mesh
 severity	src/debug.h	/^		Severity severity;$/;"	m	struct:debug::Error
-shader	src/shader.h	/^namespace shader {$/;"	n
-shader	src/shader_loader.h	/^namespace shader {$/;"	n
-shaderCount	src/shader_loader.h	/^		unsigned int shaderCount;$/;"	m	struct:shader::Program
-shaderProgramLookup	src/shader.cpp	/^std::unordered_map<std::string, unsigned int> shader::shaderProgramLookup;$/;"	m	class:shader	file:
 shouldPrintInfo	src/debug.cpp	/^bool debug::shouldPrintInfo = true;$/;"	m	class:debug	file:
 showDistanceField	src/font_loader.cpp	/^int showDistanceField = 1;$/;"	v
 sign	dt/misc.h	/^inline int sign(const T &x) { return (x >= 0 ? 1 : -1); };$/;"	f
@@ -1126,7 +1154,7 @@ src	src/gates.h	/^        Source src;$/;"	m	struct:gates::toggle_gate
 src	src/signal.h	/^		Source src;$/;"	m	struct:signals::Signal
 src	src/signal.h	/^		bool src;$/;"	m	struct:signals::Source
 srcs	src/gates.h	/^        std::tuple<Srcs...> srcs;$/;"	m	struct:gates::gate
-stages	src/shader_loader.h	/^		unsigned int stages[4];$/;"	m	struct:shader::Program
+stages	src/shader_loader.h	/^		unsigned int stages[4];$/;"	m	struct:Shader::Program
 startCode	src/font.h	/^			unsigned int startCode = 35;$/;"	m	struct:gui::text::FontInstructions
 state	src/app.cpp	/^app::State app::state = app::State::Init;$/;"	m	class:app	file:
 state	src/gates.h	/^        bool state;$/;"	m	struct:gates::switch_gate
@@ -1181,14 +1209,14 @@ translateGlobal	src/camera.cpp	/^void camera::Camera::translateGlobal( glm::vec3
 translateLocal	src/camera.cpp	/^void camera::Camera::translateLocal( float pX, float pY, float pZ )$/;"	f	class:camera::Camera
 translateLocal	src/camera.cpp	/^void camera::Camera::translateLocal( glm::vec3 pDir )$/;"	f	class:camera::Camera
 traverse	src/neural.cpp	/^void traverse() {$/;"	f
-type	src/shader_loader.h	/^		ModuleType type;$/;"	m	struct:shader::Module
-type	src/shader_loader.h	/^		ProgramType type;$/;"	m	struct:shader::Program
+type	src/shader_loader.h	/^		ModuleType type;$/;"	m	struct:Shader::Module
+type	src/shader_loader.h	/^		ProgramType type;$/;"	m	struct:Shader::Program
 type	src/texture.h	/^		GLenum type;$/;"	m	struct:texture::Texture2D
 uchar	dt/misc.h	/^typedef unsigned char uchar;$/;"	t
 unbind	src/vao.h	/^        void unbind() $/;"	f	struct:gl::VAO
 underline_drop	src/font.h	/^			float underline_drop;$/;"	m	struct:gui::text::FontMetric
 underline_thickness	src/font.h	/^			float underline_thickness;$/;"	m	struct:gui::text::FontMetric
-unuse	src/shader.cpp	/^void shader::unuse()$/;"	f	class:shader
+unuse	src/shader.cpp	/^void Shader::unuse()$/;"	f	class:Shader
 up	src/camera.cpp	/^void camera::Camera::up()$/;"	f	class:camera::Camera
 up	src/camera.cpp	/^void camera::up( Camera & pCam )$/;"	f	class:camera
 up	src/camera.h	/^		glm::vec3 up;$/;"	m	struct:camera::Frustum
@@ -1196,6 +1224,8 @@ update	src/camera.cpp	/^void camera::Camera::update()$/;"	f	class:camera::Camera
 updateCharStorage	src/font.cpp	/^void gui::text::updateCharStorage()$/;"	f	class:gui::text
 updateColorBuffer	src/color.cpp	/^void gl::updateColorBuffer()$/;"	f	class:gl
 updateColorQuads	src/quadcolors.cpp	/^void gui::updateColorQuads()$/;"	f	class:gui
+updateColorings	src/colorings.cpp	/^void gui::updateColorings()$/;"	f	class:gui
+updateConstColors	src/colorings.cpp	/^void gui::updateConstColors()$/;"	f	class:gui
 updateEntityBuffers	src/entities.cpp	/^void entities::updateEntityBuffers()$/;"	f	class:entities
 updateEntityMatrices	src/entities.cpp	/^void entities::updateEntityMatrices()$/;"	f	class:entities
 updateGeneralUniformBuffer	src/gl.cpp	/^void gl::updateGeneralUniformBuffer()$/;"	f	class:gl
@@ -1208,16 +1238,19 @@ updateMouse	src/mouse.cpp	/^void input::updateMouse()$/;"	f	class:input
 updateQuadBuffer	src/quad.cpp	/^void gui::updateQuadBuffer()$/;"	f	class:gui
 updateTime	src/app.cpp	/^void app::updateTime()$/;"	f	class:app
 updateTimeFactor	src/app.cpp	/^void app::updateTimeFactor() $/;"	f	class:app
+uploadConstColors	src/colorings.cpp	/^void gui::uploadConstColors()$/;"	f	class:gui
 uploadStorage	src/storage.h	/^    void uploadStorage( StreamStorage<T>& pStorage, unsigned int pByteSize, void* pData )$/;"	f	namespace:gl
+uploadUVRanges	src/colorings.cpp	/^void gui::uploadUVRanges()$/;"	f	class:gui
 upsampling	src/font.h	/^			unsigned int upsampling = 4;$/;"	m	struct:gui::text::FontInstructions
 upward_factor	src/camera.h	/^		float upward_factor;$/;"	m	struct:camera::MovementPolicy
 upward_off	src/camera.h	/^		size_t upward_off;$/;"	m	struct:camera::MovementPolicy
-use	src/shader.cpp	/^void shader::use( std::string pProgramName )$/;"	f	class:shader
-use	src/shader.cpp	/^void shader::use( unsigned int pID )$/;"	f	class:shader
+use	src/shader.cpp	/^void Shader::use( std::string pProgramName )$/;"	f	class:Shader
+use	src/shader.cpp	/^void Shader::use( unsigned int pID )$/;"	f	class:Shader
 utils	src/element.h	/^namespace utils $/;"	n
 utils	src/element_utils.h	/^namespace utils $/;"	n
 utils	src/utils.h	/^namespace utils {$/;"	n
 uv	src/mesh.h	/^		glm::vec2 uv;$/;"	m	struct:mesh::Vertex
+uvBuffer	src/colorings.cpp	/^size_t uvBuffer = 0;$/;"	v
 vec4	experimental/hierarchy.cpp	/^    vec4( float X, float Y, float Z, float W )$/;"	f	struct:vec4
 vec4	experimental/hierarchy.cpp	/^struct vec4$/;"	s	file:
 vertexAttrib	src/vao.cpp	/^void gl::VAO::vertexAttrib( unsigned int pBindingIndex, unsigned int pAttributeIndex, unsigned int pCount, unsigned int pType, unsigned int pOffset, bool pNormalize ) $/;"	f	class:gl::VAO

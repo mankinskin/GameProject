@@ -1,6 +1,6 @@
 #include "sequencer.h"
 
-#include "shader_loader.h"
+#include "Shader_loader.h"
 #include "shader.h"
 #include "gui.h"
 #include "color.h"
@@ -32,26 +32,26 @@ void sequencer::initialize()
 void sequencer::includeShaders()
 {
     gui::initLineShader();
-    gui::initColorQuadShader();
+    gui::initColorquadShader();
     gui::initQuadIndexShader();
-    //mesh::initMeshShader();
-    //mesh::initBlendMeshShader();
+    //mesh::initmeshShader();
+    //mesh::initBlendmeshShader();
     //mesh::initMeshNormalShader();
     //lights::initLightShader();
-    //gui::text::initFontShader();
+    //gui::text::initfontShader();
     //voxelization::init();
 }
 
 void sequencer::buildShaders()
 {
 	puts( "Building Shaders..." );
-    shader::Loader::buildShaderPrograms();
+    Shader::Loader::buildShaderPrograms();
 	gui::setupLineShader();
-	gui::setupColorQuadShader();
+	gui::setupColorquadShader();
 	gui::setupQuadIndexShader();
-	//mesh::setupMeshShader();
+	//mesh::setupmeshShader();
 	//lights::setupLightShader();
-	//mesh::setupBlendMeshShader();
+	//mesh::setupBlendmeshShader();
 	//mesh::setupMeshNormalShader();
 	//voxelization::setupShader();
 }

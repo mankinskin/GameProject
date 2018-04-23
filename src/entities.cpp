@@ -1,6 +1,6 @@
-#include "Entities.h"
-#include <glm\gtc\matrix_transform.hpp>
-#include "VAO.h"
+#include "entities.h"
+#include <gtc\matrix_transform.hpp>
+#include "vao.h"
 #include "Model.h"
 
 std::vector<glm::mat4> entities::allMatrices;

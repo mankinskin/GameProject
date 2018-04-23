@@ -1,5 +1,5 @@
-#include "Functor.h"
-#include "Event.h"
+#include "functor.h"
+#include "event.h"
 
 std::vector<void( * )( unsigned int )> functors::functorInvokers = std::vector<void( * )( unsigned int )>();
 std::vector<void( * )()> functors::functorDestructors = std::vector<void( * )()>();

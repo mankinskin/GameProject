@@ -3,16 +3,18 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <tuple>
-#include "Quad.h"
-namespace gui {
+#include "quad.h"
 
-
-
-	struct ConstColor {
+namespace gui 
+{
+	struct ConstColor 
+	{
 		ConstColor(std::string pColorName);
 		ConstColor(size_t pIndex)
-			:color_index(pIndex){}
-		ConstColor():color_index(0){}
+			:color_index(pIndex)
+		{}
+		ConstColor():color_index(0)
+		{}
 		size_t color_index;
 	};
 	
@@ -50,7 +52,7 @@ namespace gui {
 }
 
 template<class ColorType>
-void gui::colorQuad(size_t pQuadID, ColorType pColor) {
-
+void gui::colorQuad(size_t pQuadID, ColorType pColor) 
+{
 	colorings<ColorType>[pQuadID-1] = pColor;
 }

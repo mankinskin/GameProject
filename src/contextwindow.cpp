@@ -1,5 +1,5 @@
-#include "ContextWindow.h"
-#include "Debug.h"
+#include "contextwindow.h"
+#include "debug.h"
 #include "app.h"
 #include "gl.h"
 

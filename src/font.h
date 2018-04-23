@@ -1,5 +1,5 @@
 #pragma once
-#include <glm\glm.hpp>
+#include <glm.hpp>
 #include <vector>
 #include <string>
 #include "storage.h"
@@ -139,7 +139,7 @@ namespace gui
 		extern std::vector<CharQuad> charQuadBuffer;
 		extern std::vector<unsigned char> allChars;
 
-		void initFontShader();
+		void initfontShader();
 		void initFontVAO();
 		void updateCharStorage();
 		void clearCharStorage();

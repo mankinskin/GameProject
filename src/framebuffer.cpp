@@ -1,4 +1,4 @@
-#include "Framebuffer.h"
+#include "framebuffer.h"
 #include "texture.h"
 #include "gl.h"
 #include "debug.h"

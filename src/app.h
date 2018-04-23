@@ -1,7 +1,7 @@
 #pragma once
 #include <glew.h>
-#include "ContextWindow.h"
-#include <glm\glm.hpp>
+#include "contextwindow.h"
+#include <glm.hpp>
 
 namespace app {
     enum State {
