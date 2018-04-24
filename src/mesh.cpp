@@ -4,8 +4,8 @@
 #include "shader.h"
 #include "entities.h"
 #include "vao.h"
-#include "Lights.h"
-#include "Material.h"
+#include "lights.h"
+#include "material.h"
 #include "texture.h"
 #include "framebuffer.h"
 

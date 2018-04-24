@@ -1,4 +1,4 @@
-#include "Material.h"
+#include "material.h"
 #include "vao.h"
 #include "shader.h"
 #include "gldebug.h"

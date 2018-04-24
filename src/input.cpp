@@ -9,12 +9,12 @@
 #include "functor.h"
 #include "mesh.h"
 #include <array>
-#include "Text.h"
-#include "Lights.h"
+#include "text.h"
+#include "lights.h"
 #include <glm.hpp>
-#include "GUI.h"
-#include "Line.h"
-#include "Widget.h"
+#include "gui.h"
+#include "line.h"
+#include "widget.h"
 #include <tuple>
 
 /*

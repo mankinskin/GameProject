@@ -1,10 +1,10 @@
-#include "Model_Loader.h"
+#include "model_loader.h"
 #include "debug.h"
-#include <assimp\postprocess.h>
+#include <assimp/postprocess.h>
 #include "model.h"
 #include "mesh.h"
-#include "Material.h"
-#include "Texture.h"
+#include "material.h"
+#include "texture.h"
 #define DEFAULT_MODEL_DIR "assets//models//"
 
 std::string model::Loader::MODEL_DIR = DEFAULT_MODEL_DIR;

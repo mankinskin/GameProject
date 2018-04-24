@@ -1,12 +1,13 @@
 #include "gl.h"
 #include "debug.h"
+#include <ncurses.h>
 #include "app.h"
 #include <array>
 #include "viewport.h"
 #include "primitives.h"
 #include "camera.h"
 #include "gldebug.h"
-#include <gtc\type_ptr.hpp>
+#include <gtc/type_ptr.hpp>
 #include "texture.h"
 #include "font_loader.h"
 #include "quad.h"
@@ -148,3 +149,4 @@ void gl::updateGeneralUniformBuffer()
     std::memcpy( &generalUniformData[36], glm::value_ptr( voxelization::projectionMatrix ), sizeof( float ) * 16 );
     uploadStorage( generalUniformBuffer, sizeof( float ) * 52, &generalUniformData[0] );
 }
+

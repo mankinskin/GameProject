@@ -12,7 +12,7 @@
 #include "quadcolors.h"
 #include "line.h"
 #include "font.h"
-#include "Shader_loader.h"
+#include "shader_loader.h"
 #include "quad.h"
 #include "voxelization.h"
 

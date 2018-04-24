@@ -1,11 +1,11 @@
-#include "Shader_Loader.h"
+#include "shader_loader.h"
 #include "shader.h"
 #include "debug.h"
 #include <fstream>
 #include <sstream>
 #include "gldebug.h"
 
-#define DEFAULT_SHADER_DIRECTORY "Shaders//"
+#define DEFAULT_SHADER_DIRECTORY "shaders//"
 
 std::string Shader::Loader::SHADER_DIR = DEFAULT_SHADER_DIRECTORY;
 

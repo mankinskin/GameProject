@@ -1,6 +1,6 @@
 #include "sequencer.h"
 
-#include "Shader_loader.h"
+#include "shader_loader.h"
 #include "shader.h"
 #include "gui.h"
 #include "color.h"

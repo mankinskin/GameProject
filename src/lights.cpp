@@ -1,4 +1,4 @@
-#include "Lights.h"
+#include "lights.h"
 #include "vao.h"
 #include "shader.h"
 #include "gl.h"

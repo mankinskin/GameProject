@@ -31,9 +31,9 @@ void gui::initColorQuadVAO()
 
 void gui::initColorquadShader() 
 {
-    colorquadShader = Shader::newProgram( "colorquadShader", 
-            Shader::createModule( "colorquadShader.vert" ), 
-            Shader::createModule( "colorquadShader.frag" ) );
+    colorquadShader = Shader::newProgram( "colorQuadShader", 
+            Shader::createModule( "colorQuadShader.vert" ), 
+            Shader::createModule( "colorQuadShader.frag" ) );
     Shader::addVertexAttribute( colorquadShader, "corner_pos", 0 );
 }
 
