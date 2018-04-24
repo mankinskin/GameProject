@@ -480,6 +480,7 @@ data	dt/image.h	/^  T *data;$/;"	m	class:image
 data	src/texture.h	/^		std::vector<unsigned char> data;$/;"	m	struct:texture::TexData2D
 data	src/texture.h	/^		unsigned char* data;$/;"	m	struct:texture::TextureBuffer
 debug	src/debug.h	/^namespace debug {$/;"	n
+destroy	src/contextwindow.cpp	/^void app::Window::destroy()$/;"	f	class:app::Window
 diff_color	src/material.h	/^		glm::vec4 diff_color;$/;"	m	struct:mesh::Material
 diff_tex	src/material.h	/^		unsigned int diff_tex;$/;"	m	struct:mesh::MaterialTextures
 disableCursor	src/mouse.cpp	/^int disableCursor = 0;$/;"	v
@@ -918,6 +919,7 @@ operator *	experimental/hierarchy.cpp	/^    size_t& operator*()$/;"	f	struct:Qua
 operator *	experimental/hierarchy.cpp	/^    vec4& operator*()$/;"	f	struct:Color
 operator *	src/utils.h	/^        T& operator*(){$/;"	f	struct:utils::Itr
 operator =	src/contextwindow.h	/^	    GLFWwindow* operator=( const Window& obj ) const $/;"	f	struct:app::Window
+operator =	src/contextwindow.h	/^	    Window& operator=( const Window obj ) $/;"	f	struct:app::Window
 operator =	src/utils.h	/^        Itr<T, Container>& operator=( Itr<T, Container>& other ){$/;"	f	struct:utils::Itr
 operator ==	dt/misc.h	/^inline bool operator==(const rgb &a, const rgb &b) {$/;"	f
 operator ==	src/event.h	/^	inline bool operator==( Event const & l, Event const& r ) {$/;"	f	namespace:events
@@ -958,6 +960,7 @@ pos	src/text.cpp	/^	unsigned int pos;$/;"	m	struct:Textbox	file:
 ppem_x	src/font_loader.cpp	/^	size_t ppem_x;$/;"	m	struct:LoadFontMetrics	file:
 ppem_y	src/font_loader.cpp	/^	size_t ppem_y;$/;"	m	struct:LoadFontMetrics	file:
 press	src/keys.h	/^        unsigned int press;$/;"	m	struct:input::KeySignal
+print	src/contextwindow.h	/^		void print()$/;"	f	struct:app::Window
 printErrors	src/debug.cpp	/^void debug::printErrors()$/;"	f	class:debug
 printInfo	src/debug.cpp	/^void debug::printInfo()$/;"	f	class:debug
 projectionMatrix	src/camera.h	/^		glm::mat4 projectionMatrix = {};$/;"	m	class:camera::Camera
@@ -1277,5 +1280,4 @@ y_rotation_factor	src/camera.h	/^		float y_rotation_factor;$/;"	m	struct:camera:
 y_rotator_off	src/camera.h	/^		size_t y_rotator_off;$/;"	m	struct:camera::LookPolicy
 ypos	src/contextwindow.h	/^	    int xpos, ypos = 0;$/;"	m	struct:app::Monitor
 z	experimental/hierarchy.cpp	/^    float x, y, z, w;$/;"	m	struct:vec4	file:
-~Window	src/contextwindow.cpp	/^app::Window::~Window()$/;"	f	class:app::Window
 ~image	dt/image.h	/^image<T>::~image() {$/;"	f	class:image

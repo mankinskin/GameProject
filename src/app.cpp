@@ -54,6 +54,7 @@ void app::init()
 	initGLFW();
 	initMonitors();
 	mainWindow = Window( 1600, 850 );
+	mainWindow.print();
 	gl::init();
 
     sequencer::initialize();

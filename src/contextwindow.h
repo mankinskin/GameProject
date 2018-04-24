@@ -41,14 +41,26 @@ namespace app
 		Window( std::string pName, unsigned int pWidth = DEFAULT_WIDTH, unsigned int pHeight = DEFAULT_HEIGHT );
 		Window( unsigned int pWidth, unsigned int pHeight );
 		Window();
-		~Window();
 
 	    void setSize( unsigned int pWidth, unsigned int pHeight );
+	    void destroy();
 
 	    GLFWwindow* operator=( const Window& obj ) const 
 		{
 			return window;
 	    }
+	    Window& operator=( const Window obj ) 
+		{
+			name = obj.name;
+			width = obj.width;
+			height = obj.height;
+			window = obj.window;
+			return *this;
+	    }
+		void print()
+		{
+			printf("Window %s\nWidth: %u\nHeight: %u\nPtr: %p\n", name.c_str(), width, height, window );
+		}
 
 	    GLFWwindow* window = nullptr;
 	    unsigned int width;

@@ -86,8 +86,8 @@ void app::Window::init()
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
 	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 5 );
 	glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, true );
-	glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, 1 );
-	glfwWindowHint( GLFW_CONTEXT_NO_ERROR, 1 );
+	//glfwWindowHint( GLFW_OPENGL_DEBUG_CONTEXT, 1 );
+	//glfwWindowHint( GLFW_CONTEXT_NO_ERROR, 1 );
 	glfwWindowHint( GLFW_RESIZABLE, 1 );
 	glfwWindowHint( GLFW_FOCUSED, 1 );
 	glfwWindowHint( GLFW_AUTO_ICONIFY, 1 );
@@ -100,12 +100,16 @@ void app::Window::init()
 		puts( "Failed to create GLFW Window! window was nullptr!" );  
 		return;
 	}
-		puts( "Successfully initialized Window" );
-		glfwSetWindowPos( window, 
-				( allMonitors[ windowMonitor ].currentVideoMode->width / 2 ) - width / 2, 
-				( allMonitors[ windowMonitor ].currentVideoMode->height / 2 ) - height / 2 );
-		glfwMakeContextCurrent( window );
-		glfwSetWindowUserPointer( window, window );
+	puts( "Successfully initialized Window" );
+	glfwSetWindowPos( window, 
+			( allMonitors[ windowMonitor ].currentVideoMode->width / 2 ) - width / 2, 
+			( allMonitors[ windowMonitor ].currentVideoMode->height / 2 ) - height / 2 );
+	glfwMakeContextCurrent( window );
+	glfwSetWindowUserPointer( window, window );
+	if ( window == nullptr ) {
+		puts( "Failed to create GLFW Window! window was nullptr!" );  
+		return;
+	}
 }
 
 app::Window::Window( std::string pName, unsigned int pWidth, unsigned int pHeight )
@@ -125,7 +129,7 @@ app::Window::Window()
 {
 }
 
-app::Window::~Window()
+void app::Window::destroy()
 {
 	if ( window != nullptr ) {
 		puts( "\nDestroying current GLFW Window..." );
