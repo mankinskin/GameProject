@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <array>
 
 namespace debug {
 	struct Error {
@@ -9,6 +10,7 @@ namespace debug {
 			Trivial,
 			Fatal
 		};
+		const static std::array<const std::string, 3> severityStrings; 
 		Error() :msg( "" ), severity( Warning ) {}
 		Error( std::string& pMsg, Severity& pSev )
 			:msg( pMsg ), severity( pSev ) {}

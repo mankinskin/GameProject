@@ -2,13 +2,16 @@
 #include <glew.h>
 #include <string>
 #include <glfw3.h>
+#include <vector>
 
-namespace app {
-
-	struct Monitor {
-	    //structure to wrap glfw monitor functionality
-	    void init();
-	    GLFWmonitor* monitor;
+namespace app 
+{
+	struct Monitor 
+	{
+		Monitor();
+		Monitor( GLFWmonitor* pMonitor );
+		//~Monitor();
+	    GLFWmonitor* monitorPtr;
 	    int videoModeCount = 0;
 	    const GLFWvidmode* vidModes = nullptr;
 	    const GLFWvidmode* currentVideoMode = nullptr;
@@ -19,26 +22,40 @@ namespace app {
 	    int physical_height;
 	    int pixels_x;
 	    int pixels_y;
+		private:
+		void init();
 	};
 
 	void initMonitors();
-	extern Monitor primaryMonitor;
-	extern int monitorCount;
-	extern GLFWmonitor** allMonitors;
+	extern std::vector<Monitor> allMonitors;
+	extern GLFWmonitor** allMonitorPtrs;
+	extern unsigned int windowMonitor;
 
-	struct Window {
+	void switchWindowToMonitor( unsigned int pMonitor );
+
+	struct Window 
+	{
+		const static unsigned int DEFAULT_WIDTH = 1000;
+		const static unsigned int DEFAULT_HEIGHT = 700;
+		const static std::string DEFAULT_NAME;
+		Window( std::string pName, unsigned int pWidth = DEFAULT_WIDTH, unsigned int pHeight = DEFAULT_HEIGHT );
+		Window( unsigned int pWidth, unsigned int pHeight );
+		Window();
+		~Window();
 
 	    void setSize( unsigned int pWidth, unsigned int pHeight );
-	    void init();
 
-	    GLFWwindow* operator=( const Window& obj ) {
-		return window;
+	    GLFWwindow* operator=( const Window& obj ) const 
+		{
+			return window;
 	    }
 
 	    GLFWwindow* window = nullptr;
-	    unsigned int width = 1000;
-	    unsigned int height = 7000;
-	    std::string name = "GLFW/OpenGL Window";
-	    int fullscreen = 0;;
+	    unsigned int width;
+	    unsigned int height;
+	    std::string name;
+	    bool fullscreen = 0;
+	private:
+	    void init();
 	};
 }

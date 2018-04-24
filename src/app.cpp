@@ -35,7 +35,7 @@
 #include "sequencer.h"
 
 app::State app::state = app::State::Init;
-app::Window app::mainWindow = app::Window();
+app::Window app::mainWindow;
 double app::timeFactor = 1.0;
 double app::lastFrameMS = 0;
 double app::lastFrameLimitedMS = 0;
@@ -50,12 +50,10 @@ void app::init()
 	puts( "Hello" );
 	state = Running;
 	setMaxFPS( 50 );
-	//Windows and gl Context
+	// Windows and gl Context
 	initGLFW();
 	initMonitors();
-	primaryMonitor.init();
-	mainWindow.setSize( 1600, 850 );
-	mainWindow.init();
+	mainWindow = Window( 1600, 850 );
 	gl::init();
 
     sequencer::initialize();

@@ -3,7 +3,7 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+!_TAG_PROGRAM_VERSION	5.8	//
 Agent	src/neural.h	/^	class Agent {$/;"	c	namespace:neural
 BLUE_WEIGHT	dt/imconv.h	31;"	d
 BUF_SIZE	dt/pnmfile.h	31;"	d
@@ -36,12 +36,16 @@ Color	experimental/hierarchy.cpp	/^struct Color$/;"	s	file:
 Color	src/color.h	/^    typedef glm::vec4 Color;$/;"	t	namespace:gl
 ColorIt	src/color.h	/^    typedef utils::Itr<Color, std::array<Color, MAX_COLOR_COUNT>> ColorIt;$/;"	t	namespace:gl
 DEFAULT_CAMERA_CONTROLS	src/camera.h	/^	const CameraControls DEFAULT_CAMERA_CONTROLS = CameraControls( GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_Y );$/;"	m	namespace:camera
+DEFAULT_HEIGHT	src/contextwindow.h	/^		const static unsigned int DEFAULT_HEIGHT = 700;$/;"	m	struct:app::Window
 DEFAULT_LINE_GROUP_FLAGS	src/line.h	/^	const int DEFAULT_LINE_GROUP_FLAGS = 1;$/;"	m	namespace:gui
 DEFAULT_MODEL_DIR	src/model_loader.cpp	8;"	d	file:
+DEFAULT_NAME	src/contextwindow.cpp	/^const std::string app::Window::DEFAULT_NAME = "OpenGL Window";$/;"	m	class:app::Window	file:
+DEFAULT_NAME	src/contextwindow.h	/^		const static std::string DEFAULT_NAME;$/;"	m	struct:app::Window
 DEFAULT_SHADER_DIRECTORY	src/shader_loader.cpp	8;"	d	file:
 DEFAULT_STORE_DIR	src/font_loader.cpp	17;"	d	file:
 DEFAULT_TEXTURE_DIRECTORY	src/texture.cpp	5;"	d	file:
 DEFAULT_TTF_DIR	src/font_loader.cpp	16;"	d	file:
+DEFAULT_WIDTH	src/contextwindow.h	/^		const static unsigned int DEFAULT_WIDTH = 1000;$/;"	m	struct:app::Window
 DT_H	dt/dt.h	22;"	d
 EXTENSIONS_SUPPORTED_NUM	src/gl.cpp	/^int gl::EXTENSIONS_SUPPORTED_NUM = 0;$/;"	m	class:gl	file:
 EXTENSION_LIST	src/gl.cpp	/^std::vector<std::string> gl::EXTENSION_LIST = {};$/;"	m	class:gl	file:
@@ -165,7 +169,9 @@ ModelLoadFile	src/model_loader.h	/^		struct ModelLoadFile {$/;"	s	namespace:mode
 Module	src/shader_loader.h	/^		Module( std::string& pFileName ) :fileName( pFileName ), content( "" ), ID( 0 ), type( ModuleType::Vertex ) {}$/;"	f	struct:shader::Module
 Module	src/shader_loader.h	/^	struct Module {$/;"	s	namespace:shader
 ModuleType	src/shader_loader.h	/^	enum class ModuleType {$/;"	c	namespace:shader
-Monitor	src/contextwindow.h	/^	struct Monitor {$/;"	s	namespace:app
+Monitor	src/contextwindow.cpp	/^app::Monitor::Monitor( GLFWmonitor* pMonitor )$/;"	f	class:app::Monitor
+Monitor	src/contextwindow.cpp	/^app::Monitor::Monitor()$/;"	f	class:app::Monitor
+Monitor	src/contextwindow.h	/^	struct Monitor $/;"	s	namespace:app
 Mouse	src/mouse.h	/^	class Mouse {\/\/TODO$/;"	c	namespace:input
 MouseKeyEvent	src/mouse.h	/^		MouseKeyEvent( int pKey, KeyCondition pChange )$/;"	f	struct:input::MouseKeyEvent
 MouseKeyEvent	src/mouse.h	/^		MouseKeyEvent( int pKey, int pAction )$/;"	f	struct:input::MouseKeyEvent
@@ -264,7 +270,10 @@ Warning	src/debug.h	/^			Warning,$/;"	e	enum:debug::Error::Severity
 Widget	src/widget.h	/^            Widget( Initer pIniter, Colors pColors, $/;"	f	struct:gui::Widget
 Widget	src/widget.h	/^            Widget( Preset pPreset )$/;"	f	struct:gui::Widget
 Widget	src/widget.h	/^        struct Widget$/;"	s	namespace:gui
-Window	src/contextwindow.h	/^	struct Window {$/;"	s	namespace:app
+Window	src/contextwindow.cpp	/^app::Window::Window( std::string pName, unsigned int pWidth, unsigned int pHeight )$/;"	f	class:app::Window
+Window	src/contextwindow.cpp	/^app::Window::Window( unsigned int pWidth, unsigned int pHeight )$/;"	f	class:app::Window
+Window	src/contextwindow.cpp	/^app::Window::Window()$/;"	f	class:app::Window
+Window	src/contextwindow.h	/^	struct Window $/;"	s	namespace:app
 _USE_MATH_DEFINES	src/font_loader.cpp	2;"	d	file:
 _index	src/element_utils.h	/^    template<size_t I> struct _index { };$/;"	s	namespace:utils
 _type	src/element_utils.h	/^    template<typename T> struct _type { using type = T; };$/;"	s	namespace:utils
@@ -305,7 +314,8 @@ allMetrics	src/font.cpp	/^std::vector<gui::text::GlyphMetrics> gui::text::allMet
 allModelNames	src/model.cpp	/^std::vector<std::string> model::allModelNames;$/;"	m	class:model	file:
 allModels	src/model.cpp	/^std::vector<model::Model> model::allModels;$/;"	m	class:model	file:
 allModules	src/shader.cpp	/^std::vector<shader::Module> shader::allModules;$/;"	m	class:shader	file:
-allMonitors	src/contextwindow.cpp	/^GLFWmonitor** app::allMonitors = nullptr;$/;"	m	class:app	file:
+allMonitorPtrs	src/contextwindow.cpp	/^GLFWmonitor** app::allMonitorPtrs = nullptr;$/;"	m	class:app	file:
+allMonitors	src/contextwindow.cpp	/^std::vector<app::Monitor> app::allMonitors;$/;"	m	class:app	file:
 allNormals	src/entities.cpp	/^std::vector<glm::vec3> entities::allNormals;$/;"	m	class:entities	file:
 allPositions	src/entities.cpp	/^std::vector<glm::vec3> entities::allPositions;$/;"	m	class:entities	file:
 allPrograms	src/shader.cpp	/^std::vector<shader::Program> shader::allPrograms;$/;"	m	class:shader	file:
@@ -328,7 +338,7 @@ amb_tex	src/material.h	/^		unsigned int amb_tex;$/;"	m	struct:mesh::MaterialText
 and_op	src/gates.h	/^        and_op()$/;"	f	struct:gates::and_op
 and_op	src/gates.h	/^    struct and_op $/;"	s	namespace:gates
 app	src/app.h	/^namespace app {$/;"	n
-app	src/contextwindow.h	/^namespace app {$/;"	n
+app	src/contextwindow.h	/^namespace app $/;"	n
 applier	src/functor.h	/^	struct applier $/;"	s	namespace:functors
 applier	src/functor.h	/^	struct applier<0, R, Args...> $/;"	s	namespace:functors
 apply	src/camera.cpp	/^void camera::CameraMode::apply( Camera* pCam ) {$/;"	f	class:camera::CameraMode
@@ -541,7 +551,7 @@ from	src/neural.h	/^		unsigned int from;$/;"	m	struct:neural::Synapse
 frustum	src/camera.h	/^		Frustum frustum;$/;"	m	struct:camera::CameraMode
 frustum_size	src/voxelization.cpp	/^glm::uvec3 voxelization::frustum_size = glm::ivec3( 200, 200, 200 );$/;"	m	class:voxelization	file:
 ftLib	src/font_loader.cpp	/^FT_Library ftLib;$/;"	v
-fullscreen	src/contextwindow.h	/^	    int fullscreen = 0;;$/;"	m	struct:app::Window
+fullscreen	src/contextwindow.h	/^	    bool fullscreen = 0;$/;"	m	struct:app::Window
 func	src/element.h	/^                func( const std::tuple<Initers...> initer )$/;"	f	struct:utils::element_constructor
 func	src/functor.h	/^		R( &func )( Args... );$/;"	m	class:functors::Functor
 func_impl	src/element.h	/^                func_impl( const std::tuple<SubIniter> initer )$/;"	f	struct:utils::element_constructor
@@ -620,7 +630,7 @@ h	dt/image.h	/^  int w, h;$/;"	m	class:image
 hardness	src/font.h	/^			float hardness = 1.0f;$/;"	m	struct:gui::text::TextStyle
 height	dt/image.h	/^  int height() const { return h; }$/;"	f	class:image
 height	src/camera.h	/^		float height = 650.0f;$/;"	m	struct:camera::Frustum
-height	src/contextwindow.h	/^	    unsigned int height = 7000;$/;"	m	struct:app::Window
+height	src/contextwindow.h	/^	    unsigned int height;$/;"	m	struct:app::Window
 height	src/font.h	/^			float height;$/;"	m	struct:gui::text::GlyphMetrics
 height	src/font_loader.cpp	/^	size_t height;$/;"	m	struct:LoadAtlas	file:
 height	src/texture.h	/^		int height;$/;"	m	struct:texture::TextureBuffer
@@ -802,7 +812,7 @@ lookAt	src/camera.h	/^		glm::vec3 lookAt = glm::vec3( 0.0f, 0.0f, -1.0f );$/;"	m
 lookAtCenter	src/camera.cpp	/^void camera::Camera::lookAtCenter()$/;"	f	class:camera::Camera
 main	experimental/hierarchy.cpp	/^int main()$/;"	f
 main	src/main.cpp	/^int main() {$/;"	f
-mainWindow	src/app.cpp	/^app::Window app::mainWindow = app::Window();$/;"	m	class:app	file:
+mainWindow	src/app.cpp	/^app::Window app::mainWindow;$/;"	m	class:app	file:
 main_camera	src/camera.cpp	/^camera::Camera camera::main_camera = camera::Camera( camera::CAMERA_MODES[1] );$/;"	m	class:camera	file:
 mainmenu	src/app.cpp	/^void app::mainmenu()$/;"	f	class:app
 mappedPtr	src/storage.h	/^            void* mappedPtr;$/;"	m	struct:gl::StreamStorage
@@ -836,8 +846,7 @@ model	src/model_loader.h	/^namespace model {$/;"	n
 modelLoadBuffer	src/model_loader.cpp	/^std::vector<model::Loader::ModelLoadFile> modelLoadBuffer;$/;"	v
 modelname	src/model_loader.h	/^			std::string modelname;$/;"	m	struct:model::Loader::ModelLoadFile
 moduleLookup	src/shader.cpp	/^std::unordered_map<std::string, unsigned int> shader::moduleLookup;$/;"	m	class:shader	file:
-monitor	src/contextwindow.h	/^	    GLFWmonitor* monitor;$/;"	m	struct:app::Monitor
-monitorCount	src/contextwindow.cpp	/^int app::monitorCount = 0;$/;"	m	class:app	file:
+monitorPtr	src/contextwindow.h	/^	    GLFWmonitor* monitorPtr;$/;"	m	struct:app::Monitor
 mouseKey_Callback	src/mouse.cpp	/^void input::mouseKey_Callback( GLFWwindow * window, int pKey, int pAction, int pMods )$/;"	f	class:input
 mouseKeys	src/mouse.cpp	/^std::array<input::KeyCondition, 3> mouseKeys;$/;"	v
 mov	src/camera.h	/^		glm::vec3 mov;$/;"	m	class:camera::Camera
@@ -858,7 +867,7 @@ movepolicy	src/widget.h	/^                const MovePolicy movepolicy;$/;"	m	str
 movepolicy	src/widget.h	/^            const MovePolicy movepolicy;$/;"	m	struct:gui::Widget
 msg	src/debug.h	/^		std::string msg = "";$/;"	m	struct:debug::Error
 name	src/camera.h	/^		std::string name = "camera";$/;"	m	class:camera::Camera
-name	src/contextwindow.h	/^	    std::string name = "GLFW\/OpenGL Window";$/;"	m	struct:app::Window
+name	src/contextwindow.h	/^	    std::string name;$/;"	m	struct:app::Window
 name	src/shader_loader.h	/^		std::string name;$/;"	m	struct:shader::Program
 name	src/storage.h	/^            std::string name;$/;"	m	struct:gl::Storage
 name	src/vao.h	/^        std::string name;$/;"	m	struct:gl::VAO
@@ -908,7 +917,7 @@ operator *	experimental/hierarchy.cpp	/^    T& operator*()$/;"	f	struct:Itr
 operator *	experimental/hierarchy.cpp	/^    size_t& operator*()$/;"	f	struct:Quad
 operator *	experimental/hierarchy.cpp	/^    vec4& operator*()$/;"	f	struct:Color
 operator *	src/utils.h	/^        T& operator*(){$/;"	f	struct:utils::Itr
-operator =	src/contextwindow.h	/^	    GLFWwindow* operator=( const Window& obj ) {$/;"	f	struct:app::Window
+operator =	src/contextwindow.h	/^	    GLFWwindow* operator=( const Window& obj ) const $/;"	f	struct:app::Window
 operator =	src/utils.h	/^        Itr<T, Container>& operator=( Itr<T, Container>& other ){$/;"	f	struct:utils::Itr
 operator ==	dt/misc.h	/^inline bool operator==(const rgb &a, const rgb &b) {$/;"	f
 operator ==	src/event.h	/^	inline bool operator==( Event const & l, Event const& r ) {$/;"	f	namespace:events
@@ -949,7 +958,6 @@ pos	src/text.cpp	/^	unsigned int pos;$/;"	m	struct:Textbox	file:
 ppem_x	src/font_loader.cpp	/^	size_t ppem_x;$/;"	m	struct:LoadFontMetrics	file:
 ppem_y	src/font_loader.cpp	/^	size_t ppem_y;$/;"	m	struct:LoadFontMetrics	file:
 press	src/keys.h	/^        unsigned int press;$/;"	m	struct:input::KeySignal
-primaryMonitor	src/contextwindow.cpp	/^app::Monitor app::primaryMonitor;$/;"	m	class:app	file:
 printErrors	src/debug.cpp	/^void debug::printErrors()$/;"	f	class:debug
 printInfo	src/debug.cpp	/^void debug::printInfo()$/;"	f	class:debug
 projectionMatrix	src/camera.h	/^		glm::mat4 projectionMatrix = {};$/;"	m	class:camera::Camera
@@ -1093,6 +1101,8 @@ setupModels	src/model.cpp	/^void model::setupModels()$/;"	f	class:model
 setupQuadIndexShader	src/quadindex.cpp	/^void gui::setupQuadIndexShader()$/;"	f	class:gui
 setupShader	src/voxelization.cpp	/^void voxelization::setupShader()$/;"	f	class:voxelization
 severity	src/debug.h	/^		Severity severity;$/;"	m	struct:debug::Error
+severityStrings	src/debug.cpp	/^const std::array<const std::string, 3> debug::Error::severityStrings = $/;"	m	class:debug::Error	file:
+severityStrings	src/debug.h	/^		const static std::array<const std::string, 3> severityStrings; $/;"	m	struct:debug::Error
 shader	src/shader.h	/^namespace shader {$/;"	n
 shader	src/shader_loader.h	/^namespace shader {$/;"	n
 shaderCount	src/shader_loader.h	/^		unsigned int shaderCount;$/;"	m	struct:shader::Program
@@ -1144,6 +1154,7 @@ styleStorage	src/font.cpp	/^unsigned int styleStorage = 0;$/;"	v
 subelements	src/element.h	/^            const std::tuple<Elems...> subelements;$/;"	m	struct:utils::Element
 subwidgets	src/widget.h	/^            const SubWidgets subwidgets;$/;"	m	struct:gui::Widget
 swapVolumeBuffers	src/voxelization.cpp	/^void voxelization::swapVolumeBuffers() {$/;"	f	class:voxelization
+switchWindowToMonitor	src/contextwindow.cpp	/^void app::switchWindowToMonitor( unsigned int pMonitor )$/;"	f	class:app
 switch_gate	src/gates.h	/^        switch_gate( On pOnSource, Off pOffSource, bool pStartWith = false ) $/;"	f	struct:gates::switch_gate
 switch_gate	src/gates.h	/^        switch_gate() $/;"	f	struct:gates::switch_gate
 switch_gate	src/gates.h	/^    struct switch_gate $/;"	s	namespace:gates
@@ -1170,7 +1181,7 @@ toggleLineGroup	src/line.cpp	/^void gui::toggleLineGroup( unsigned int pLineGrou
 toggleLook	src/camera.cpp	/^void camera::Camera::toggleLook()$/;"	f	class:camera::Camera
 toggleLook	src/camera.cpp	/^void camera::toggleLook( Camera & pCam )$/;"	f	class:camera
 toggleNormals	src/mesh.cpp	/^void mesh::toggleNormals()$/;"	f	class:mesh
-togglePrintInfo	src/debug.cpp	/^void debug::togglePrintInfo() {$/;"	f	class:debug
+togglePrintInfo	src/debug.cpp	/^void debug::togglePrintInfo() $/;"	f	class:debug
 toggle_gate	src/gates.h	/^        toggle_gate( Source pSource, bool pStartAs = false ) $/;"	f	struct:gates::toggle_gate
 toggle_gate	src/gates.h	/^    struct toggle_gate $/;"	s	namespace:gates
 toggle_look_key	src/camera.h	/^		int toggle_look_key;$/;"	m	struct:camera::CameraControls
@@ -1238,7 +1249,7 @@ w	dt/image.h	/^  int w, h;$/;"	m	class:image
 w	experimental/hierarchy.cpp	/^    float x, y, z, w;$/;"	m	struct:vec4	file:
 width	dt/image.h	/^  int width() const { return w; }$/;"	f	class:image
 width	src/camera.h	/^		float width = 1000.0f;$/;"	m	struct:camera::Frustum
-width	src/contextwindow.h	/^	    unsigned int width = 1000;$/;"	m	struct:app::Window
+width	src/contextwindow.h	/^	    unsigned int width;$/;"	m	struct:app::Window
 width	src/font.h	/^			float width;$/;"	m	struct:gui::text::GlyphMetrics
 width	src/font_loader.cpp	/^	size_t width;$/;"	m	struct:LoadAtlas	file:
 width	src/texture.h	/^		int width;$/;"	m	struct:texture::TextureBuffer
@@ -1246,6 +1257,7 @@ width	src/texture.h	/^		unsigned int width = 0;$/;"	m	struct:texture::Texture2D
 width	src/texture.h	/^		unsigned int width;$/;"	m	struct:texture::TexData2D
 width	src/viewport.h	/^        unsigned int width;$/;"	m	struct:gl::Viewport
 window	src/contextwindow.h	/^	    GLFWwindow* window = nullptr;$/;"	m	struct:app::Window
+windowMonitor	src/contextwindow.cpp	/^unsigned int app::windowMonitor = 0;$/;"	m	class:app	file:
 write_packed	dt/pnmfile.h	/^static void write_packed(unsigned char *data, int size, std::ofstream &f) {$/;"	f
 x	experimental/hierarchy.cpp	/^    float x, y, z, w;$/;"	m	struct:vec4	file:
 xBearing	src/font_loader.cpp	/^	int xBearing;$/;"	m	struct:LoadGlyphMetrics	file:
@@ -1265,4 +1277,5 @@ y_rotation_factor	src/camera.h	/^		float y_rotation_factor;$/;"	m	struct:camera:
 y_rotator_off	src/camera.h	/^		size_t y_rotator_off;$/;"	m	struct:camera::LookPolicy
 ypos	src/contextwindow.h	/^	    int xpos, ypos = 0;$/;"	m	struct:app::Monitor
 z	experimental/hierarchy.cpp	/^    float x, y, z, w;$/;"	m	struct:vec4	file:
+~Window	src/contextwindow.cpp	/^app::Window::~Window()$/;"	f	class:app::Window
 ~image	dt/image.h	/^image<T>::~image() {$/;"	f	class:image
