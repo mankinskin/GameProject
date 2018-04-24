@@ -3,7 +3,6 @@
 #include <algorithm>
 #include "debug.h"
 #include <glew.h>
-
 void gl::VAO::vertexAttrib( unsigned int pBindingIndex, unsigned int pAttributeIndex, unsigned int pCount, unsigned int pType, unsigned int pOffset, bool pNormalize ) 
 {
      if ( pType == GL_FLOAT ) {
@@ -23,3 +22,4 @@ void gl::VAO::attribDivisor( unsigned int pAttrib, unsigned int pDivisor )
 {
     glVertexArrayBindingDivisor( ID, pAttrib, pDivisor );
 }
+

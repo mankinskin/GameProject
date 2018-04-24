@@ -32,26 +32,26 @@ void sequencer::initialize()
 void sequencer::includeShaders()
 {
     gui::initLineShader();
-    gui::initColorquadShader();
+    gui::initColorQuadShader();
     gui::initQuadIndexShader();
-    //mesh::initmeshShader();
-    //mesh::initBlendmeshShader();
+    //mesh::initMeshShader();
+    //mesh::initBlendMeshShader();
     //mesh::initMeshNormalShader();
     //lights::initLightShader();
-    //gui::text::initfontShader();
+    //gui::text::initFontShader();
     //voxelization::init();
 }
 
 void sequencer::buildShaders()
 {
 	puts( "Building Shaders..." );
-    Shader::Loader::buildShaderPrograms();
+    shader::Loader::buildShaderPrograms();
 	gui::setupLineShader();
-	gui::setupColorquadShader();
+	gui::setupColorQuadShader();
 	gui::setupQuadIndexShader();
-	//mesh::setupmeshShader();
+	//mesh::setupMeshShader();
 	//lights::setupLightShader();
-	//mesh::setupBlendmeshShader();
+	//mesh::setupBlendMeshShader();
 	//mesh::setupMeshNormalShader();
 	//voxelization::setupShader();
 }

@@ -63,9 +63,9 @@ void lights::updateLightIndexRangeBuffer()
 }
 void lights::initLightShader()
 {
-	lightShaderProgram = Shader::newProgram( "lightShaderProgram", Shader::createModule( "lightShaderProgram.vert" ), Shader::createModule( "lightShaderProgram.frag" ) );
-	Shader::addVertexAttribute( lightShaderProgram, "corner_pos", 0 );
-	Shader::addVertexAttribute( lightShaderProgram, "index_range", 1 );
+	lightShaderProgram = shader::newProgram( "lightShaderProgram", shader::createModule( "lightShaderProgram.vert" ), shader::createModule( "lightShaderProgram.frag" ) );
+	shader::addVertexAttribute( lightShaderProgram, "corner_pos", 0 );
+	shader::addVertexAttribute( lightShaderProgram, "index_range", 1 );
 }
 
 unsigned int lights::createLight( glm::vec4 pPos, glm::vec4 pColor )
@@ -100,7 +100,7 @@ void lights::renderLights()
 	glDepthMask( 0 );
 	//glDisable( GL_CULL_FACE );
 	glBindVertexArray( lightVAO );
-	Shader::use( lightShaderProgram );
+	shader::use( lightShaderProgram );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );//mix colors
 	glDepthFunc( GL_ALWAYS );
 
@@ -122,7 +122,7 @@ void lights::renderLights()
 
 	glBindImageTexture( 0, 0, 0, GL_TRUE, 0, GL_READ_ONLY, GL_RGBA16F );
 	glBindTexture( GL_TEXTURE_3D, 0 );
-	Shader::unuse();
+	shader::unuse();
 	glBindVertexArray( 0 );
 	glDisable( GL_CULL_FACE );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -133,8 +133,8 @@ void lights::renderLights()
 
 void lights::setupLightShader()
 {
-	//Shader::bindUniformBufferToShader( lightShaderProgram, lightDataUBO, "LightDataBuffer" );
-	Shader::bindUniformBufferToShader( lightShaderProgram, gl::generalUniformBuffer, "GeneralUniformBuffer" );
+	//shader::bindUniformBufferToShader( lightShaderProgram, lightDataUBO, "LightDataBuffer" );
+	shader::bindUniformBufferToShader( lightShaderProgram, gl::generalUniformBuffer, "GeneralUniformBuffer" );
 }
 
 void lights::setLightPos( unsigned int pLightIndex, glm::vec3& pPos ) 

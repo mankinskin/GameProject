@@ -19,7 +19,7 @@ std::vector<unsigned int> mesh::allMeshInstancenode;
 std::vector<unsigned int> mesh::opaqueMeshList;
 std::vector<unsigned int> mesh::blendMeshList;
 unsigned int mesh::meshShader = 0;
-unsigned int mesh::blendmeshShader = 0;
+unsigned int mesh::blendMeshShader = 0;
 unsigned int mesh::meshNormalShader = 0;
 gl::VAO mesh::meshVAO;
 gl::Storage<mesh::Vertex> mesh::meshVBO;
@@ -50,47 +50,47 @@ void mesh::initMeshVAO()
 	glBindVertexArray( 0 );
 }
 
-void mesh::initmeshShader()
+void mesh::initMeshShader()
 {
-	meshShader = Shader::newProgram( "meshShader", Shader::createModule( "meshShader.vert" ), 
-            Shader::createModule( "meshShader.frag" ) );
-	Shader::addVertexAttribute( meshShader, "pos", 0 );
-	Shader::addVertexAttribute( meshShader, "normal", 1 );
-	Shader::addVertexAttribute( meshShader, "uv", 2 );
-	Shader::addVertexAttribute( meshShader, "transform", 3 );
+	meshShader = shader::newProgram( "meshShader", shader::createModule( "meshShader.vert" ), 
+            shader::createModule( "meshShader.frag" ) );
+	shader::addVertexAttribute( meshShader, "pos", 0 );
+	shader::addVertexAttribute( meshShader, "normal", 1 );
+	shader::addVertexAttribute( meshShader, "uv", 2 );
+	shader::addVertexAttribute( meshShader, "transform", 3 );
 }
 
 void mesh::initMeshNormalShader()
 {
-	meshNormalShader = Shader::newProgram( "meshNormalShader", Shader::createModule( "meshNormalShader.vert" ), 
-            Shader::createModule( "meshNormalShader.geo" ), Shader::createModule( "meshNormalShader.frag" ) );
-	Shader::addVertexAttribute( meshNormalShader, "pos", 0 );
-	Shader::addVertexAttribute( meshNormalShader, "normal", 1 );
-	Shader::addVertexAttribute( meshNormalShader, "transform", 3 );
+	meshNormalShader = shader::newProgram( "meshNormalShader", shader::createModule( "meshNormalShader.vert" ), 
+            shader::createModule( "meshNormalShader.geo" ), shader::createModule( "meshNormalShader.frag" ) );
+	shader::addVertexAttribute( meshNormalShader, "pos", 0 );
+	shader::addVertexAttribute( meshNormalShader, "normal", 1 );
+	shader::addVertexAttribute( meshNormalShader, "transform", 3 );
 }
 
-void mesh::initBlendmeshShader()
+void mesh::initBlendMeshShader()
 {
-	blendmeshShader = Shader::newProgram( "blendmeshShader", Shader::createModule( "blendmeshShader.vert" ), 
-            Shader::createModule( "blendmeshShader.frag" ) );
-	Shader::addVertexAttribute( blendmeshShader, "pos", 0 );
-	Shader::addVertexAttribute( blendmeshShader, "normal", 1 );
-	Shader::addVertexAttribute( blendmeshShader, "uv", 2 );
-	Shader::addVertexAttribute( blendmeshShader, "transform", 3 );
+	blendMeshShader = shader::newProgram( "blendMeshShader", shader::createModule( "blendMeshShader.vert" ), 
+            shader::createModule( "blendMeshShader.frag" ) );
+	shader::addVertexAttribute( blendMeshShader, "pos", 0 );
+	shader::addVertexAttribute( blendMeshShader, "normal", 1 );
+	shader::addVertexAttribute( blendMeshShader, "uv", 2 );
+	shader::addVertexAttribute( blendMeshShader, "transform", 3 );
 }
 
-void mesh::setupBlendmeshShader()
+void mesh::setupBlendMeshShader()
 {
-	Shader::bindUniformBufferToShader( blendmeshShader, materialUBO, "MaterialBuffer" );
-	Shader::bindUniformBufferToShader( blendmeshShader, lights::lightDataUBO, "LightDataBuffer" );
-	Shader::bindUniformBufferToShader( blendmeshShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
-	Shader::bindUniformBufferToShader( blendmeshShader, entities::entityMatrixBuffer, "NodeMatrixBuffer" );
+	shader::bindUniformBufferToShader( blendMeshShader, materialUBO, "MaterialBuffer" );
+	shader::bindUniformBufferToShader( blendMeshShader, lights::lightDataUBO, "LightDataBuffer" );
+	shader::bindUniformBufferToShader( blendMeshShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
+	shader::bindUniformBufferToShader( blendMeshShader, entities::entityMatrixBuffer, "NodeMatrixBuffer" );
 }
 
 void mesh::renderMeshes()
 {
 	glBindVertexArray( meshVAO );
-	Shader::use( meshShader );
+	shader::use( meshShader );
 
 	for ( unsigned int m = 0; m < allMeshes.size(); ++m ) {
 		mesh::Mesh& mesh = mesh::allMeshes[m];
@@ -100,13 +100,13 @@ void mesh::renderMeshes()
 		glBindTexture( GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].diff_tex );
 		glActiveTexture( GL_TEXTURE2 );//spec
 		glBindTexture( GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].spec_tex );
-		Shader::setUniform( meshShader, "materialIndex", mesh.materialIndex );
+		shader::setUniform( meshShader, "materialIndex", mesh.materialIndex );
 
 		glDrawElementsInstancedBaseInstance( GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, 
                 ( void* )( mesh.indexOffset * sizeof( unsigned int ) ), 
                 mesh.instanceCount, mesh.instanceOffset );
 	}
-	Shader::unuse();
+	shader::unuse();
 	glBindVertexArray( 0 );
 }
 
@@ -115,14 +115,14 @@ void mesh::renderMeshNormals()
 	if ( draw_normals ) {
 		mesh::updateMeshBuffers();//TODO: make work without this
 		glBindVertexArray( meshVAO );
-		Shader::use( meshNormalShader );
+		shader::use( meshNormalShader );
 		for ( unsigned int m = 0; m < allMeshes.size(); ++m ) {
 			mesh::Mesh& mesh = mesh::allMeshes[m];
 			glDrawElementsInstancedBaseInstance( GL_POINTS, mesh.indexCount, GL_UNSIGNED_INT, 
                     ( void* )( mesh.indexOffset *sizeof( unsigned int ) ), 
                     mesh.instanceCount, mesh.instanceOffset );
 		}
-		Shader::unuse();
+		shader::unuse();
 		glBindVertexArray( 0 );
 	}
 }
@@ -130,7 +130,7 @@ void mesh::renderMeshNormals()
 void mesh::renderBlendMeshes()
 {
 	glBindVertexArray( meshVAO );
-	Shader::use( blendmeshShader );
+	shader::use( blendMeshShader );
 	//glDepthMask( 0 );
 	glDisable( GL_CULL_FACE );
 	for ( unsigned int m = 0; m < allMeshes.size(); ++m ) {
@@ -141,13 +141,13 @@ void mesh::renderBlendMeshes()
 		glBindTexture( GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].diff_tex );
 		glActiveTexture( GL_TEXTURE2 );//spec
 		glBindTexture( GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].spec_tex );
-		Shader::setUniform( meshShader, "materialIndex", mesh.materialIndex );
+		shader::setUniform( meshShader, "materialIndex", mesh.materialIndex );
 
 		glDrawElementsInstancedBaseInstance( GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, 
                 ( void* )( mesh.indexOffset * sizeof( unsigned int ) ), 
                 mesh.instanceCount, mesh.instanceOffset );
 	}
-	Shader::unuse();
+	shader::unuse();
 	glBindVertexArray( 0 );
 	//glDepthMask( 1 );
 	glEnable( GL_CULL_FACE );
@@ -161,17 +161,17 @@ void mesh::updateMeshBuffers()
 	}
 }
 
-void mesh::setupmeshShader()
+void mesh::setupMeshShader()
 {
-	Shader::bindUniformBufferToShader( meshShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
-	Shader::bindUniformBufferToShader( meshShader, entities::entityMatrixBuffer, "NodeMatrixBuffer" );
-	Shader::bindUniformBufferToShader( meshShader, materialUBO, "MaterialBuffer" );
+	shader::bindUniformBufferToShader( meshShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
+	shader::bindUniformBufferToShader( meshShader, entities::entityMatrixBuffer, "NodeMatrixBuffer" );
+	shader::bindUniformBufferToShader( meshShader, materialUBO, "MaterialBuffer" );
 }
 
 void mesh::setupMeshNormalShader()
 {
-	Shader::bindUniformBufferToShader( meshNormalShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
-	Shader::bindUniformBufferToShader( meshNormalShader, entities::entityMatrixBuffer, "NodeMatrixBuffer" );
+	shader::bindUniformBufferToShader( meshNormalShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
+	shader::bindUniformBufferToShader( meshNormalShader, entities::entityMatrixBuffer, "NodeMatrixBuffer" );
 }
 
 

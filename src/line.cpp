@@ -87,7 +87,7 @@ void gui::renderLines()
     lineVAO.bind();
     glDepthFunc( GL_ALWAYS );
     glBlendFunc( GL_SRC_ALPHA, GL_DST_ALPHA );
-    Shader::use( lineShader );
+    shader::use( lineShader );
     for ( unsigned int g = 0; g < allLineGroups.size(); ++g ) {
         const LineGroup& lineGroup = allLineGroups[g];
         if ( lineGroup.flags ) {
@@ -98,23 +98,23 @@ void gui::renderLines()
     }
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glDepthFunc( GL_LESS );
-    Shader::unuse();
+    shader::unuse();
     lineVAO.unbind();
 }
 
 void gui::initLineShader() 
 {
     puts( "Creating lineShader..." );
-    lineShader = Shader::newProgram( "lineShader", 
-            Shader::createModule( "lineShader.vert" ), 
-            Shader::createModule( "lineShader.frag" ) );
-    Shader::addVertexAttribute( lineShader, "vertexColor", 0 );
+    lineShader = shader::newProgram( "lineShader", 
+            shader::createModule( "lineShader.vert" ), 
+            shader::createModule( "lineShader.frag" ) );
+    shader::addVertexAttribute( lineShader, "vertexColor", 0 );
 }
 
 void gui::setupLineShader() 
 {
     puts( "Binding lineShader..." );
-    Shader::bindUniformBufferToShader( lineShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
-    Shader::bindUniformBufferToShader( lineShader, gl::colorBuffer, "ColorBuffer" );
-    Shader::bindUniformBufferToShader( lineShader, lineVertexPositionBuffer, "PosBuffer" );
+    shader::bindUniformBufferToShader( lineShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
+    shader::bindUniformBufferToShader( lineShader, gl::colorBuffer, "ColorBuffer" );
+    shader::bindUniformBufferToShader( lineShader, lineVertexPositionBuffer, "PosBuffer" );
 }

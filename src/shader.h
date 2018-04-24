@@ -1,6 +1,6 @@
 #pragma once
 #include "gl.h"
-#include <glew.h>
+#include <GL/glew.h>
 #include <string>
 #include <unordered_map>
 #include <glm.hpp>
@@ -8,19 +8,18 @@
 #include <typeinfo>
 #include <gtc/type_ptr.hpp>
 
-namespace Shader 
-{
+namespace shader {
 
-	unsigned int createModule( std::string pFileName );
-	unsigned int createProgram( std::string pProgramName );
-	unsigned int newProgram( std::string pProgramName, unsigned int pVertexModuleIndex, unsigned int pFragmentModuleIndex );
-	unsigned int newProgram( std::string pProgramName, unsigned int pVertexModuleIndex, unsigned int pFragmentModuleIndex, unsigned int pGeometryModuleIndex );
-	unsigned int newProgram( std::string pProgramName, unsigned int pComputeModuleIndex );
-	void use( std::string pProgramName );
-	void use( unsigned int pID );
-	void unuse();
-	void addVertexAttribute( unsigned int pProgram, std::string pAttributeName, unsigned int pAttributeIndex );
-	void addVertexAttribute( std::string pProgramName, std::string pAttributeName, unsigned int pAttributeIndex );
+    unsigned int createModule( std::string pFileName );
+    unsigned int createProgram( std::string pProgramName );
+    unsigned int newProgram( std::string pProgramName, unsigned int pVertexModuleIndex, unsigned int pFragmentModuleIndex );
+    unsigned int newProgram( std::string pProgramName, unsigned int pVertexModuleIndex, unsigned int pFragmentModuleIndex, unsigned int pGeometryModuleIndex );
+    unsigned int newProgram( std::string pProgramName, unsigned int pComputeModuleIndex );
+    void use( std::string pProgramName );
+    void use( unsigned int pID );
+    void unuse();
+    void addVertexAttribute( unsigned int pProgram, std::string pAttributeName, unsigned int pAttributeIndex );
+    void addVertexAttribute( std::string pProgramName, std::string pAttributeName, unsigned int pAttributeIndex );
 
 	template<typename T>
 		void bindUniformBufferToShader( unsigned int pProgram, const gl::Storage<T>& pStorage, std::string pBlockName )

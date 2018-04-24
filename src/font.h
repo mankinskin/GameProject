@@ -139,7 +139,7 @@ namespace gui
 		extern std::vector<CharQuad> charQuadBuffer;
 		extern std::vector<unsigned char> allChars;
 
-		void initfontShader();
+		void initFontShader();
 		void initFontVAO();
 		void updateCharStorage();
 		void clearCharStorage();

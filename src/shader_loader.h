@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-namespace Shader {
+namespace shader {
 	enum class ModuleType {
 		Vertex,
 		Fragment,
@@ -22,7 +22,7 @@ namespace Shader {
 		std::string name;
 		ProgramType type;
 		unsigned int stages[4];
-		unsigned int ShaderCount;
+		unsigned int shaderCount;
 	};
 
 	struct Module {
@@ -34,7 +34,7 @@ namespace Shader {
 	};
 	
 	extern std::vector<Program> allPrograms;
-	extern std::unordered_map<std::string, unsigned int> ShaderProgramLookup;
+	extern std::unordered_map<std::string, unsigned int> shaderProgramLookup;
 	extern std::vector<Module> allModules;
 	extern std::unordered_map<std::string, unsigned int> moduleLookup;
 
