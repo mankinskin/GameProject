@@ -1,6 +1,6 @@
 #include "mesh.h"
 #include "gldebug.h"
-#include "Model.h"
+#include "model.h"
 #include "shader.h"
 #include "entities.h"
 #include "vao.h"

@@ -5,6 +5,7 @@
 #include "gl.h"
 #include "gldebug.h"
 #include "texture.h"
+#include "primitives.h"
 
 #include <algorithm>
 

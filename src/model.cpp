@@ -1,6 +1,6 @@
 #include "model.h"
 #include "Model_Loader.h"
-#include "Model.h"
+#include "model.h"
 #include "shader.h"
 #include "mesh.h"
 #include "entities.h"
