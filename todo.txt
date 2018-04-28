@@ -8,4 +8,8 @@ TO-DO:
       while parsing the shader files word for word.
       It inserts the values of the variables in place of the strings.
 
->
+> Split the project into modules
+	> the source tree would be easier to test and think about 
+	> This forces me to write robust interfaces for each module
+
+> Write testing suite
