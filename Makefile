@@ -12,7 +12,7 @@ OBJ_TARGETS=$(patsubst %, build/%, $(OBJ_FILES))
 H_FILES=$(shell ls src | grep -e '\.h')
 INCLUDE_LIB_PATHS=-L$(LIBGL_DIR) -L$(LIBGLFW_DIR) -L$(LIBFREETYPE_DIR) -L$(LIBASSIMP_DIR) -L$(LIBSOIL_DIR) -L$(LIBGLUT_DIR)
 INCLUDE_LIBS=-lncurses -lassimp -lglfw -lGLEW -lGL -lGLU -lSOIL -lfreetype -lX11 -lm -lrt  
-iDEP_PACKAGES=libglfw3 libglfw3-dev 
+DEP_PACKAGES=libglfw3 libglfw3-dev 
 
 .deps_installed:
 	sudo apt-get install llvm-6.0-dev 
