@@ -46,6 +46,7 @@ DEFAULT_STORE_DIR	src/font_loader.cpp	17;"	d	file:
 DEFAULT_TEXTURE_DIRECTORY	src/texture.cpp	5;"	d	file:
 DEFAULT_TTF_DIR	src/font_loader.cpp	16;"	d	file:
 DEFAULT_WIDTH	src/contextwindow.h	/^		const static unsigned int DEFAULT_WIDTH = 1000;$/;"	m	struct:app::Window
+DEP_PACKAGES	Makefile	/^DEP_PACKAGES=libglfw3 libglfw3-dev $/;"	m
 DT_H	dt/dt.h	22;"	d
 EXTENSIONS_SUPPORTED_NUM	src/gl.cpp	/^int gl::EXTENSIONS_SUPPORTED_NUM = 0;$/;"	m	class:gl	file:
 EXTENSION_LIST	src/gl.cpp	/^std::vector<std::string> gl::EXTENSION_LIST = {};$/;"	m	class:gl	file:
@@ -642,7 +643,6 @@ hold	src/event.h	/^		unsigned int hold;$/;"	m	struct:events::ButtonEvents
 hold	src/keys.h	/^        unsigned int hold;$/;"	m	struct:input::KeySignal
 hold_evt	src/event.h	/^		gates::switch_gate<OnType, OffType> hold_evt;$/;"	m	struct:events::ButtonEvents
 hovered_quad	src/mouse.cpp	/^unsigned int hovered_quad = 0;$/;"	v
-iDEP_PACKAGES	Makefile	/^iDEP_PACKAGES=libglfw3 libglfw3-dev $/;"	m
 id	src/camera.h	/^		size_t id;$/;"	m	struct:camera::CameraMode
 imPtr	dt/image.h	61;"	d
 imRef	dt/image.h	58;"	d
