@@ -67,29 +67,7 @@ namespace gui
 			float bearingX;
 			float bearingY;
 		};
-		struct FontInstructions 
-		{
-			FontInstructions()
-				:pointSize( 11 ), startCode( 35 ), 
-				glyphCount( 100 ), flags( 0 ) 
-			{}
-			FontInstructions( unsigned int pPointSize, unsigned int pStartCode, 
-					unsigned int pGlyphCount, int pFlags, unsigned int pUpsampling )
-				:pointSize( pPointSize ), startCode( pStartCode ), 
-				glyphCount( pGlyphCount ), flags( pFlags ), upsampling( pUpsampling ) 
-			{}
-			unsigned int startCode = 35;
-			unsigned int glyphCount = 100;
-			unsigned int pointSize = 11;
-			int flags = 0;
-			unsigned int upsampling = 4;
-		};
 
-		inline bool operator==( const FontInstructions& l, const FontInstructions& r ) 
-		{
-			return  l.pointSize == r.pointSize && l.startCode == r.startCode && 
-				l.glyphCount == r.glyphCount && l.flags == r.flags;
-		}
 		struct String 
 		{
 			String()
@@ -128,7 +106,7 @@ namespace gui
 			glm::vec2 size;
 		};
 		extern gl::VAO fontVAO;
-		extern unsigned int glyphShaderProgram;
+		extern unsigned int fontShaderProgram;
 		extern std::vector<unsigned int> glyphIndexBuffer;
 		extern std::vector<Font> allFonts;
 

@@ -6,12 +6,13 @@ CPLUS_INCLUDE_PATH=/usr/include/c++
 INCLUDE_FREETYPE=-I$(INCLUDE_FREETYPE_DIR)
 INCLUDE_ASSIMP=-I$(INCLUDE_ASSIMP_DIR)
 INCLUDE_SOIL=-I$(INCLUDE_SOIL_DIR)
+INCLUDE_LIBPNG=-I$(INCLUDE_LIBPNG_DIR)
 SRC_FILES=$(shell ls src | grep -e '\.cpp')
 OBJ_FILES=$(SRC_FILES:cpp=o)
 OBJ_TARGETS=$(patsubst %, build/%, $(OBJ_FILES))
 H_FILES=$(shell ls src | grep -e '\.h')
-INCLUDE_LIB_PATHS=-L$(LIBGL_DIR) -L$(LIBGLFW_DIR) -L$(LIBFREETYPE_DIR) -L$(LIBASSIMP_DIR) -L$(LIBSOIL_DIR) -L$(LIBGLUT_DIR)
-INCLUDE_LIBS=-lncurses -lassimp -lglfw -lGLEW -lGL -lGLU -lSOIL -lfreetype -lX11 -lm -lrt  
+INCLUDE_LIB_PATHS=-L$(LIBGL_DIR) -L$(LIBGLFW_DIR) -L$(LIBFREETYPE_DIR) -L$(LIBASSIMP_DIR) -L$(LIBSOIL_DIR) -L$(LIBGLUT_DIR) -L$(LIBPNG_DIR)
+INCLUDE_LIBS=-lncurses -lassimp -lglfw -lGLEW -lGL -lGLU -lSOIL -lfreetype -lX11 -lm -lrt -lpng 
 DEP_PACKAGES=libglfw3 libglfw3-dev 
 
 .deps_installed:
@@ -35,7 +36,7 @@ build:
 	mkdir build
 
 all: build tags $(OBJ_TARGETS) 
-	$(GCC) -o game $(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_GLFW) $(INCLUDE_SOIL) $(OBJ_TARGETS) $(INCLUDE_LIB_PATHS)  $(INCLUDE_LIBS)
+	$(GCC) -o game $(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_GLFW) $(INCLUDE_SOIL) $(OBJ_TARGETS) $(INCLUDE_LIB_PATHS) $(INCLUDE_LIBS)
 
 run: all
 	./game

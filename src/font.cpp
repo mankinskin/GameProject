@@ -12,7 +12,7 @@ unsigned int styleStorage = 0;
 std::vector<gui::text::TextStyle> allTextStyles;
 
 gl::VAO gui::text::fontVAO;
-unsigned int gui::text::glyphShaderProgram = 0;
+unsigned int gui::text::fontShaderProgram = 0;
 std::vector<unsigned int> gui::text::glyphIndexBuffer;
 std::vector<gui::text::Font> gui::text::allFonts;
 std::vector<gui::text::FontInstructions> gui::text::allFontInstructions;
@@ -21,10 +21,11 @@ std::vector<float> gui::text::allKerning;
 
 void gui::text::initFontShader()
 {
-	glyphShaderProgram = shader::newProgram( "glyphShapeShader", shader::createModule( "glyphShapeShader.vert" ), shader::createModule( "glyphShapeShader.frag" ) );
-	shader::addVertexAttribute( glyphShaderProgram, "pos", 0 );
-	shader::addVertexAttribute( glyphShaderProgram, "quad", 1 );
-	shader::addVertexAttribute( glyphShaderProgram, "index", 2 );
+	fontShaderProgram = shader::newProgram( "fontShader", 
+			shader::createModule( "fontShader.vert" ), shader::createModule( "fontShader.frag" ) );
+	shader::addVertexAttribute( fontShaderProgram, "pos", 0 );
+	shader::addVertexAttribute( fontShaderProgram, "quad", 1 );
+	shader::addVertexAttribute( fontShaderProgram, "index", 2 );
 }
 
 void gui::text::initFontVAO() 
@@ -78,7 +79,7 @@ void gui::text::initStyleBuffer()
 	//createTextStyle( 1.2f, 0.8f );
 	//styleStorage = gl::createStorage( "FontStyleBuffer", sizeof( TextStyle )*allTextStyles.size(), 0, &allTextStyles[0] );
 
-	//shader::bindUniformBufferToShader( glyphShaderProgram, styleStorage, "StyleBuffer" );
+	//shader::bindUniformBufferToShader( fontShaderProgram, styleStorage, "StyleBuffer" );
 }
 
 void gui::text::updateCharStorage()

@@ -10,26 +10,25 @@
 #define TEXT_LAYOUT_CENTER_BOTH 00001100
 #define TEXT_LAYOUT_FREE_LINES 00010000
 
-namespace gui {
-	namespace text {
+namespace gui 
+{
+	namespace text 
+	{
 		void initFonts();
+
 		struct Font;
 		struct String;
 		struct TextStyle;
+
 		void setStringColor( unsigned int pStringIndex, unsigned int pColorIndex );
 		void setStringStyle( unsigned int pStringIndex, unsigned int pStyleIndex );
 		//Interface
 		void reserveTextboxSpace( unsigned int pCount );
-		unsigned int createTextbox( Quad pQuad, unsigned int pMetrics, 
-				int pFlags, float pMarging = 0.0f );
-		unsigned int createTextbox( unsigned int pPosIndex, unsigned int pSizeIndex, 
-				unsigned int pMetrics, int pFlags, float pMarging = 0.0f );
-		unsigned int createTextbox( glm::vec4 pQuad, unsigned int pMetrics, 
-				int pFlags, float pMarging );
-		unsigned int createTextbox( glm::vec2 pTopLeft, glm::vec2 pSize, 
-				unsigned int pMetrics, int pFlags, float pMarging = 0.0f );
-		unsigned int createTextboxMetrics( unsigned int pFont, float pGlyphScaleX, 
-				float pGlyphScaleY, float pAdvanceScale, float pLineGapScale );
+		unsigned int createTextbox( Quad pQuad, unsigned int pMetrics, int pFlags, float pMarging = 0.0f );
+		unsigned int createTextbox( unsigned int pPosIndex, unsigned int pSizeIndex, unsigned int pMetrics, int pFlags, float pMarging = 0.0f );
+		unsigned int createTextbox( glm::vec4 pQuad, unsigned int pMetrics, int pFlags, float pMarging );
+		unsigned int createTextbox( glm::vec2 pTopLeft, glm::vec2 pSize, unsigned int pMetrics, int pFlags, float pMarging = 0.0f );
+		unsigned int createTextboxMetrics( unsigned int pFont, float pGlyphScaleX, float pGlyphScaleY, float pAdvanceScale, float pLineGapScale );
 		void setTextboxString( unsigned int pTextbox, std::string pString );
 
 		void setTextboxString( unsigned int pTextbox, String pString );
@@ -39,7 +38,7 @@ namespace gui {
 		void revalidateTextboxCharIndices();
 
 		void insertFontString( Font & pFont, String pString );
-		void setupGlyphShader();
+		void setupFontShader();
 
 		//unsigned int createTextStyle( TextStyle pInstructions );
 		//unsigned int createTextStyle( float pThickness, float pHardness );

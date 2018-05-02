@@ -321,17 +321,17 @@ void gui::initWidgets()
     //};
     //FunctorRef<void, glm::vec4&, Quad, Quad> set_slide_target_func = createFunctor<void, glm::vec4&, Quad, Quad>( set_slide_target, lights::getLightColor( 0 ), slider.element<0>(), slider.element<1>() );
     //set_slide_target_func.set_triggers( { slider_lmb.hold } );
-    //
-    ////text
+    
+    //text
     //gui::text::createTextboxMetrics( 0, 1.0, 1.0, 1.0, 1.0 );
-    //
-    //unsigned int qu_tb = gui::text::createTextbox( quitButton.element<1>().index, 0, TEXT_LAYOUT_CENTER_Y );
-    ////unsigned int fps_tb = gui::text::createTextbox( fps_box.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y );
-    //
+    
+	//unsigned int qu_tb = gui::text::createTextbox( quit_button.subwidgets.element<1>(), 0, TEXT_LAYOUT_CENTER_Y );
+	//unsigned int pl_tb = gui::text::createTextbox( play_button.subwidgets.element<1>(), 0, TEXT_LAYOUT_CENTER_Y );
+    //unsigned int fps_tb = gui::text::createTextbox( fps_box.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y );
+    
     //gui::text::setTextboxString( qu_tb, " QUIT" );
-    ////gui::text::setTextboxString( pl_tb, " Play" );
-    ////gui::text::setTextboxString( fps_tb, "FPS" );
-    //gui::text::loadTextboxes();
+    //gui::text::setTextboxString( pl_tb, " Play" );
+    //gui::text::setTextboxString( fps_tb, "FPS" );
 }
 
 glm::vec2 gui::pixel_round( glm::vec2 pIn ) {

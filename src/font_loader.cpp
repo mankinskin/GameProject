@@ -44,7 +44,6 @@ struct LoadAtlas
 {
 	size_t width;
 	size_t height;
-	int flags;
 	std::vector<LoadGlyphQuad> quads;
 	std::vector<unsigned char> buffer;
 };
@@ -63,18 +62,6 @@ std::vector<LoadFont> loadFontBuffer = {};
 std::string font_input_directory = DEFAULT_TTF_DIR;
 std::string font_store_directory = DEFAULT_STORE_DIR;
 FT_Library ftLib;
-int showDistanceField = 1;
-/*
-PIPELINE FOR FONT LOADING
-- Include desired font paths
-	- set load instructions for each font
-- loadFonts
-
-*/
-//template<typename T>
-//inline T square( T p ) {
-//	return p*p;
-//}
 
 std::vector<int> getKerningMap( FT_Face pFace, size_t pStartCode, size_t pGlyphCount )
 {
@@ -110,7 +97,6 @@ void setFontSize( FT_Face& pFace, LoadFontMetrics& pFontMetrics, gui::text::Font
 	pFontMetrics.ppem_x = pFace->size->metrics.x_ppem;
 	pFontMetrics.ppem_y = pFace->size->metrics.y_ppem;
 	//pFontMetrics.lineGap = FT_MulFix( pFace->size->metrics.ascender - pFace->size->metrics.descender, pFace->size->metrics.y_scale )/64;
-
 }
 
 void loadAtlas( FT_Face& pFace, gui::text::FontInstructions& pFontInstructions, 
@@ -122,19 +108,6 @@ void loadAtlas( FT_Face& pFace, gui::text::FontInstructions& pFontInstructions,
 	size_t maxGlyphWidth = FT_MulFix( pFace->bbox.xMax - pFace->bbox.xMin, pFontMetrics.scale_x ) / 64; //max width of the actual glyph bitmap
 	size_t maxGlyphHeight = FT_MulFix( pFace->bbox.yMax - pFace->bbox.yMin, pFontMetrics.scale_y ) / 64;//max height of the actual glyph bitmap
 
-	size_t spread_pixels = 0; // glyph will be rendered with distance field
-	float spread_dist = 0.0f;
-	float size_scale = 1.0f;
-	if ( pFontInstructions.flags & 1 ) {
-		size_scale = 1.0f / ( float )pFontInstructions.upsampling;
-		spread_dist = 5.0f;
-		spread_pixels = ( size_t )ceil( spread_dist );
-
-		//if this flag is set, FreeType has loaded the glyph bitmaps with a higher resolution than needed ( *upsampling )
-		//therefore all sizes have to be scaled back down to their actual, screen fitted sizes
-		maxGlyphWidth = ( size_t )std::ceil( ( ( float )maxGlyphWidth ) * size_scale + spread_dist * 2 );
-		maxGlyphHeight = ( size_t )std::ceil( ( ( float )maxGlyphHeight ) * size_scale + spread_dist * 2 );
-	}
 	const size_t atlasMaxAdvanceX = maxGlyphWidth + pad_pixels * 2;
 	const size_t atlasMaxAdvanceY = maxGlyphHeight + pad_pixels * 2;
 
@@ -147,128 +120,54 @@ void loadAtlas( FT_Face& pFace, gui::text::FontInstructions& pFontInstructions,
 
 	size_t maxAtlasWidth = 0; //the maximum width of the final atlas ( e.g. the maximum line width measured while loading the glyphs line-by-line into the atlas
 	size_t thisLineMaxY = 0; // the maximum height of the current line( e.g. the distance to advance by when advancing to the next line )
-	glm::uvec2 cursor = glm::uvec2();
 
+	glm::uvec2 cursor = glm::uvec2();
 	int maxAscend = 0; //for taking an accurate linegap distance. take the max value of all glyphs for these
 	int maxDescend = 0;
 	for ( size_t g = 0; g < pFontInstructions.glyphCount; ++g ) {
 		//FreeType loads binary bitmap with 1 bit per pixel
-		int flags = FT_LOAD_RENDER;
-		if ( pFontInstructions.flags & 1 ) {
-			//for DT fonts, the bitmap should be a binary image 
-			flags = flags | FT_LOAD_TARGET_MONO;
-		}
-		FT_Load_Char( pFace, pFontInstructions.startCode + g, flags );
+		FT_Load_Char( pFace, pFontInstructions.startCode + g, FT_LOAD_RENDER );
 		FT_GlyphSlot& gly = pFace->glyph;
 
-		glm::uvec2 outlineSize = glm::uvec2( gly->bitmap.width, gly->bitmap.rows ); //the size the the original glyph bitmap, loaded by freetype. if distance field is enabled, spread pixels will be added
-		glm::uvec2 dtSize = glm::uvec2( gly->bitmap.width + spread_pixels * 2, gly->bitmap.rows + spread_pixels * 2 );
+		glm::uvec2 outlineSize = glm::uvec2( gly->bitmap.width, gly->bitmap.rows ); 
 		LoadGlyphMetrics met;
-		met.advanceX = size_t( ( gly->metrics.horiAdvance >> 6 ) * ( size_scale ) );
-		met.xBearing = size_t( ( ( gly->metrics.horiBearingX >> 6 ) ) * size_scale - ( int )spread_pixels );//gly->bitmap_left; //
-		met.yBearing = size_t( ( ( gly->metrics.horiBearingY >> 6 ) ) * size_scale + ( int )spread_pixels );//gly->bitmap_top; //
+		met.advanceX = size_t( ( gly->metrics.horiAdvance >> 6 ) );
+		met.xBearing = size_t( ( gly->metrics.horiBearingX >> 6 ) );//gly->bitmap_left; //
+		met.yBearing = size_t( ( gly->metrics.horiBearingY >> 6 ) );//gly->bitmap_top; //
 
-		glm::uvec2 tileSize = glm::uvec2( outlineSize.x * size_scale + spread_pixels * 2, outlineSize.y * size_scale + spread_pixels * 2 );
-		//the space dedecated to the current glyph in the atlas ( without padding )
 
-		//set atlas uv coords using the direct size of the current glyph, which may actually still need to be downsampled
-		//glyph usage data
 		LoadGlyphQuad qud;
 		qud.minX = cursor.x + pad_pixels;
 		qud.minY = cursor.y + pad_pixels;
-		qud.maxX = qud.minX + tileSize.x;
-		qud.maxY = qud.minY + tileSize.y;
+		qud.maxX = qud.minX + gly->bitmap.width;
+		qud.maxY = qud.minY + gly->bitmap.rows;
 
-		if ( pFontInstructions.flags & 1 ) {
-			
-			image<unsigned char> inImage( dtSize.x, dtSize.y );
-			image<float> innerOutImg( dtSize.x, dtSize.y );
-			image<float> outerOutImg( dtSize.x, dtSize.y );
-			size_t pitch = abs( gly->bitmap.pitch );//how many bytes per bmp row
 
-			//decode binary bitmap to full char bitmap by reading it bit by bit
-			for ( size_t line = 0; line < gly->bitmap.rows; ++line ) {//it all rows of binary bitmap
-				size_t remaining_pixels = gly->bitmap.width;
-				for ( size_t byt = 0; byt < pitch; ++byt ) {//it all bytes per row
-					unsigned char chr = gly->bitmap.buffer[( line*pitch ) + byt];
-					size_t read_bits = std::min( ( size_t )8, remaining_pixels );
-					remaining_pixels -= read_bits;
-					//the byte 
-					//it holds the binary values for 8 pixels in the final image
-					for ( size_t bit = 0; bit < read_bits; ++bit ) { //it all 8 bits of this byte
-						unsigned char val = ( chr >> ( 7 - bit ) ) & 1;
-						size_t posx = ( byt * 8 ) + bit + spread_pixels;
-						size_t posy = line + spread_pixels; //the pos in the freetype bmp
-						inImage.data[( posy*dtSize.x ) + posx] = val; //the coord in the DT image ( + spread_pixels )
-					}
-				}
-			}
-
-			innerOutImg = *dt( &inImage, 0 );//perform distance transform for the glyph image
-			outerOutImg = *dt( &inImage, 1 );//once inner and outer DT, because we want 
-			float innerMaxDistance = 0.0f;
-
-			//find max 
-			for ( size_t h = 0; h < dtSize.y; ++h ) {
-				for ( size_t w = 0; w < dtSize.x; ++w ) {
-					innerMaxDistance = std::max( innerMaxDistance, innerOutImg.data[h*dtSize.x + w] );
-				}
-			}
-			innerMaxDistance = std::min( spread_dist, std::sqrt( innerMaxDistance ) );
-			/*  In      Out
-			   43210 | 01234567
-			   43210 | 01234567
-			   43210 | 01234567
-			   43210 | 01234567
-			   ^     ^        ^spread_pixels
-			   ^     ^Outline
-			   ^innerMaxDistance
-			*/
-			float outerMaxDist = spread_dist;
-			float max_range = innerMaxDistance + spread_dist;
-			size_t bufpos = ( cursor.y + pad_pixels ) * preWidth + cursor.x + pad_pixels;
-			for ( size_t h = 0; h < dtSize.y; ++h ) {
-				for ( size_t w = 0; w < dtSize.x; ++w ) {
-					float outDist = std::min( spread_dist, std::sqrt( outerOutImg.data[h*dtSize.x + w] ) ); //values from 0 to outerMaxDistance
-					float inDist = std::min( spread_dist, std::sqrt( innerOutImg.data[h*dtSize.x + w] ) ); //values from 0 to innerMaxDistance
-
-					float val = ( ( inDist - outDist ) + spread_dist ) / max_range;
-					//distance values are never more than innerMaxDistance
-					//outside outline distances are negative
-					//add innerMaxDistance to map all distances to a range of [0, innerMaxDistance*2( max_dist )]
-					//devide by max_dist to get a range [0.0f, 1.0f] where the glyph center is 1 and the outline is 0.5
-					//unfortunately this only applies to the thickest parts of the glyph, since innerMaxDistance is the max distance from the outline of the entire glyph
-					//what is needed is 
-					val = val*( float )square( size_scale );
-					size_t pos = ( size_t )( ( h*size_scale )*preWidth + ( w*size_scale ) );
-					buf[bufpos + pos] += ( unsigned char )( val *255.0f );
-				}
-			}
-		}
-		else {//regular load
-			for ( size_t line = 0; line < gly->bitmap.rows; ++line ) {
-				std::memcpy( &buf[( ( line + qud.minY )*preWidth ) + qud.minX], &gly->bitmap.buffer[( line*gly->bitmap.width )], sizeof( unsigned char )*gly->bitmap.width );
-			}
+		for ( size_t line = 0; line < gly->bitmap.rows; ++line ) {
+			std::memcpy( &buf[( ( line + qud.minY )*preWidth ) + qud.minX], 
+					&gly->bitmap.buffer[( line*gly->bitmap.width )], 
+					sizeof( unsigned char )*gly->bitmap.width );
 		}
 
 		//advance atlas cursor
-		cursor.x += ( tileSize.x + pad_pixels * 2 );
-		thisLineMaxY = std::max( tileSize.y + pad_pixels * 2, thisLineMaxY );
+		cursor.x += qud.maxX - qud.minX;;
+		thisLineMaxY = std::max( qud.maxY - qud.minY, thisLineMaxY );
 		maxAscend = std::max( maxAscend, met.yBearing );
 		maxDescend = std::max( maxDescend, ( int )( outlineSize.y ) - ( met.yBearing ) );
 		pAtlas.quads[g] = qud;
 		pMetrics[g] = met;
 
 		//check whether to start a new line of glyphs in the atlas
-		if ( ( cursor.x + ( atlasMaxAdvanceX ) ) > preWidth || g + 1 == pFontInstructions.glyphCount ) {
+		if ( ( cursor.x + ( atlasMaxAdvanceX ) ) > preWidth ) {
 			maxAtlasWidth = std::max( maxAtlasWidth, ( size_t )cursor.x );
 			cursor.x = 0;
 			cursor.y += thisLineMaxY;
-
+			thisLineMaxY = 0;
 		}
-
 	}
-
+	
+	maxAtlasWidth = std::max( maxAtlasWidth, ( size_t )cursor.x );
+	cursor.y += thisLineMaxY;
 	pAtlas.width = maxAtlasWidth;
 	pAtlas.height = cursor.y;
 
@@ -398,7 +297,7 @@ std::pair<size_t, size_t> convertKerning( std::vector<int>& pKerningMap )
 
 gui::text::Font integrateFont( LoadFont& pFont )
 {
-	gui::text::Font font;//TODO make font support multiple fontSizes
+	gui::text::Font font;
 	glGenTextures( 1, &font.atlasID );
 	glBindTexture( GL_TEXTURE_2D, font.atlasID );
 

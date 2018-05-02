@@ -49,6 +49,7 @@ void sequencer::buildShaders()
 	gui::setupLineShader();
 	gui::setupColorQuadShader();
 	gui::setupQuadIndexShader();
+	//gui::text::setupFontShader();
 	//mesh::setupMeshShader();
 	//lights::setupLightShader();
 	//mesh::setupBlendMeshShader();
@@ -66,6 +67,9 @@ void sequencer::initializeVAOs()
 
 	puts( "Lines..." );
 	gui::initLineVAO();
+
+	puts( "Fonts..." );
+	//gui::text::initFonts();
 
     gui::initQuadBuffer();
 
@@ -98,6 +102,10 @@ void sequencer::initModules()
 
     puts( "Widgets..." );
     gui::initWidgets();
+
+    puts( "Text..." );
+	//gui::text::loadTextboxes();
+	//gui::text::updateCharStorage();
 }
 
 void sequencer::fetchInput()
@@ -172,62 +180,6 @@ void sequencer::gameloop()
         frame();
     }
 
-    while ( app::state == app::Running ) 
-    {
-        fetchInput();
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-        //entities::translate( 0, node_mov * 0.01f );
-        //node_mov = glm::vec3();
-
-        camera::main_camera.look( input::cursorFrameDelta );
-        camera::main_camera.update();
-
-        gl::updateGeneralUniformBuffer();
-        gl::updateColorBuffer();
-        //lights::updateLightIndexRangeBuffer();
-        //lights::updateLightDataBuffer();
-        //entities::updateEntityMatrices();
-        //entities::updateEntityBuffers();
-        //mesh::updateMeshBuffers();
-
-        //gui::text::updateCharStorage();
-
-        //reset g_buffer
-        //glClearNamedFramebufferfv( texture::gBuffer, GL_COLOR, 0, g_clear_color );
-        //glClearNamedFramebufferfv( texture::gBuffer, GL_COLOR, 1, g_clear_color );
-        //glClearNamedFramebufferfv( texture::gBuffer, GL_COLOR, 2, g_clear_color );
-        //glClearNamedFramebufferfv( texture::gBuffer, GL_COLOR, 3, g_clear_color );
-        //glClearNamedFramebufferfv( texture::gBuffer, GL_COLOR, 4, g_clear_color );
-        //glClearNamedFramebufferfv( texture::gBuffer, GL_DEPTH, 0, &g_clear_depth );
-        //clear screen buffer
-        //voxelization::clearVolumeTexture();
-        //glClearNamedFramebufferfv( 0, GL_COLOR, 0, g_clear_color );
-        //glClearNamedFramebufferfv( 0, GL_DEPTH, 0, &g_clear_depth );
-        ////reset guiFBO
-
-        //voxelization::voxelizeMeshes();
-        //glBindFramebuffer( GL_FRAMEBUFFER, texture::gBuffer );
-        //mesh::renderMeshes();
-
-        //glBindFramebuffer( GL_READ_FRAMEBUFFER, texture::gBuffer );
-
-        //glBlitFramebuffer( 0, 0, gl::Viewport::current->width, gl::Viewport::current->height, 0, 0, gl::Viewport::current->width, gl::Viewport::current->height, GL_DEPTH_BUFFER_BIT, GL_NEAREST );
-
-        //glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-        //lights::renderLights();
-
-        //mesh::renderMeshNormals();
-
-        //gui::text::renderGlyphs();
-
-        glfwSwapBuffers( app::mainWindow.window );
-
-        debug::printErrors();
-        //updateTime();
-        //updateTimeFactor();
-        //limitFPS();
-        //debug::printInfo();
-    }
     gui::text::clearCharStorage();
     functors::clearFunctors();
     signals::clearSignals();

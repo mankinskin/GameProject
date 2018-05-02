@@ -5,6 +5,7 @@ LIBGLUT_DIR=/usr/lib/x86_64-linux-gnu/
 LIBGLEW_DIR=/usr/lib/x86_64-linux-gnu/
 LIBASSIMP_DIR=/usr/lib/x86_64-linux-gnu/
 LIBSOIL_DIR=/usr/lib/
+LIBPNG_DIR=/usr/lib/
 
 INCLUDE_GLEW_DIR=/usr/include/GLEW/
 INCLUDE_GL_DIR=/usr/include/GL/
@@ -13,3 +14,4 @@ INCLUDE_GLM_DIR=/usr/include/glm
 INCLUDE_GLFW_DIR=/usr/include/GLFW
 INCLUDE_ASSIMP_DIR=/usr/include
 INCLUDE_SOIL_DIR=/usr/include/SOIL
+INCLUDE_LIBPNG_DIR=/usr/include/
