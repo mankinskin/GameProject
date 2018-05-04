@@ -1,105 +1,206 @@
 #include "font.h"
-#include "text.h"
-#include "shader.h"
-#include "primitives.h"
+#include <unistd.h>
+#include <fcntl.h>
 
-unsigned int MAX_CHARS = 1000;
-gl::StreamStorage<gui::text::CharQuad> quadStorage;
-gl::StreamStorage<unsigned int> charStorage;
-std::vector<gui::text::String> allStrings;
+FT_Library ftLib;
 
-unsigned int styleStorage = 0;
-std::vector<gui::text::TextStyle> allTextStyles;
+using namespace text;
 
-gl::VAO gui::text::fontVAO;
-unsigned int gui::text::fontShaderProgram = 0;
-std::vector<unsigned int> gui::text::glyphIndexBuffer;
-std::vector<gui::text::Font> gui::text::allFonts;
-std::vector<gui::text::FontInstructions> gui::text::allFontInstructions;
-std::vector<gui::text::GlyphMetrics> gui::text::allMetrics;
-std::vector<float> gui::text::allKerning;
-
-void gui::text::initFontShader()
+void Font::loadGlyph( glm::uvec4& quad, Font::Glyphs::Metric& met, FT_GlyphSlotRec* glyph )
 {
-	fontShaderProgram = shader::newProgram( "fontShader", 
-			shader::createModule( "fontShader.vert" ), shader::createModule( "fontShader.frag" ) );
-	shader::addVertexAttribute( fontShaderProgram, "pos", 0 );
-	shader::addVertexAttribute( fontShaderProgram, "quad", 1 );
-	shader::addVertexAttribute( fontShaderProgram, "index", 2 );
+	quad = glm::uvec4( 
+			cursor.x + padding, cursor.y + padding, 
+			glyph->bitmap.width, glyph->bitmap.rows );
+
+	met = Font::Glyphs::Metric( 
+			glyph->metrics.horiAdvance, 
+			glyph->metrics.horiBearingX,
+			glyph->metrics.horiBearingY );
 }
 
-void gui::text::initFontVAO() 
+void Font::writeGlyphBitmap( glm::uvec4& quad, const FT_Bitmap& bitmap )
 {
-	quadStorage = gl::StreamStorage<CharQuad>( "CharQuadBuffer", 
-			MAX_CHARS, GL_MAP_WRITE_BIT );
-	charStorage = gl::StreamStorage<unsigned int>( "CharBuffer", 
-			MAX_CHARS, GL_MAP_WRITE_BIT );
-
-    fontVAO = gl::VAO( "fontVAO" );
-	//gl::setVertexAttrib( fontVAO, 0, 0, 2, GL_FLOAT, 0 );
-	//gl::setVertexAttrib( fontVAO, 1, 1, 4, GL_FLOAT, 0 );
-	//gl::setVertexAttrib( fontVAO, 2, 2, 1, GL_UNSIGNED_INT, 0 );
-
-	glVertexArrayBindingDivisor( fontVAO, 1, 1 );
-	glVertexArrayBindingDivisor( fontVAO, 2, 1 );
-
-	glVertexArrayElementBuffer( fontVAO, gl::quadEBO.ID );
-	glVertexArrayVertexBuffer( fontVAO, 0, gl::quadVBO.ID, 0, sizeof( float ) * 2 );
-
-	//gl::setVertexArrayVertexStorage( fontVAO, 1, quadStorage, sizeof( CharQuad ) );
-	//gl::setVertexArrayVertexStorage( fontVAO, 2, charStorage, sizeof( unsigned int ) );
-}
-
-void gui::text::revalidateFontStringIndices()
-{
-	unsigned int off = 0;
-	for ( Font& fon : allFonts ) {
-		fon.stringOffset = off;
-		off += fon.stringCount;
+	for ( unsigned int row = 0; row < quad.w; ++row ) {
+		glm::uvec2 cur = glm::uvec2( quad.x, quad.y + row );
+		std::memcpy( 
+				&atlas.pixels[ cur.y * atlas.width + cur.x ], 
+				&bitmap.buffer[ row * bitmap.pitch ],
+				bitmap.pitch );
 	}
 }
 
-void gui::text::insertFontString( Font& pFont, String pString )
+void Font::setLoadPadding( unsigned int padPixels )
 {
-	if ( !pFont.stringCount ) {//if first textbox of this font
-		pFont.stringOffset = allFontStrings.size();//dedicate a new range of tb indices to this font
-	}
-	++pFont.stringCount;
-	allFontStrings.insert( allFontStrings.begin() + pFont.stringOffset, pString );
-}
-//unsigned int gui::text::createTextStyle( TextStyle & pStyle )
-//{
-//	allTextStyles.push_back( pStyle );
-//	return allTextStyles.size() - 1;
-//}
-void gui::text::initStyleBuffer() 
-{
-	allTextStyles.reserve( 2 );
-	//createTextStyle( 1.5f, 0.8f );
-	//createTextStyle( 1.2f, 0.8f );
-	//styleStorage = gl::createStorage( "FontStyleBuffer", sizeof( TextStyle )*allTextStyles.size(), 0, &allTextStyles[0] );
-
-	//shader::bindUniformBufferToShader( fontShaderProgram, styleStorage, "StyleBuffer" );
+	padding = padPixels;
 }
 
-void gui::text::updateCharStorage()
+void Font::setLoadSize( unsigned int ptx, unsigned int pty ) 
 {
-	if ( charQuadBuffer.size() ) {
-		//gl::uploadStorage( quadStorage, sizeof( CharQuad )*charQuadBuffer.size(), &charQuadBuffer[0] );
-		//gl::uploadStorage( charStorage, sizeof( unsigned int )*glyphIndexBuffer.size(), &glyphIndexBuffer[0] );
+	size.x = ptx;
+	size.y = pty;
+}
+
+void Font::setLoadResolution( unsigned int ptx, unsigned int pty ) 
+{
+	resolution.x = ptx;
+	resolution.y = pty;
+}
+std::string stripExtension( std::string& pFilename )
+{
+	unsigned int pos = pFilename.find_last_of( '.' );
+	if( pos == std::string::npos ) {
+		return "";
+	}
+	std::string ext = pFilename.substr( pos );
+	pFilename = pFilename.substr( 0, pos );
+	return ext;
+}
+
+Font::Font( std::string pFilename )
+{
+	filepath = FONT_DIR + pFilename; 
+	extension = stripExtension( pFilename );
+	name = pFilename;
+
+	printf( " Extension: %s\n", extension.c_str() );
+}
+
+void Font::read()
+{
+	if ( extension == ".font" ) {
+		readFontfile();
+	}
+	else {
+		readFace();
 	}
 }
 
-void gui::text::clearCharStorage()
+void Font::readFace()
 {
-	for ( Font& font : allFonts ) {
-		font.stringOffset = 0;
-		font.stringCount = 0;
+	FT_Face face;
+	ft_error = FT_New_Face( ftLib, filepath.c_str(), 0, &face );
+	if ( ft_error || !face ) {
+		printf( "Could not load font %s\n", filepath.c_str() ); 
+		return;
 	}
-	allChars.clear();
-	glyphIndexBuffer.clear();
-	charQuadBuffer.clear();
-	allStrings.clear();
-	allFontStrings.clear();
+
+	FT_Set_Char_Size( face, size.x*64, size.y*64, resolution.x, resolution.y );
+	glyphs.resize( face->num_glyphs );	
+
+	unsigned int max_glyph_width = face->bbox.xMax - face->bbox.xMin;
+	unsigned int row_length = std::ceil( std::sqrt( face->num_glyphs ) );
+	unsigned int max_atlas_width = row_length * max_glyph_width;
+
+	unsigned int row_max_height = 0;
+	unsigned int max_row_width = 0;
+
+	// precalculate glyph quads and store metrics
+	for ( unsigned int gi = 0; gi < glyphs.count; ++gi ) {
+		FT_Load_Char( face, gi, FT_LOAD_RENDER );
+		FT_Render_Glyph( face->glyph, FT_RENDER_MODE_MONO );
+
+		glm::uvec4& quad = glyphs.quads[ gi ];
+		Font::Glyphs::Metric& met = glyphs.metrics[ gi ];
+
+		loadGlyph( quad, met, face->glyph );
+
+		cursor.x += quad.z + padding * 2;
+		row_max_height = std::max( quad.w + padding * 2, row_max_height );
+		if ( ( gi + 1 ) % row_length == 0 ) {
+			max_row_width = std::max( cursor.x, max_row_width );
+			cursor.x = 0;
+			cursor.y += row_max_height;
+			row_max_height = 0;
+		}
+	}
+
+	cursor.y += row_max_height;
+	atlas.width = max_row_width;
+	atlas.height = cursor.y;
+	cursor = glm::uvec2( 0, 0 );
+	atlas.pixels = (png_byte*)malloc( atlas.width * atlas.height );
+
+	// now write glyph bitmaps to glyph quads in atlas
+	for ( unsigned int gi = 0; gi < glyphs.count; ++gi ) {
+		FT_Load_Char( face, gi, FT_LOAD_RENDER );
+		FT_Render_Glyph( face->glyph, FT_RENDER_MODE_MONO );
+
+		writeGlyphBitmap( glyphs.quads[ gi ], face->glyph->bitmap );
+	}
+
+	FT_Done_Face( face );
+}
+
+void Font::readFontfile()
+{
+	FILE* file = fopen( filepath.c_str(), "rb" );
+
+	if ( !file ) {
+		printf( "Failed to open file %s\n", filepath.c_str() );
+		return;
+	}
+
+	unsigned int glyphs_bytes = readGlyphs( file );
+	if ( glyphs_bytes == 0 ) {
+		printf( "Font file %s invalid!", filepath.c_str() );
+		return;
+	}
+	atlas = Image( file, glyphs_bytes  );
+	atlas.read();
+
+	fclose( file );
+}
+
+unsigned int Font::readGlyphs( FILE* file )
+{
+       fread( &glyphs.count, sizeof( unsigned int ), 1, file ); 
+       if ( glyphs.count == 0 ) {
+               return 0;
+       }
+       glyphs.quads.resize( glyphs.count );
+       glyphs.metrics.resize( glyphs.count );
+       fread( &glyphs.quads[0], sizeof( glm::uvec4 ), glyphs.count, file ); 
+       fread( &glyphs.metrics[0], sizeof( Glyphs::Metric ), glyphs.count, file ); 
+
+       unsigned int read_size = sizeof( unsigned int );
+       read_size += sizeof( glm::uvec4 ) * glyphs.quads.size();
+       read_size += sizeof( Glyphs::Metric ) * glyphs.metrics.size();
+
+       return read_size;
+}
+
+std::string Font::write()
+{
+	std::string outname = std::string( name + ".font" );
+	FILE* file = fopen( outname.c_str(), "wb" );
+
+	unsigned int glyphs_size = writeGlyphs( file );
+	Image atlas_image( file, glyphs_size );
+	atlas_image.write( &atlas.pixels[0], atlas.width, atlas.height );
+
+	fclose( file );
+	return outname;
+}
+
+unsigned int Font::writeGlyphs( FILE* file )
+{
+	fwrite( &glyphs.count, sizeof( unsigned int ), 1, file ); 
+	fwrite( &glyphs.quads[0], sizeof( glm::uvec4 ), glyphs.count, file ); 
+	fwrite( &glyphs.metrics[0], sizeof( Glyphs::Metric ), glyphs.count, file ); 
+
+	unsigned int write_size = sizeof( unsigned int );
+	write_size += sizeof( glm::uvec4 ) * glyphs.quads.size();
+	write_size += sizeof( Glyphs::Metric ) * glyphs.metrics.size();
+
+	return write_size;
+}
+
+int text::initFreeType()
+{
+	if ( FT_Init_FreeType( &ftLib ) ) {
+		puts( "Failed to init FreeType!" );
+		return -1;
+	}
+	return 0;
 }
 

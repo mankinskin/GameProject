@@ -1,5 +1,4 @@
 #include "sequencer.h"
-
 #include "shader_loader.h"
 #include "shader.h"
 #include "gui.h"
@@ -16,10 +15,10 @@
 #include "keys.h"
 #include "functor.h"
 #include "debug.h"
-#include "text.h"
 #include "quad.h"
 #include "quadindex.h"
 #include "framebuffer.h"
+#include "text.h"
 
 // Initialization
 void sequencer::initialize()
@@ -104,7 +103,7 @@ void sequencer::initModules()
     gui::initWidgets();
 
     puts( "Text..." );
-	//gui::text::loadTextboxes();
+	text::loadFonts();
 	//gui::text::updateCharStorage();
 }
 
@@ -180,7 +179,6 @@ void sequencer::gameloop()
         frame();
     }
 
-    gui::text::clearCharStorage();
     functors::clearFunctors();
     signals::clearSignals();
 }

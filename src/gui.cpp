@@ -5,7 +5,6 @@
 #include "quad.h"
 #include "line.h"
 #include "quadcolors.h"
-#include "text.h"
 #include "framebuffer.h"
 #include "widget.h"
 #include "input.h"

@@ -9,11 +9,9 @@
 #include "gldebug.h"
 #include <gtc/type_ptr.hpp>
 #include "texture.h"
-#include "font_loader.h"
 #include "quad.h"
 #include "model.h"
 #include "model_loader.h"
-#include "text.h"
 #include "framebuffer.h"
 #include "lights.h"
 #include "entities.h"

@@ -103,3 +103,7 @@ void Image::read()
 	}
 }
 
+Image::~Image()
+{
+	free( pixels );
+}

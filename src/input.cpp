@@ -9,7 +9,6 @@
 #include "functor.h"
 #include "mesh.h"
 #include <array>
-#include "text.h"
 #include "lights.h"
 #include <glm.hpp>
 #include "gui.h"

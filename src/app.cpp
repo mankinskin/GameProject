@@ -1,37 +1,15 @@
 #include "app.h"
 #include "debug.h"
-#include "input.h"
-#include "keys.h"
-#include "functor.h"
-#include "mouse.h"
-#include "event.h"
-#include "signal.h"
 //#ifdef WINDOWS
 #include <ncurses.h>
 //#else
 #include <curses.h>
 //#endif
-#include <thread>
 #include <chrono>
+#include <thread>
 #include "gl.h"
-#include "text.h"
-#include "camera.h"
 #include "gldebug.h"
-#include "font_loader.h"
-#include "gui.h"
-#include "model.h"
-#include "mesh.h"
-#include "lights.h"
-#include "quadcolors.h"
-#include "framebuffer.h"
-#include "quad.h"
-#include <functional>
-#include <algorithm>
-#include "entities.h"
 #include "contextwindow.h"
-#include "physics.h"
-#include "voxelization.h"
-#include "line.h"
 #include "sequencer.h"
 
 app::State app::state = app::State::Init;

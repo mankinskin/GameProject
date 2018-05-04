@@ -1,126 +1,81 @@
 #pragma once
+#include <ft2build.h>
+#include FT_FREETYPE_H
 #include <glm.hpp>
 #include <vector>
 #include <string>
-#include "storage.h"
-#include "vao.h"
+#include <cstring>
+#include "image.h"
 
-namespace gui 
+namespace text 
 {
-	namespace text 
+	struct Font
 	{
-		struct FontMetric 
+		struct Glyphs
 		{
-			FontMetric() 
-				:lineGap( 0.0f ), underline_drop( 0.0f ), 
-				underline_thickness( 0.0f ) 
-			{}
-			float lineGap;
-			float underline_drop;
-			float underline_thickness;
-		};
+			struct Metric
+			{
+				unsigned int advance;
+				unsigned int bearx;
+				unsigned int beary;
+				unsigned int _pad;
 
-		struct Glyph 
-		{
-			Glyph() 
-			{}
-			Glyph( float minX, float minY, float maxX, float maxY )
-				:min( glm::vec2( minX, minY ) ), max( glm::vec2( maxX, maxY ) ) 
-			{}
-			glm::vec2 min;
-			glm::vec2 max;
-		};
-		struct Font 
-		{
-			Font() 
-				:instructions( 0 ), kerningOffset( 0 ), kerningCount( 0 ), 
-				metricOffset( 0 ), metricCount( 0 ), atlasID( 0 ), 
-				fontMetric( FontMetric() ), stringOffset( 0 ), stringCount( 0 ) 
-			{}
-			unsigned int atlasID;
-			FontMetric fontMetric;
-			unsigned int instructions;
-			gl::Storage<Glyph> glyphStorage;
-
-			unsigned int kerningOffset;
-			unsigned int kerningCount;
-			unsigned int metricOffset;
-			unsigned int metricCount;
-
-			unsigned int stringOffset;
-			unsigned int stringCount;
-		};
-
-
-		struct GlyphMetrics 
-		{
-			GlyphMetrics() 
-			{}
-			GlyphMetrics( float pWidth, float pHeight, float pAdvanceX, float pBearingX, float pBearingY )
-				:width( pWidth ), height( pHeight ), 
-				advanceX( pAdvanceX ), bearingX( pBearingX ), bearingY( pBearingY ) 
-			{}
-			//in screen relative coordinates
-			float width;
-			float height;
-			float advanceX;
-			float bearingX;
-			float bearingY;
-		};
-
-		struct String 
-		{
-			String()
-				:offset( 0 ), count( 0 ) 
-			{}
-			String( unsigned int pOffset, unsigned int pCount )
-				:offset( pOffset ), count( pCount ) 
-			{}
-			String( std::string pString );
-			unsigned int offset;
+				Metric()
+				{
+				}
+				Metric( unsigned int adv, unsigned int bx, unsigned int by )
+					:advance ( adv ), bearx( bx ), beary( by )
+				{
+				}
+			};
 			unsigned int count;
+			std::vector<glm::uvec4> quads;
+			std::vector<Metric> metrics;
+			void resize( size_t size )
+			{
+				count = size;
+				quads.resize( count );
+				metrics.resize( count );
+			}
+			Glyphs()
+				:count( 0 )
+			{
+			}
 		};
 
-		struct TextStyle 
+		Image atlas;
+		Glyphs glyphs;
+
+		Font( std::string pFilename );
+
+		Font()
 		{
-			TextStyle()
-				:thickness( 1.5f ), hardness( 0.5f ) 
-			{}
-			TextStyle( float pThickness, float pHardness )
-				:thickness( pThickness ), hardness( pHardness ) 
-			{}
+		}
 
-			float thickness = 1.0f;
-			float hardness = 1.0f;
-			glm::vec2 pad;
-		};
-		struct CharQuad 
-		{
-			CharQuad() 
-			{}
-			CharQuad( float pPosX, float pPosY, float pWidth, float pHeight )
-				:pos( glm::vec2( pPosX, pPosY ) ), 
-				size( glm::vec2( pWidth, pHeight ) ) 
-			{}
-			glm::vec2 pos;
-			glm::vec2 size;
-		};
-		extern gl::VAO fontVAO;
-		extern unsigned int fontShaderProgram;
-		extern std::vector<unsigned int> glyphIndexBuffer;
-		extern std::vector<Font> allFonts;
+		std::string write();
+		void read();
 
-		extern std::vector<FontInstructions> allFontInstructions;
-		extern std::vector<GlyphMetrics> allMetrics;
-		extern std::vector<float> allKerning;
-		extern std::vector<String> allFontStrings;
-		extern std::vector<CharQuad> charQuadBuffer;
-		extern std::vector<unsigned char> allChars;
+		void setLoadSize( unsigned int ptx, unsigned int pty );
+		void setLoadResolution( unsigned int ptx, unsigned int pty );
+		void setLoadPadding( unsigned int padPixels );
+		private:
+		void readFontfile();
+		void readFace();
+		void writeGlyphBitmap( glm::uvec4& quad, const FT_Bitmap& bitmap );
+		void loadGlyph( glm::uvec4& quad, Font::Glyphs::Metric& met, FT_GlyphSlotRec* glyph );
+		const std::string FONT_DIR = "fonts/";
+		glm::uvec2 size = glm::uvec2( 4, 4 );
+		glm::uvec2 resolution = glm::uvec2( 1920, 1080 );
+		unsigned int padding = 0;
+		std::string filepath = "";
+		std::string name = "";
+		std::string extension = "";
+		glm::uvec2 cursor;
+		int ft_error = 0;
+		unsigned int writeGlyphs( FILE* file );
+		unsigned int readGlyphs( FILE* file );
+	};
 
-		void initFontShader();
-		void initFontVAO();
-		void updateCharStorage();
-		void clearCharStorage();
-		void revalidateFontStringIndices();
-	}
+	int initFreeType();
 }
+
