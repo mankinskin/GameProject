@@ -1,8 +1,8 @@
 #version 450
 
 layout( location = 0 ) in vec2 corner;
-layout( location = 1 ) in vec4 quad;
-layout( location = 2 ) in unsigned int glyph_index;
+//layout( location = 1 ) in vec4 quad;
+//layout( location = 2 ) in uint glyph_index;
 
 
 struct Glyph
@@ -17,22 +17,25 @@ struct Quad
 	vec2 size;
 };
 
-layout( std140 ) uniform GlyphBuffer
-{
-	Glyph glyphs[ 255 ];
-};
+//layout( std140 ) uniform GlyphBuffer
+//{
+//	Glyph glyphs[ 255 ];
+//};
 
 out vec2 uv;
 
 void main()
 {
-	Quad qud = Quad( quad.xy, quad.zw );
-	Glyph gly = glyphs[ index ];
-	
-	uv = vec2(
-		gly.min.x * ( 1.0 - corner.x ) + gly.max.x * corner.x, 
-		gly.min.y * corner.y + gly.max.y * ( 1.0 - corner.y ) );
-	 
-	gl_Position = vec4( qud.pos.x + pos.x * qud.size.x, qud.pos.y - ( qud.size.y * ( 1.0 - pos.y ) ), 0.0, 1.0 );
+	//Quad qud = Quad( quad.xy, quad.zw );
+	//Glyph gly = glyphs[ index ];
+	//
+	//uv = vec2(
+	//	gly.min.x * ( 1.0 - corner.x ) + gly.max.x * corner.x, 
+	//	gly.min.y * corner.y + gly.max.y * ( 1.0 - corner.y ) );
+	// 
+	//gl_Position = vec4( qud.pos.x + pos.x * qud.size.x, qud.pos.y - ( qud.size.y * ( 1.0 - pos.y ) ), 0.0, 1.0 );
+
+	uv = corner;
+	gl_Position = vec4( corner, 0.0, 1.0 );
 }
 

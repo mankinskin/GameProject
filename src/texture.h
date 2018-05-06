@@ -11,11 +11,11 @@ namespace texture
 		Texture2D()
 		{
 		}
-		Texture2D( Image image, GLenum pType );
-		Texture2D( std::string pFilename );
+		Texture2D( const Image& image, GLenum pType = GL_UNSIGNED_BYTE );
+		Texture2D( std::string pFilename, GLenum pType = GL_UNSIGNED_BYTE );
 		Texture2D( unsigned int pWidth, unsigned int pHeight, 
 				GLenum pInternalFormat, GLenum pFormat, GLenum pType, unsigned char* pData = nullptr );
-		void loadImage( Image image );
+		void loadImage( const Image& image );
 		void setup( unsigned char* pData );
 		unsigned int ID = 0;
 		unsigned int width = 0;
@@ -34,10 +34,10 @@ namespace texture
 	extern std::unordered_map<std::string, unsigned int> textureLookup;
 
     unsigned int generateMipMap( Texture2D& texture, 
-            int glMinFilter, int glMagFilter );
-	void setTextureWrapping( unsigned int pTextureIndex, unsigned int pWrapS, unsigned int pWrapT );
-	void setTextureFilter( unsigned int pTextureIndex, unsigned int pMagFilter, unsigned int pMinFilter );
-	unsigned int get2DTextureID( unsigned int pTextureIndex );
+            int glMinFilter = GL_NEAREST_MIPMAP_LINEAR, 
+			int glMagFilter = GL_NEAREST );
+	void setTextureWrapping( Texture2D& pTexture, unsigned int pWrapS, unsigned int pWrapT );
+	void setTextureFilter( Texture2D& pTexture, unsigned int pMagFilter, unsigned int pMinFilter );
 
 	void setTextureDirectory( std::string& pDirectory );
 	void resetTextureDirectory();

@@ -235,10 +235,9 @@ TOP_DOWN_LOOK	src/camera.h	/^	const LookPolicy TOP_DOWN_LOOK = LookPolicy( offse
 TOP_DOWN_MOVEMENT	src/camera.h	/^	const MovementPolicy TOP_DOWN_MOVEMENT = MovementPolicy( offsetof( Camera, normal ), 1.0f, offsetof( Camera, cross ), 1.0f, offsetof( Camera, lookAt ), -1.0f );$/;"	m	namespace:camera
 TTF	fontloader/ttf.cpp	/^TTF::TTF( std::string pFilename )$/;"	f	class:TTF
 TTF	fontloader/ttf.h	/^class TTF$/;"	c
-TTF	src/ttf.h	/^	class TTF$/;"	c	namespace:text
 Texture2D	src/texture.cpp	/^Texture2D::Texture2D( $/;"	f	class:Texture2D
-Texture2D	src/texture.cpp	/^Texture2D::Texture2D( Image image, GLenum pType )$/;"	f	class:Texture2D
-Texture2D	src/texture.cpp	/^Texture2D::Texture2D( std::string pFilename )$/;"	f	class:Texture2D
+Texture2D	src/texture.cpp	/^Texture2D::Texture2D( const Image& image, GLenum pType )$/;"	f	class:Texture2D
+Texture2D	src/texture.cpp	/^Texture2D::Texture2D( std::string pFilename, GLenum pType )$/;"	f	class:Texture2D
 Texture2D	src/texture.h	/^		Texture2D()$/;"	f	struct:texture::Texture2D
 Texture2D	src/texture.h	/^	struct Texture2D $/;"	s	namespace:texture
 TreeNode	src/voxelization.h	/^	struct TreeNode $/;"	s	namespace:voxelization
@@ -323,7 +322,7 @@ apply	src/camera.h	/^		void apply( Camera* pCam ) {$/;"	f	struct:camera::Movemen
 args	src/functor.h	/^		std::tuple<Args...> args;$/;"	m	class:functors::Functor
 atlas	fontloader/font.h	/^	Atlas atlas;$/;"	m	struct:Font
 atlas	src/font.h	/^		Image atlas;$/;"	m	struct:text::Font
-atlasTexture	src/text.cpp	/^unsigned int atlasTexture = 0;$/;"	v
+atlasTexture	src/text.cpp	/^texture::Texture2D atlasTexture;$/;"	v
 attribDivisor	src/vao.cpp	/^void gl::VAO::attribDivisor( unsigned int pAttrib, unsigned int pDivisor )$/;"	f	class:gl::VAO
 axis_limits	src/camera.h	/^		glm::vec3 axis_limits;$/;"	m	struct:camera::LookPolicy
 b	dt/misc.h	/^typedef struct { uchar r, g, b; } rgb;$/;"	m	struct:__anon1
@@ -505,6 +504,8 @@ flags	src/line.h	/^		int flags;$/;"	m	struct:gui::LineGroup
 flags	src/storage.h	/^            int flags;$/;"	m	struct:gl::Storage
 followCursor	src/camera.h	/^		bool followCursor = false;$/;"	m	class:camera::Camera
 fontColorTexture	src/framebuffer.cpp	/^texture::Texture2D texture::fontColorTexture;$/;"	m	class:texture	file:
+fontShader	src/text.cpp	/^unsigned int fontShader;$/;"	v
+fontVAO	src/text.cpp	/^gl::VAO fontVAO;$/;"	v
 format	src/texture.h	/^		GLenum format;$/;"	m	struct:texture::Texture2D
 forward	src/camera.cpp	/^void camera::Camera::forward()$/;"	f	class:camera::Camera
 forward	src/camera.cpp	/^void camera::forward( Camera & pCam )$/;"	f	class:camera
@@ -545,7 +546,6 @@ gaussian	dt/misc.h	/^inline double gaussian(double val, double sigma) {$/;"	f
 generalUniformBuffer	src/gl.cpp	/^gl::StreamStorage<glm::vec4> gl::generalUniformBuffer;$/;"	m	class:gl	file:
 generateDebugGrid	src/gldebug.cpp	/^unsigned int glDebug::generateDebugGrid( std::string pName, $/;"	f	class:glDebug
 generateMipMap	src/texture.cpp	/^unsigned int texture::generateMipMap( Texture2D& texture, $/;"	f	class:texture
-get2DTextureID	src/texture.cpp	/^unsigned int texture::get2DTextureID( unsigned int pTextureIndex )$/;"	f	class:texture
 getAspectRatio	src/viewport.cpp	/^float gl::getAspectRatio()$/;"	f	class:gl
 getChannels	src/image.cpp	/^unsigned int getChannels( png_byte type )$/;"	f
 getColor	src/color.cpp	/^gl::ColorIt gl::getColor( std::string pColorName )$/;"	f	class:gl
@@ -645,6 +645,8 @@ initColorQuadVAO	src/quadcolors.cpp	/^void gui::initColorQuadVAO() $/;"	f	class:
 initColors	src/color.cpp	/^void gl::initColors()$/;"	f	class:gl
 initCoordinateSystem	src/gldebug.cpp	/^unsigned int glDebug::initCoordinateSystem( std::string pName )$/;"	f	class:glDebug
 initEntityBuffers	src/entities.cpp	/^void entities::initEntityBuffers()$/;"	f	class:entities
+initFontShader	src/text.cpp	/^void text::initFontShader()$/;"	f	class:text
+initFontVAO	src/text.cpp	/^void text::initFontVAO()$/;"	f	class:text
 initFramebuffers	src/framebuffer.cpp	/^void texture::initFramebuffers()$/;"	f	class:texture
 initFreeType	fontloader/ttf.cpp	/^int initFreeType()$/;"	f
 initFreeType	src/font.cpp	/^int text::initFreeType()$/;"	f	class:text
@@ -732,7 +734,7 @@ load	fontloader/ttf.cpp	/^void TTF::load( Font& font ) $/;"	f	class:TTF
 loadFonts	src/text.cpp	/^void text::loadFonts()$/;"	f	class:text
 loadGlyph	fontloader/ttf.cpp	/^void TTF::loadGlyph( Font& font, glm::uvec4& quad, Font::Glyphs::Metric& met, FT_GlyphSlotRec* glyph )$/;"	f	class:TTF
 loadGlyph	src/font.cpp	/^void Font::loadGlyph( glm::uvec4& quad, Font::Glyphs::Metric& met, FT_GlyphSlotRec* glyph )$/;"	f	class:Font
-loadImage	src/texture.cpp	/^void Texture2D::loadImage( Image image )$/;"	f	class:Texture2D
+loadImage	src/texture.cpp	/^void Texture2D::loadImage( const Image& image )$/;"	f	class:Texture2D
 loadMaterial	src/model_loader.cpp	/^void model::Loader::loadMaterial( size_t pTargetIndex, aiMaterial* pMat ) {$/;"	f	class:model::Loader
 loadMaterialTextures	src/model_loader.cpp	/^void model::Loader::loadMaterialTextures( size_t pTargetIndex, aiMaterial* pMat )$/;"	f	class:model::Loader
 loadMaterials	src/model_loader.cpp	/^void model::Loader::loadMaterials( const aiScene* pScene ) {$/;"	f	class:model::Loader
@@ -935,6 +937,7 @@ read_packed	dt/pnmfile.h	/^static void read_packed(unsigned char *data, int size
 release	src/keys.h	/^        unsigned int release;$/;"	m	struct:input::KeySignal
 renderBlendMeshes	src/mesh.cpp	/^void mesh::renderBlendMeshes()$/;"	f	class:mesh
 renderColorQuads	src/quadcolors.cpp	/^void gui::renderColorQuads() $/;"	f	class:gui
+renderFont	src/text.cpp	/^void text::renderFont()$/;"	f	class:text
 renderLights	src/lights.cpp	/^void lights::renderLights()$/;"	f	class:lights
 renderLines	src/line.cpp	/^void gui::renderLines()$/;"	f	class:gui
 renderMeshNormals	src/mesh.cpp	/^void mesh::renderMeshNormals()$/;"	f	class:mesh
@@ -1014,8 +1017,8 @@ setSpeed	src/camera.cpp	/^void camera::Camera::setSpeed( float pNewSpeed )$/;"	f
 setSpeed	src/camera.cpp	/^void camera::setSpeed( Camera & pCam, float pSpeed )$/;"	f	class:camera
 setTarget	src/storage.h	/^            void setTarget( unsigned int pTarget )$/;"	f	struct:gl::Storage
 setTextureDirectory	src/texture.cpp	/^void texture::setTextureDirectory( std::string& pDirectory )$/;"	f	class:texture
-setTextureFilter	src/texture.cpp	/^void texture::setTextureFilter( unsigned int pTextureIndex, unsigned int pMagFilter, unsigned int pMinFilter )$/;"	f	class:texture
-setTextureWrapping	src/texture.cpp	/^void texture::setTextureWrapping( unsigned int pTextureIndex, unsigned int pWrapS, unsigned int pWrapT )$/;"	f	class:texture
+setTextureFilter	src/texture.cpp	/^void texture::setTextureFilter( Texture2D& pTexture, unsigned int pMagFilter, unsigned int pMinFilter )$/;"	f	class:texture
+setTextureWrapping	src/texture.cpp	/^void texture::setTextureWrapping( Texture2D& pTexture, unsigned int pWrapS, unsigned int pWrapT )$/;"	f	class:texture
 setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, float pValue ) {$/;"	f	class:shader
 setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::ivec3 pValue ) {$/;"	f	class:shader
 setUniform	src/shader.cpp	/^void shader::setUniform( unsigned int pProgram, std::string pUniformName, glm::ivec4 pValue ) {$/;"	f	class:shader
@@ -1098,7 +1101,6 @@ target	src/storage.h	/^            unsigned int target;$/;"	m	struct:gl::Storage
 targetBindingCounts	src/storage.cpp	/^std::unordered_map<unsigned int, unsigned int> targetBindingCounts;$/;"	v
 text	src/font.h	/^namespace text $/;"	n
 text	src/text.h	/^namespace text$/;"	n
-text	src/ttf.h	/^namespace text$/;"	n
 texture	src/framebuffer.h	/^namespace texture {$/;"	n
 texture	src/texture.h	/^namespace texture $/;"	n
 textureLookup	src/texture.cpp	/^std::unordered_map<std::string, unsigned int> texture::textureLookup;$/;"	m	class:texture	file:
@@ -1188,6 +1190,7 @@ windowMonitor	src/contextwindow.cpp	/^unsigned int app::windowMonitor = 0;$/;"	m
 write	fontloader/font.cpp	/^std::string Font::write()$/;"	f	class:Font
 write	fontloader/image.cpp	/^void Image::write( png_bytep pPixels, unsigned int pWidth, unsigned int pHeight, $/;"	f	class:Image
 write	src/font.cpp	/^std::string Font::write()$/;"	f	class:Font
+write	src/image.cpp	/^void Image::write( FILE* file )$/;"	f	class:Image
 write	src/image.cpp	/^void Image::write( FILE* file, unsigned char* pPixels, unsigned int pWidth, unsigned int pHeight, $/;"	f	class:Image
 writeGlyphBitmap	fontloader/ttf.cpp	/^void TTF::writeGlyphBitmap( Font& font, glm::uvec4& quad, const FT_Bitmap& bitmap )$/;"	f	class:TTF
 writeGlyphBitmap	src/font.cpp	/^void Font::writeGlyphBitmap( glm::uvec4& quad, const FT_Bitmap& bitmap )$/;"	f	class:Font

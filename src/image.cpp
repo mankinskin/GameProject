@@ -81,6 +81,11 @@ void Image::write( FILE* file, unsigned char* pPixels, unsigned int pWidth, unsi
 	channels = pChannels;
 	bit_depth = pBitDepth;
 
+	write( file );
+}
+
+void Image::write( FILE* file )
+{
 	if ( !file ) {
 		printf( "Can't write to file %s !", filename.c_str() );
 		return;

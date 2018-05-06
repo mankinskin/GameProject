@@ -23,5 +23,6 @@ struct Image
 
 	void write( FILE* file, unsigned char* pPixels, unsigned int pWidth, unsigned int pHeight, 
 			unsigned int pChannels = 1, unsigned char pBitDepth = 8 );
+	void write( FILE* file );
 	void read( FILE* file );
 };

@@ -31,8 +31,12 @@ void Texture2D::setup( unsigned char* pData )
 	glBindTexture( GL_TEXTURE_2D, 0 );
 }
 
-void Texture2D::loadImage( Image image )
+void Texture2D::loadImage( const Image& image )
 {
+	if ( image.width == 0 || image.height == 0 ) {
+		puts ( "Texture2D: invalid Image!" );
+		return;
+	}
 	width = image.width;
 	height = image.height;
 	switch ( image.channels ) {
@@ -78,14 +82,14 @@ void Texture2D::loadImage( Image image )
 	}
 }
 
-Texture2D::Texture2D( Image image, GLenum pType )
+Texture2D::Texture2D( const Image& image, GLenum pType )
 	:type( pType )
 {
 	loadImage( image );
 	setup( image.pixels );
 }
 
-Texture2D::Texture2D( std::string pFilename )
+Texture2D::Texture2D( std::string pFilename, GLenum pType )
 {
 	Image image;
 	FILE* file = fopen( pFilename.c_str(), "wb" );
@@ -96,29 +100,21 @@ Texture2D::Texture2D( std::string pFilename )
 }
 
 unsigned int texture::generateMipMap( Texture2D& texture, 
-		int glMinFilter = GL_NEAREST_MIPMAP_LINEAR, 
-		int glMagFilter = GL_NEAREST )
+		int glMinFilter, int glMagFilter )
 {
-	glTextureParameteri( texture.ID, GL_TEXTURE_MIN_FILTER, glMinFilter );
-	glTextureParameteri( texture.ID, GL_TEXTURE_MAG_FILTER, glMagFilter );
-	glGenerateMipmap( GL_TEXTURE_2D );
+	glGenerateTextureMipmap( texture.ID );
 }
 
-void texture::setTextureWrapping( unsigned int pTextureIndex, unsigned int pWrapS, unsigned int pWrapT )
+void texture::setTextureWrapping( Texture2D& pTexture, unsigned int pWrapS, unsigned int pWrapT )
 {
-	glTextureParameteri( all2DTextures[pTextureIndex].ID, GL_TEXTURE_WRAP_S, pWrapS );
-	glTextureParameteri( all2DTextures[pTextureIndex].ID, GL_TEXTURE_WRAP_T, pWrapT );
+	glTextureParameteri( pTexture.ID, GL_TEXTURE_WRAP_S, pWrapS );
+	glTextureParameteri( pTexture.ID, GL_TEXTURE_WRAP_T, pWrapT );
 }
 
-void texture::setTextureFilter( unsigned int pTextureIndex, unsigned int pMagFilter, unsigned int pMinFilter )
+void texture::setTextureFilter( Texture2D& pTexture, unsigned int pMagFilter, unsigned int pMinFilter )
 {
-	glTextureParameteri( all2DTextures[pTextureIndex].ID, GL_TEXTURE_MIN_FILTER, pMinFilter );
-	glTextureParameteri( all2DTextures[pTextureIndex].ID, GL_TEXTURE_MAG_FILTER, pMagFilter );
-}
-
-unsigned int texture::get2DTextureID( unsigned int pTextureIndex )
-{
-	return all2DTextures[pTextureIndex].ID;
+	glTextureParameteri( pTexture.ID, GL_TEXTURE_MIN_FILTER, pMinFilter );
+	glTextureParameteri( pTexture.ID, GL_TEXTURE_MAG_FILTER, pMagFilter );
 }
 
 void texture::setTextureDirectory( std::string& pDirectory )

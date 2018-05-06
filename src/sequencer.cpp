@@ -33,6 +33,7 @@ void sequencer::includeShaders()
     gui::initLineShader();
     gui::initColorQuadShader();
     gui::initQuadIndexShader();
+	text::initFontShader();
     //mesh::initMeshShader();
     //mesh::initBlendMeshShader();
     //mesh::initMeshNormalShader();
@@ -68,7 +69,7 @@ void sequencer::initializeVAOs()
 	gui::initLineVAO();
 
 	puts( "Fonts..." );
-	//gui::text::initFonts();
+	text::initFontVAO();
 
     gui::initQuadBuffer();
 
@@ -156,6 +157,7 @@ void sequencer::frame()
 
     gui::renderLines();
     gui::renderColorQuads();
+	text::renderFont();
 
     glfwSwapBuffers(app::mainWindow.window );
 

@@ -29,8 +29,8 @@ void shader::Loader::resetShaderDirectory()
 std::string extractStageString( std::string filename ) 
 {
     unsigned int begin = filename.find_first_of('.') + 1;
-    unsigned int end = filename.find_first_of( "\n.", begin );
-    return filename.substr( begin, end );
+    unsigned int end = filename.find_last_of( '.' );
+	return filename.substr( begin, end );
 }
 
 int setModuleType( shader::Module& module, std::string stagetype )
@@ -52,7 +52,7 @@ int setModuleType( shader::Module& module, std::string stagetype )
 		module.type = shader::ModuleType::Compute;
 	}
 	else {
-		debug::pushError( "\nShader::loadShader(): invalid shader file name " + module.fileName + "!\nHas to include '.vert', '.frag', '.geo' or '.comp'!", debug::Error::Fatal );
+		debug::pushError( "\nShader::loadShader(): invalid shader file name " + module.fileName + "!\nHas to include '.vert', '.frag', '.geo' or '.comp'! Got: " + stagetype, debug::Error::Fatal );
 		return 1;
 	}
     return 0;
@@ -119,12 +119,8 @@ void shader::Loader::linkProgram( unsigned int pProgramIndex )
 		glGetProgramiv( program.ID, GL_INFO_LOG_LENGTH, &maxLength );
 		std::vector<char> errorLog( maxLength );
 		glGetProgramInfoLog( program.ID, maxLength, &maxLength, &errorLog[0] );
-
 		glDeleteProgram( program.ID );
-
-
 		debug::pushError( "!!!/nError when linking program: " + program.name + " /nopenGL Error Log: " + &( errorLog[0] ), debug::Error::Fatal );
-
 	}
 
 	for ( unsigned int i = 0; i < program.shaderCount; ++i ) {
