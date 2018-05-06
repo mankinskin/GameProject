@@ -106,15 +106,15 @@ void model::Loader::loadMaterialTextures( size_t pTargetIndex, aiMaterial* pMat 
 
 	if ( pMat->GetTextureCount( aiTextureType_AMBIENT ) ) {
 		pMat->GetTexture( aiTextureType_AMBIENT, 0, &path_buf );
-		mesh::allMaterialTextures[pTargetIndex].amb_tex = texture::all2DTextures[texture::createTexture2D( path_buf.C_Str() )].ID;
+		mesh::allMaterialTextures[pTargetIndex].amb_tex = texture::Texture2D( path_buf.C_Str() );
 	}
 	if ( pMat->GetTextureCount( aiTextureType_DIFFUSE ) ) {
 		pMat->GetTexture( aiTextureType_DIFFUSE, 0, &path_buf );
-		mesh::allMaterialTextures[pTargetIndex].diff_tex = texture::all2DTextures[texture::createTexture2D( path_buf.C_Str() )].ID;
+		mesh::allMaterialTextures[pTargetIndex].diff_tex = texture::Texture2D( path_buf.C_Str() );
 	}
 	if ( pMat->GetTextureCount( aiTextureType_SPECULAR ) ) {
 		pMat->GetTexture( aiTextureType_SPECULAR, 0, &path_buf );
-		mesh::allMaterialTextures[pTargetIndex].spec_tex = texture::all2DTextures[texture::createTexture2D( path_buf.C_Str() )].ID;
+		mesh::allMaterialTextures[pTargetIndex].spec_tex = texture::Texture2D( path_buf.C_Str() );
 	}
 }
 

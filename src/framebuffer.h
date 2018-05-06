@@ -1,5 +1,6 @@
 #pragma once
 #include <stddef.h>
+#include "texture.h"
 
 namespace texture {
 
@@ -7,17 +8,17 @@ namespace texture {
 
 	void initGBuffer();
 	extern unsigned int gBuffer;
-	extern unsigned int gPosTexture;
-	extern unsigned int gNormalTexture;
-	extern unsigned int gAmbientTexture;
-	extern unsigned int gDiffuseTexture;
-	extern unsigned int gSpecularTexture;
+	extern Texture2D gPosTexture;
+	extern Texture2D gNormalTexture;
+	extern Texture2D gAmbientTexture;
+	extern Texture2D gDiffuseTexture;
+	extern Texture2D gSpecularTexture;
 	extern unsigned int gDepthRenderbuffer;
 
 	void initGUIFBO();
 	extern unsigned int guiFBO;
-	extern unsigned int quadIndexTexture;
-	extern unsigned int fontColorTexture;
+	extern Texture2D quadIndexTexture;
+	extern Texture2D fontColorTexture;
 	extern unsigned int guiDepthRenderbuffer;
 }
 

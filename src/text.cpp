@@ -1,9 +1,8 @@
 #include "text.h"
 
 
+unsigned int atlasTexture = 0;
 using namespace text;
-
-
 
 void text::loadFonts()
 {

@@ -51,7 +51,7 @@ std::string stripExtension( std::string& pFilename )
 	if( pos == std::string::npos ) {
 		return "";
 	}
-	std::string ext = pFilename.substr( pos );
+	std::string ext = pFilename.substr( pos + 1 );
 	pFilename = pFilename.substr( 0, pos );
 	return ext;
 }
@@ -61,13 +61,12 @@ Font::Font( std::string pFilename )
 	filepath = FONT_DIR + pFilename; 
 	extension = stripExtension( pFilename );
 	name = pFilename;
-
-	printf( " Extension: %s\n", extension.c_str() );
 }
 
 void Font::read()
 {
-	if ( extension == ".font" ) {
+
+	if ( extension == "font" ) {
 		readFontfile();
 	}
 	else {
@@ -118,7 +117,7 @@ void Font::readFace()
 	atlas.width = max_row_width;
 	atlas.height = cursor.y;
 	cursor = glm::uvec2( 0, 0 );
-	atlas.pixels = (png_byte*)malloc( atlas.width * atlas.height );
+	atlas.pixels = (unsigned char*)malloc( atlas.width * atlas.height );
 
 	// now write glyph bitmaps to glyph quads in atlas
 	for ( unsigned int gi = 0; gi < glyphs.count; ++gi ) {
@@ -145,9 +144,8 @@ void Font::readFontfile()
 		printf( "Font file %s invalid!", filepath.c_str() );
 		return;
 	}
-	atlas = Image( file, glyphs_bytes  );
-	atlas.read();
-
+	fseek( file, glyphs_bytes, SEEK_SET );
+	atlas.read( file );
 	fclose( file );
 }
 
@@ -175,8 +173,9 @@ std::string Font::write()
 	FILE* file = fopen( outname.c_str(), "wb" );
 
 	unsigned int glyphs_size = writeGlyphs( file );
-	Image atlas_image( file, glyphs_size );
-	atlas_image.write( &atlas.pixels[0], atlas.width, atlas.height );
+	fseek( file, glyphs_size, SEEK_SET );
+	Image atlas_image;
+	atlas_image.write( file, &atlas.pixels[0], atlas.width, atlas.height );
 
 	fclose( file );
 	return outname;

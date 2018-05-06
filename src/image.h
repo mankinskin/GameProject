@@ -1,34 +1,27 @@
 #pragma once
 #include <string>
-#include <png.h>
+#include <vector>
 
 struct Image
 {
 	std::string filename = "";
-	FILE* file;
-	unsigned int file_offset = 0;
 	unsigned int width = 0;
 	unsigned int height = 0;
-	png_bytep pixels;
-	png_byte color_type;
-	png_byte bit_depth;
+	unsigned int channels = 1;
+	unsigned int bit_depth = 8;
+	unsigned char* pixels;
 
 	Image()
 	{
 	}
-	Image( std::string pFilename, unsigned int pOffset = 0 )
-		:filename( pFilename ), file_offset( pOffset )
+	Image( std::string pFilename )
+		:filename( pFilename )
 	{
 	}
 
-	Image( FILE* pFile, unsigned int pOffset = 0 )
-		:file( pFile ), file_offset( pOffset )
-	{
-	}
 	~Image();
 
-
-	void write( unsigned char* pPixels, unsigned int pWidth, unsigned int pHeight, 
-			png_byte pType = PNG_COLOR_TYPE_GRAY, png_byte pBitDepth = 8 );
-	void read();
+	void write( FILE* file, unsigned char* pPixels, unsigned int pWidth, unsigned int pHeight, 
+			unsigned int pChannels = 1, unsigned char pBitDepth = 8 );
+	void read( FILE* file );
 };

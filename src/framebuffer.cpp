@@ -1,5 +1,4 @@
 #include "framebuffer.h"
-#include "texture.h"
 #include "gl.h"
 #include "debug.h"
 #include "app.h"
@@ -7,15 +6,15 @@
 #include "viewport.h"
 
 unsigned int texture::gBuffer;
-unsigned int texture::gPosTexture;
-unsigned int texture::gNormalTexture;
-unsigned int texture::gAmbientTexture;
-unsigned int texture::gDiffuseTexture;
-unsigned int texture::gSpecularTexture;
+texture::Texture2D texture::gPosTexture;
+texture::Texture2D texture::gNormalTexture;
+texture::Texture2D texture::gAmbientTexture;
+texture::Texture2D texture::gDiffuseTexture;
+texture::Texture2D texture::gSpecularTexture;
 unsigned int texture::gDepthRenderbuffer;
 unsigned int texture::guiFBO;
-unsigned int texture::fontColorTexture;
-unsigned int texture::quadIndexTexture;
+texture::Texture2D texture::fontColorTexture;
+texture::Texture2D texture::quadIndexTexture;
 unsigned int texture::guiDepthRenderbuffer;
 
 void texture::initFramebuffers()
@@ -29,12 +28,13 @@ void texture::initGUIFBO() {
 	glCreateFramebuffers( 1, &guiFBO );
 	glCreateRenderbuffers( 1, &guiDepthRenderbuffer );
 
-	quadIndexTexture = get2DTextureID( createTexture2D( 
+	quadIndexTexture = Texture2D( 
                 gl::getWidth(), gl::getHeight(), GL_R16UI, 
-                GL_RED_INTEGER, GL_UNSIGNED_BYTE, 0 ) );
-	fontColorTexture = get2DTextureID( createTexture2D( 
+                GL_RED_INTEGER, GL_UNSIGNED_BYTE );
+
+	fontColorTexture = Texture2D( 
                 gl::getWidth(), gl::getHeight(), GL_RGBA8, 
-                GL_RGBA, GL_UNSIGNED_BYTE, 0 ) );
+                GL_RGBA, GL_UNSIGNED_BYTE );
 
 	glBindFramebuffer( GL_FRAMEBUFFER, guiFBO );
 
@@ -66,21 +66,16 @@ void texture::initGBuffer()
 	glCreateFramebuffers( 1, &gBuffer );
 	glCreateRenderbuffers( 1, &gDepthRenderbuffer );
 
-	gAmbientTexture = get2DTextureID( createTexture2D( 
-                gl::getWidth(), gl::getHeight(), 
-                GL_RGBA16F, GL_RGBA, GL_FLOAT, 0 ) );
-	gDiffuseTexture = get2DTextureID( createTexture2D( 
-                gl::getWidth(), gl::getHeight(), 
-                GL_RGBA16F, GL_RGBA, GL_FLOAT, 0 ) );
-	gSpecularTexture = get2DTextureID( createTexture2D( 
-                gl::getWidth(), gl::getHeight(), 
-                GL_RGBA16F, GL_RGBA, GL_FLOAT, 0 ) );
-	gPosTexture = get2DTextureID( createTexture2D( 
-                gl::getWidth(), gl::getHeight(), 
-                GL_RGB16F, GL_RGB, GL_FLOAT, 0 ) );
-	gNormalTexture = get2DTextureID( createTexture2D( 
-                gl::getWidth(), gl::getHeight(), 
-                GL_RGB16F, GL_RGB, GL_FLOAT, 0 ) );
+	gAmbientTexture = Texture2D( gl::getWidth(), gl::getHeight(), 
+                GL_RGBA16F, GL_RGBA, GL_FLOAT );
+	gDiffuseTexture = Texture2D( gl::getWidth(), gl::getHeight(), 
+                GL_RGBA16F, GL_RGBA, GL_FLOAT );
+	gSpecularTexture = Texture2D( gl::getWidth(), gl::getHeight(), 
+                GL_RGBA16F, GL_RGBA, GL_FLOAT );
+	gPosTexture = Texture2D( gl::getWidth(), gl::getHeight(), 
+                GL_RGB16F, GL_RGB, GL_FLOAT );
+	gNormalTexture = Texture2D( gl::getWidth(), gl::getHeight(), 
+                GL_RGB16F, GL_RGB, GL_FLOAT );
 
 	glBindFramebuffer( GL_FRAMEBUFFER, gBuffer );
 	glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
