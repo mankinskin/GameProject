@@ -49,7 +49,7 @@ void sequencer::buildShaders()
 	gui::setupLineShader();
 	gui::setupColorQuadShader();
 	gui::setupQuadIndexShader();
-	//gui::text::setupFontShader();
+	text::setupFontShader();
 	//mesh::setupMeshShader();
 	//lights::setupLightShader();
 	//mesh::setupBlendMeshShader();
@@ -105,7 +105,6 @@ void sequencer::initModules()
 
     puts( "Text..." );
 	text::loadFonts();
-	//gui::text::updateCharStorage();
 }
 
 void sequencer::fetchInput()
@@ -157,7 +156,7 @@ void sequencer::frame()
 
     gui::renderLines();
     gui::renderColorQuads();
-	text::renderFont();
+	text::mainFont.render();
 
     glfwSwapBuffers(app::mainWindow.window );
 
@@ -176,6 +175,7 @@ void sequencer::gameloop()
 
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
+	text::mainFont.print( "Hello World!" );
     while ( app::state == app::Running ) 
     {
         frame();

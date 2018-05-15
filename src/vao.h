@@ -20,6 +20,7 @@ namespace gl
         void vertexAttrib( unsigned int pBindingIndex, unsigned int pAttributeIndex, 
                 unsigned int pCount, unsigned int pType, 
                 unsigned int pOffset, bool pNormalize = false );
+
         template<typename T>
             void vertexBuffer( unsigned int pBinding, Storage<T>& pBuffer, 
                     unsigned int pStride = sizeof(T) )
@@ -27,6 +28,7 @@ namespace gl
                 pBuffer.setTarget( GL_ARRAY_BUFFER );
                 glVertexArrayVertexBuffer( ID, pBinding, pBuffer.ID, 0, pStride );
             } 
+
         template<typename T>
             void elementBuffer( Storage<T>& pBuffer )
             {

@@ -24,27 +24,23 @@ namespace input
         return l.action != r.action;
     }
 
-    class KeyEvent 
+    struct KeyEvent 
     {
-        public:
-            KeyEvent()
-                :key( -1 ), change( KeyCondition() ) 
-            {}
-            KeyEvent( int pKey, KeyCondition pChange )
-                :key( pKey ), change( pChange ) 
-            {}
-            KeyEvent( int pKey, int pAction, int pMods )
-                :key( pKey ), change( KeyCondition( pAction ) ) 
-            {}
+        KeyEvent()
+            :key( -1 ), change( KeyCondition() ) 
+        {}
+        KeyEvent( int pKey, KeyCondition pChange );
+        KeyEvent( int pKey, int pAction );
 
-            int key;
-            KeyCondition change;
+        int key;
+        KeyCondition change;
     };
 
     inline bool operator==( KeyEvent const & l, KeyEvent const& r ) 
     {
         return l.key == r.key && l.change == r.change;
     }
+	KeyEvent KeyEventFromScancode( int pScancode, int pAction );
     struct KeySignal 
     {
         KeySignal()

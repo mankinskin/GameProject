@@ -33,6 +33,7 @@ namespace input {
     extern KeySignal key_o;
     extern KeySignal key_l;
     extern KeySignal key_lshift;
+    extern KeySignal key_x;
     extern events::ButtonEvents<events::Event> lmb;
     extern events::ButtonEvents<events::Event> rmb;
     extern unsigned int always;

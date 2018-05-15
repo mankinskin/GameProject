@@ -20,7 +20,7 @@ namespace gl
             Storage()
             {}
             Storage( std::string pName, size_type pSize, 
-                    int pFlags, void* pData = nullptr )
+                    int pFlags, const void* pData = nullptr )
                 :name( pName ), capacity( pSize * sizeof(T) ), flags( pFlags )
             {
                 glCreateBuffers( 1, &ID );
@@ -55,7 +55,7 @@ namespace gl
             {
             }
             StreamStorage( std::string pName, typename Storage<T>::size_type pSize, 
-                    int pFlags, void* pData = nullptr )
+                    int pFlags, const void* pData = nullptr )
                 : Storage<T>( pName, pSize, pFlags | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT, pData )
             {
                 mappedPtr = glMapNamedBufferRange( Storage<T>::ID, 0, 

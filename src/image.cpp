@@ -1,6 +1,8 @@
 #include "image.h"
 #include <glm.hpp>
 #include <png.h>
+#include <SOIL.h>
+#include <cstring>
 
 unsigned int getChannels( png_byte type )
 {
@@ -18,6 +20,7 @@ unsigned int getChannels( png_byte type )
 	}
 	return -1;
 }
+
 png_byte getColorType( unsigned int channels )
 {
 	if ( channels == 1 ) {
@@ -34,10 +37,32 @@ png_byte getColorType( unsigned int channels )
 	}
 	return -1;
 }
+
+Image::Image( std::string pFilename )
+{
+	read( pFilename );
+}
+
+Image::Image( unsigned int pWidth, unsigned int pHeight, 
+		unsigned int pChannels, unsigned int pBitDepth, unsigned char* pData )
+	:width( pWidth ), height( pHeight ), channels( pChannels ), bit_depth( pBitDepth )
+{
+	unsigned int size = channels * width * height;
+	pixels = (unsigned char*)malloc( size );
+	std::memcpy( pixels, pData, size );	
+}
+
+void Image::read( std::string pFilename )
+{
+	FILE* file = fopen( pFilename.c_str(), "rb" );
+	read( file );
+	fclose( file );
+}
+
 void Image::read( FILE* file )
 {
 	if ( !file ) {
-		printf( "Can't read from file %s !", filename.c_str() );
+		puts( "invalid file pointer!");
 		return;
 	}
 
@@ -53,7 +78,8 @@ void Image::read( FILE* file )
 	png_read_info( png, info );
 	width = png_get_image_width( png, info );
 	height = png_get_image_height( png, info );
-	channels = getChannels( png_get_color_type( png, info ) );
+	png_byte color_type = png_get_color_type( png, info );
+	channels = getChannels( color_type );
 	png_byte bit_depth = png_get_bit_depth( png, info );
 
 	png_read_update_info( png, info );
@@ -70,24 +96,20 @@ void Image::read( FILE* file )
 
 	png_read_image( png, rows );
 	pixels = rows[0];
+	fclose( file );
 }
 
-void Image::write( FILE* file, unsigned char* pPixels, unsigned int pWidth, unsigned int pHeight, 
-		unsigned int pChannels, unsigned char pBitDepth )
+void Image::write( std::string pFilename )
 {
-	width = pWidth;
-	height = pHeight;
-	pixels = pPixels;
-	channels = pChannels;
-	bit_depth = pBitDepth;
-
+	FILE* file = fopen( pFilename.c_str(), "wb" );
 	write( file );
+	fclose( file );
 }
 
 void Image::write( FILE* file )
 {
 	if ( !file ) {
-		printf( "Can't write to file %s !", filename.c_str() );
+		puts( "Invalid file pointer!" );
 		return;
 	}
 
@@ -108,6 +130,7 @@ void Image::write( FILE* file )
 			PNG_COMPRESSION_TYPE_DEFAULT,
 			PNG_FILTER_TYPE_DEFAULT );
 
+	png_set_compression_level( png, 0 );
 	png_write_info( png, info );
 
 	unsigned int row_size = png_get_rowbytes( png, info );
@@ -120,9 +143,11 @@ void Image::write( FILE* file )
 
 	png_write_image( png, rows );
 	png_write_end( png, NULL );
+	fclose( file );
 }
 
 Image::~Image()
 {
 	free( pixels );
 }
+

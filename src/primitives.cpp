@@ -16,7 +16,7 @@ void gl::initPrimitives()
 	};
 
 	unsigned int iarr[6] = {
-		2, 0, 1, 1, 3, 2
+		2, 0, 3, 0, 1, 3
 	};
 	quadVBO = Storage<glm::vec2>( "QuadVBO", 4, 0, &varr[0] );
 	quadEBO = Storage<unsigned int>( "QuadEBO", 6, 0, &iarr[0] );

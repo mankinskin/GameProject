@@ -4,21 +4,9 @@
 #include <SOIL/SOIL.h>
 
 #define DEFAULT_TEXTURE_DIRECTORY "textures/"
-std::vector<texture::Texture2D> texture::all2DTextures;
-std::unordered_map<std::string, unsigned int> texture::textureLookup;
 std::string texture::TEXTURE_DIR = DEFAULT_TEXTURE_DIRECTORY;
 
 using namespace texture;
-
-Texture2D::Texture2D( 
-		unsigned int pWidth, unsigned int pHeight, 
-		GLenum pInternalFormat, GLenum pFormat, GLenum pType, unsigned char* pData )
-	:width( pWidth ), height( pHeight ), 
-	internalFormat( pInternalFormat ), 
-	format( pFormat ), type( pType ) 
-{
-	setup( pData );
-}
 
 void Texture2D::setup( unsigned char* pData ) 
 {
@@ -26,7 +14,7 @@ void Texture2D::setup( unsigned char* pData )
 	glBindTexture( GL_TEXTURE_2D, ID );
 
 	glTexImage2D( GL_TEXTURE_2D, 0, internalFormat, 
-			width, height, 0, format, type, pData );
+			width, height, 0, format, GL_UNSIGNED_BYTE, pData );
 
 	glBindTexture( GL_TEXTURE_2D, 0 );
 }
@@ -39,6 +27,7 @@ void Texture2D::loadImage( const Image& image )
 	}
 	width = image.width;
 	height = image.height;
+
 	switch ( image.channels ) {
 		case 4:
 			if ( image.bit_depth == 16 ) {
@@ -82,24 +71,33 @@ void Texture2D::loadImage( const Image& image )
 	}
 }
 
-Texture2D::Texture2D( const Image& image, GLenum pType )
-	:type( pType )
+Texture2D::Texture2D( 
+		unsigned int pWidth, unsigned int pHeight, 
+		GLenum pInternalFormat, GLenum pFormat, unsigned char* pData )
+	:width( pWidth ), height( pHeight ), 
+	internalFormat( pInternalFormat ), 
+	format( pFormat ) 
+{
+	setup( pData );
+}
+
+Texture2D::Texture2D( const Image& image )
 {
 	loadImage( image );
 	setup( image.pixels );
 }
 
-Texture2D::Texture2D( std::string pFilename, GLenum pType )
+Texture2D::Texture2D( std::string pFilename )
 {
 	Image image;
-	FILE* file = fopen( pFilename.c_str(), "wb" );
+	FILE* file = fopen( pFilename.c_str(), "rb" );
 	image.read( file );
 	loadImage( image );
 	setup( image.pixels );
 	fclose( file );
 }
 
-unsigned int texture::generateMipMap( Texture2D& texture, 
+void texture::generateMipMap( Texture2D& texture, 
 		int glMinFilter, int glMagFilter )
 {
 	glGenerateTextureMipmap( texture.ID );

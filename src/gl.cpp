@@ -97,6 +97,7 @@ void gl::getOpenGLInitValues()
     glGetIntegerv( GL_MAX_UNIFORM_BLOCK_SIZE, &MAX_UNIFORM_BLOCK_SIZE );
 
     printf( "Max Uniform Block Size:\t%d\n", MAX_UNIFORM_BLOCK_SIZE );
+    printf( "Max Uniform Buffer Bindings:\t%d\n", MAX_UNIFORM_BUFFER_BINDINGS );
 
 
     glClearColor( 0.2f, 0.2f, 0.2f, 1.0f );
@@ -110,6 +111,7 @@ void gl::getOpenGLInitValues()
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_DEBUG_OUTPUT );
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 }
 
 void gl::initGLEW() 

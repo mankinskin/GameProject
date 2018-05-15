@@ -16,15 +16,14 @@ namespace text
 			struct Metric
 			{
 				unsigned int advance;
-				unsigned int bearx;
-				unsigned int beary;
-				unsigned int _pad;
+				unsigned int bearingx;
+				unsigned int bearingy;
 
 				Metric()
 				{
 				}
 				Metric( unsigned int adv, unsigned int bx, unsigned int by )
-					:advance ( adv ), bearx( bx ), beary( by )
+					:advance ( adv ), bearingx( bx ), bearingy( by )
 				{
 				}
 			};
@@ -46,31 +45,25 @@ namespace text
 		Image atlas;
 		Glyphs glyphs;
 
-		Font( std::string pFilename );
-
 		Font()
 		{
 		}
 
 		std::string write();
-		void read();
+		void read( std::string pFilename );
 
 		void setLoadSize( unsigned int ptx, unsigned int pty );
 		void setLoadResolution( unsigned int ptx, unsigned int pty );
 		void setLoadPadding( unsigned int padPixels );
 		private:
-		void readFontfile();
-		void readFace();
-		void writeGlyphBitmap( glm::uvec4& quad, const FT_Bitmap& bitmap );
-		void loadGlyph( glm::uvec4& quad, Font::Glyphs::Metric& met, FT_GlyphSlotRec* glyph );
+		void readFontfile( std::string pFilepath );
+		void readFace( std::string pFilepath );
+		void writeGlyphBitmap( const unsigned int x, const unsigned int y, const FT_Bitmap& bitmap );
 		const std::string FONT_DIR = "fonts/";
 		glm::uvec2 size = glm::uvec2( 4, 4 );
 		glm::uvec2 resolution = glm::uvec2( 1920, 1080 );
 		unsigned int padding = 0;
-		std::string filepath = "";
 		std::string name = "";
-		std::string extension = "";
-		glm::uvec2 cursor;
 		int ft_error = 0;
 		unsigned int writeGlyphs( FILE* file );
 		unsigned int readGlyphs( FILE* file );

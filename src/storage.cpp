@@ -1,5 +1,6 @@
 #include "storage.h"
 #include <unordered_map>
+#include "gl.h"
 
 std::unordered_map<unsigned int, unsigned int> targetBindingCounts;
 int gl::SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT = 0;
@@ -13,6 +14,11 @@ unsigned int gl::getNewTargetBinding( const unsigned int pTarget )
 	if ( target_it == targetBindingCounts.end() ) {
         targetBindingCounts.insert( { pTarget, 1 } );
         return 0;
+	}
+	if ( pTarget == GL_UNIFORM_BUFFER ) { 
+		if ( target_it->second == MAX_UNIFORM_BUFFER_BINDINGS ) {
+			puts( "!!! Exceeding MAX_UNIFORM_BUFFER_BINDINGS!" );
+		}
 	}
 	return target_it->second++;
 }

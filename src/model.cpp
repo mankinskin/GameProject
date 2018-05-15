@@ -69,9 +69,9 @@ model::Model& model::getModel( std::string pName )
 		return getModel( i );
 	}
 	catch ( std::string pErrorMsg ) {
-
 		puts( pErrorMsg.c_str() );
 	}
+	return getModel( 0 );
 }
 
 unsigned int model::createModel( unsigned int pMeshOffset, unsigned int pMeshCount )

@@ -6,28 +6,6 @@ FT_Library ftLib;
 
 using namespace text;
 
-void Font::loadGlyph( glm::uvec4& quad, Font::Glyphs::Metric& met, FT_GlyphSlotRec* glyph )
-{
-	quad = glm::uvec4( 
-			cursor.x + padding, cursor.y + padding, 
-			glyph->bitmap.width, glyph->bitmap.rows );
-
-	met = Font::Glyphs::Metric( 
-			glyph->metrics.horiAdvance, 
-			glyph->metrics.horiBearingX,
-			glyph->metrics.horiBearingY );
-}
-
-void Font::writeGlyphBitmap( glm::uvec4& quad, const FT_Bitmap& bitmap )
-{
-	for ( unsigned int row = 0; row < quad.w; ++row ) {
-		glm::uvec2 cur = glm::uvec2( quad.x, quad.y + row );
-		std::memcpy( 
-				&atlas.pixels[ cur.y * atlas.width + cur.x ], 
-				&bitmap.buffer[ row * bitmap.pitch ],
-				bitmap.pitch );
-	}
-}
 
 void Font::setLoadPadding( unsigned int padPixels )
 {
@@ -36,14 +14,30 @@ void Font::setLoadPadding( unsigned int padPixels )
 
 void Font::setLoadSize( unsigned int ptx, unsigned int pty ) 
 {
-	size.x = ptx;
-	size.y = pty;
+	if ( ptx || pty ) {
+		if ( !ptx ) {
+			ptx = pty;	
+		} 
+		else if ( !pty ) {
+			pty = ptx;	
+		}
+		size.x = ptx;
+		size.y = pty;
+	}
 }
 
 void Font::setLoadResolution( unsigned int ptx, unsigned int pty ) 
 {
-	resolution.x = ptx;
-	resolution.y = pty;
+	if ( ptx || pty ) {
+		if ( !ptx ) {
+			ptx = pty;	
+		} 
+		else if ( !pty ) {
+			pty = ptx;	
+		}
+		resolution.x = ptx;
+		resolution.y = pty;
+	}
 }
 std::string stripExtension( std::string& pFilename )
 {
@@ -56,30 +50,26 @@ std::string stripExtension( std::string& pFilename )
 	return ext;
 }
 
-Font::Font( std::string pFilename )
+
+void Font::read( std::string pFilename )
 {
-	filepath = FONT_DIR + pFilename; 
-	extension = stripExtension( pFilename );
+	std::string filepath = FONT_DIR + pFilename; 
+	std::string extension = stripExtension( pFilename );
 	name = pFilename;
-}
-
-void Font::read()
-{
-
 	if ( extension == "font" ) {
-		readFontfile();
+		readFontfile( filepath );
 	}
 	else {
-		readFace();
+		readFace( filepath );
 	}
 }
 
-void Font::readFace()
+void Font::readFace( std::string pFilepath )
 {
 	FT_Face face;
-	ft_error = FT_New_Face( ftLib, filepath.c_str(), 0, &face );
+	ft_error = FT_New_Face( ftLib, pFilepath.c_str(), 0, &face );
 	if ( ft_error || !face ) {
-		printf( "Could not load font %s\n", filepath.c_str() ); 
+		printf( "Could not load font %s\n", pFilepath.c_str() ); 
 		return;
 	}
 
@@ -93,18 +83,31 @@ void Font::readFace()
 	unsigned int row_max_height = 0;
 	unsigned int max_row_width = 0;
 
+	glm::uvec2 cursor = glm::uvec2( 0, 0 );
 	// precalculate glyph quads and store metrics
 	for ( unsigned int gi = 0; gi < glyphs.count; ++gi ) {
 		FT_Load_Char( face, gi, FT_LOAD_RENDER );
 		FT_Render_Glyph( face->glyph, FT_RENDER_MODE_MONO );
+		FT_GlyphSlot glyph = face->glyph;
+
+		Font::Glyphs::Metric& met = glyphs.metrics[ gi ];
+		met = Font::Glyphs::Metric( 
+				glyph->metrics.horiAdvance, 
+				glyph->metrics.horiBearingX,
+				glyph->metrics.horiBearingY );
 
 		glm::uvec4& quad = glyphs.quads[ gi ];
-		Font::Glyphs::Metric& met = glyphs.metrics[ gi ];
 
-		loadGlyph( quad, met, face->glyph );
+
+		quad = glm::uvec4( 
+				cursor.x + padding, 
+				cursor.y + padding, 
+				glyph->bitmap.width,
+				glyph->bitmap.rows );
 
 		cursor.x += quad.z + padding * 2;
 		row_max_height = std::max( quad.w + padding * 2, row_max_height );
+
 		if ( ( gi + 1 ) % row_length == 0 ) {
 			max_row_width = std::max( cursor.x, max_row_width );
 			cursor.x = 0;
@@ -113,35 +116,53 @@ void Font::readFace()
 		}
 	}
 
-	cursor.y += row_max_height;
+	if( glyphs.count % row_length ) {
+		cursor.y += row_max_height;
+	}
 	atlas.width = max_row_width;
 	atlas.height = cursor.y;
 	cursor = glm::uvec2( 0, 0 );
 	atlas.pixels = (unsigned char*)malloc( atlas.width * atlas.height );
 
+	printf( "Loaded Atlas: %s\nWidth %u\nHeight: %u\nSize: %u\nResolution: %u %u\n", 
+			name.c_str(), atlas.width, atlas.height, size.x, resolution.x, resolution.y ); 
 	// now write glyph bitmaps to glyph quads in atlas
 	for ( unsigned int gi = 0; gi < glyphs.count; ++gi ) {
 		FT_Load_Char( face, gi, FT_LOAD_RENDER );
 		FT_Render_Glyph( face->glyph, FT_RENDER_MODE_MONO );
+		FT_GlyphSlot glyph = face->glyph;
 
-		writeGlyphBitmap( glyphs.quads[ gi ], face->glyph->bitmap );
+		glm::uvec4& quad = glyphs.quads[ gi ];
+
+		writeGlyphBitmap( quad.x, quad.y, face->glyph->bitmap );
 	}
+	
 
 	FT_Done_Face( face );
 }
 
-void Font::readFontfile()
+void Font::writeGlyphBitmap( const unsigned int x, const unsigned int y, const FT_Bitmap& bitmap )
 {
-	FILE* file = fopen( filepath.c_str(), "rb" );
+	for ( unsigned int row = 0; row < bitmap.rows; ++row ) {
+		glm::uvec2 cur = glm::uvec2( x, y + row );
+		std::memcpy( 
+				&atlas.pixels[ cur.y * atlas.width + cur.x ], 
+				&bitmap.buffer[ row * bitmap.pitch ], bitmap.pitch );
+	}
+}
+
+void Font::readFontfile( std::string pFilepath )
+{
+	FILE* file = fopen( pFilepath.c_str(), "rb" );
 
 	if ( !file ) {
-		printf( "Failed to open file %s\n", filepath.c_str() );
+		printf( "Failed to open file %s\n", pFilepath.c_str() );
 		return;
 	}
 
 	unsigned int glyphs_bytes = readGlyphs( file );
 	if ( glyphs_bytes == 0 ) {
-		printf( "Font file %s invalid!", filepath.c_str() );
+		printf( "Font file %s invalid!", pFilepath.c_str() );
 		return;
 	}
 	fseek( file, glyphs_bytes, SEEK_SET );
@@ -151,20 +172,20 @@ void Font::readFontfile()
 
 unsigned int Font::readGlyphs( FILE* file )
 {
-       fread( &glyphs.count, sizeof( unsigned int ), 1, file ); 
-       if ( glyphs.count == 0 ) {
-               return 0;
-       }
-       glyphs.quads.resize( glyphs.count );
-       glyphs.metrics.resize( glyphs.count );
-       fread( &glyphs.quads[0], sizeof( glm::uvec4 ), glyphs.count, file ); 
-       fread( &glyphs.metrics[0], sizeof( Glyphs::Metric ), glyphs.count, file ); 
+	fread( &glyphs.count, sizeof( unsigned int ), 1, file ); 
+	if ( glyphs.count == 0 ) {
+		return 0;
+	}
+	glyphs.quads.resize( glyphs.count );
+	glyphs.metrics.resize( glyphs.count );
+	fread( &glyphs.quads[0], sizeof( glm::uvec4 ), glyphs.count, file ); 
+	fread( &glyphs.metrics[0], sizeof( Glyphs::Metric ), glyphs.count, file ); 
 
-       unsigned int read_size = sizeof( unsigned int );
-       read_size += sizeof( glm::uvec4 ) * glyphs.quads.size();
-       read_size += sizeof( Glyphs::Metric ) * glyphs.metrics.size();
+	unsigned int read_size = sizeof( unsigned int );
+	read_size += sizeof( glm::uvec4 ) * glyphs.quads.size();
+	read_size += sizeof( Glyphs::Metric ) * glyphs.metrics.size();
 
-       return read_size;
+	return read_size;
 }
 
 std::string Font::write()
@@ -174,8 +195,7 @@ std::string Font::write()
 
 	unsigned int glyphs_size = writeGlyphs( file );
 	fseek( file, glyphs_size, SEEK_SET );
-	Image atlas_image;
-	atlas_image.write( file, &atlas.pixels[0], atlas.width, atlas.height );
+	atlas.write( file );
 
 	fclose( file );
 	return outname;

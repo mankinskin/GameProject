@@ -4,7 +4,7 @@
 
 struct Image
 {
-	std::string filename = "";
+	public:
 	unsigned int width = 0;
 	unsigned int height = 0;
 	unsigned int channels = 1;
@@ -14,15 +14,14 @@ struct Image
 	Image()
 	{
 	}
-	Image( std::string pFilename )
-		:filename( pFilename )
-	{
-	}
+	Image( std::string pFilename );
+	Image( unsigned int pWidth, unsigned int pHeight, 
+			unsigned int pChannels, unsigned int pBitDepth, unsigned char* pData );
 
 	~Image();
 
-	void write( FILE* file, unsigned char* pPixels, unsigned int pWidth, unsigned int pHeight, 
-			unsigned int pChannels = 1, unsigned char pBitDepth = 8 );
 	void write( FILE* file );
+	void write( std::string pFilename );
 	void read( FILE* file );
+	void read( std::string pFilename );
 };

@@ -54,6 +54,7 @@ input::KeySignal input::key_right;
 input::KeySignal input::key_o;
 input::KeySignal input::key_l;
 input::KeySignal input::key_lshift;
+input::KeySignal input::key_x;
 events::ButtonEvents<events::Event> input::lmb;
 events::ButtonEvents<events::Event> input::rmb;
 unsigned int input::always;
@@ -102,6 +103,7 @@ void input::setupControls()
 	key_o = input::KeySignal( GLFW_KEY_O );
 	key_l = input::KeySignal( GLFW_KEY_L );
 	key_lshift = input::KeySignal( GLFW_KEY_LEFT_SHIFT );
+	key_x = input::KeySignal( GLFW_KEY_X );
 	lmb = events::ButtonEvents<events::Event>( events::createEvent( input::MouseKeyEvent( 0, 1 ) ), events::createEvent( input::MouseKeyEvent( 0, 0 ) ) );
 	rmb = events::ButtonEvents<events::Event>( events::createEvent( input::MouseKeyEvent( 1, 1 ) ), events::createEvent( input::MouseKeyEvent( 1, 0 ) ) );
 	always = signals::createSignal( signals::Source( true ), true );
