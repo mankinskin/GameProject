@@ -30,7 +30,7 @@ layout( std140 ) uniform UVBuffer
 
 layout( std140 ) uniform SizeBuffer
 {
-	vec2 sizes[ 255 ];
+	vec4 sizes[ 255 ];
 };
 
 out vec2 uv;
@@ -40,7 +40,7 @@ void main()
 	const uint i = gl_InstanceID;
 	const uint c = chars[ i/4 ][ i%4 ];
 	vec2 pos = vec2( positions[ i/2 ][ (i%2)*2 ], positions[ i/2 ][ (i%2)*2 + 1] );
-	vec2 size = sizes[ c ];
+	vec2 size = vec2( sizes[ c/2 ][ (c%2)*2 ], sizes[ c/2 ][ (c%2)*2 + 1] );
 	vec4 gly = uvs[ c ];
 
 	uv = vec2(
