@@ -72,10 +72,10 @@ text::LoadedFont::LoadedFont( const Font& font )
 	sizeBuffer = gl::Storage<glm::vec2>( "SizeBuffer", 255, 0, &glyphsizes[0] );
 	sizeBuffer.setTarget( GL_UNIFORM_BUFFER );
 
-	posBuffer = gl::StreamStorage<glm::vec2>( "PosBuffer", 500, GL_MAP_WRITE_BIT, nullptr );
+	posBuffer = gl::StreamStorage<glm::vec2>( "PosBuffer", 100, GL_MAP_WRITE_BIT );
 	posBuffer.setTarget( GL_UNIFORM_BUFFER );
 
-	charBuffer = gl::StreamStorage<unsigned int>( "CharBuffer", 500, GL_MAP_WRITE_BIT, nullptr );
+	charBuffer = gl::StreamStorage<unsigned int>( "CharBuffer", 100, GL_MAP_WRITE_BIT );
 	charBuffer.setTarget( GL_UNIFORM_BUFFER );
 }
 
@@ -114,12 +114,15 @@ void text::LoadedFont::print( const std::string& str, glm::vec2 pos )
 	chars.reserve( chars.size() + str.size() );
 	positions.reserve( positions.size() + str.size() );
 	glm::vec2 cursor;
+	printf( "Printing \"%s\"\n", str.c_str() );
+
 	for ( unsigned int ci = 0; ci < str.size(); ++ci ) {
 		const unsigned char& c = str[ci];
 		const LoadedMetric& met = metrics[ c ];
-		positions.push_back( pos + cursor + glm::vec2( met.bearingx, met.bearingy ) );
-		chars.push_back( 80 );
-		cursor += glm::vec2( 0.01f, 0.0f );
+		//cursor += glm::vec2( met.bearingx, met.bearingy );
+		positions.push_back( pos + cursor );
+		chars.push_back( c );
+		cursor += glm::vec2( 0.05f, 0.0f );
 	}
 }
 void text::LoadedFont::render()
@@ -137,7 +140,7 @@ void text::LoadedFont::render()
 		glActiveTexture( GL_TEXTURE0 );
 		glBindTexture( GL_TEXTURE_2D, atlasTexture.ID );
 
-		glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, 7 );
+		glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, chars.size() );
 
 		fontVAO.unbind();
 		shader::unuse();

@@ -16,12 +16,12 @@ struct Quad
 
 layout( std140 ) uniform CharBuffer
 {
-	uint chars[ 500 ];
+	uvec4 chars[ 20 ];
 };
 
 layout( std140 ) uniform PosBuffer
 {
-	vec2 positions[ 500 ];
+	vec4 positions[ 50 ];
 };
 layout( std140 ) uniform UVBuffer
 {
@@ -38,8 +38,8 @@ out vec2 uv;
 void main()
 {
 	const uint i = gl_InstanceID;
-	const uint c = 77;//chars[ i ];
-	vec2 pos = positions[ i ];
+	const uint c = chars[ i/4 ][ i%4 ];
+	vec2 pos = vec2( positions[ i/2 ][ (i%2)*2 ], positions[ i/2 ][ (i%2)*2 + 1] );
 	vec2 size = sizes[ c ];
 	vec4 gly = uvs[ c ];
 
