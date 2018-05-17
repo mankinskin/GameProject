@@ -337,10 +337,9 @@ b	dt/misc.h	/^typedef struct { uchar r, g, b; } rgb;$/;"	m	struct:__anon1
 back	src/camera.cpp	/^void camera::Camera::back()$/;"	f	class:camera::Camera
 back	src/camera.cpp	/^void camera::back( Camera & pCam )$/;"	f	class:camera
 backVolumeImage	src/voxelization.cpp	/^unsigned int voxelization::backVolumeImage = 0;$/;"	m	class:voxelization	file:
+bearing	src/text.h	/^			glm::vec2 bearing;$/;"	m	struct:text::LoadedFont::LoadedMetric
 bearingx	src/font.h	/^				unsigned int bearingx;$/;"	m	struct:text::Font::Glyphs::Metric
-bearingx	src/text.h	/^			float bearingx;$/;"	m	struct:text::LoadedFont::LoadedMetric
 bearingy	src/font.h	/^				unsigned int bearingy;$/;"	m	struct:text::Font::Glyphs::Metric
-bearingy	src/text.h	/^			float bearingy;$/;"	m	struct:text::LoadedFont::LoadedMetric
 bearx	fontloader/font.h	/^			unsigned int bearx;$/;"	m	struct:Font::Glyphs::Metric
 beary	fontloader/font.h	/^			unsigned int beary;$/;"	m	struct:Font::Glyphs::Metric
 bind	src/vao.h	/^        void bind() $/;"	f	struct:gl::VAO

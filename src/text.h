@@ -33,14 +33,15 @@ namespace text
 			{
 			}
 			LoadedMetric( float adv, float bx, float by )
-				:advance ( adv ), bearingx( bx ), bearingy( by )
+				:advance ( adv ), bearing( glm::vec2( bx, by ) )
 			{
 			}
+			
 			float advance;
-			float bearingx;
-			float bearingy;
+			glm::vec2 bearing;
 		};
 		std::vector<LoadedMetric> metrics;
+
 		std::vector<glm::vec2> positions;
 		std::vector<unsigned int> chars;
 		static std::vector<LoadedFont&> allFonts;

@@ -92,9 +92,9 @@ void Font::readFace( std::string pFilepath )
 
 		Font::Glyphs::Metric& met = glyphs.metrics[ gi ];
 		met = Font::Glyphs::Metric( 
-				glyph->metrics.horiAdvance, 
-				glyph->metrics.horiBearingX,
-				glyph->metrics.horiBearingY );
+				glyph->metrics.horiAdvance/64, 
+				glyph->metrics.horiBearingX/64,
+				glyph->metrics.horiBearingY/64 );
 
 		glm::uvec4& quad = glyphs.quads[ gi ];
 
@@ -126,6 +126,11 @@ void Font::readFace( std::string pFilepath )
 
 	printf( "Loaded Atlas: %s\nWidth %u\nHeight: %u\nSize: %u\nResolution: %u %u\n", 
 			name.c_str(), atlas.width, atlas.height, size.x, resolution.x, resolution.y ); 
+	//for( unsigned int m = 0; m < glyphs.metrics.size(); ++m ) {
+	//	Font::Glyphs::Metric& met = glyphs.metrics[ m ];
+	//	printf( "Glyph %u: \n\tadvance %u\n\tbearingx %u\n\tbearingy %u\n\n", 
+	//			m, met.advance, met.bearingx, met.bearingy ); 
+	//}
 	// now write glyph bitmaps to glyph quads in atlas
 	for ( unsigned int gi = 0; gi < glyphs.count; ++gi ) {
 		FT_Load_Char( face, gi, FT_LOAD_RENDER );

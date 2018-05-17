@@ -148,6 +148,9 @@ void sequencer::frame()
     gui::updateLinePositions();
     gui::updateLineColors();
 
+	text::mainFont.uploadChars();
+	text::mainFont.uploadPositions();
+
     // RENDERING
     glBindFramebuffer( GL_FRAMEBUFFER, texture::guiFBO );
     gui::rasterQuadIndices();
@@ -175,7 +178,7 @@ void sequencer::gameloop()
 
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
-	text::mainFont.print( "Hello World!" );
+	text::mainFont.print( "2 + 2 is 4 - 1 that's 3 quick maths", glm::vec2( -1.0f, 0.1f ) );
     while ( app::state == app::Running ) 
     {
         frame();

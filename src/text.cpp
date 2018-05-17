@@ -25,6 +25,7 @@ void text::loadFonts()
 	initFreeType();
 	
 	Font font;
+	font.setLoadPadding( 2 );
 	font.setLoadResolution( app::mainWindow.width, app::mainWindow.height );
 	font.setLoadSize( 2, 2 );
 	font.read( "Terminus.ttf" );
@@ -49,19 +50,19 @@ text::LoadedFont::LoadedFont( const Font& font )
 									(float)quad.w / (float)font.atlas.height );
 	}
 
-	std::vector<glm::vec2> glyphsizes( font.glyphs.quads.size() );
-	for ( unsigned int g = 0; g < glyphsizes.size(); ++g ) {
+	std::vector<glm::vec2> sizes( font.glyphs.quads.size() );
+	for ( unsigned int g = 0; g < sizes.size(); ++g ) {
 		glm::uvec4 quad = font.glyphs.quads[ g ];
-		glyphsizes[g] = glm::vec2(	(float)quad.z / (resolution.x / 2.0f ),
-									(float)quad.w / (resolution.y / 2.0f ) );
+		sizes[g] = glm::vec2(	(float)quad.z / ((float)resolution.x / 2.0f ),
+								(float)quad.w / ((float)resolution.y / 2.0f ) );
 	}
 	metrics.resize( font.glyphs.metrics.size() );
 	for ( unsigned int g = 0; g < metrics.size(); ++g ) {
 		const Font::Glyphs::Metric& met = font.glyphs.metrics[ g ];
 		metrics[g] = LoadedMetric( 
-				(float)met.advance / (resolution.x / 2.0f ),
-				(float)met.bearingx / (resolution.x / 2.0f ),
-				(float)met.bearingy / (resolution.y / 2.0f ) );
+				(float)met.advance / ((float)resolution.x / 2.0f ),
+				(float)met.bearingx / ((float)resolution.x / 2.0f ),
+				(float)met.bearingy / ((float)resolution.y / 2.0f ) );
 
 	}
 
@@ -69,7 +70,7 @@ text::LoadedFont::LoadedFont( const Font& font )
 	uvBuffer = gl::Storage<glm::vec4>( "UVBuffer", 255, 0, &glyphuvs[0] );
 	uvBuffer.setTarget( GL_UNIFORM_BUFFER );
 
-	sizeBuffer = gl::Storage<glm::vec2>( "SizeBuffer", 255, 0, &glyphsizes[0] );
+	sizeBuffer = gl::Storage<glm::vec2>( "SizeBuffer", 255, 0, &sizes[0] );
 	sizeBuffer.setTarget( GL_UNIFORM_BUFFER );
 
 	posBuffer = gl::StreamStorage<glm::vec2>( "PosBuffer", 100, GL_MAP_WRITE_BIT );
@@ -113,16 +114,14 @@ void text::LoadedFont::print( const std::string& str, glm::vec2 pos )
 {
 	chars.reserve( chars.size() + str.size() );
 	positions.reserve( positions.size() + str.size() );
-	glm::vec2 cursor;
-	printf( "Printing \"%s\"\n", str.c_str() );
 
+	glm::vec2 cursor;
 	for ( unsigned int ci = 0; ci < str.size(); ++ci ) {
 		const unsigned char& c = str[ci];
 		const LoadedMetric& met = metrics[ c ];
-		//cursor += glm::vec2( met.bearingx, met.bearingy );
-		positions.push_back( pos + cursor );
+		positions.push_back( pos + cursor + met.bearing );
 		chars.push_back( c );
-		cursor += glm::vec2( 0.05f, 0.0f );
+		cursor.x += met.advance;
 	}
 }
 void text::LoadedFont::render()
@@ -132,8 +131,6 @@ void text::LoadedFont::render()
 		shader::bindUniformBufferToShader( fontShader, charBuffer, "CharBuffer" );
 		shader::bindUniformBufferToShader( fontShader, uvBuffer, "UVBuffer" );
 		shader::bindUniformBufferToShader( fontShader, sizeBuffer, "SizeBuffer" );
-		uploadChars();
-		uploadPositions();
 		shader::use( fontShader );
 		fontVAO.bind();
 
