@@ -52,16 +52,16 @@ namespace text
 		std::string write();
 		void read( std::string pFilename );
 
-		void setLoadSize( unsigned int ptx, unsigned int pty );
-		void setLoadResolution( unsigned int ptx, unsigned int pty );
+		void setLoadSize( unsigned int ptx, unsigned int pty = 0 );
+		void setLoadDpi( glm::uvec2 pDpi );
+		void setLoadDpi( unsigned int ptx, unsigned int pty = 0 );
 		void setLoadPadding( unsigned int padPixels );
 		private:
 		void readFontfile( std::string pFilepath );
 		void readFace( std::string pFilepath );
-		void writeGlyphBitmap( const unsigned int x, const unsigned int y, const FT_Bitmap& bitmap );
 		const std::string FONT_DIR = "fonts/";
 		glm::uvec2 size = glm::uvec2( 4, 4 );
-		glm::uvec2 resolution = glm::uvec2( 1920, 1080 );
+		glm::uvec2 dpi = glm::uvec2( 100, 100 );
 		unsigned int padding = 0;
 		std::string name = "";
 		int ft_error = 0;

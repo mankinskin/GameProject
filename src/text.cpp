@@ -3,6 +3,7 @@
 #include "vao.h"
 #include "primitives.h"
 #include "app.h"
+#include "contextwindow.h"
 
 gl::VAO fontVAO;
 unsigned int fontShader;
@@ -25,9 +26,9 @@ void text::loadFonts()
 	initFreeType();
 	
 	Font font;
-	font.setLoadPadding( 2 );
-	font.setLoadResolution( app::mainWindow.width, app::mainWindow.height );
-	font.setLoadSize( 2, 2 );
+	font.setLoadPadding( 0 );
+	font.setLoadDpi( app::windowMonitor->dpi * glm::uvec2( 2, 2 ) );
+	font.setLoadSize( 6 );
 	font.read( "Terminus.ttf" );
 	
 	LoadedFont::setTargetResolution( app::mainWindow.width, app::mainWindow.height );
@@ -38,7 +39,7 @@ text::LoadedFont::LoadedFont( const Font& font )
 {
 	atlasTexture = texture::Texture2D( font.atlas );
 	texture::setTextureWrapping( atlasTexture, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE );
-	texture::setTextureFilter( atlasTexture, GL_NEAREST, GL_NEAREST );
+	texture::setTextureFilter( atlasTexture, GL_NEAREST, GL_NEAREST_MIPMAP_NEAREST );
 	texture::generateMipMap( atlasTexture );
 
 	std::vector<glm::vec4> glyphuvs( font.glyphs.quads.size() );
@@ -53,8 +54,8 @@ text::LoadedFont::LoadedFont( const Font& font )
 	std::vector<glm::vec2> sizes( font.glyphs.quads.size() );
 	for ( unsigned int g = 0; g < sizes.size(); ++g ) {
 		glm::uvec4 quad = font.glyphs.quads[ g ];
-		sizes[g] = glm::vec2(	(float)quad.z / ((float)resolution.x / 2.0f ),
-								(float)quad.w / ((float)resolution.y / 2.0f ) );
+		sizes[g] = glm::vec2(	(float)(quad.z) / ((float)resolution.x / 2.0f ),
+								(float)(quad.w) / ((float)resolution.y / 2.0f ) );
 	}
 	metrics.resize( font.glyphs.metrics.size() );
 	for ( unsigned int g = 0; g < metrics.size(); ++g ) {
@@ -73,10 +74,10 @@ text::LoadedFont::LoadedFont( const Font& font )
 	sizeBuffer = gl::Storage<glm::vec2>( "SizeBuffer", 255, 0, &sizes[0] );
 	sizeBuffer.setTarget( GL_UNIFORM_BUFFER );
 
-	posBuffer = gl::StreamStorage<glm::vec2>( "PosBuffer", 100, GL_MAP_WRITE_BIT );
+	posBuffer = gl::StreamStorage<glm::vec2>( "PosBuffer", 1000, GL_MAP_WRITE_BIT );
 	posBuffer.setTarget( GL_UNIFORM_BUFFER );
 
-	charBuffer = gl::StreamStorage<unsigned int>( "CharBuffer", 100, GL_MAP_WRITE_BIT );
+	charBuffer = gl::StreamStorage<unsigned int>( "CharBuffer", 1000, GL_MAP_WRITE_BIT );
 	charBuffer.setTarget( GL_UNIFORM_BUFFER );
 }
 
@@ -112,16 +113,20 @@ void text::LoadedFont::uploadPositions()
 }
 void text::LoadedFont::print( const std::string& str, glm::vec2 pos )
 {
-	chars.reserve( chars.size() + str.size() );
-	positions.reserve( positions.size() + str.size() );
+	chars.resize( 1000 );
+	positions.resize( 1000 );
 
 	glm::vec2 cursor;
-	for ( unsigned int ci = 0; ci < str.size(); ++ci ) {
-		const unsigned char& c = str[ci];
+	for ( unsigned int c = 0; c < 1000; ++c ) {
+		//const unsigned char& c = str[ci];
 		const LoadedMetric& met = metrics[ c ];
-		positions.push_back( pos + cursor + met.bearing );
-		chars.push_back( c );
+		positions[c] = ( pos + cursor + met.bearing );
+		chars[c] = ( c );
 		cursor.x += met.advance;
+		if ( cursor.x > 1.0f ) {
+			cursor.x = 0.0f;
+			cursor.y -= 0.1f;
+		}
 	}
 }
 void text::LoadedFont::render()

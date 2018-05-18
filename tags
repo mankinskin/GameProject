@@ -461,8 +461,8 @@ diff_tex	src/material.h	/^		unsigned int diff_tex;$/;"	m	struct:mesh::MaterialTe
 disableCursor	src/mouse.cpp	/^int disableCursor = 0;$/;"	v
 down	src/camera.cpp	/^void camera::Camera::down()$/;"	f	class:camera::Camera
 down	src/camera.cpp	/^void camera::down( Camera & pCam )$/;"	f	class:camera
-dpi_x	src/contextwindow.h	/^	    unsigned int dpi_x;$/;"	m	struct:app::Monitor
-dpi_y	src/contextwindow.h	/^	    unsigned int dpi_y;$/;"	m	struct:app::Monitor
+dpi	src/contextwindow.h	/^		glm::uvec2 dpi;$/;"	m	struct:app::Monitor
+dpi	src/font.h	/^		glm::uvec2 dpi = glm::uvec2( 100, 100 );$/;"	m	struct:text::Font
 draw_normals	src/mesh.cpp	/^bool mesh::draw_normals = false;$/;"	m	class:mesh	file:
 drop_head	src/element.h	/^                drop_head( const std::tuple<Head, Rest...> tup )$/;"	f	struct:utils::element_constructor
 drop_head_impl	src/element.h	/^                drop_head_impl( const std::index_sequence<Ns...> ns, $/;"	f	struct:utils::element_constructor
@@ -639,7 +639,6 @@ infiniteProjectionMatrix	src/camera.h	/^		glm::mat4 infiniteProjectionMatrix = {
 init	dt/image.h	/^void image<T>::init(const T &val) {$/;"	f	class:image
 init	src/app.cpp	/^void app::init()$/;"	f	class:app
 init	src/camera.cpp	/^void camera::Camera::init()$/;"	f	class:camera::Camera
-init	src/contextwindow.cpp	/^void app::Monitor::init()$/;"	f	class:app::Monitor
 init	src/contextwindow.cpp	/^void app::Window::init()$/;"	f	class:app::Window
 init	src/gl.cpp	/^void gl::init()$/;"	f	class:gl
 init	src/gldebug.cpp	/^void glDebug::init()$/;"	f	class:glDebug
@@ -886,22 +885,21 @@ pArgTuple	src/functor.h	/^		static void func( R( &pF )( Args... ), std::tuple<Ar
 padding	fontloader/ttf.cpp	/^unsigned int TTF::padding = 0;$/;"	m	class:TTF	file:
 padding	fontloader/ttf.h	/^		static unsigned int padding;$/;"	m	class:TTF
 padding	src/font.h	/^		unsigned int padding = 0;$/;"	m	struct:text::Font
-physical_height	src/contextwindow.h	/^	    int physical_height;$/;"	m	struct:app::Monitor
-physical_width	src/contextwindow.h	/^	    int physical_width;$/;"	m	struct:app::Monitor
+physical_size	src/contextwindow.h	/^		glm::ivec2 physical_size;$/;"	m	struct:app::Monitor
 physics	src/collision.h	/^namespace physics {$/;"	n
 physics	src/physics.h	/^namespace physics {$/;"	n
 pixel_round	src/gui.cpp	/^glm::vec2 gui::pixel_round( glm::vec2 pIn ) {$/;"	f	class:gui
 pixel_round_x	src/gui.cpp	/^float gui::pixel_round_x( float pIn ) {$/;"	f	class:gui
 pixel_round_y	src/gui.cpp	/^float gui::pixel_round_y( float pIn ) {$/;"	f	class:gui
+pixel_size	src/contextwindow.h	/^		glm::ivec2 pixel_size;$/;"	m	struct:app::Monitor
 pixel_size	src/gui.cpp	/^glm::vec2 gui::pixel_size;$/;"	m	class:gui	file:
 pixels	fontloader/font.h	/^		std::vector<unsigned char> pixels;$/;"	m	struct:Font::Atlas
 pixels	fontloader/image.h	/^	png_bytep pixels;$/;"	m	struct:Image
 pixels	src/image.h	/^	unsigned char* pixels;$/;"	m	struct:Image
-pixels_x	src/contextwindow.h	/^	    int pixels_x;$/;"	m	struct:app::Monitor
-pixels_y	src/contextwindow.h	/^	    int pixels_y;$/;"	m	struct:app::Monitor
 pnm_error	dt/pnmfile.h	/^class pnm_error { };$/;"	c
 pnm_read	dt/pnmfile.h	/^static void pnm_read(std::ifstream &file, char *buf) {$/;"	f
 pos	src/camera.h	/^		glm::vec3 pos = glm::vec3();$/;"	m	class:camera::Camera
+pos	src/contextwindow.h	/^		glm::ivec2 pos;$/;"	m	struct:app::Monitor
 pos	src/mesh.h	/^		glm::vec3 pos;$/;"	m	struct:mesh::Vertex
 posBuffer	src/text.h	/^		gl::StreamStorage<glm::vec2> posBuffer;$/;"	m	struct:text::LoadedFont
 positions	src/text.h	/^		std::vector<glm::vec2> positions;$/;"	m	struct:text::LoadedFont
@@ -980,7 +978,6 @@ resizepolicy	src/widget.h	/^                const ResizePolicy resizepolicy;$/;"
 resizepolicy	src/widget.h	/^            const ResizePolicy resizepolicy;$/;"	m	struct:gui::Widget
 resolution	fontloader/ttf.cpp	/^glm::uvec2 TTF::resolution = glm::uvec2( 1920, 1080 );$/;"	m	class:TTF	file:
 resolution	fontloader/ttf.h	/^		static glm::uvec2 resolution;$/;"	m	class:TTF
-resolution	src/font.h	/^		glm::uvec2 resolution = glm::uvec2( 1920, 1080 );$/;"	m	struct:text::Font
 resolution	src/text.cpp	/^glm::uvec2 text::LoadedFont::resolution = glm::uvec2( 1920, 1080 );$/;"	m	class:text::LoadedFont	file:
 resolution	src/text.h	/^		static glm::uvec2 resolution;$/;"	m	struct:text::LoadedFont
 resolution	src/viewport.h	/^        float resolution;$/;"	m	struct:gl::Viewport
@@ -1010,8 +1007,9 @@ setLightColor	src/lights.cpp	/^void lights::setLightColor( unsigned int pLightIn
 setLightColor	src/lights.cpp	/^void lights::setLightColor( unsigned int pLightIndex, glm::vec4& pColor )$/;"	f	class:lights
 setLightPos	src/lights.cpp	/^void lights::setLightPos( unsigned int pLightIndex, glm::vec3& pPos ) $/;"	f	class:lights
 setLightPos	src/lights.cpp	/^void lights::setLightPos( unsigned int pLightIndex, glm::vec4& pPos ) $/;"	f	class:lights
+setLoadDpi	src/font.cpp	/^void Font::setLoadDpi( glm::uvec2 pDpi ) $/;"	f	class:Font
+setLoadDpi	src/font.cpp	/^void Font::setLoadDpi( unsigned int ptx, unsigned int pty ) $/;"	f	class:Font
 setLoadPadding	src/font.cpp	/^void Font::setLoadPadding( unsigned int padPixels )$/;"	f	class:Font
-setLoadResolution	src/font.cpp	/^void Font::setLoadResolution( unsigned int ptx, unsigned int pty ) $/;"	f	class:Font
 setLoadSize	src/font.cpp	/^void Font::setLoadSize( unsigned int ptx, unsigned int pty ) $/;"	f	class:Font
 setMaxFPS	src/app.cpp	/^void app::setMaxFPS( unsigned int pMaxFPS )$/;"	f	class:app
 setMode	src/camera.cpp	/^void camera::Camera::setMode( CameraMode pMode )$/;"	f	class:camera::Camera
@@ -1207,14 +1205,13 @@ width	src/image.h	/^	unsigned int width = 0;$/;"	m	struct:Image
 width	src/texture.h	/^		unsigned int width = 0;$/;"	m	struct:texture::Texture2D
 width	src/viewport.h	/^        unsigned int width;$/;"	m	struct:gl::Viewport
 window	src/contextwindow.h	/^	    GLFWwindow* window = nullptr;$/;"	m	struct:app::Window
-windowMonitor	src/contextwindow.cpp	/^unsigned int app::windowMonitor = 0;$/;"	m	class:app	file:
+windowMonitor	src/contextwindow.cpp	/^app::Monitor* app::windowMonitor = nullptr;$/;"	m	class:app	file:
 write	fontloader/font.cpp	/^std::string Font::write()$/;"	f	class:Font
 write	fontloader/image.cpp	/^void Image::write( png_bytep pPixels, unsigned int pWidth, unsigned int pHeight, $/;"	f	class:Image
 write	src/font.cpp	/^std::string Font::write()$/;"	f	class:Font
 write	src/image.cpp	/^void Image::write( FILE* file )$/;"	f	class:Image
 write	src/image.cpp	/^void Image::write( std::string pFilename )$/;"	f	class:Image
 writeGlyphBitmap	fontloader/ttf.cpp	/^void TTF::writeGlyphBitmap( Font& font, glm::uvec4& quad, const FT_Bitmap& bitmap )$/;"	f	class:TTF
-writeGlyphBitmap	src/font.cpp	/^void Font::writeGlyphBitmap( const unsigned int x, const unsigned int y, const FT_Bitmap& bitmap )$/;"	f	class:Font
 writeGlyphs	fontloader/font.cpp	/^unsigned int Font::writeGlyphs( FILE* file )$/;"	f	class:Font
 writeGlyphs	src/font.cpp	/^unsigned int Font::writeGlyphs( FILE* file )$/;"	f	class:Font
 write_packed	dt/pnmfile.h	/^static void write_packed(unsigned char *data, int size, std::ofstream &f) {$/;"	f
@@ -1226,13 +1223,11 @@ xnor_op	src/gates.h	/^        xnor_op() $/;"	f	struct:gates::xnor_op
 xnor_op	src/gates.h	/^    struct xnor_op $/;"	s	namespace:gates
 xor_op	src/gates.h	/^        xor_op() {}$/;"	f	struct:gates::xor_op
 xor_op	src/gates.h	/^    struct xor_op $/;"	s	namespace:gates
-xpos	src/contextwindow.h	/^	    int xpos, ypos = 0;$/;"	m	struct:app::Monitor
 y	experimental/hierarchy.cpp	/^    float x, y, z, w;$/;"	m	struct:vec4	file:
 yRestrictionAngle	src/camera.cpp	/^const float yRestrictionAngle = 3.0f;$/;"	v
 y_rotation_axis_off	src/camera.h	/^		size_t y_rotation_axis_off;$/;"	m	struct:camera::LookPolicy
 y_rotation_factor	src/camera.h	/^		float y_rotation_factor;$/;"	m	struct:camera::LookPolicy
 y_rotator_off	src/camera.h	/^		size_t y_rotator_off;$/;"	m	struct:camera::LookPolicy
-ypos	src/contextwindow.h	/^	    int xpos, ypos = 0;$/;"	m	struct:app::Monitor
 z	experimental/hierarchy.cpp	/^    float x, y, z, w;$/;"	m	struct:vec4	file:
 ~Image	src/image.cpp	/^Image::~Image()$/;"	f	class:Image
 ~TTF	fontloader/ttf.cpp	/^TTF::~TTF()$/;"	f	class:TTF

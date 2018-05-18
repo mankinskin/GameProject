@@ -2,26 +2,14 @@
 
 layout( location = 0 ) in vec2 corner;
 
-struct Glyph
-{
-	vec2 min;
-	vec2 max;
-};
-
-struct Quad
-{
-	vec2 pos;
-	vec2 size;
-};
-
 layout( std140 ) uniform CharBuffer
 {
-	uvec4 chars[ 20 ];
+	uvec4 chars[ 200 ];
 };
 
 layout( std140 ) uniform PosBuffer
 {
-	vec4 positions[ 50 ];
+	vec4 positions[ 500 ];
 };
 layout( std140 ) uniform UVBuffer
 {
@@ -47,6 +35,6 @@ void main()
 		gly.x + gly.z * corner.x, 
 		gly.y + gly.w * ( 1.0 - corner.y ) );
 
-	gl_Position = vec4( pos.x + size.x * corner.x, pos.y + size.y * corner.y - size.y, 0.0, 1.0 );
+	gl_Position = vec4( pos.x + size.x * corner.x, -size.y + pos.y + (size.y * corner.y), 0.0, 1.0 );
 }
 

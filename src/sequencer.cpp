@@ -138,6 +138,7 @@ void sequencer::frame()
 
     camera::main_camera.look( input::cursorFrameDelta );
     camera::main_camera.update();
+	text::mainFont.print( "2 + 2 is 4 - 1 that's 3 quick maths", input::relativeCursorPosition );
 
     gl::updateGeneralUniformBuffer();
 
@@ -178,7 +179,6 @@ void sequencer::gameloop()
 
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
-	text::mainFont.print( "2 + 2 is 4 - 1 that's 3 quick maths", glm::vec2( -1.0f, 0.1f ) );
     while ( app::state == app::Running ) 
     {
         frame();

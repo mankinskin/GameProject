@@ -14,30 +14,30 @@ void Font::setLoadPadding( unsigned int padPixels )
 
 void Font::setLoadSize( unsigned int ptx, unsigned int pty ) 
 {
-	if ( ptx || pty ) {
-		if ( !ptx ) {
-			ptx = pty;	
-		} 
-		else if ( !pty ) {
-			pty = ptx;	
-		}
-		size.x = ptx;
-		size.y = pty;
+	if ( !ptx ) {
+		ptx = pty;	
+	} 
+	else if ( !pty ) {
+		pty = ptx;	
 	}
+	size.x = ptx;
+	size.y = pty;
 }
 
-void Font::setLoadResolution( unsigned int ptx, unsigned int pty ) 
+void Font::setLoadDpi( glm::uvec2 pDpi ) 
 {
-	if ( ptx || pty ) {
-		if ( !ptx ) {
-			ptx = pty;	
-		} 
-		else if ( !pty ) {
-			pty = ptx;	
-		}
-		resolution.x = ptx;
-		resolution.y = pty;
+	setLoadDpi( pDpi.x, pDpi.y );
+}
+void Font::setLoadDpi( unsigned int ptx, unsigned int pty ) 
+{
+	if ( !ptx ) {
+		ptx = pty;	
+	} 
+	else if ( !pty ) {
+		pty = ptx;	
 	}
+	dpi.x = ptx;
+	dpi.y = pty;
 }
 std::string stripExtension( std::string& pFilename )
 {
@@ -73,7 +73,7 @@ void Font::readFace( std::string pFilepath )
 		return;
 	}
 
-	FT_Set_Char_Size( face, size.x*64, size.y*64, resolution.x, resolution.y );
+	FT_Set_Char_Size( face, size.x*64, size.y*64, dpi.x, dpi.y );
 	glyphs.resize( face->num_glyphs );	
 
 	unsigned int max_glyph_width = face->bbox.xMax - face->bbox.xMin;
@@ -84,7 +84,8 @@ void Font::readFace( std::string pFilepath )
 	unsigned int max_row_width = 0;
 
 	glm::uvec2 cursor = glm::uvec2( 0, 0 );
-	// precalculate glyph quads and store metrics
+
+	// precalculate glyph quads
 	for ( unsigned int gi = 0; gi < glyphs.count; ++gi ) {
 		FT_Load_Char( face, gi, FT_LOAD_RENDER );
 		FT_Render_Glyph( face->glyph, FT_RENDER_MODE_MONO );
@@ -98,16 +99,19 @@ void Font::readFace( std::string pFilepath )
 
 		glm::uvec4& quad = glyphs.quads[ gi ];
 
+		unsigned int width = glyph->bitmap.width; 
+		unsigned int height = glyph->bitmap.rows; 
 
 		quad = glm::uvec4( 
 				cursor.x + padding, 
 				cursor.y + padding, 
-				glyph->bitmap.width,
-				glyph->bitmap.rows );
+				width,
+				height);
 
-		cursor.x += quad.z + padding * 2;
-		row_max_height = std::max( quad.w + padding * 2, row_max_height );
+		cursor.x += width + padding * 2;
+		row_max_height = std::max( height + padding * 2, row_max_height );
 
+		// at the end of a row, do a line break
 		if ( ( gi + 1 ) % row_length == 0 ) {
 			max_row_width = std::max( cursor.x, max_row_width );
 			cursor.x = 0;
@@ -116,6 +120,8 @@ void Font::readFace( std::string pFilepath )
 		}
 	}
 
+	// if glyphs.count is not divisible by row_length
+	// a new row had already been started but not finished
 	if( glyphs.count % row_length ) {
 		cursor.y += row_max_height;
 	}
@@ -124,36 +130,31 @@ void Font::readFace( std::string pFilepath )
 	cursor = glm::uvec2( 0, 0 );
 	atlas.pixels = (unsigned char*)malloc( atlas.width * atlas.height );
 
-	printf( "Loaded Atlas: %s\nWidth %u\nHeight: %u\nSize: %u\nResolution: %u %u\n", 
-			name.c_str(), atlas.width, atlas.height, size.x, resolution.x, resolution.y ); 
-	//for( unsigned int m = 0; m < glyphs.metrics.size(); ++m ) {
-	//	Font::Glyphs::Metric& met = glyphs.metrics[ m ];
-	//	printf( "Glyph %u: \n\tadvance %u\n\tbearingx %u\n\tbearingy %u\n\n", 
-	//			m, met.advance, met.bearingx, met.bearingy ); 
-	//}
+	printf( "Loaded Atlas: %s\nWidth %u\nHeight: %u\nSize: %u\nDpi: %u %u\n", 
+			name.c_str(), atlas.width, atlas.height, size.x, dpi.x, dpi.y ); 
+	for( unsigned int m = 0; m < glyphs.metrics.size(); ++m ) {
+		const glm::uvec4& quad = glyphs.quads[m];
+		const Font::Glyphs::Metric& met = glyphs.metrics[ m ];
+		printf( "Glyph %u:\t%u %u\n\t\t%u %u\n\tadvance %u\n\tbearingx %u\n\tbearingy %u\n\n", 
+				m, quad.x, quad.y, quad.z, quad.w, 
+				met.advance, met.bearingx, met.bearingy ); 
+	}
 	// now write glyph bitmaps to glyph quads in atlas
 	for ( unsigned int gi = 0; gi < glyphs.count; ++gi ) {
 		FT_Load_Char( face, gi, FT_LOAD_RENDER );
 		FT_Render_Glyph( face->glyph, FT_RENDER_MODE_MONO );
-		FT_GlyphSlot glyph = face->glyph;
+		FT_Bitmap& bitmap = face->glyph->bitmap;
 
 		glm::uvec4& quad = glyphs.quads[ gi ];
 
-		writeGlyphBitmap( quad.x, quad.y, face->glyph->bitmap );
+		for ( unsigned int row = 0; row < bitmap.rows; ++row ) {
+			std::memcpy( 
+					&atlas.pixels[ ( quad.y + row ) * atlas.width + quad.x ], 
+					&bitmap.buffer[ row * bitmap.pitch ], bitmap.pitch );
+		}
 	}
-	
 
 	FT_Done_Face( face );
-}
-
-void Font::writeGlyphBitmap( const unsigned int x, const unsigned int y, const FT_Bitmap& bitmap )
-{
-	for ( unsigned int row = 0; row < bitmap.rows; ++row ) {
-		glm::uvec2 cur = glm::uvec2( x, y + row );
-		std::memcpy( 
-				&atlas.pixels[ cur.y * atlas.width + cur.x ], 
-				&bitmap.buffer[ row * bitmap.pitch ], bitmap.pitch );
-	}
 }
 
 void Font::readFontfile( std::string pFilepath )
