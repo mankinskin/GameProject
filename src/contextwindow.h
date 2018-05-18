@@ -1,5 +1,6 @@
 #pragma once
 #include <glew.h>
+#include <glm.hpp>
 #include <string>
 #include <glfw3.h>
 #include <vector>
@@ -15,21 +16,16 @@ namespace app
 	    int videoModeCount = 0;
 	    const GLFWvidmode* vidModes = nullptr;
 	    const GLFWvidmode* currentVideoMode = nullptr;
-	    int xpos, ypos = 0;
-	    unsigned int dpi_x;
-	    unsigned int dpi_y;
-	    int physical_width;
-	    int physical_height;
-	    int pixels_x;
-	    int pixels_y;
-		private:
-		void init();
+		glm::uvec2 dpi;
+		glm::ivec2 physical_size;
+		glm::ivec2 pixel_size;
+		glm::ivec2 pos;
 	};
 
 	void initMonitors();
 	extern std::vector<Monitor> allMonitors;
 	extern GLFWmonitor** allMonitorPtrs;
-	extern unsigned int windowMonitor;
+	extern Monitor* windowMonitor;
 
 	void switchWindowToMonitor( unsigned int pMonitor );
 
@@ -49,6 +45,7 @@ namespace app
 		{
 			return window;
 	    }
+
 	    Window& operator=( const Window obj ) 
 		{
 			name = obj.name;
@@ -57,6 +54,7 @@ namespace app
 			window = obj.window;
 			return *this;
 	    }
+
 		void print()
 		{
 			printf("Window %s\nWidth: %u\nHeight: %u\nPtr: %p\n", name.c_str(), width, height, window );
