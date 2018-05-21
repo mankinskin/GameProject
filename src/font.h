@@ -52,25 +52,10 @@ namespace text
 	};
 
 	extern std::vector<Font> fonts;
-	
-	struct FontID
-	{
-		FontID( FontFile file )
-			:index( fonts.size() )
-		{
-			fonts.push_back( Font( file ) );
-		}
-		FontID( std::vector<Font>::size_type i )
-			:index( i )
-		{
-		}
-		std::vector<Font>::size_type index;
-		Font* operator->()
-		{
-			return &fonts[index];
-		}
-	};
+    using FontID = utils::Itr<Font, std::vector<Font>, fonts>;
 
+
+	
 	extern FontID mainFont;
 	void loadFonts();
 

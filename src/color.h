@@ -10,7 +10,8 @@ namespace gl
 {
 	const unsigned int MAX_COLOR_COUNT = 100;
     typedef glm::vec4 Color;
-    typedef utils::Itr<Color, std::array<Color, MAX_COLOR_COUNT>> ColorIt;
+    extern std::array<glm::vec4, gl::MAX_COLOR_COUNT> allColors;
+    typedef utils::Itr<Color, std::array<Color, MAX_COLOR_COUNT>, allColors> ColorIt;
 
 	extern StreamStorage<Color> colorBuffer;
 

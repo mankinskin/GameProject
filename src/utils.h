@@ -7,20 +7,19 @@ namespace utils {
     
     template<
         typename T, 
-        typename Container>
+        typename Container,
+        Container& container>
     struct Itr 
 	{
-        Itr()
-            :container( nullptr ), index( 0 )
-        {}
-        Itr( const Itr<T, Container>& other )
-            :container( other.container ), index( other.index )
-        {}
-        Itr( Container& arr, typename Container::size_type i )
-            :container( arr ), index( i )
+        Itr( const T& element )
+            :index( container.size() )
+        {
+            container.push_back( element );
+        }
+        Itr( typename Container::size_type i )
+            :index( i )
         {}
 
-        Container& container; 
         typename Container::size_type index;
 
         operator typename Container::size_type&()

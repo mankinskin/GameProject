@@ -1,6 +1,8 @@
 #include "text.h"
 
 std::vector<text::Text> text::texts;
+
+
 void text::Text::print( const std::string& pStr )
 {
 	str = pStr;

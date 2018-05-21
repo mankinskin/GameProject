@@ -4,7 +4,7 @@
 #include "gl.h"
 
 std::array<std::string, gl::MAX_COLOR_COUNT> colorNames;
-std::array<glm::vec4, gl::MAX_COLOR_COUNT> allColors;
+std::array<glm::vec4, gl::MAX_COLOR_COUNT> gl::allColors;
 unsigned int colorCount = 0;
 
 gl::StreamStorage<gl::Color> gl::colorBuffer;
@@ -39,7 +39,7 @@ gl::ColorIt gl::createColor( Color pColor, std::string pColorName )
             pColorName.c_str(), pColor.x, pColor.y, pColor.z, pColor.w );
     allColors[ colorCount ] = pColor;
     colorNames[ colorCount ] = pColorName;
-    return ColorIt( allColors, colorCount++ );
+    return ColorIt( colorCount++ );
 }
 
 gl::ColorIt gl::getColor( std::string pColorName )
@@ -48,11 +48,11 @@ gl::ColorIt gl::getColor( std::string pColorName )
             colorNames.begin() + colorCount, pColorName ); 
     if ( nameIt == colorNames.end() ) {
         printf( "Color %s not found!\n", pColorName.c_str() );
-        return ColorIt( allColors, 0 );
+        return ColorIt( 0 );
     }
     unsigned int i = nameIt - colorNames.begin();
     printf( "Color %s found at %d!\n", pColorName.c_str(), i );
-    return ColorIt( allColors, i );
+    return ColorIt( i );
 }
 
 void gl::initColorBuffer()
