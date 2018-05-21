@@ -69,7 +69,7 @@ namespace gl
         };
 
     template<typename T>
-    void uploadStorage( StreamStorage<T>& pStorage, unsigned int pByteSize, void* pData )
+    void uploadStorage( const StreamStorage<T>& pStorage, const unsigned int pByteSize, const void* pData )
     {
         if( pByteSize ) {
             if ( !pStorage.mappedPtr ) {
