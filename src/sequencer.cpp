@@ -18,6 +18,7 @@
 #include "quad.h"
 #include "quadindex.h"
 #include "framebuffer.h"
+#include "font.h"
 #include "text.h"
 
 // Initialization
@@ -123,6 +124,7 @@ void sequencer::clearFramebuffers()
     glClearNamedFramebufferfv( texture::guiFBO, 
             GL_DEPTH, 0, &g_clear_depth );
 }
+
 void sequencer::frame()
 {
     clearFramebuffers();
@@ -138,7 +140,6 @@ void sequencer::frame()
 
     camera::main_camera.look( input::cursorFrameDelta );
     camera::main_camera.update();
-	text::mainFont.print( "2 + 2 is 4 - 1 that's 3 quick maths", input::relativeCursorPosition );
 
     gl::updateGeneralUniformBuffer();
 
@@ -149,10 +150,6 @@ void sequencer::frame()
     gui::updateLinePositions();
     gui::updateLineColors();
 
-	text::mainFont.uploadChars();
-	text::mainFont.uploadPositions();
-
-    // RENDERING
     glBindFramebuffer( GL_FRAMEBUFFER, texture::guiFBO );
     gui::rasterQuadIndices();
     gui::readQuadIndexBuffer();
@@ -160,7 +157,7 @@ void sequencer::frame()
 
     gui::renderLines();
     gui::renderColorQuads();
-	text::mainFont.render();
+	text::renderFonts();
 
     glfwSwapBuffers(app::mainWindow.window );
 
@@ -179,6 +176,13 @@ void sequencer::gameloop()
 
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
+	text::TextID term_box( text::Text( glm::vec2( -0.5f, 0.0f ) ) );
+	text::TextID lib_box( text::Text( glm::vec2( 0.5f, 0.0f ) ) );
+	lib_box->setFont( 1 );
+	term_box->print( "This\nis\nterminus.\nFuck yeah, this is more text comin in\nthrough your screen LEDs, beware the current of characters\npiercing your retina at the speed of light\n(duh)\nIs that lineGap okay???" );
+	lib_box->print( "This is liberation." );
+	text::updateTexts();
+	text::updateFonts();
     while ( app::state == app::Running ) 
     {
         frame();
