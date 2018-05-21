@@ -1,74 +1,86 @@
 #pragma once
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include <glm.hpp>
 #include <vector>
 #include <string>
-#include <cstring>
-#include "image.h"
+#include "utils.h"
+#include "fontfile.h"
 
 namespace text 
 {
 	struct Font
 	{
-		struct Glyphs
-		{
-			struct Metric
-			{
-				unsigned int advance;
-				unsigned int bearingx;
-				unsigned int bearingy;
-
-				Metric()
-				{
-				}
-				Metric( unsigned int adv, unsigned int bx, unsigned int by )
-					:advance ( adv ), bearingx( bx ), bearingy( by )
-				{
-				}
-			};
-			unsigned int count;
-			std::vector<glm::uvec4> quads;
-			std::vector<Metric> metrics;
-			void resize( size_t size )
-			{
-				count = size;
-				quads.resize( count );
-				metrics.resize( count );
-			}
-			Glyphs()
-				:count( 0 )
-			{
-			}
-		};
-
-		Image atlas;
-		Glyphs glyphs;
-
 		Font()
 		{
 		}
 
-		std::string write();
-		void read( std::string pFilename );
+		Font( const FontFile& font );
+		gl::Storage<glm::vec4> uvBuffer;
+		gl::Storage<glm::vec2> sizeBuffer;
+		gl::StreamStorage<glm::vec2> posBuffer;
+		gl::StreamStorage<unsigned int> charBuffer;
+		texture::Texture2D atlasTexture;
+		void render() const;
 
-		void setLoadSize( unsigned int ptx, unsigned int pty = 0 );
-		void setLoadDpi( glm::uvec2 pDpi );
-		void setLoadDpi( unsigned int ptx, unsigned int pty = 0 );
-		void setLoadPadding( unsigned int padPixels );
-		private:
-		void readFontfile( std::string pFilepath );
-		void readFace( std::string pFilepath );
-		const std::string FONT_DIR = "fonts/";
-		glm::uvec2 size = glm::uvec2( 4, 4 );
-		glm::uvec2 dpi = glm::uvec2( 100, 100 );
-		unsigned int padding = 0;
-		std::string name = "";
-		int ft_error = 0;
-		unsigned int writeGlyphs( FILE* file );
-		unsigned int readGlyphs( FILE* file );
+		static void setTargetResolution( const unsigned int rx, const unsigned int ry );
+		static void setTargetResolution( glm::uvec2 pRes );
+		void uploadChars() const;
+		void uploadPositions() const;
+
+		std::string name;
+		std::vector<glm::vec2> positions;
+		std::vector<unsigned int> chars;
+		static glm::vec2 pixel_quantize( glm::vec2 v )
+		{
+			return glm::round( v / pixel_size ) * pixel_size;
+		}
+		struct Metric
+		{
+			Metric()
+			{
+			}
+			Metric( float adv, float bx, float by )
+				:advance ( adv ), bearing( glm::vec2( bx, by ) )
+			{
+			}
+			
+			float advance;
+			glm::vec2 bearing;
+		};
+		std::vector<Metric> metrics;
+		float linegap;
+		static glm::uvec2 resolution;
+		static glm::vec2 pixel_size;
 	};
 
-	int initFreeType();
+	extern std::vector<Font> fonts;
+	
+	struct FontID
+	{
+		FontID( FontFile file )
+			:index( fonts.size() )
+		{
+			fonts.push_back( Font( file ) );
+		}
+		FontID( std::vector<Font>::size_type i )
+			:index( i )
+		{
+		}
+		std::vector<Font>::size_type index;
+		Font* operator->()
+		{
+			return &fonts[index];
+		}
+	};
+
+	extern FontID mainFont;
+	void loadFonts();
+
+	void initFontVAO();
+	
+	void initFontShader();
+	void setupFontShader();
+	void updateFonts();
+	void renderFonts();
+
+	void renderFont();
 }
 
