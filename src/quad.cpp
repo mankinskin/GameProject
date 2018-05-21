@@ -40,7 +40,6 @@ void gui::updateQuadBuffer()
 
 void gui::Quad::move( const glm::vec2 pV ) const
 {
-    printf("Moving Quad %d\n", ID );
     getQuadData( ID ) += glm::vec4( pV.x, pV.y, 0.0f, 0.0f );
 }
 

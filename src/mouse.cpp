@@ -93,7 +93,6 @@ void input::getCursorQuadEvents()
 			pushEvent( QuadEvent( hovered_quad, 1 ) );
 		}
 	}
-    printf( "%d\n", hovered_quad );
 }
 
 void input::mouseKey_Callback( GLFWwindow * window, int pKey, int pAction, int pMods )

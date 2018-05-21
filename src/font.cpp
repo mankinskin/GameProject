@@ -10,45 +10,41 @@
 
 gl::VAO fontVAO;
 unsigned int fontShader;
-glm::uvec2 text::Font::resolution = glm::uvec2( 1920, 1080 );
-glm::vec2 text::Font::pixel_size = glm::vec2( 2.0f / (float)1920, 2.0f / (float)1080 );
+glm::vec2 text::pixel_size = glm::vec2( 2.0f / (float)1920, 2.0f / (float)1080 );
 std::vector<text::Font> text::fonts;
 
-using namespace text;
-
-void Font::setTargetResolution( const unsigned int rx, const unsigned int ry )
+void text::setTargetResolution( const unsigned int rx, const unsigned int ry )
 {
 	setTargetResolution( glm::uvec2( rx, ry ) );
 }
 
-void Font::setTargetResolution( const glm::uvec2 pRes )
+void text::setTargetResolution( const glm::uvec2 pRes )
 {
-	resolution = pRes;
 	pixel_size = glm::vec2( 2.0f, 2.0f ) / (glm::vec2)pRes;
 }
 
 void text::loadFonts()
 {
 	initFreeType();
+	setTargetResolution( app::mainWindow.width, app::mainWindow.height );
 	
 	FontFile terminusfont;
 	terminusfont.setLoadPadding( 1 );
 	terminusfont.setLoadDpi( app::windowMonitor->dpi );
-	terminusfont.setLoadSize( 12 );
+	terminusfont.setLoadSize( 16 );
 	terminusfont.read( "Terminus.ttf" );
 
 	FontFile liberationfont;
 	liberationfont.setLoadPadding( 1 );
 	liberationfont.setLoadDpi( app::windowMonitor->dpi );
-	liberationfont.setLoadSize( 12 );
+	liberationfont.setLoadSize( 16 );
 	liberationfont.read( "LiberationMono-Regular.ttf" );
 	
-	Font::setTargetResolution( app::mainWindow.width, app::mainWindow.height );
 	fonts.push_back( Font( terminusfont ) );
 	fonts.push_back( Font( liberationfont ) );
 }
 
-Font::Font( const FontFile& fontfile )
+text::Font::Font( const FontFile& fontfile )
 {
 	name = fontfile.name;
 	atlasTexture = texture::Texture2D( fontfile.atlas );
@@ -82,10 +78,10 @@ Font::Font( const FontFile& fontfile )
 
 	linegap = (float)fontfile.linegap * pixel_size.y;
 
-	uvBuffer = gl::Storage<glm::vec4>( "UVBuffer", 255, 0, &glyphuvs[0] );
+	uvBuffer = gl::Storage<glm::vec4>( "UVBuffer", glyphuvs.size(), 0, &glyphuvs[0] );
 	uvBuffer.setTarget( GL_UNIFORM_BUFFER );
 
-	sizeBuffer = gl::Storage<glm::vec2>( "SizeBuffer", 255, 0, &sizes[0] );
+	sizeBuffer = gl::Storage<glm::vec2>( "SizeBuffer", sizes.size(), 0, &sizes[0] );
 	sizeBuffer.setTarget( GL_UNIFORM_BUFFER );
 
 	posBuffer = gl::StreamStorage<glm::vec2>( "PosBuffer", 1000, GL_MAP_WRITE_BIT );
@@ -116,12 +112,12 @@ void text::setupFontShader()
 {
 }
 
-void Font::uploadChars() const
+void text::Font::uploadChars() const
 {
 	gl::uploadStorage( charBuffer, sizeof( unsigned int ) * chars.size(), &chars[0] );
 }
 
-void Font::uploadPositions() const
+void text::Font::uploadPositions() const
 {
 	gl::uploadStorage( posBuffer, sizeof( glm::vec2 ) * positions.size(), &positions[0] );
 }
@@ -134,7 +130,7 @@ void text::updateFonts()
 	}
 }
 
-void Font::render() const
+void text::Font::render() const
 {
 	if ( chars.size() ) {
 		shader::bindUniformBufferToShader( fontShader, posBuffer, "PosBuffer" );

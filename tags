@@ -70,7 +70,7 @@ Fatal	src/debug.h	/^			Fatal$/;"	e	enum:debug::Error::Severity
 Font	fontloader/font.h	/^	Font( std::string pFilename )$/;"	f	struct:Font
 Font	fontloader/font.h	/^	Font()$/;"	f	struct:Font
 Font	fontloader/font.h	/^struct Font$/;"	s
-Font	src/font.cpp	/^Font::Font( const FontFile& fontfile )$/;"	f	class:Font
+Font	src/font.cpp	/^text::Font::Font( const FontFile& fontfile )$/;"	f	class:text::Font
 Font	src/font.h	/^		Font()$/;"	f	struct:text::Font
 Font	src/font.h	/^	struct Font$/;"	s	namespace:text
 FontFile	src/fontfile.h	/^		FontFile()$/;"	f	struct:text::FontFile
@@ -353,6 +353,7 @@ bit_depth	src/image.h	/^	unsigned int bit_depth = 8;$/;"	m	struct:Image
 blendMeshList	src/mesh.cpp	/^std::vector<unsigned int> mesh::blendMeshList;$/;"	m	class:mesh	file:
 blendMeshShader	src/mesh.cpp	/^unsigned int mesh::blendMeshShader = 0;$/;"	m	class:mesh	file:
 bound	dt/misc.h	/^inline T bound(const T &x, const T &min, const T &max) {$/;"	f
+bufferBegin	src/text.h	/^            unsigned int bufferBegin = 0; \/\/ begin of the data in the font buffers$/;"	m	struct:text::Text
 buildShaderPrograms	src/shader_loader.cpp	/^void shader::Loader::buildShaderPrograms()$/;"	f	class:shader::Loader
 buildShaders	src/sequencer.cpp	/^void sequencer::buildShaders()$/;"	f	class:sequencer
 call	src/functor.h	/^		static void call( unsigned int pFunc ) $/;"	f	class:functors::Functor
@@ -364,6 +365,7 @@ change	src/keys.h	/^        KeyCondition change;$/;"	m	struct:input::KeyEvent
 change	src/mouse.h	/^		KeyCondition change;$/;"	m	struct:input::MouseKeyEvent
 channels	src/image.h	/^	unsigned int channels = 1;$/;"	m	struct:Image
 charBuffer	src/font.h	/^		gl::StreamStorage<unsigned int> charBuffer;$/;"	m	struct:text::Font
+charCount	src/font.h	/^        size_t charCount = 0;$/;"	m	struct:text::Font
 char_Callback	src/keys.cpp	/^void input::char_Callback( GLFWwindow * window, unsigned int pCodepoint )$/;"	f	class:input
 charge	src/neural.h	/^		float charge;$/;"	m	struct:neural::Neuron
 chars	src/font.h	/^		std::vector<unsigned int> chars;$/;"	m	struct:text::Font
@@ -449,7 +451,7 @@ current	src/viewport.h	/^        static Viewport* current;$/;"	m	struct:gl::View
 currentShaderProgram	src/shader.cpp	/^unsigned int shader::currentShaderProgram;$/;"	m	class:shader	file:
 currentVideoMode	src/contextwindow.h	/^	    const GLFWvidmode* currentVideoMode = nullptr;$/;"	m	struct:app::Monitor
 cursor	fontloader/ttf.h	/^		glm::uvec2 cursor;$/;"	m	class:TTF
-cursor	src/text.h	/^			glm::vec2 cursor; \/\/ relative to pos$/;"	m	struct:text::Text
+cursor	src/text.h	/^			float cursor; \/\/ relative to pos$/;"	m	struct:text::Text
 cursorEnter_Callback	src/mouse.cpp	/^void input::cursorEnter_Callback( GLFWwindow* window, int pEntered )$/;"	f	class:input
 cursorFrameDelta	src/mouse.cpp	/^glm::vec2 input::cursorFrameDelta;$/;"	m	class:input	file:
 cursorPosition_Callback	src/mouse.cpp	/^void input::cursorPosition_Callback( GLFWwindow * window, double pX, double pY )$/;"	f	class:input
@@ -732,8 +734,10 @@ lightShaderProgram	src/lights.cpp	/^unsigned int lights::lightShaderProgram = 0;
 lightVAO	src/lights.cpp	/^gl::VAO lights::lightVAO;$/;"	m	class:lights	file:
 lights	src/lights.h	/^namespace lights$/;"	n
 limitFPS	src/app.cpp	/^void app::limitFPS()$/;"	f	class:app
+line	src/text.h	/^            size_t line;$/;"	m	struct:text::Text
 lineBreak	src/text.cpp	/^void text::Text::lineBreak()$/;"	f	class:text::Text
 lineCount	src/line.h	/^		unsigned int lineCount;$/;"	m	struct:gui::LineGroup
+lineCount	src/text.h	/^            size_t lineCount()$/;"	f	struct:text::Text
 lineOffset	src/line.h	/^		unsigned int lineOffset;$/;"	m	struct:gui::LineGroup
 lineShader	src/line.cpp	/^unsigned int lineShader = 0;$/;"	v
 lineVAO	src/line.cpp	/^gl::VAO lineVAO;$/;"	v
@@ -900,13 +904,12 @@ padding	src/fontfile.h	/^		unsigned int padding = 0;$/;"	m	struct:text::FontFile
 physical_size	src/contextwindow.h	/^		glm::ivec2 physical_size;$/;"	m	struct:app::Monitor
 physics	src/collision.h	/^namespace physics {$/;"	n
 physics	src/physics.h	/^namespace physics {$/;"	n
-pixel_quantize	src/font.h	/^		static glm::vec2 pixel_quantize( glm::vec2 v )$/;"	f	struct:text::Font
+pixel_quantize	src/font.h	/^	inline glm::vec2 pixel_quantize( glm::vec2 v )$/;"	f	namespace:text
 pixel_round	src/gui.cpp	/^glm::vec2 gui::pixel_round( glm::vec2 pIn ) {$/;"	f	class:gui
 pixel_round_x	src/gui.cpp	/^float gui::pixel_round_x( float pIn ) {$/;"	f	class:gui
 pixel_round_y	src/gui.cpp	/^float gui::pixel_round_y( float pIn ) {$/;"	f	class:gui
 pixel_size	src/contextwindow.h	/^		glm::ivec2 pixel_size;$/;"	m	struct:app::Monitor
-pixel_size	src/font.cpp	/^glm::vec2 text::Font::pixel_size = glm::vec2( 2.0f \/ (float)1920, 2.0f \/ (float)1080 );$/;"	m	class:text::Font	file:
-pixel_size	src/font.h	/^		static glm::vec2 pixel_size;$/;"	m	struct:text::Font
+pixel_size	src/font.cpp	/^glm::vec2 text::pixel_size = glm::vec2( 2.0f \/ (float)1920, 2.0f \/ (float)1080 );$/;"	m	class:text	file:
 pixel_size	src/gui.cpp	/^glm::vec2 gui::pixel_size;$/;"	m	class:gui	file:
 pixels	fontloader/font.h	/^		std::vector<unsigned char> pixels;$/;"	m	struct:Font::Atlas
 pixels	fontloader/image.h	/^	png_bytep pixels;$/;"	m	struct:Image
@@ -916,12 +919,11 @@ pnm_read	dt/pnmfile.h	/^static void pnm_read(std::ifstream &file, char *buf) {$/
 pos	src/camera.h	/^		glm::vec3 pos = glm::vec3();$/;"	m	class:camera::Camera
 pos	src/contextwindow.h	/^		glm::ivec2 pos;$/;"	m	struct:app::Monitor
 pos	src/mesh.h	/^		glm::vec3 pos;$/;"	m	struct:mesh::Vertex
-pos	src/text.h	/^			glm::vec2 pos;$/;"	m	struct:text::Text
 posBuffer	src/font.h	/^		gl::StreamStorage<glm::vec2> posBuffer;$/;"	m	struct:text::Font
+position	src/text.h	/^			glm::vec2 position;$/;"	m	struct:text::Text
 positions	src/font.h	/^		std::vector<glm::vec2> positions;$/;"	m	struct:text::Font
 press	src/keys.h	/^        unsigned int press;$/;"	m	struct:input::KeySignal
 print	src/contextwindow.h	/^		void print()$/;"	f	struct:app::Window
-print	src/text.cpp	/^void text::Text::print( const std::string& pStr )$/;"	f	class:text::Text
 printErrors	src/debug.cpp	/^void debug::printErrors()$/;"	f	class:debug
 printInfo	src/debug.cpp	/^void debug::printInfo()$/;"	f	class:debug
 projectionMatrix	src/camera.h	/^		glm::mat4 projectionMatrix = {};$/;"	m	class:camera::Camera
@@ -963,7 +965,7 @@ readQuadIndexMap	src/quadindex.cpp	/^unsigned int gui::readQuadIndexMap( $/;"	f	
 readQuadIndexMap	src/quadindex.cpp	/^unsigned int gui::readQuadIndexMap( const unsigned int pPos )$/;"	f	class:gui
 read_packed	dt/pnmfile.h	/^static void read_packed(unsigned char *data, int size, std::ifstream &f) {$/;"	f
 release	src/keys.h	/^        unsigned int release;$/;"	m	struct:input::KeySignal
-render	src/font.cpp	/^void Font::render() const$/;"	f	class:Font
+render	src/font.cpp	/^void text::Font::render() const$/;"	f	class:text::Font
 renderBlendMeshes	src/mesh.cpp	/^void mesh::renderBlendMeshes()$/;"	f	class:mesh
 renderColorQuads	src/quadcolors.cpp	/^void gui::renderColorQuads() $/;"	f	class:gui
 renderFonts	src/font.cpp	/^void text::renderFonts()$/;"	f	class:text
@@ -995,8 +997,6 @@ resizepolicy	src/widget.h	/^                const ResizePolicy resizepolicy;$/;"
 resizepolicy	src/widget.h	/^            const ResizePolicy resizepolicy;$/;"	m	struct:gui::Widget
 resolution	fontloader/ttf.cpp	/^glm::uvec2 TTF::resolution = glm::uvec2( 1920, 1080 );$/;"	m	class:TTF	file:
 resolution	fontloader/ttf.h	/^		static glm::uvec2 resolution;$/;"	m	class:TTF
-resolution	src/font.cpp	/^glm::uvec2 text::Font::resolution = glm::uvec2( 1920, 1080 );$/;"	m	class:text::Font	file:
-resolution	src/font.h	/^		static glm::uvec2 resolution;$/;"	m	struct:text::Font
 resolution	src/viewport.h	/^        float resolution;$/;"	m	struct:gl::Viewport
 revalidateMeshNodeOffsets	src/mesh.cpp	/^void mesh::revalidateMeshNodeOffsets()$/;"	f	class:mesh
 revalidateModelMeshOffsets	src/model.cpp	/^void model::revalidateModelMeshOffsets()$/;"	f	class:model
@@ -1020,6 +1020,7 @@ scroll_Callback	src/mouse.cpp	/^void input::scroll_Callback( GLFWwindow * window
 sensitivity	src/camera.h	/^		float sensitivity;$/;"	m	struct:camera::LookPolicy
 sequencer	src/sequencer.h	/^namespace sequencer {$/;"	n
 set	src/event.h	/^		void set() {$/;"	f	class:events::EventSlot
+setChars	src/text.cpp	/^void text::Text::setChars( const std::string& pStr )$/;"	f	class:text::Text
 setFont	src/text.cpp	/^void text::Text::setFont( FontID pFontID )$/;"	f	class:text::Text
 setLightColor	src/lights.cpp	/^void lights::setLightColor( unsigned int pLightIndex, glm::vec3& pColor ) $/;"	f	class:lights
 setLightColor	src/lights.cpp	/^void lights::setLightColor( unsigned int pLightIndex, glm::vec4& pColor )$/;"	f	class:lights
@@ -1048,8 +1049,8 @@ setSize	src/contextwindow.cpp	/^void app::Window::setSize( unsigned int pWidth, 
 setSpeed	src/camera.cpp	/^void camera::Camera::setSpeed( float pNewSpeed )$/;"	f	class:camera::Camera
 setSpeed	src/camera.cpp	/^void camera::setSpeed( Camera & pCam, float pSpeed )$/;"	f	class:camera
 setTarget	src/storage.h	/^            void setTarget( unsigned int pTarget )$/;"	f	struct:gl::Storage
-setTargetResolution	src/font.cpp	/^void Font::setTargetResolution( const glm::uvec2 pRes )$/;"	f	class:Font
-setTargetResolution	src/font.cpp	/^void Font::setTargetResolution( const unsigned int rx, const unsigned int ry )$/;"	f	class:Font
+setTargetResolution	src/font.cpp	/^void text::setTargetResolution( const glm::uvec2 pRes )$/;"	f	class:text
+setTargetResolution	src/font.cpp	/^void text::setTargetResolution( const unsigned int rx, const unsigned int ry )$/;"	f	class:text
 setTextureDirectory	src/texture.cpp	/^void texture::setTextureDirectory( std::string& pDirectory )$/;"	f	class:texture
 setTextureFilter	src/texture.cpp	/^void texture::setTextureFilter( Texture2D& pTexture, unsigned int pMagFilter, unsigned int pMinFilter )$/;"	f	class:texture
 setTextureWrapping	src/texture.cpp	/^void texture::setTextureWrapping( Texture2D& pTexture, unsigned int pWrapS, unsigned int pWrapT )$/;"	f	class:texture
@@ -1134,6 +1135,8 @@ switch_gate	src/gates.h	/^        switch_gate( On pOnSource, Off pOffSource, boo
 switch_gate	src/gates.h	/^        switch_gate() $/;"	f	struct:gates::switch_gate
 switch_gate	src/gates.h	/^    struct switch_gate $/;"	s	namespace:gates
 synapses	src/neural.h	/^		std::vector<std::vector<Synapse>> synapses;$/;"	m	struct:neural::Circuit
+tab	src/text.cpp	/^void text::Text::tab()$/;"	f	class:text::Text
+tabsize	src/text.cpp	/^unsigned int text::tabsize = 4;$/;"	m	class:text	file:
 target	src/storage.h	/^            unsigned int target;$/;"	m	struct:gl::Storage
 targetBindingCounts	src/storage.cpp	/^std::unordered_map<unsigned int, unsigned int> targetBindingCounts;$/;"	v
 text	src/font.h	/^namespace text $/;"	n
@@ -1189,8 +1192,8 @@ updateQuadBuffer	src/quad.cpp	/^void gui::updateQuadBuffer()$/;"	f	class:gui
 updateTexts	src/text.cpp	/^void text::updateTexts()$/;"	f	class:text
 updateTime	src/app.cpp	/^void app::updateTime()$/;"	f	class:app
 updateTimeFactor	src/app.cpp	/^void app::updateTimeFactor() $/;"	f	class:app
-uploadChars	src/font.cpp	/^void Font::uploadChars() const$/;"	f	class:Font
-uploadPositions	src/font.cpp	/^void Font::uploadPositions() const$/;"	f	class:Font
+uploadChars	src/font.cpp	/^void text::Font::uploadChars() const$/;"	f	class:text::Font
+uploadPositions	src/font.cpp	/^void text::Font::uploadPositions() const$/;"	f	class:text::Font
 uploadStorage	src/storage.h	/^    void uploadStorage( const StreamStorage<T>& pStorage, const unsigned int pByteSize, const void* pData )$/;"	f	namespace:gl
 upward_factor	src/camera.h	/^		float upward_factor;$/;"	m	struct:camera::MovementPolicy
 upward_off	src/camera.h	/^		size_t upward_off;$/;"	m	struct:camera::MovementPolicy
