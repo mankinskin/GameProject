@@ -17,6 +17,7 @@ namespace text
 			}
 			void setChars( const std::string& str );
 			void writeChars();
+            void writeWord( unsigned int start, unsigned int length );
 			void setFont( FontID );
             size_t lineCount()
             {
@@ -38,4 +39,8 @@ namespace text
 
 	void updateTexts();
 
+    struct Printer
+    {
+
+    };
 }

@@ -23,6 +23,16 @@ void text::Text::tab()
     }
 }
 
+void text::Text::writeWord( unsigned int start, unsigned int length )
+{
+    for ( unsigned int ci = 0; ci < length; ++ci ) {
+        const unsigned char& c = str[ci];
+		const Font::Metric& met = font->metrics[ c ];
+        font->chars.push_back( c );
+        font->positions.push_back( position + glm::vec2( cursor, -1.0f * font->linegap * line ) + met.bearing );
+    }
+}
+
 void text::Text::writeChars()
 {
     // TODO: consider a printer class for values like this
@@ -34,8 +44,6 @@ void text::Text::writeChars()
 	font->positions.reserve( bufferBegin + str.size() );
 
     size_t wordLength = 0;
-    size_t charCount = 0;
-    std::vector<unsigned int> lineLengths( lineCount() );	
 
 	for ( unsigned int ci = 0; ci < str.size(); ++ci ) {
 		const unsigned char& c = str[ci];
@@ -45,33 +53,29 @@ void text::Text::writeChars()
         // - process whitespaces for word wrapping
         // - pushback printable characters to printing queue
         if ( c == ' ' ) {
-            lineLengths[line] += wordLength;
+            writeWord( ci - wordLength, wordLength );
             wordLength = 0; 
         }
         else if ( c == '\t' ) {
-            lineLengths[line] += wordLength;
+            writeWord( ci - wordLength, wordLength );
             wordLength = 0; 
             tab();
         } 
         else if ( c == '\n' ) {
-            lineLengths[line] += wordLength;
+            writeWord( ci - wordLength, wordLength );
             wordLength = 0; 
 			lineBreak();			
-			continue;
+            continue;
 		} else {
-            font->chars.push_back( c );
-            font->positions.push_back( position + glm::vec2( cursor, -1.0f * font->linegap * line ) + met.bearing );
-            ++charCount;
+            ++wordLength;
+		    cursor += met.advance;
         }
 
         // advance appropriately 
         if ( cursor + met.advance > size.x ) {
             // automatic linebreak due to advance out of bounds
 			lineBreak();			
-		} else {
-            ++wordLength;
-		    cursor += met.advance;
-        }
+		} 
 	}
 
     font->chars.shrink_to_fit();
