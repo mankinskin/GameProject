@@ -73,8 +73,8 @@ void text::FontFile::readFace( std::string pFilepath )
 	glm::uvec2 cursor = glm::uvec2( 0, 0 );
 
 	// precalculate glyph quads
-	FT_Int32 load_mode = FT_LOAD_RENDER; 
-	FT_Render_Mode_ render_mode = FT_RENDER_MODE_NORMAL; 
+	FT_Int32 load_mode = FT_LOAD_TARGET_MONO; 
+	FT_Render_Mode_ render_mode = FT_RENDER_MODE_MONO; 
 
 	for ( unsigned int gi = 0; gi < glyphs.count; ++gi ) {
 		FT_Load_Char( face, gi, load_mode );
@@ -133,8 +133,9 @@ void text::FontFile::readFace( std::string pFilepath )
 				for ( unsigned int byte = 0; byte < bitmap.pitch; ++byte ) {
 					const unsigned char& bitmap_byte = bitmap.buffer[ row * bitmap.pitch + byte ]; 
 					for ( unsigned int bit = 0; bit < 8; ++bit ) {
+                        // take each bit from the glyph bitmap and map it onto a byte in the atlas
 						atlas.pixels[ ( quad.y + row ) * atlas.width + quad.x + byte * 8 + bit ] = 
-							(unsigned char)( ( bitmap_byte << bit ) & 10000000 ); 
+							(unsigned char)( ( bitmap_byte >> 7 - bit ) & 1 ) * 255; 
 					}
 				}
 			}

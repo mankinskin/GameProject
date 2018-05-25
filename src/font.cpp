@@ -31,8 +31,9 @@ void text::loadFonts()
 	FontFile terminusfont;
 	terminusfont.setLoadPadding( 1 );
 	terminusfont.setLoadDpi( app::windowMonitor->dpi );
-	terminusfont.setLoadSize( 16 );
+	terminusfont.setLoadSize( 12 );
 	terminusfont.read( "Terminus.ttf" );
+    terminusfont.atlas.write("atlas.png");
 
 	FontFile liberationfont;
 	liberationfont.setLoadPadding( 1 );
@@ -49,8 +50,7 @@ text::Font::Font( const FontFile& fontfile )
 	name = fontfile.name;
 	atlasTexture = texture::Texture2D( fontfile.atlas );
 	texture::setTextureWrapping( atlasTexture, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE );
-	texture::setTextureFilter( atlasTexture, GL_NEAREST, GL_NEAREST_MIPMAP_NEAREST );
-	texture::generateMipMap( atlasTexture );
+	texture::setTextureFilter( atlasTexture, GL_NEAREST, GL_NEAREST );
 
 	std::vector<glm::vec4> glyphuvs( fontfile.glyphs.quads.size() );
 	for ( unsigned int g = 0; g < fontfile.glyphs.quads.size(); ++g ) {
