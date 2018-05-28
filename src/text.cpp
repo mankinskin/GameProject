@@ -85,6 +85,9 @@ void text::Text::writeChars()
 		} 
 
 	}
+    if ( wordChars ) {
+        writeWord( str.size() - wordChars, wordChars );
+    }
 
     font->chars.shrink_to_fit();
 	font->positions.shrink_to_fit();

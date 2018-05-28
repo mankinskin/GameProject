@@ -178,10 +178,7 @@ void sequencer::gameloop()
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
 	text::TextID term_box( text::Text( glm::vec2( -0.5f, 0.0f ), glm::vec2( 0.5f, 1.0f ) ) );
-	text::TextID lib_box( text::Text( glm::vec2( 0.1f, 0.0f ), glm::vec2( 0.5f, 1.0f ) ) );
-	lib_box->setFont( 1 );
-	term_box->setChars( "\n\nHey, first line of Terminus.\n\tNewline and Tab! And now a few words which should eventually be wrapped because they make the line too long.\nAndnowareallyreallylongwordthatshouldbreakjustbecausethereisnothingelsetodoandthisshouldshowhowlongalinecanbebutmaybeishouldjustmaketheboundingboxlesswidehowboutthat." );
-	lib_box->setChars( "This is liberation.\nAnd it should also get an awesome text some day. But until then liberation is just going to be a sidekick and I am not even going to capitalize it because honestly I dont think it is any good for my game. So fuck it. I just use it to test for smooth fonts." );
+	term_box->setChars( "1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item" );
 	text::updateTexts();
     while ( app::state == app::Running ) 
     {
