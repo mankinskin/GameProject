@@ -18,18 +18,16 @@ void text::Text::lineBreak()
 void text::Text::tab()
 {
     cursor += font->metrics[' '].advance * tabsize; 
-    if ( cursor > size.x ) {
-        lineBreak();
-    }
 }
 
 void text::Text::writeWord( unsigned int start, unsigned int length )
 {
     for ( unsigned int ci = 0; ci < length; ++ci ) {
-        const unsigned char& c = str[ci];
+        const unsigned char& c = str[start + ci];
 		const Font::Metric& met = font->metrics[ c ];
         font->chars.push_back( c );
         font->positions.push_back( position + glm::vec2( cursor, -1.0f * font->linegap * line ) + met.bearing );
+        cursor += met.advance;
     }
 }
 
@@ -43,39 +41,49 @@ void text::Text::writeChars()
 	font->chars.reserve( bufferBegin + str.size() );
 	font->positions.reserve( bufferBegin + str.size() );
 
-    size_t wordLength = 0;
+    size_t wordChars = 0;
+    float wordLength = 0.0f;
 
 	for ( unsigned int ci = 0; ci < str.size(); ++ci ) {
 		const unsigned char& c = str[ci];
 		const Font::Metric& met = font->metrics[ c ];
-        // first determine an action to take based on the character
-        // - process newline and tab characters
-        // - process whitespaces for word wrapping
-        // - pushback printable characters to printing queue
-        if ( c == ' ' ) {
-            writeWord( ci - wordLength, wordLength );
-            wordLength = 0; 
+
+        // Word wrapping
+        // for every printable char, increase the word size
+        // when encountering a whitespace, push the word to 
+        // the buffer and start a new word
+		if ( c != ' ' && c != '\t' && c != '\n' ) {
+            ++wordChars;
+		    wordLength += met.advance;
+        } 
+        else if ( c == ' ' ) {
+            writeWord( ci - wordChars, wordChars );
+            wordChars = 0; 
+            wordLength = 0.0f; 
+		    cursor += met.advance;
         }
         else if ( c == '\t' ) {
-            writeWord( ci - wordLength, wordLength );
-            wordLength = 0; 
+            writeWord( ci - wordChars, wordChars );
+            wordChars = 0; 
+            wordLength = 0.0f; 
             tab();
         } 
         else if ( c == '\n' ) {
-            writeWord( ci - wordLength, wordLength );
-            wordLength = 0; 
+            writeWord( ci - wordChars, wordChars );
+            wordChars = 0; 
+            wordLength = 0.0f; 
 			lineBreak();			
             continue;
-		} else {
-            ++wordLength;
-		    cursor += met.advance;
         }
-
-        // advance appropriately 
-        if ( cursor + met.advance > size.x ) {
-            // automatic linebreak due to advance out of bounds
+        if ( cursor + wordLength > size.x ) {
+            if ( wordLength > size.x ) {
+                writeWord( ci - (wordChars - 1), wordChars - 1 );
+                wordChars = 1; 
+                wordLength = met.advance; 
+            }
 			lineBreak();			
 		} 
+
 	}
 
     font->chars.shrink_to_fit();
