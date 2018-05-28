@@ -15,11 +15,6 @@ void text::Text::lineBreak()
 	++line;
 }
 
-void text::Text::tab()
-{
-    cursor += font->metrics[' '].advance * tabsize; 
-}
-
 void text::Text::writeWord( unsigned int start, unsigned int length )
 {
     for ( unsigned int ci = 0; ci < length; ++ci ) {
@@ -66,7 +61,7 @@ void text::Text::writeChars()
             writeWord( ci - wordChars, wordChars );
             wordChars = 0; 
             wordLength = 0.0f; 
-            tab();
+            cursor += font->metrics[' '].advance * tabsize; 
         } 
         else if ( c == '\n' ) {
             writeWord( ci - wordChars, wordChars );

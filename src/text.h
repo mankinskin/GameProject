@@ -26,7 +26,6 @@ namespace text
 		private:
             void writeChar( const unsigned char& c, glm::vec2 pos );
 			void lineBreak();
-			void tab();
 			float cursor; // relative to pos
             size_t line;
 			std::string str;
