@@ -8,8 +8,8 @@
 #include <typeinfo>
 #include <gtc/type_ptr.hpp>
 
-namespace shader {
-
+namespace shader 
+{
     unsigned int createModule( std::string pFileName );
     unsigned int createProgram( std::string pProgramName );
     unsigned int newProgram( std::string pProgramName, unsigned int pVertexModuleIndex, unsigned int pFragmentModuleIndex );

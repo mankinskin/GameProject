@@ -86,7 +86,7 @@ void compileModuleSource( shader::Module& module )
 void shader::Loader::compileModule( unsigned int pModuleIndex )
 {
 	Module& mod = allModules[pModuleIndex];
-	printf( "Compiling Shader Module %s\n", mod.fileName.c_str() );
+	printf( "Shaderfile: Compiling %s\n", mod.fileName.c_str() );
     std::string moduleStageType = extractStageString( mod.fileName ); 
     if( setModuleType( mod, moduleStageType ) ){
         return;
@@ -98,33 +98,37 @@ void shader::Loader::compileModule( unsigned int pModuleIndex )
 void shader::Loader::linkProgram( unsigned int pProgramIndex )
 {
 	Program& program = allPrograms[pProgramIndex];
-	printf( "Linking Shader %s\n", program.name.c_str() );
-	if ( program.type == ProgramType::Compute ) {
-		program.stages[0] = allModules[program.stages[0]].ID;
-		glAttachShader( program.ID, program.stages[0] );
-	}
-	else
-	{
-		for ( unsigned int i = 0; i < program.shaderCount; ++i ) {
-			program.stages[i] = allModules[program.stages[i]].ID;
-			glAttachShader( ( GLuint )program.ID, ( GLuint )program.stages[i] );
+	printf( "Shaderfile: Linking %s\n", program.name.c_str() );
+	if( program.shaderCount ) {
+		if ( program.type == ProgramType::Compute ) {
+			program.stages[0] = allModules[program.stages[0]].ID;
+			glAttachShader( program.ID, program.stages[0] );
+		} 
+		else {
+			for ( unsigned int i = 0; i < program.shaderCount; ++i ) {
+				program.stages[i] = allModules[program.stages[i]].ID;
+				glAttachShader( ( GLuint )program.ID, ( GLuint )program.stages[i] );
+			}
 		}
-	}
-	glLinkProgram( program.ID );
-	GLint success = 0;
-	glGetProgramiv( program.ID, GL_LINK_STATUS, &success );
+		glLinkProgram( program.ID );
+		GLint success = 0;
+		glGetProgramiv( program.ID, GL_LINK_STATUS, &success );
 
-	if ( success == GL_FALSE ) {
-		GLint maxLength = 0;
-		glGetProgramiv( program.ID, GL_INFO_LOG_LENGTH, &maxLength );
-		std::vector<char> errorLog( maxLength );
-		glGetProgramInfoLog( program.ID, maxLength, &maxLength, &errorLog[0] );
-		glDeleteProgram( program.ID );
-		debug::pushError( "!!!/nError when linking program: " + program.name + " /nopenGL Error Log: " + &( errorLog[0] ), debug::Error::Fatal );
-	}
+		if ( success == GL_FALSE ) {
+			GLint maxLength = 0;
+			glGetProgramiv( program.ID, GL_INFO_LOG_LENGTH, &maxLength );
+			std::vector<char> errorLog( maxLength );
+			glGetProgramInfoLog( program.ID, maxLength, &maxLength, &errorLog[0] );
+			glDeleteProgram( program.ID );
+			debug::pushError( "!!!/nError when linking program: " + program.name + " /nopenGL Error Log: " + &( errorLog[0] ), debug::Error::Fatal );
+		}
 
-	for ( unsigned int i = 0; i < program.shaderCount; ++i ) {
-		glDetachShader( program.ID, program.stages[i] );
+		for ( unsigned int i = 0; i < program.shaderCount; ++i ) {
+			glDetachShader( program.ID, program.stages[i] );
+		}
+	} 
+	else {
+		puts( "Shaderfile: Error: Unable to link program: Program contains no shaders." );
 	}
 }
 

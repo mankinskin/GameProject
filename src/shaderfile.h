@@ -3,21 +3,25 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-namespace shader {
-	enum class ModuleType {
+namespace shader 
+{
+	enum class ModuleType 
+	{
 		Vertex,
 		Fragment,
 		Geometry,
 		Compute
 	};
 
-	enum class ProgramType {
+	enum class ProgramType 
+	{
 		Basic,
 		Geometry,
 		Compute
 	};
 
-	struct Program {
+	struct Program 
+	{
 		GLuint ID;
 		std::string name;
 		ProgramType type;
@@ -25,8 +29,14 @@ namespace shader {
 		unsigned int shaderCount;
 	};
 
-	struct Module {
-		Module( std::string& pFileName ) :fileName( pFileName ), content( "" ), ID( 0 ), type( ModuleType::Vertex ) {}
+	struct Module 
+	{
+		Module( std::string& pFileName ) 
+			: fileName( pFileName )
+			, content( "" )
+			, ID( 0 )
+			, type( ModuleType::Vertex ) 
+		{}
 		std::string content;
 		std::string fileName;
 		GLuint ID;
@@ -38,7 +48,8 @@ namespace shader {
 	extern std::vector<Module> allModules;
 	extern std::unordered_map<std::string, unsigned int> moduleLookup;
 
-	namespace Loader {
+	namespace Loader 
+	{
 		extern std::string SHADER_DIR;
 
 		void buildShaderPrograms();

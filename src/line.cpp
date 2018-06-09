@@ -104,7 +104,6 @@ void gui::renderLines()
 
 void gui::initLineShader() 
 {
-    puts( "Creating lineShader..." );
     lineShader = shader::newProgram( "lineShader", 
             shader::createModule( "lineShader.vert" ), 
             shader::createModule( "lineShader.frag" ) );
@@ -113,7 +112,6 @@ void gui::initLineShader()
 
 void gui::setupLineShader() 
 {
-    puts( "Binding lineShader..." );
     shader::bindUniformBufferToShader( lineShader, gl::generalUniformBuffer, "GeneralUniformBuffer" );
     shader::bindUniformBufferToShader( lineShader, gl::colorBuffer, "ColorBuffer" );
     shader::bindUniformBufferToShader( lineShader, lineVertexPositionBuffer, "PosBuffer" );
