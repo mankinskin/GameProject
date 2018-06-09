@@ -33,7 +33,6 @@ void text::loadFonts()
 	terminusfont.setLoadDpi( app::windowMonitor->dpi );
 	terminusfont.setLoadSize( 12 );
 	terminusfont.read( "Terminus.ttf" );
-    terminusfont.atlas.write("atlas.png");
 
 	FontFile liberationfont;
 	liberationfont.setLoadPadding( 1 );
