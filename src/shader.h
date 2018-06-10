@@ -1,10 +1,10 @@
 #pragma once
 #include "gl.h"
+#include "storage.h"
 #include <GL/glew.h>
 #include <string>
 #include <unordered_map>
 #include <glm.hpp>
-#include "storage.h"
 #include <typeinfo>
 #include <gtc/type_ptr.hpp>
 
@@ -54,16 +54,21 @@ namespace shader
 	extern std::vector<Shader> allShaders;
 	extern std::unordered_map<std::string, unsigned int> shaderLookup;
 
-    unsigned int createShader( std::string pFileName );
-    unsigned int createProgram( std::string pProgramName );
-    unsigned int newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex );
-    unsigned int newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex, unsigned int pGeometryShaderIndex );
-    unsigned int newProgram( std::string pProgramName, unsigned int pComputeShaderIndex );
-    void use( std::string pProgramName );
-    void use( unsigned int pID );
-    void unuse();
-    void addVertexAttribute( unsigned int pProgram, std::string pAttributeName, unsigned int pAttributeIndex );
-    void addVertexAttribute( std::string pProgramName, std::string pAttributeName, unsigned int pAttributeIndex );
+	void buildShaderPrograms();
+
+	void compileShader( unsigned int pShaderIndex );
+	void linkProgram( unsigned int pProgramID );
+	void compileAndLink();
+	unsigned int createShader( std::string pFileName );
+	unsigned int createProgram( std::string pProgramName );
+	unsigned int newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex );
+	unsigned int newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex, unsigned int pGeometryShaderIndex );
+	unsigned int newProgram( std::string pProgramName, unsigned int pComputeShaderIndex );
+	void use( std::string pProgramName );
+	void use( unsigned int pID );
+	void unuse();
+	void addVertexAttribute( unsigned int pProgram, std::string pAttributeName, unsigned int pAttributeIndex );
+	void addVertexAttribute( std::string pProgramName, std::string pAttributeName, unsigned int pAttributeIndex );
 
 	template<typename T>
 		void bindUniformBufferToShader( unsigned int pProgram, const gl::Storage<T>& pStorage, std::string pBlockName )
