@@ -33,23 +33,23 @@ std::string extractStageString( std::string filename )
 	return filename.substr( begin, end );
 }
 
-int setModuleType( shader::Module& module, std::string stagetype )
+int setShaderType( shader::Shader& module, std::string stagetype )
 {
 	if ( stagetype ==  "vert" ) {
 		module.ID = glCreateShader( GL_VERTEX_SHADER );
-		module.type = shader::ModuleType::Vertex;
+		module.type = shader::ShaderType::Vertex;
 	}
 	else if ( stagetype ==  "geo" ) {
 		module.ID = glCreateShader( GL_GEOMETRY_SHADER );
-		module.type = shader::ModuleType::Geometry;
+		module.type = shader::ShaderType::Geometry;
 	}
 	else if ( stagetype ==  "frag" ) {
 		module.ID = glCreateShader( GL_FRAGMENT_SHADER );
-		module.type = shader::ModuleType::Fragment;
+		module.type = shader::ShaderType::Fragment;
 	}
 	else if ( stagetype ==  "comp" ) {
 		module.ID = glCreateShader( GL_COMPUTE_SHADER );
-		module.type = shader::ModuleType::Compute;
+		module.type = shader::ShaderType::Compute;
 	}
 	else {
 		debug::pushError( "\nShader::loadShader(): invalid shader file name " + module.fileName + "!\nHas to include '.vert', '.frag', '.geo' or '.comp'! Got: " + stagetype, debug::Error::Fatal );
@@ -57,7 +57,7 @@ int setModuleType( shader::Module& module, std::string stagetype )
 	}
     return 0;
 }
-void compileModuleSource( shader::Module& module )
+void compileShaderSource( shader::Shader& module )
 {
     using namespace shader::Loader;
 	std::ifstream moduleFile;
@@ -83,16 +83,16 @@ void compileModuleSource( shader::Module& module )
 		return;
 	}
 }
-void shader::Loader::compileModule( unsigned int pModuleIndex )
+void shader::Loader::compileShader( unsigned int pShaderIndex )
 {
-	Module& mod = allModules[pModuleIndex];
+	Shader& mod = allShaders[pShaderIndex];
 	printf( "Shaderfile: Compiling %s\n", mod.fileName.c_str() );
     std::string moduleStageType = extractStageString( mod.fileName ); 
-    if( setModuleType( mod, moduleStageType ) ){
+    if( setShaderType( mod, moduleStageType ) ){
         return;
     }   
-    compileModuleSource( mod );
-	allModules[pModuleIndex] = mod;
+    compileShaderSource( mod );
+	allShaders[pShaderIndex] = mod;
 }
 
 void shader::Loader::linkProgram( unsigned int pProgramIndex )
@@ -101,12 +101,12 @@ void shader::Loader::linkProgram( unsigned int pProgramIndex )
 	printf( "Shaderfile: Linking %s\n", program.name.c_str() );
 	if( program.shaderCount ) {
 		if ( program.type == ProgramType::Compute ) {
-			program.stages[0] = allModules[program.stages[0]].ID;
+			program.stages[0] = allShaders[program.stages[0]].ID;
 			glAttachShader( program.ID, program.stages[0] );
 		} 
 		else {
 			for ( unsigned int i = 0; i < program.shaderCount; ++i ) {
-				program.stages[i] = allModules[program.stages[i]].ID;
+				program.stages[i] = allShaders[program.stages[i]].ID;
 				glAttachShader( ( GLuint )program.ID, ( GLuint )program.stages[i] );
 			}
 		}
@@ -134,8 +134,8 @@ void shader::Loader::linkProgram( unsigned int pProgramIndex )
 
 void shader::Loader::compileAndLink()
 {
-	for ( unsigned int s = 0; s < allModules.size(); ++s ) {
-		compileModule( s );
+	for ( unsigned int s = 0; s < allShaders.size(); ++s ) {
+		compileShader( s );
 	}
 	for ( unsigned int p = 0; p < allPrograms.size(); ++p ) {
 		linkProgram( p );

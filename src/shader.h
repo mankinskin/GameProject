@@ -10,11 +10,55 @@
 
 namespace shader 
 {
-    unsigned int createModule( std::string pFileName );
+	enum class ShaderType 
+	{
+		Invalid,
+		Vertex,
+		Fragment,
+		Geometry,
+		Compute
+	};
+
+	enum class ProgramType 
+	{
+		Invalid,
+		Basic,
+		Geometry,
+		Compute
+	};
+
+	struct Program 
+	{
+		GLuint ID;
+		std::string name;
+		ProgramType type;
+		unsigned int stages[4];
+		unsigned int shaderCount;
+	};
+
+	struct Shader 
+	{
+		Shader( std::string& pFileName ) 
+			, content( "" )
+			, ID( 0 )
+			, type( ShaderType::Vertex ) 
+		{}
+		std::string content;
+		std::string fileName;
+		GLuint ID;
+		ShaderType type;
+	};
+	
+	extern std::vector<Program> allPrograms;
+	extern std::unordered_map<std::string, unsigned int> programLookup;
+	extern std::vector<Shader> allShaders;
+	extern std::unordered_map<std::string, unsigned int> shaderLookup;
+
+    unsigned int createShader( std::string pFileName );
     unsigned int createProgram( std::string pProgramName );
-    unsigned int newProgram( std::string pProgramName, unsigned int pVertexModuleIndex, unsigned int pFragmentModuleIndex );
-    unsigned int newProgram( std::string pProgramName, unsigned int pVertexModuleIndex, unsigned int pFragmentModuleIndex, unsigned int pGeometryModuleIndex );
-    unsigned int newProgram( std::string pProgramName, unsigned int pComputeModuleIndex );
+    unsigned int newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex );
+    unsigned int newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex, unsigned int pGeometryShaderIndex );
+    unsigned int newProgram( std::string pProgramName, unsigned int pComputeShaderIndex );
     void use( std::string pProgramName );
     void use( unsigned int pID );
     void unuse();

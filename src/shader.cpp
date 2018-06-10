@@ -18,16 +18,16 @@
 unsigned int shader::currentShaderProgram;
 
 std::vector<shader::Program> shader::allPrograms;
-std::unordered_map<std::string, unsigned int> shader::shaderProgramLookup;
-std::vector<shader::Module> shader::allModules;
-std::unordered_map<std::string, unsigned int> shader::moduleLookup;
+std::unordered_map<std::string, unsigned int> shader::programLookup;
+std::vector<shader::Shader> shader::allShaders;
+std::unordered_map<std::string, unsigned int> shader::shaderLookup;
 
 
-unsigned int shader::createModule( std::string pFileName )
+unsigned int shader::createShader( std::string pFileName )
 {
-    unsigned int index = allModules.size();
-    moduleLookup.insert( std::pair<std::string, unsigned int>( pFileName, index ) );
-    allModules.push_back( Module( pFileName ) );
+    unsigned int index = allShaders.size();
+    shaderLookup.insert( std::pair<std::string, unsigned int>( pFileName, index ) );
+    allShaders.push_back( Shader( pFileName ) );
     return index;
 }
 
@@ -66,7 +66,7 @@ unsigned int shader::createProgram( std::string pProgramName )
     Program program;
     program.ID = glCreateProgram();
     program.name = pProgramName;
-    shaderProgramLookup.insert( std::pair<std::string, unsigned int>( pProgramName, program.ID ) );
+    programLookup.insert( std::pair<std::string, unsigned int>( pProgramName, program.ID ) );
     allPrograms.push_back( program );
     return allPrograms.size() - 1;
 }
@@ -79,7 +79,7 @@ void shader::use( unsigned int pID )
 
 void shader::use( std::string pProgramName )
 {
-    use( shaderProgramLookup.find( pProgramName )->second );
+    use( programLookup.find( pProgramName )->second );
 }
 
 void shader::unuse()
@@ -96,8 +96,8 @@ void shader::addVertexAttribute( unsigned int pProgramID, std::string pAttribute
 
 void shader::addVertexAttribute( std::string pProgramName, std::string pAttributeName, unsigned int pAttributeIndex )
 {
-    auto it = shaderProgramLookup.find( pProgramName.c_str() );
-    if ( it == shaderProgramLookup.end() ) {
+    auto it = programLookup.find( pProgramName.c_str() );
+    if ( it == programLookup.end() ) {
         debug::pushError( "addVertexAttribute():/nCould not find shader Program " + pProgramName + "!/n" );
         return;
     }
