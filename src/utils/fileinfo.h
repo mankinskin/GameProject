@@ -6,6 +6,11 @@ namespace path
 {
 	class Fileinfo
 	{
+		Fileinfo()
+		{}
+		Fileinfo( std::string pPath )
+			:path( pPath )
+		{}
 		std::string path;
 
 		bool isAbsolute() const
