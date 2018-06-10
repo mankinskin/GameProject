@@ -40,7 +40,7 @@ void text::FontFile::setLoadDpi( unsigned int ptx, unsigned int pty )
 void text::FontFile::read( std::string pFilename )
 {
 	std::string filepath = FONT_DIR + pFilename; 
-	std::string extension = getExtension( pFilename );
+	std::string extension = path::getExtension( pFilename );
 	name = pFilename;
 	if ( extension == "font" ) {
 		readFontfile( filepath );
