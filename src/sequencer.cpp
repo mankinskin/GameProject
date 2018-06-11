@@ -10,7 +10,6 @@
 #include "color.h"
 #include "camera.h"
 #include "framebuffer.h"
-#include "shaderfile.h"
 #include "shader.h"
 #include "gui.h"
 #include "line.h"
@@ -34,7 +33,7 @@ void sequencer::includeShaders()
     gui::initLineShader();
     gui::initColorQuadShader();
     gui::initQuadIndexShader();
-	text::initFontShader();
+    text::initFontShader();
     //mesh::initMeshShader();
     //mesh::initBlendMeshShader();
     //mesh::initMeshNormalShader();
@@ -45,57 +44,56 @@ void sequencer::includeShaders()
 
 void sequencer::buildShaders()
 {
-	puts( "Building Shaders..." );
-    shader::Loader::buildShaderPrograms();
-	gui::setupLineShader();
-	gui::setupColorQuadShader();
-	gui::setupQuadIndexShader();
-	text::setupFontShader();
-	//mesh::setupMeshShader();
-	//lights::setupLightShader();
-	//mesh::setupBlendMeshShader();
-	//mesh::setupMeshNormalShader();
-	//voxelization::setupShader();
+    puts( "Building Shaders..." );
+    gui::setupLineShader();
+    gui::setupColorQuadShader();
+    gui::setupQuadIndexShader();
+    text::setupFontShader();
+    //mesh::setupMeshShader();
+    //lights::setupLightShader();
+    //mesh::setupBlendMeshShader();
+    //mesh::setupMeshNormalShader();
+    //voxelization::setupShader();
 }
 
 void sequencer::initializeVAOs()
 {
-	puts( "Primitives..." );
+    puts( "Primitives..." );
     gl::initPrimitives();
 
-	puts( "General Uniform Buffer..." );
+    puts( "General Uniform Buffer..." );
     gl::initGeneralUniformBuffer();
 
-	puts( "Lines..." );
-	gui::initLineVAO();
+    puts( "Lines..." );
+    gui::initLineVAO();
 
-	puts( "Fonts..." );
-	text::initFontVAO();
+    puts( "Fonts..." );
+    text::initFontVAO();
 
     gui::initQuadBuffer();
 
-    gui::initColorQuadVAO();	
+    gui::initColorQuadVAO();
 
     gui::initQuadIndexBuffer();
 }
 
 void sequencer::initModules()
 {
-	puts( "Framebuffers..." );
-	texture::initFramebuffers();
+    puts( "Framebuffers..." );
+    texture::initFramebuffers();
 
     puts( "Colors..." );
     gl::initColors();
 
-	puts( "Input..." );
+    puts( "Input..." );
     input::init();
 
-	puts( "Camera..." );
-	camera::main_camera.init();
+    puts( "Camera..." );
+    camera::main_camera.init();
 
     input::setupControls();
 
-	puts( "Debug Geometry..." );
+    puts( "Debug Geometry..." );
     glDebug::createDebugGeometry();
 
     puts( "GUI..." );
@@ -105,7 +103,7 @@ void sequencer::initModules()
     gui::initWidgets();
 
     puts( "Text..." );
-	text::loadFonts();
+    text::loadFonts();
 }
 
 void sequencer::fetchInput()
@@ -149,7 +147,7 @@ void sequencer::frame()
 
     gui::updateLinePositions();
     gui::updateLineColors();
-	text::updateFonts();
+    text::updateFonts();
 
     glBindFramebuffer( GL_FRAMEBUFFER, texture::guiFBO );
     gui::rasterQuadIndices();
@@ -158,7 +156,7 @@ void sequencer::frame()
 
     gui::renderLines();
     gui::renderColorQuads();
-	text::renderFonts();
+    text::renderFonts();
 
     glfwSwapBuffers(app::mainWindow.window );
 
@@ -172,14 +170,14 @@ void sequencer::frame()
     debug::printErrors();
 }
 void sequencer::gameloop()
-{	
+{
     puts( "Entering gameloop" );
 
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
-	text::TextID term_box( text::Text( glm::vec2( -0.5f, 0.0f ), glm::vec2( 0.5f, 1.0f ) ) );
-	term_box->setChars( "1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item" );
-	text::updateTexts();
+    text::TextID term_box( text::Text( glm::vec2( -0.5f, 0.0f ), glm::vec2( 0.5f, 1.0f ) ) );
+    term_box->setChars( "1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item" );
+    text::updateTexts();
     while ( app::state == app::Running ) 
     {
         frame();
@@ -188,3 +186,4 @@ void sequencer::gameloop()
     functors::clearFunctors();
     signals::clearSignals();
 }
+

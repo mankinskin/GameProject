@@ -1,6 +1,7 @@
 #pragma once
 #include "storage.h"
 #include "vao.h"
+#include "shader.h"
 
 namespace gui 
 {
@@ -15,7 +16,7 @@ namespace gui
     float readQuadDepthMap( const unsigned int pPos );
     float readQuadDepthMap( const unsigned int pXPos, const unsigned int pYPos );
 
-    extern unsigned int quadIndexShader;
+    extern shader::Program quadIndexShader;
     extern gl::VAO quadIndexVAO;
-	extern gl::StreamStorage<unsigned int> quadIndexBuffer;
+    extern gl::StreamStorage<unsigned int> quadIndexBuffer;
 }

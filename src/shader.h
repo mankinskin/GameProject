@@ -7,91 +7,101 @@
 #include <glm.hpp>
 #include <typeinfo>
 #include <gtc/type_ptr.hpp>
+#include <array>
 
 namespace shader 
 {
-	enum class ShaderType 
-	{
-		Invalid,
-		Vertex,
-		Fragment,
-		Geometry,
-		Compute
-	};
+    extern std::string SHADER_DIR;
+    void setShaderDirectory( std::string& pDirectory );
+    void resetShaderDirectory();
 
-	enum class ProgramType 
-	{
-		Invalid,
-		Basic,
-		Geometry,
-		Compute
-	};
+    struct Stage
+    {
+        Stage( std::string pFilename );
+        Stage()
+            :type( 0 )
+        {}
+        GLenum type;
+        GLuint ID;
+        std::string filename;
+        std::string content;
+        void compile();
+    };
 
-	struct Program 
-	{
-		GLuint ID;
-		std::string name;
-		ProgramType type;
-		unsigned int stages[4];
-		unsigned int shaderCount;
-	};
 
-	struct Shader 
-	{
-		Shader( std::string& pFileName ) 
-			, content( "" )
-			, ID( 0 )
-			, type( ShaderType::Vertex ) 
-		{}
-		std::string content;
-		std::string fileName;
-		GLuint ID;
-		ShaderType type;
-	};
-	
-	extern std::vector<Program> allPrograms;
-	extern std::unordered_map<std::string, unsigned int> programLookup;
-	extern std::vector<Shader> allShaders;
-	extern std::unordered_map<std::string, unsigned int> shaderLookup;
+    struct Program 
+    {
+        Program()
+            : ID( 0 )
+            , stageCount( 0 )
+        {}
 
-	void buildShaderPrograms();
+        Program( std::string pName, const Stage& vert, const Stage& frag )
+            : ID( glCreateProgram() )
+            , name( pName )
+            , stageCount( 0 )
+        {
+            addStage( vert );
+            addStage( frag );
+        }
+        Program( std::string pName, const Stage& vert, const Stage& geo, const Stage& frag )
+            : ID( glCreateProgram() )
+            , name( pName )
+            , stageCount( 0 )
+        {
+            addStage( vert );
+            addStage( geo );
+            addStage( frag );
+        }
+        Program( std::string pName, const Stage& comp )
+            : ID( glCreateProgram() )
+            , name( pName )
+            , stageCount( 0 )
+        {
+            addStage( comp );
+        }
 
-	void compileShader( unsigned int pShaderIndex );
-	void linkProgram( unsigned int pProgramID );
-	void compileAndLink();
-	unsigned int createShader( std::string pFileName );
-	unsigned int createProgram( std::string pProgramName );
-	unsigned int newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex );
-	unsigned int newProgram( std::string pProgramName, unsigned int pVertexShaderIndex, unsigned int pFragmentShaderIndex, unsigned int pGeometryShaderIndex );
-	unsigned int newProgram( std::string pProgramName, unsigned int pComputeShaderIndex );
-	void use( std::string pProgramName );
-	void use( unsigned int pID );
-	void unuse();
-	void addVertexAttribute( unsigned int pProgram, std::string pAttributeName, unsigned int pAttributeIndex );
-	void addVertexAttribute( std::string pProgramName, std::string pAttributeName, unsigned int pAttributeIndex );
+        Program& operator=( const Program& other )
+        {
+            ID = other.ID;
+            name = other.name;
+            stages = other.stages;
+            stageCount = other.stageCount;
+            return *this;
+        }
+        static const unsigned int MAX_POSSIBLE_STAGES = 3;
+        GLuint ID;
+        std::string name;
+        std::array<Stage, MAX_POSSIBLE_STAGES> stages;
+        unsigned int stageCount;
 
-	template<typename T>
-		void bindUniformBufferToShader( unsigned int pProgram, const gl::Storage<T>& pStorage, std::string pBlockName )
-		{
-			int blockIndex = glGetUniformBlockIndex( pProgram, pBlockName.c_str() );
-			if ( blockIndex < 0 ) {
-				debug::pushError( "invalid uniform block name " + pBlockName + "!" );
-				return;
-			}
-			glUniformBlockBinding( pProgram, blockIndex, pStorage.binding );
-		}
-	extern unsigned int currentShaderProgram;
-
-	void setUniform( unsigned int pProgram, std::string pUniformName, int pValue );
-	void setUniform( unsigned int pProgram, std::string pUniformName, unsigned int pValue );
-	void setUniform( unsigned int pProgram, std::string pUniformName, float pValue );
-	void setUniform( unsigned int pProgram, std::string pUniformName, glm::vec3 pValue );
-	void setUniform( unsigned int pProgram, std::string pUniformName, glm::vec4 pValue ); 
-	void setUniform( unsigned int pProgram, std::string pUniformName, glm::uvec4 pValue );
-	void setUniform( unsigned int pProgram, std::string pUniformName, glm::uvec3 pValue );
-	void setUniform( unsigned int pProgram, std::string pUniformName, glm::ivec4 pValue );
-	void setUniform( unsigned int pProgram, std::string pUniformName, glm::ivec3 pValue );
-	void setUniform( unsigned int pProgram, std::string pUniformName, glm::mat4 pValue, bool pTranspose );
-	void setUniform( unsigned int pProgram, std::string pUniformName, glm::mat3 pValue, bool pTranspose );
+        void addStage( const Stage& );
+        void link();
+        void build();
+        void use() const;
+        static void unuse();
+        void addVertexAttribute( std::string, unsigned int );
+        void setUniform( std::string pUniformName, int pValue );
+        void setUniform( std::string pUniformName, unsigned int pValue );
+        void setUniform( std::string pUniformName, float pValue );
+        void setUniform( std::string pUniformName, glm::vec3 pValue );
+        void setUniform( std::string pUniformName, glm::vec4 pValue ); 
+        void setUniform( std::string pUniformName, glm::uvec4 pValue );
+        void setUniform( std::string pUniformName, glm::uvec3 pValue );
+        void setUniform( std::string pUniformName, glm::ivec4 pValue );
+        void setUniform( std::string pUniformName, glm::ivec3 pValue );
+        void setUniform( std::string pUniformName, glm::mat4 pValue, bool pTranspose );
+        void setUniform( std::string pUniformName, glm::mat3 pValue, bool pTranspose );
+        template<typename T>
+            void bindUniformBuffer( const gl::Storage<T>& pStorage, std::string pBlockName )
+            {
+                int blockIndex = glGetUniformBlockIndex( ID, pBlockName.c_str() );
+                if ( blockIndex < 0 ) {
+                    debug::pushError( "invalid uniform block name " + pBlockName + "!" );
+                    return;
+                }
+                glUniformBlockBinding( ID, blockIndex, pStorage.binding );
+            }
+    };
 }
 

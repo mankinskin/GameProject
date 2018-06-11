@@ -6,65 +6,65 @@
 
 namespace text 
 {
-	struct Font
-	{
-		Font()
-		{
-		}
-		Font( const FontFile& font );
+    struct Font
+    {
+        Font()
+        {
+        }
+        Font( const FontFile& font );
 
-		struct Metric
-		{
-			Metric()
-			{
-			}
-			Metric( float adv, float bx, float by )
-				:advance ( adv ), bearing( glm::vec2( bx, by ) )
-			{
-			}
-			
-			float advance;
-			glm::vec2 bearing;
-		};
+        struct Metric
+        {
+            Metric()
+            {
+            }
+            Metric( float adv, float bx, float by )
+                :advance ( adv ), bearing( glm::vec2( bx, by ) )
+            {
+            }
 
-		void render() const;
-		void uploadChars() const;
-		void uploadPositions() const;
+            float advance;
+            glm::vec2 bearing;
+        };
 
-		std::string name;
-		std::vector<glm::vec2> positions;
-		std::vector<unsigned int> chars;
+        void render() const;
+        void uploadChars() const;
+        void uploadPositions() const;
+
+        std::string name;
+        std::vector<glm::vec2> positions;
+        std::vector<unsigned int> chars;
         size_t charCount = 0;
-		std::vector<Metric> metrics;
-		float linegap;
+        std::vector<Metric> metrics;
+        float linegap;
 
-		gl::Storage<glm::vec4> uvBuffer;
-		gl::Storage<glm::vec2> sizeBuffer;
-		gl::StreamStorage<glm::vec2> posBuffer;
-		gl::StreamStorage<unsigned int> charBuffer;
-		texture::Texture2D atlasTexture;
-	};
+        gl::Storage<glm::vec4> uvBuffer;
+        gl::Storage<glm::vec2> sizeBuffer;
+        gl::StreamStorage<glm::vec2> posBuffer;
+        gl::StreamStorage<unsigned int> charBuffer;
+        texture::Texture2D atlasTexture;
+    };
 
     void setTargetResolution( const unsigned int, const unsigned int );
     void setTargetResolution( const glm::uvec2 );
-	extern glm::vec2 pixel_size;
-	extern std::vector<Font> fonts;
+    extern glm::vec2 pixel_size;
+    extern std::vector<Font> fonts;
     using FontID = utils::Itr<Font, std::vector<Font>, fonts>;
-	
-	inline glm::vec2 pixel_quantize( glm::vec2 v )
-	{
-		return glm::round( v / pixel_size ) * pixel_size;
-	}
 
-	void loadFonts();
+    inline glm::vec2 pixel_quantize( glm::vec2 v )
+    {
+        return glm::round( v / pixel_size ) * pixel_size;
+    }
 
-	void initFontVAO();
-	
-	void initFontShader();
-	void setupFontShader();
-	void updateFonts();
-	void renderFonts();
+    void loadFonts();
 
-	void renderFont();
+    void initFontVAO();
+
+    void initFontShader();
+    void setupFontShader();
+    void updateFonts();
+    void renderFonts();
+
+    void renderFont();
 }
 

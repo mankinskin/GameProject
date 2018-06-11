@@ -14,7 +14,7 @@ std::array<unsigned int, gui::MAX_QUAD_COUNT> quadColors;
 gl::StreamStorage<unsigned int> gui::colorQuadBuffer;
 
 gl::VAO gui::colorQuadVAO;
-unsigned int gui::colorQuadShader;
+static shader::Program colorQuadShader;
 
 void gui::initColorQuadVAO() 
 {
@@ -31,17 +31,18 @@ void gui::initColorQuadVAO()
 
 void gui::initColorQuadShader() 
 {
-    colorQuadShader = shader::newProgram( "colorQuadShader", 
-            shader::createModule( "colorQuadShader.vert" ), 
-            shader::createModule( "colorQuadShader.frag" ) );
-    shader::addVertexAttribute( colorQuadShader, "corner_pos", 0 );
+    colorQuadShader = shader::Program( "colorQuadShader", 
+            shader::Stage( "colorQuadShader.vert" ), 
+            shader::Stage( "colorQuadShader.frag" ) );
+    colorQuadShader.addVertexAttribute( "corner_pos", 0 );
 }
 
 void gui::setupColorQuadShader() 
 {
-    shader::bindUniformBufferToShader( colorQuadShader, quadBuffer, "QuadBuffer" );
-    shader::bindUniformBufferToShader( colorQuadShader, colorQuadBuffer, "QuadColorBuffer" );
-    shader::bindUniformBufferToShader( colorQuadShader, gl::colorBuffer, "ColorBuffer" );
+    colorQuadShader.build();
+    colorQuadShader.bindUniformBuffer( quadBuffer, "QuadBuffer" );
+    colorQuadShader.bindUniformBuffer( colorQuadBuffer, "QuadColorBuffer" );
+    colorQuadShader.bindUniformBuffer( gl::colorBuffer, "ColorBuffer" );
 }
 
 void gui::updateColorQuads()
@@ -54,11 +55,11 @@ void gui::renderColorQuads()
     glDepthFunc( GL_LEQUAL );
 
     colorQuadVAO.bind();
-    shader::use( colorQuadShader );
+    colorQuadShader.use();
 
     glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, quadCount );
 
-    shader::unuse();
+    shader::Program::unuse();
     colorQuadVAO.unbind();
 
     glDepthFunc( GL_LESS );

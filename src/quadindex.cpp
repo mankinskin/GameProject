@@ -1,10 +1,9 @@
 #include "quadindex.h"
 #include "primitives.h"
-#include "shader.h"
 #include "quad.h"
 #include "viewport.h"
 
-unsigned int gui::quadIndexShader;
+shader::Program gui::quadIndexShader;
 gl::VAO gui::quadIndexVAO;
 std::vector<unsigned int> quadIndexMap;
 std::vector<float> quadDepthMap;
@@ -28,16 +27,16 @@ void gui::initQuadIndexBuffer()
 
 void gui::initQuadIndexShader()
 {
-    quadIndexShader = shader::newProgram( "quadIndexShader", 
-            shader::createModule( "quadIndexShader.vert" ), 
-            shader::createModule( "quadIndexShader.frag" ) );
-    shader::addVertexAttribute( quadIndexShader, "corner_pos", 0 );
+    quadIndexShader = shader::Program( "quadIndexShader", 
+            shader::Stage( "quadIndexShader.vert" ), 
+            shader::Stage( "quadIndexShader.frag" ) );
+    quadIndexShader.addVertexAttribute( "corner_pos", 0 );
 }
 
 void gui::setupQuadIndexShader()
 {
-    shader::bindUniformBufferToShader( quadIndexShader, 
-            quadBuffer, "QuadBuffer" );
+    quadIndexShader.build();
+    quadIndexShader.bindUniformBuffer( quadBuffer, "QuadBuffer" );
 }
 
 void gui::rasterQuadIndices()
@@ -46,12 +45,12 @@ void gui::rasterQuadIndices()
         glDepthMask( 0 );
         glDepthFunc( GL_LEQUAL );
         quadIndexVAO.bind();
-        shader::use( quadIndexShader );
+        quadIndexShader.use();
 
         glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 
                 0, quadCount );
 
-        shader::unuse();
+        shader::Program::unuse();
         quadIndexVAO.unbind();
         glDepthFunc( GL_LESS );
         glDepthMask( 1 );
