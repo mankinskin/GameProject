@@ -8,13 +8,13 @@ std::vector<std::pair<unsigned int, unsigned int>> functors::functorOrder = std:
 
 void functors::clearFunctors() 
 {
-	for ( void( *&destructor )() : functorDestructors ) {
-		destructor();
-	}
+    for ( void( *&destructor )() : functorDestructors ) {
+        destructor();
+    }
 }
 void functors::callFunctors()
 {
-	for ( std::pair<unsigned int, unsigned int>& funi : functorOrder ) {
-		functorInvokers[funi.first]( funi.second );
-	}
+    for ( std::pair<unsigned int, unsigned int>& funi : functorOrder ) {
+        functorInvokers[funi.first]( funi.second );
+    }
 }

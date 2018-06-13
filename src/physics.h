@@ -4,9 +4,9 @@
 
 namespace physics 
 {
-	extern float gravity_force;
-	
-	void step();
+    extern float gravity_force;
 
-	extern std::vector<glm::vec4> allVelocities;//vec3 normalized vector for direction + scalar for kenetic energy
+    void step();
+
+    extern std::vector<glm::vec4> allVelocities;//vec3 normalized vector for direction + scalar for kenetic energy
 }

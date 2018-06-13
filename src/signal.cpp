@@ -6,20 +6,20 @@ std::vector<void( * )()> signals::signalDestructors;//destroys all Signal templa
 
 void signals::clearSignals() 
 {
-	allSignals.clear();
-	for ( void( *&destructor )() : signalDestructors ) {
-		destructor();
-	}
+    allSignals.clear();
+    for ( void( *&destructor )() : signalDestructors ) {
+        destructor();
+    }
 }
 void signals::resetSignals()
 {
-	std::fill( allSignals.begin(), allSignals.end(), false );
+    std::fill( allSignals.begin(), allSignals.end(), false );
 }
 
 void signals::checkSignals() 
 {
-	for ( void( *&checker )() : signalCheckers ) {
-		checker();
-	}
+    for ( void( *&checker )() : signalCheckers ) {
+        checker();
+    }
 }
 

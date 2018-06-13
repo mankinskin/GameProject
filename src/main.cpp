@@ -1,12 +1,12 @@
 #include "app.h"
 #ifdef WINDOWS
-    #include <conio.h>
+#include <conio.h>
 #else
-    #include <curses.h>
+#include <curses.h>
 #endif
 
 int main() 
 {
-	app::init();
-	return 0;
+    app::init();
+    return 0;
 }

@@ -23,7 +23,7 @@ gui::LineGroup::LineGroup( unsigned int pLineOffset,
         unsigned int pLineCount, int pFlags )
     : lineOffset( pLineOffset )
     , lineCount( pLineCount )
-    , flags( 1 )
+      , flags( 1 )
 {
 }
 

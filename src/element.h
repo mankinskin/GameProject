@@ -66,7 +66,7 @@ namespace utils
             static const size_t COUNT = sizeof...( Elems );
 
             template<typename... Initers>
-            Element( const Element<Initers...>& initer )
+                Element( const Element<Initers...>& initer )
                 :subelements( construct<Elems...>( initer.subelements ) )
                 {
                     puts( "Constructed Element with Element<Initers...>" );
@@ -76,9 +76,9 @@ namespace utils
                 Element( const Initers... initers )
                 :subelements( construct<Elems...>( 
                             std::tuple<Initers...>(initers...) ) )
-                {
-                    puts( "Constructed Element with Initers..." );
-                }
+            {
+                puts( "Constructed Element with Initers..." );
+            }
 
             Element( const Elems... elems )
                 :subelements( construct<Elems...>( 

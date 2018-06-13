@@ -50,7 +50,7 @@ GLenum toStageType( std::string stagestring )
 
 shader::Stage::Stage( std::string pFilename )
     : filename( pFilename )
-    , type( toStageType( extractStageString( pFilename ) ) )
+      , type( toStageType( extractStageString( pFilename ) ) )
 {
     if ( !type ) {
         debug::pushError( 

@@ -40,7 +40,7 @@ namespace input
     {
         return l.key == r.key && l.change == r.change;
     }
-	KeyEvent KeyEventFromScancode( int pScancode, int pAction );
+    KeyEvent KeyEventFromScancode( int pScancode, int pAction );
     struct KeySignal 
     {
         KeySignal()

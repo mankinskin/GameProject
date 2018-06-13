@@ -111,7 +111,7 @@ void gl::getOpenGLInitValues()
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_DEBUG_OUTPUT );
-	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 }
 
 void gl::initGLEW() 

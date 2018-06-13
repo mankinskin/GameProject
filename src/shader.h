@@ -33,21 +33,21 @@ namespace shader
     {
         Program()
             : ID( 0 )
-            , stageCount( 0 )
+              , stageCount( 0 )
         {}
 
         Program( std::string pName, const Stage& vert, const Stage& frag )
             : ID( glCreateProgram() )
-            , name( pName )
-            , stageCount( 0 )
+              , name( pName )
+              , stageCount( 0 )
         {
             addStage( vert );
             addStage( frag );
         }
         Program( std::string pName, const Stage& vert, const Stage& geo, const Stage& frag )
             : ID( glCreateProgram() )
-            , name( pName )
-            , stageCount( 0 )
+              , name( pName )
+              , stageCount( 0 )
         {
             addStage( vert );
             addStage( geo );
@@ -55,8 +55,8 @@ namespace shader
         }
         Program( std::string pName, const Stage& comp )
             : ID( glCreateProgram() )
-            , name( pName )
-            , stageCount( 0 )
+              , name( pName )
+              , stageCount( 0 )
         {
             addStage( comp );
         }

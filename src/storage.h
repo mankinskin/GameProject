@@ -6,10 +6,10 @@
 
 namespace gl
 {
-	extern int SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT;
-	extern int UNIFORM_BUFFER_OFFSET_ALIGNMENT;
-	extern int MAX_UNIFORM_BUFFER_BINDINGS;
-	extern int MIN_MAP_BUFFER_ALIGNMENT;
+    extern int SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT;
+    extern int UNIFORM_BUFFER_OFFSET_ALIGNMENT;
+    extern int MAX_UNIFORM_BUFFER_BINDINGS;
+    extern int MIN_MAP_BUFFER_ALIGNMENT;
 
     unsigned int getNewTargetBinding( const unsigned int pTarget );
 
@@ -69,15 +69,15 @@ namespace gl
         };
 
     template<typename T>
-    void uploadStorage( const StreamStorage<T>& pStorage, const unsigned int pByteSize, const void* pData )
-    {
-        if( pByteSize ) {
-            if ( !pStorage.mappedPtr ) {
-                debug::pushError( "Attempted to upload to unmapped buffer!", debug::Error::Fatal );
-                return;
+        void uploadStorage( const StreamStorage<T>& pStorage, const unsigned int pByteSize, const void* pData )
+        {
+            if( pByteSize ) {
+                if ( !pStorage.mappedPtr ) {
+                    debug::pushError( "Attempted to upload to unmapped buffer!", debug::Error::Fatal );
+                    return;
+                }
+                std::memcpy( pStorage.mappedPtr, pData, pByteSize );
             }
-            std::memcpy( pStorage.mappedPtr, pData, pByteSize );
         }
-    }
 }
 

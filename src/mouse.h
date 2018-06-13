@@ -6,52 +6,52 @@
 
 namespace input 
 {
-	struct MouseKeyEvent    // events thrown when a mouse key changes 
+    struct MouseKeyEvent    // events thrown when a mouse key changes 
     {
-		MouseKeyEvent()
-			:key( -1 ) 
+        MouseKeyEvent()
+            :key( -1 ) 
         {}
-		MouseKeyEvent( int pKey, KeyCondition pChange )
-			:key( pKey ), change( pChange ) 
+        MouseKeyEvent( int pKey, KeyCondition pChange )
+            :key( pKey ), change( pChange ) 
         {}
-		MouseKeyEvent( int pKey, int pAction )
-			:key( pKey ), change( KeyCondition( pAction ) ) 
+        MouseKeyEvent( int pKey, int pAction )
+            :key( pKey ), change( KeyCondition( pAction ) ) 
         {}
-		int key;
-		KeyCondition change;
-	};
-	inline bool operator==( MouseKeyEvent const & l, MouseKeyEvent const& r ) 
+        int key;
+        KeyCondition change;
+    };
+    inline bool operator==( MouseKeyEvent const & l, MouseKeyEvent const& r ) 
     {
-		return l.key == r.key && l.change == r.change;
-	}
+        return l.key == r.key && l.change == r.change;
+    }
 
-	struct QuadEvent    // events thrown when entering or leaving quads with the cursor
+    struct QuadEvent    // events thrown when entering or leaving quads with the cursor
     {
-		QuadEvent()
-			:quad_index( 0 ), enter( 0 ) 
+        QuadEvent()
+            :quad_index( 0 ), enter( 0 ) 
         {}
-		QuadEvent( unsigned int pQuad, int pEnter )
-			:quad_index( pQuad ), enter( pEnter ) 
+        QuadEvent( unsigned int pQuad, int pEnter )
+            :quad_index( pQuad ), enter( pEnter ) 
         {}
-		unsigned int quad_index;// 0 if none
-		int enter;
-	};
-	inline bool operator==( QuadEvent const & l, QuadEvent const& r ) 
+        unsigned int quad_index;// 0 if none
+        int enter;
+    };
+    inline bool operator==( QuadEvent const & l, QuadEvent const& r ) 
     {
-		return l.quad_index == r.quad_index && l.enter == r.enter;
-	}
+        return l.quad_index == r.quad_index && l.enter == r.enter;
+    }
 
-	extern glm::vec2 relativeCursorPosition;
-	extern glm::uvec2 absoluteCursorPosition;
-	extern glm::vec2 cursorFrameDelta;
-	void updateMouse();
-	void resetMouse();
-	void toggleCursor();
-	void getCursorQuadEvents();
-	void getMouseKeyEvents();
+    extern glm::vec2 relativeCursorPosition;
+    extern glm::uvec2 absoluteCursorPosition;
+    extern glm::vec2 cursorFrameDelta;
+    void updateMouse();
+    void resetMouse();
+    void toggleCursor();
+    void getCursorQuadEvents();
+    void getMouseKeyEvents();
 
-	void mouseKey_Callback( GLFWwindow* window, int pKey, int pAction, int pMods );
-	void cursorPosition_Callback( GLFWwindow* window, double pX, double pY );
-	void cursorEnter_Callback( GLFWwindow * window, int pEntered );
-	void scroll_Callback( GLFWwindow* window, double pX, double pY );
+    void mouseKey_Callback( GLFWwindow* window, int pKey, int pAction, int pMods );
+    void cursorPosition_Callback( GLFWwindow* window, double pX, double pY );
+    void cursorEnter_Callback( GLFWwindow * window, int pEntered );
+    void scroll_Callback( GLFWwindow* window, double pX, double pY );
 }

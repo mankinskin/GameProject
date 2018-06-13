@@ -23,7 +23,7 @@ namespace app
     extern double lastFrameMS;
     extern double totalMS;
     extern double minFrameMS;
-	extern glm::vec3 node_mov;
+    extern glm::vec3 node_mov;
 
     enum State 
     {

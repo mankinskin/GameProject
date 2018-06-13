@@ -49,8 +49,8 @@ void gui::initWidgets()
     Button::Initer button_initer( 
             glm::vec4(0.0f, 0.0f, button_width, button_height ),
             glm::vec4( margin.x, -margin.y, 
-                    button_width - margin.x*2.0f, 
-                    button_height - margin.y*2.0f ) );
+                button_width - margin.x*2.0f, 
+                button_height - margin.y*2.0f ) );
 
     Button::Colors button_colors = Button::Colors( gl::getColor( "lightgrey" ), 
             gl::getColor( "black" ) );
@@ -65,14 +65,14 @@ void gui::initWidgets()
     Button::Preset button_preset( button_initer, button_colors, 
             button_move_policy, button_resize_policy );
 
-    
+
     Button play_button( button_preset );
     Button quit_button( button_preset );
 
     play_button.move( glm::vec2( -0.95f, -0.6f ) );
     quit_button.move( glm::vec2( -0.95f, -0.8f ) );
- 
-    
+
+
     ButtonEvents<Event> play_button_events( 
             createEvent( QuadEvent( play_button.subwidgets.element<1>().ID, 1 ) ), 
             createEvent( QuadEvent( play_button.subwidgets.element<1>().ID, 0 ) ) );
@@ -181,10 +181,10 @@ void gui::initWidgets()
 
 
     WindowFrame::MovePolicy window_frame_move_policy(
-        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
+            glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
             glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ),
             glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-    );
+            );
     WindowFrame::ResizePolicy window_frame_resize_policy(
             glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ), 
             glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), 
@@ -194,22 +194,22 @@ void gui::initWidgets()
             );
 
     WindowHeader::MovePolicy window_header_move_policy(
-        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
-    );
+            glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
+            );
     WindowHeader::ResizePolicy window_header_resize_policy(
             glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f )
             );
 
     Window::MovePolicy window_move_policy(
-        glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)
-    );
+            glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)
+            );
     Window::ResizePolicy window_resize_policy(
-        glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)
+            glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)
             );
 
     //Window window( window_quad_initer, window_colors, 
     //        window_move_policy, window_resize_policy );
-    
+
 
     //ButtonEvents<Event> header_button( 
     //        createEvent( QuadEvent( window_quads.element<1>().element<1>().ID, 1 ) ), 
@@ -320,14 +320,14 @@ void gui::initWidgets()
     //};
     //FunctorRef<void, glm::vec4&, Quad, Quad> set_slide_target_func = createFunctor<void, glm::vec4&, Quad, Quad>( set_slide_target, lights::getLightColor( 0 ), slider.element<0>(), slider.element<1>() );
     //set_slide_target_func.set_triggers( { slider_lmb.hold } );
-    
+
     //text
     //gui::text::createTextboxMetrics( 0, 1.0, 1.0, 1.0, 1.0 );
-    
-	//unsigned int qu_tb = gui::text::createTextbox( quit_button.subwidgets.element<1>(), 0, TEXT_LAYOUT_CENTER_Y );
-	//unsigned int pl_tb = gui::text::createTextbox( play_button.subwidgets.element<1>(), 0, TEXT_LAYOUT_CENTER_Y );
+
+    //unsigned int qu_tb = gui::text::createTextbox( quit_button.subwidgets.element<1>(), 0, TEXT_LAYOUT_CENTER_Y );
+    //unsigned int pl_tb = gui::text::createTextbox( play_button.subwidgets.element<1>(), 0, TEXT_LAYOUT_CENTER_Y );
     //unsigned int fps_tb = gui::text::createTextbox( fps_box.element<0>().element(), 0, TEXT_LAYOUT_CENTER_Y );
-    
+
     //gui::text::setTextboxString( qu_tb, " QUIT" );
     //gui::text::setTextboxString( pl_tb, " Play" );
     //gui::text::setTextboxString( fps_tb, "FPS" );
