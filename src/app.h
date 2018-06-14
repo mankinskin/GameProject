@@ -1,6 +1,4 @@
 #pragma once
-#include "contextwindow.h"
-
 #include <glew.h>
 #include <glm.hpp>
 
@@ -17,7 +15,6 @@ namespace app
     void updateTimeFactor();
     void limitFPS();
 
-    extern Window mainWindow;
     extern double timeFactor;
     extern double lastFrameLimitedMS;
     extern double lastFrameMS;

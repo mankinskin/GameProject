@@ -5,16 +5,15 @@
 #include "contextwindow.h"
 #include "sequencer.h"
 
-//#ifdef WINDOWS
-#include <ncurses.h>
-//#else
-#include <curses.h>
-//#endif
+#ifdef WINDOWS
+#   include <ncurses.h>
+#else
+#   include <curses.h>
+#endif
 #include <chrono>
 #include <thread>
 
 app::State app::state = app::State::Init;
-app::Window app::mainWindow;
 double app::timeFactor = 1.0;
 double app::lastFrameMS = 0;
 double app::lastFrameLimitedMS = 0;
@@ -31,9 +30,7 @@ void app::init()
     setMaxFPS( 50 );
     // Windows and gl Context
     initGLFW();
-    initMonitors();
-    mainWindow = Window( 1600, 850 );
-    mainWindow.print();
+    startContextwindow();
     gl::init();
 
     sequencer::initialize();

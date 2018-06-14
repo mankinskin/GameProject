@@ -3,18 +3,47 @@
 #include "debug.h"
 #include "gl.h"
 
-GLFWmonitor** app::allMonitorPtrs = nullptr;
 std::vector<app::Monitor> app::allMonitors;
-app::Monitor* app::windowMonitor = nullptr;
+app::Window app::mainWindow;
 const std::string app::Window::DEFAULT_NAME = "OpenGL Window";
+
+void app::startContextwindow()
+{
+    initMonitors();
+    mainWindow = Window( 1600, 850 );
+}
+
+app::Monitor::Monitor()
+    :ptr( nullptr )
+{}
+
+app::Monitor::Monitor( unsigned int pIndex, GLFWmonitor* pMonitor )
+    :ptr( pMonitor ), index( pIndex )
+{
+    puts( "Initalizing Monitor" );
+    vidModes = glfwGetVideoModes( ptr, &videoModeCount );
+    currentVideoMode = glfwGetVideoMode( ptr );
+    glfwGetMonitorPhysicalSize( ptr, &physical_size.x, &physical_size.y );
+    pixel_size.x = currentVideoMode->width;
+    pixel_size.y = currentVideoMode->height;
+    dpi.x = ( unsigned int )( ( float )pixel_size.x / ( 480.0f / 25.4f ) );
+    dpi.y = ( unsigned int )( ( float )pixel_size.y / ( 275.0f / 25.4f ) );
+    glfwGetMonitorPos( ptr, &pos.x, &pos.y );
+    print();
+}
+
+void app::Monitor::print()
+{
+    printf("Monitor %u\nPosX: %u\tPosY: %u\nWidth: %u\tHeight: %u\n", 
+            index, pos.x, pos.y, pixel_size.x, pixel_size.y );
+}
 
 void app::initMonitors()
 {
     puts( "Detecting Monitors..." );
     //find primary monitor for GLFW
     int monitorCount = 0;
-    allMonitorPtrs = glfwGetMonitors( &monitorCount );
-    printf( "%d monitors detected.\n", monitorCount );
+    GLFWmonitor** allMonitorPtrs = glfwGetMonitors( &monitorCount );
 
     if ( monitorCount < 1 ) {
         puts( "Could not detect any monitors.\nAttempting to use primary monitor." );
@@ -23,48 +52,33 @@ void app::initMonitors()
             debug::pushError( "GLFW could not find any monitor!", debug::Error::Fatal );
         }
         else {
-            allMonitors.push_back( Monitor( primaryMonitor ) );
+            allMonitors.push_back( Monitor( 0, primaryMonitor ) );
         }
     }
     else {
+        printf( "%u Monitors detected.\n", monitorCount );
         allMonitors.reserve( monitorCount );
         for( unsigned int m = 0; m < monitorCount; ++m ) {
-            allMonitors.push_back( Monitor( allMonitorPtrs[m] ) );	
+            allMonitors.push_back( Monitor( m, allMonitorPtrs[m] ) );
         }
-        windowMonitor = &allMonitors[0];
     }
 }
 
-app::Monitor::Monitor()
-    :monitorPtr( nullptr )
+app::Window::Window( std::string pName, unsigned int pWidth, unsigned int pHeight )
+    :name( pName ), width( pWidth ), height( pHeight ), monitor( 0 )
 {
+    init();
 }
 
-app::Monitor::Monitor( GLFWmonitor* pMonitor )
-    :monitorPtr( pMonitor )
+app::Window::Window( unsigned int pWidth, unsigned int pHeight )
+    :name( DEFAULT_NAME ), width( pWidth ), height( pHeight ), monitor( 0 )
 {
-    puts( "Initalizing Monitor" );
-    vidModes = glfwGetVideoModes( monitorPtr, &videoModeCount );
-    currentVideoMode = glfwGetVideoMode( monitorPtr );
-    glfwGetMonitorPhysicalSize( monitorPtr, &physical_size.x, &physical_size.y );
-    pixel_size.x = currentVideoMode->width;
-    pixel_size.y = currentVideoMode->height;
-    dpi.x = ( unsigned int )( ( float )pixel_size.x / ( 480.0f / 25.4f ) );
-    dpi.y = ( unsigned int )( ( float )pixel_size.y / ( 275.0f / 25.4f ) );
-    glfwGetMonitorPos( monitorPtr, &pos.x, &pos.y );
+    init();
 }
 
-void app::Window::setSize( unsigned int pWidth, unsigned int pHeight )
+app::Window::Window()
+    :name(""), width( 0 ), height( 0 ), monitor( 0 )
 {
-    //set the pixel width and height of the window
-    width = pWidth;
-    height = pHeight;
-}
-
-void app::switchWindowToMonitor( unsigned int pMonitor )
-{
-    if ( pMonitor < allMonitors.size() ) 
-        windowMonitor = &allMonitors[ pMonitor ];
 }
 
 void app::Window::init()
@@ -75,7 +89,6 @@ void app::Window::init()
     }
     //sets up GLFW Window with OpenGL context
     printf( "Initializing GLFW window %s\n", name.c_str() );
-    printf( "GLFW Window Size:\nX: %i Y: %i\n", width, height );
 
     glfwWindowHint( GLFW_CLIENT_API, GLFW_OPENGL_API );
     glfwWindowHint( GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API );
@@ -93,36 +106,72 @@ void app::Window::init()
 
     window = glfwCreateWindow( width, height, name.c_str(), nullptr, nullptr );
     if ( window == nullptr ) {
-        puts( "Failed to create GLFW Window! window was nullptr!" );  
+        puts( "Failed to create GLFW Window!" );  
         return;
     }
-    puts( "Successfully initialized Window" );
-    glfwSetWindowPos( window, 
-            ( windowMonitor->currentVideoMode->width / 2 ) - width / 2, 
-            ( windowMonitor->currentVideoMode->height / 2 ) - height / 2 );
+    setFullscreen();
+    setMonitor( 1 );
+    center();
     glfwMakeContextCurrent( window );
     glfwSetWindowUserPointer( window, window );
-    if ( window == nullptr ) {
-        puts( "Failed to create GLFW Window! window was nullptr!" );  
-        return;
+    printf( "GLFW Window Size:\nX: %i Y: %i\n", width, height );
+}
+
+void app::Window::setSize( unsigned int pWidth, unsigned int pHeight )
+{
+    //set the pixel width and height of the window
+    width = pWidth;
+    height = pHeight;
+}
+
+void app::Window::updateMonitor()
+{
+    GLFWmonitor* mntr = nullptr;
+    if ( fullscreen ) {
+        width = monitor->pixel_size.x;
+        height = monitor->pixel_size.y;
+        mntr = monitor->ptr;
     }
+    glfwSetWindowMonitor( window, mntr, xpos, xpos, width, height, GLFW_DONT_CARE );
 }
 
-app::Window::Window( std::string pName, unsigned int pWidth, unsigned int pHeight )
-    :name( pName ), width( pWidth ), height( pHeight )
+void app::Window::setMonitor( app::MonitorID pMonitor )
 {
-    init();
+    monitor = pMonitor;
+    updateMonitor();
 }
 
-app::Window::Window( unsigned int pWidth, unsigned int pHeight )
-    :name( DEFAULT_NAME ), width( pWidth ), height( pHeight )
+void app::Window::setFullscreen()
 {
-    init();
+    fullscreen = true;
 }
 
-app::Window::Window()
-    :name(""), width( 0 ), height( 0 )
+void app::Window::unsetFullscreen()
 {
+    fullscreen = false;
+}
+
+void app::Window::toggleFullscreen()
+{
+    fullscreen = !fullscreen;
+}
+void app::Window::updatePos()
+{
+    glfwSetWindowPos( window, xpos, ypos ); 
+}
+
+void app::Window::center()
+{
+    xpos = ( monitor->currentVideoMode->width / 2 ) - width / 2; 
+    ypos = ( monitor->currentVideoMode->height / 2 ) - height / 2;
+    updatePos();
+}
+
+void app::Window::setPos( unsigned int x, unsigned int y )
+{
+    xpos = x;
+    ypos = y;
+    updatePos();
 }
 
 void app::Window::destroy()

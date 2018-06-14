@@ -30,13 +30,13 @@ void text::loadFonts()
 
     FontFile terminusfont;
     terminusfont.setLoadPadding( 1 );
-    terminusfont.setLoadDpi( app::windowMonitor->dpi );
+    terminusfont.setLoadDpi( app::mainWindow.monitor->dpi );
     terminusfont.setLoadSize( 12 );
     terminusfont.read( "Terminus.ttf" );
 
     FontFile liberationfont;
     liberationfont.setLoadPadding( 1 );
-    liberationfont.setLoadDpi( app::windowMonitor->dpi );
+    liberationfont.setLoadDpi( app::mainWindow.monitor->dpi );
     liberationfont.setLoadSize( 16 );
     liberationfont.read( "LiberationMono-Regular.ttf" );
 

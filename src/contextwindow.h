@@ -1,4 +1,5 @@
 #pragma once
+#include "utils/itr.h"
 #include <glew.h>
 #include <glm.hpp>
 #include <string>
@@ -10,9 +11,9 @@ namespace app
     struct Monitor 
     {
         Monitor();
-        Monitor( GLFWmonitor* pMonitor );
+        Monitor( unsigned int pIndex, GLFWmonitor* pMonitor );
         //~Monitor();
-        GLFWmonitor* monitorPtr;
+        GLFWmonitor* ptr;
         int videoModeCount = 0;
         const GLFWvidmode* vidModes = nullptr;
         const GLFWvidmode* currentVideoMode = nullptr;
@@ -20,14 +21,12 @@ namespace app
         glm::ivec2 physical_size;
         glm::ivec2 pixel_size;
         glm::ivec2 pos;
+        unsigned int index = 0;
+        void print();
     };
 
-    void initMonitors();
     extern std::vector<Monitor> allMonitors;
-    extern GLFWmonitor** allMonitorPtrs;
-    extern Monitor* windowMonitor;
-
-    void switchWindowToMonitor( unsigned int pMonitor );
+    using MonitorID = utils::Itr<Monitor, std::vector<Monitor>, allMonitors>;
 
     struct Window 
     {
@@ -39,7 +38,15 @@ namespace app
         Window();
 
         void setSize( unsigned int pWidth, unsigned int pHeight );
+        void setFullscreen();
+        void unsetFullscreen();
+        void toggleFullscreen();
+        void setMonitor( MonitorID pMonitor = MonitorID( 0 ) );
         void destroy();
+        void center();
+        void setPos( unsigned int x, unsigned int y );
+        void updateMonitor();
+        void updatePos();
 
         GLFWwindow* operator=( const Window& obj ) const 
         {
@@ -49,6 +56,8 @@ namespace app
         Window& operator=( const Window obj ) 
         {
             name = obj.name;
+            xpos = obj.xpos;
+            ypos = obj.ypos;
             width = obj.width;
             height = obj.height;
             window = obj.window;
@@ -57,15 +66,22 @@ namespace app
 
         void print()
         {
-            printf("Window %s\nWidth: %u\nHeight: %u\nPtr: %p\n", name.c_str(), width, height, window );
+            printf("Window %s\nWidth: %u\nHeight: %u\n", name.c_str(), width, height );
         }
 
         GLFWwindow* window = nullptr;
+        MonitorID monitor;        
+        unsigned int xpos = 0;
+        unsigned int ypos = 0;
         unsigned int width;
         unsigned int height;
         std::string name;
-        bool fullscreen = 0;
+        bool fullscreen = false;
         private:
         void init();
     };
+
+    void initMonitors();
+    void startContextwindow();
+    extern Window mainWindow;
 }
