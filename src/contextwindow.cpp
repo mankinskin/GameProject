@@ -109,8 +109,8 @@ void app::Window::init()
         puts( "Failed to create GLFW Window!" );  
         return;
     }
-    setMonitor();
     center();
+    setMonitor( 0 );
     glfwMakeContextCurrent( window );
     glfwSetWindowUserPointer( window, window );
     printf( "GLFW Window Size:\nX: %i Y: %i\n", width, height );
@@ -118,24 +118,32 @@ void app::Window::init()
 
 void app::Window::setSize( unsigned int pWidth, unsigned int pHeight )
 {
-    //set the pixel width and height of the window
     width = pWidth;
     height = pHeight;
 }
 
 void app::Window::updateMonitor()
 {
-    GLFWmonitor* mntr = nullptr;
     if ( fullscreen ) {
-        width = monitor->pixel_size.x;
-        height = monitor->pixel_size.y;
-        mntr = monitor->ptr;
+        glfwSetWindowMonitor( window, monitor->ptr, xpos, xpos, width, height, GLFW_DONT_CARE );
     }
-    glfwSetWindowMonitor( window, mntr, xpos, xpos, width, height, GLFW_DONT_CARE );
+    else {
+        setPos( xpos, ypos );
+    }
 }
 
 void app::Window::setMonitor( app::MonitorID pMonitor )
 {
+    if ( fullscreen ) {
+        xpos = pMonitor->pos.x;
+        ypos = pMonitor->pos.y;
+        width = pMonitor->width;
+        height = pMonitor->width;
+    }
+    else {
+        xpos = (xpos - monitor->pos.x) + pMonitor->pos.x;
+        ypos = (ypos - monitor->pos.y) + pMonitor->pos.y;
+    }
     monitor = pMonitor;
     updateMonitor();
 }
