@@ -23,11 +23,11 @@ app::Monitor::Monitor( unsigned int pIndex, GLFWmonitor* pMonitor )
     puts( "Initalizing Monitor" );
     vidModes = glfwGetVideoModes( ptr, &videoModeCount );
     currentVideoMode = glfwGetVideoMode( ptr );
-    glfwGetMonitorPhysicalSize( ptr, &physical_size.x, &physical_size.y );
-    pixel_size.x = currentVideoMode->width;
-    pixel_size.y = currentVideoMode->height;
-    dpi.x = ( unsigned int )( ( float )pixel_size.x / ( 480.0f / 25.4f ) );
-    dpi.y = ( unsigned int )( ( float )pixel_size.y / ( 275.0f / 25.4f ) );
+    glfwGetMonitorPhysicalSize( ptr, &physical_width, &physical_height );
+    width = currentVideoMode->width;
+    height = currentVideoMode->height;
+    dpi.x = ( unsigned int )( ( float )width / ( 480.0f / 25.4f ) );
+    dpi.y = ( unsigned int )( ( float )height / ( 275.0f / 25.4f ) );
     glfwGetMonitorPos( ptr, &pos.x, &pos.y );
     print();
 }
@@ -35,7 +35,7 @@ app::Monitor::Monitor( unsigned int pIndex, GLFWmonitor* pMonitor )
 void app::Monitor::print()
 {
     printf("Monitor %u\nPosX: %u\tPosY: %u\nWidth: %u\tHeight: %u\n", 
-            index, pos.x, pos.y, pixel_size.x, pixel_size.y );
+            index, pos.x, pos.y, width, height );
 }
 
 void app::initMonitors()
@@ -143,17 +143,21 @@ void app::Window::setMonitor( app::MonitorID pMonitor )
 void app::Window::setFullscreen()
 {
     fullscreen = true;
+    updateMonitor();
 }
 
 void app::Window::unsetFullscreen()
 {
     fullscreen = false;
+    updateMonitor();
 }
 
 void app::Window::toggleFullscreen()
 {
     fullscreen = !fullscreen;
+    updateMonitor();
 }
+
 void app::Window::updatePos()
 {
     glfwSetWindowPos( window, xpos, ypos ); 
@@ -161,8 +165,8 @@ void app::Window::updatePos()
 
 void app::Window::center()
 {
-    xpos = ( monitor->currentVideoMode->width / 2 ) - width / 2; 
-    ypos = ( monitor->currentVideoMode->height / 2 ) - height / 2;
+    xpos = monitor->pos.x + ( monitor->currentVideoMode->width / 2 ) - width / 2; 
+    ypos = monitor->pos.y + ( monitor->currentVideoMode->height / 2 ) - height / 2;
     updatePos();
 }
 

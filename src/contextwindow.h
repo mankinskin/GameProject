@@ -18,9 +18,11 @@ namespace app
         const GLFWvidmode* vidModes = nullptr;
         const GLFWvidmode* currentVideoMode = nullptr;
         glm::uvec2 dpi;
-        glm::ivec2 physical_size;
-        glm::ivec2 pixel_size;
+        int physical_width = 0;
+        int physical_height = 0;
         glm::ivec2 pos;
+        unsigned int width = 0;
+        unsigned int height = 0;
         unsigned int index = 0;
         void print();
     };
