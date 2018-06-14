@@ -109,8 +109,7 @@ void app::Window::init()
         puts( "Failed to create GLFW Window!" );  
         return;
     }
-    setFullscreen();
-    setMonitor( 1 );
+    setMonitor();
     center();
     glfwMakeContextCurrent( window );
     glfwSetWindowUserPointer( window, window );
