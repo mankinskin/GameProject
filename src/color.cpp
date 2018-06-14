@@ -35,8 +35,6 @@ void gl::createDefaultColors()
 
 gl::ColorIt gl::createColor( Color pColor, std::string pColorName ) 
 {
-    printf( "Creating Color: %s ( %f, %f, %f, %f )\n", 
-            pColorName.c_str(), pColor.x, pColor.y, pColor.z, pColor.w );
     allColors[ colorCount ] = pColor;
     colorNames[ colorCount ] = pColorName;
     return ColorIt( colorCount++ );
@@ -51,7 +49,6 @@ gl::ColorIt gl::getColor( std::string pColorName )
         return ColorIt( 0 );
     }
     unsigned int i = nameIt - colorNames.begin();
-    printf( "Color %s found at %d!\n", pColorName.c_str(), i );
     return ColorIt( i );
 }
 

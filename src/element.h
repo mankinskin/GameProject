@@ -69,7 +69,7 @@ namespace utils
                 Element( const Element<Initers...>& initer )
                 :subelements( construct<Elems...>( initer.subelements ) )
                 {
-                    puts( "Constructed Element with Element<Initers...>" );
+                    //puts( "Constructed Element with Element<Initers...>" );
                 }
 
             template<typename... Initers>
@@ -77,14 +77,14 @@ namespace utils
                 :subelements( construct<Elems...>( 
                             std::tuple<Initers...>(initers...) ) )
             {
-                puts( "Constructed Element with Initers..." );
+                //puts( "Constructed Element with Initers..." );
             }
 
             Element( const Elems... elems )
                 :subelements( construct<Elems...>( 
                             std::tuple<Elems...>( elems... ) ) )
             {
-                puts( "Constructed Element with Elems..." );
+                //puts( "Constructed Element with Elems..." );
             }
 
             const std::tuple<Elems...> subelements;
