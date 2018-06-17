@@ -3,7 +3,6 @@
 #include "debug.h"
 #include "gl.h"
 
-std::vector<app::Monitor> app::allMonitors;
 app::Window app::mainWindow;
 const std::string app::Window::DEFAULT_NAME = "OpenGL Window";
 
@@ -52,14 +51,14 @@ void app::initMonitors()
             debug::pushError( "GLFW could not find any monitor!", debug::Error::Fatal );
         }
         else {
-            allMonitors.push_back( Monitor( 0, primaryMonitor ) );
+            MonitorID( Monitor( 0, primaryMonitor ) );
         }
     }
     else {
         printf( "%u Monitors detected.\n", monitorCount );
-        allMonitors.reserve( monitorCount );
+        MonitorID::container.reserve( monitorCount );
         for( unsigned int m = 0; m < monitorCount; ++m ) {
-            allMonitors.push_back( Monitor( m, allMonitorPtrs[m] ) );
+            MonitorID( Monitor( m, allMonitorPtrs[m] ) );
         }
     }
 }
@@ -83,7 +82,7 @@ app::Window::Window()
 
 void app::Window::init()
 {
-    if( !allMonitors.size() ) {
+    if( !MonitorID::container.size() ) {
         puts( "Can't initialize Window: Monitors are not initialized yet!" );
         return;
     }
@@ -125,7 +124,7 @@ void app::Window::setSize( unsigned int pWidth, unsigned int pHeight )
 void app::Window::updateMonitor()
 {
     if ( fullscreen ) {
-        glfwSetWindowMonitor( window, monitor->ptr, xpos, xpos, width, height, GLFW_DONT_CARE );
+        glfwSetWindowMonitor( window, (*monitor).ptr, xpos, xpos, width, height, GLFW_DONT_CARE );
     }
     else {
         setPos( xpos, ypos );
@@ -135,14 +134,14 @@ void app::Window::updateMonitor()
 void app::Window::setMonitor( app::MonitorID pMonitor )
 {
     if ( fullscreen ) {
-        xpos = pMonitor->pos.x;
-        ypos = pMonitor->pos.y;
-        width = pMonitor->width;
-        height = pMonitor->width;
+        xpos = (*pMonitor).pos.x;
+        ypos = (*pMonitor).pos.y;
+        width = (*pMonitor).width;
+        height = (*pMonitor).width;
     }
     else {
-        xpos = (xpos - monitor->pos.x) + pMonitor->pos.x;
-        ypos = (ypos - monitor->pos.y) + pMonitor->pos.y;
+        xpos = (xpos - (*monitor).pos.x) + (*pMonitor).pos.x;
+        ypos = (ypos - (*monitor).pos.y) + (*pMonitor).pos.y;
     }
     monitor = pMonitor;
     updateMonitor();
@@ -173,8 +172,8 @@ void app::Window::updatePos()
 
 void app::Window::center()
 {
-    xpos = monitor->pos.x + ( monitor->currentVideoMode->width / 2 ) - width / 2; 
-    ypos = monitor->pos.y + ( monitor->currentVideoMode->height / 2 ) - height / 2;
+    xpos = (*monitor).pos.x + ( (*monitor).currentVideoMode->width / 2 ) - width / 2; 
+    ypos = (*monitor).pos.y + ( (*monitor).currentVideoMode->height / 2 ) - height / 2;
     updatePos();
 }
 

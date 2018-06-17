@@ -2,7 +2,7 @@
 #include "font.h"
 #include <glm.hpp>
 #include <vector>
-#include "utils/itr.h"
+#include "utils/id.h"
 
 namespace text
 {
@@ -33,8 +33,7 @@ namespace text
             FontID font;
     };
     extern unsigned int tabsize;
-    extern std::vector<Text> texts;
-    using TextID = utils::Itr<Text, std::vector<Text>, texts>; 
+    using TextID = utils::ID<Text>; 
 
     void updateTexts();
 

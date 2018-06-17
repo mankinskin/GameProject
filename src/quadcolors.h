@@ -4,7 +4,7 @@
 #include <glm.hpp>
 #include <tuple>
 #include "gui.h"
-#include "utils/itr.h"
+#include "utils/id.h"
 #include "color.h"
 #include "storage.h"
 #include "vao.h"
@@ -23,6 +23,6 @@ namespace gui
     void initColorQuadVAO();
     void updateColorQuads();
     void renderColorQuads();
-    void colorQuad( const unsigned int pID, const gl::ColorIt pColor );
+    void colorQuad( const QuadID pID, const gl::ColorID pColor );
 }
 

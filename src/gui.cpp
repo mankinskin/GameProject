@@ -22,7 +22,7 @@
 glm::vec2 gui::pixel_size;
 
 using gl::Color;
-using gl::ColorIt;
+using gl::ColorID;
 
 void gui::init()
 {
@@ -259,7 +259,7 @@ void gui::initWidgets()
     ////Slider
     //using Slider = QuadGroup<2>;
     //using SliderResizePolicy = WidgetResizePolicy<Slider>;
-    //using SliderColors = ColorGroup<2, gl::ColorIt>;
+    //using SliderColors = ColorGroup<2, gl::ColorID>;
 
     //SliderColors slider_colors( gl::getColor( "lightgrey" ), gl::getColor( "darkgrey" ) );
     //Slider::initer_t slider_initer( { glm::vec4( 0.0f, 0.0f, 0.2f, 0.05f ), glm::vec4( 0.0f, 0.0f, 0.05f, 0.05f ) } );

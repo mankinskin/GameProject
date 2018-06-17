@@ -1,8 +1,6 @@
 #include "text.h"
 
-std::vector<text::Text> text::texts;
 unsigned int text::tabsize = 4;
-
 
 void text::Text::setChars( const std::string& pStr )
 {
@@ -67,7 +65,7 @@ void text::Text::writeChars()
             writeWord( ci - wordChars, wordChars );
             wordChars = 0; 
             wordLength = 0.0f; 
-            lineBreak();			
+            lineBreak();
             continue;
         }
         if ( cursor + wordLength > size.x ) {
@@ -76,9 +74,8 @@ void text::Text::writeChars()
                 wordChars = 1; 
                 wordLength = met.advance; 
             }
-            lineBreak();			
+            lineBreak();
         } 
-
     }
     if ( wordChars ) {
         writeWord( str.size() - wordChars, wordChars );
@@ -98,7 +95,7 @@ void text::Text::setFont( FontID pFontID )
 
 void text::updateTexts()
 {
-    for( Text& text : texts ) {
+    for( Text& text : TextID::container ) {
         text.writeChars();
     }
 }

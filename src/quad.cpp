@@ -8,21 +8,11 @@
 #include "quadcolors.h"
 
 gl::StreamStorage<glm::vec4> gui::quadBuffer;
-std::array<glm::vec4, gui::MAX_QUAD_COUNT> allQuads;
-size_t gui::quadCount = 0;
-
-
-gui::Quad::Quad( glm::vec4 pData ) 
-    :ID( ++quadCount )
-{
-    printf("Creating Quad %u\n", ID );
-    allQuads[ ID - 1 ] = pData;
-}
 
 void gui::initQuadBuffer()
 {
     quadBuffer = gl::StreamStorage<glm::vec4>( "QuadBuffer", 
-            MAX_QUAD_COUNT, GL_MAP_WRITE_BIT, &allQuads[0] );
+            MAX_QUAD_COUNT, GL_MAP_WRITE_BIT, &QuadID::container[0] );
     quadBuffer.setTarget( GL_UNIFORM_BUFFER );
 }
 
@@ -34,20 +24,20 @@ void gui::updateQuadBuffer()
     //}
     if ( quadCount ) {
         gl::uploadStorage( quadBuffer, 
-                sizeof( glm::vec4 )*quadCount, &allQuads[0] );
+                sizeof( glm::vec4 )*quadCount, &QuadID::container[0] );
     }
 }
 
 void gui::Quad::move( const glm::vec2 pV ) const
 {
-    getQuadData( ID ) += glm::vec4( pV.x, pV.y, 0.0f, 0.0f );
+    data += glm::vec4( pV.x, pV.y, 0.0f, 0.0f );
 }
 
 void gui::Quad::resize( const glm::vec2 pV ) const
 {
-    getQuadData( ID ) += glm::vec4( 0.0f, 0.0f, pV.x, pV.y );
+    data += glm::vec4( 0.0f, 0.0f, pV.x, pV.y );
 }
-void gui::Quad::color( const gl::ColorIt pColor ) const
+void gui::Quad::color( const gl::ColorID pColor ) const
 {
     colorQuad( ID, pColor );
 }
@@ -56,8 +46,3 @@ void gui::Quad::color( const gl::ColorIt pColor ) const
 //{
 //    std::memcpy( &getQuadData( pQuad ), &pPos, sizeof( glm::vec2 ) );
 //}
-
-glm::vec4& gui::getQuadData( const unsigned int pID )
-{
-    return allQuads[ pID - 1 ]; 
-}

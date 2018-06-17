@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "utils/itr.h"
+#include "utils/id.h"
 #include "fontfile.h"
 
 namespace text 
@@ -49,7 +49,7 @@ namespace text
     void setTargetResolution( const glm::uvec2 );
     extern glm::vec2 pixel_size;
     extern std::vector<Font> fonts;
-    using FontID = utils::Itr<Font, std::vector<Font>, fonts>;
+    using FontID = utils::ID<Font>;
 
     inline glm::vec2 pixel_quantize( glm::vec2 v )
     {

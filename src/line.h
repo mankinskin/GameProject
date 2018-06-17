@@ -4,7 +4,7 @@
 #include <glm.hpp>
 #include "gl.h"
 #include "color.h"
-#include "utils/itr.h"
+#include "utils/id.h"
 #include "storage.h"
 
 namespace gui
@@ -26,7 +26,7 @@ namespace gui
             unsigned int pLineCount, int pFlags = DEFAULT_LINE_GROUP_FLAGS );
     //struct LineVertex{
     //    LinePointIt vertex;
-    //    gl::ColorIt color;
+    //    gl::ColorID color;
     //};
 
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "utils/itr.h"
+#include "utils/id.h"
 #include "storage.h"
 #include <vector>
 #include <string>
@@ -8,10 +8,9 @@
 
 namespace gl 
 {
-    const unsigned int MAX_COLOR_COUNT = 100;
     typedef glm::vec4 Color;
-    extern std::array<glm::vec4, gl::MAX_COLOR_COUNT> allColors;
-    typedef utils::Itr<Color, std::array<Color, MAX_COLOR_COUNT>, allColors> ColorIt;
+    const size_t MAX_COLOR_COUNT = 100;
+    typedef utils::ID<Color> ColorID;
 
     extern StreamStorage<Color> colorBuffer;
 
@@ -21,9 +20,9 @@ namespace gl
     void initColorBuffer();
     void updateColorBuffer();
 
-    ColorIt createColor( glm::vec4 pColor, std::string pColorName );
-    ColorIt getColor( std::string pColorName );
+    ColorID createColor( glm::vec4 pColor, std::string pColorName );
+    ColorID getColor( std::string pColorName );
 
-    Color getColorData( ColorIt colorIndex );
+    Color getColorData( ColorID colorIndex );
     Color getColorData( std::string colorName );
 }

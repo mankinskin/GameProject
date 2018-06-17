@@ -3,7 +3,7 @@
 #include <glm.hpp>
 #include <vector>
 #include <tuple>
-#include "utils/itr.h"
+#include "utils/id.h"
 #include "storage.h"
 #include "vao.h"
 #include "color.h"
@@ -12,19 +12,19 @@ namespace gui
 {
     struct Quad 
     {
-        using Initer = glm::vec4;
-        using Colors = gl::ColorIt;
-        Quad( glm::vec4 pData ); 
+        Quad( glm::vec4 pData )
+            :data( pData )
+        {}
 
-        const unsigned int ID;
+        glm::vec4 data;
         void move( const glm::vec2 pV ) const;
         void resize( const glm::vec2 pV ) const;
-        void color( const gl::ColorIt pColor ) const; 
+        void color( const gl::ColorID pColor ) const; 
     };
+    using QuadID = utils::ID<Quad>;
 
     const unsigned int MAX_QUAD_COUNT = 10000;
-    void setQuadPos( const Quad pQuad, const glm::vec2 pPos );
-    glm::vec4& getQuadData( const unsigned int pID );
+    void setQuadPos( const QuadID pQuad, const glm::vec2 pPos );
 
 
     void initQuadBuffer();

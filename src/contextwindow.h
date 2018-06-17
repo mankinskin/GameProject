@@ -1,5 +1,5 @@
 #pragma once
-#include "utils/itr.h"
+#include "utils/id.h"
 #include <glew.h>
 #include <glm.hpp>
 #include <string>
@@ -27,8 +27,7 @@ namespace app
         void print();
     };
 
-    extern std::vector<Monitor> allMonitors;
-    using MonitorID = utils::Itr<Monitor, std::vector<Monitor>, allMonitors>;
+    using MonitorID = utils::ID<Monitor>;
 
     struct Window 
     {
@@ -79,6 +78,7 @@ namespace app
         unsigned int height;
         std::string name;
         bool fullscreen = false;
+
         private:
         void init();
     };

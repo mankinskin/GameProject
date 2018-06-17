@@ -65,9 +65,9 @@ void gui::renderColorQuads()
     glDepthFunc( GL_LESS );
 }
 
-void gui::colorQuad( const unsigned int pID, const gl::ColorIt pColor )
+void gui::colorQuad( const QuadID pID, const gl::ColorID pColor )
 {
     printf( "Coloring Quad %u with color %u\n", pID, pColor.index );
-    quadColors[ pID - 1 ] = pColor.index;
+    quadColors[ pID.index ] = pColor.index;
 }
 
