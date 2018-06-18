@@ -41,14 +41,14 @@ void gui::setupQuadIndexShader()
 
 void gui::rasterQuadIndices()
 {
-    if ( quadCount ) {
+    if ( QuadID::container.size() ) {
         glDepthMask( 0 );
         glDepthFunc( GL_LEQUAL );
         quadIndexVAO.bind();
         quadIndexShader.use();
 
         glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 
-                0, quadCount );
+                0, QuadID::container.size() );
 
         shader::Program::unuse();
         quadIndexVAO.unbind();
@@ -88,4 +88,3 @@ float gui::readQuadDepthMap( const unsigned int pXPos,
     return readQuadDepthMap( 
             ( gl::Viewport::current->width * pYPos ) + pXPos );
 }
-

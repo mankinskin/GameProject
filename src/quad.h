@@ -15,20 +15,27 @@ namespace gui
         Quad( glm::vec4 pData )
             :data( pData )
         {}
-
         glm::vec4 data;
+    };
+
+    struct QuadID 
+        : public utils::ID<Quad>
+    {
+        QuadID( const Quad& q )
+            :utils::ID<Quad>( q )
+        {}
+        QuadID( size_t i )
+            :utils::ID<Quad>( i )
+        {}
         void move( const glm::vec2 pV ) const;
         void resize( const glm::vec2 pV ) const;
         void color( const gl::ColorID pColor ) const; 
     };
-    using QuadID = utils::ID<Quad>;
 
     const unsigned int MAX_QUAD_COUNT = 10000;
     void setQuadPos( const QuadID pQuad, const glm::vec2 pPos );
 
-
     void initQuadBuffer();
     void updateQuadBuffer();
     extern gl::StreamStorage<glm::vec4> quadBuffer;
-    extern size_t quadCount;
 }
