@@ -24,17 +24,21 @@ namespace utils
             {
                 return index;
             }
+            T& get() const
+            {
+                return container[index];
+            }
             T* operator->() const
             {
-                return &container[index];
+                return &get();
             }
             T& operator*() const
             {
-                return container[index];
+                return get();
             }
             operator T() const
             {
-                return container[index];
+                return get();
             }
         };
 
