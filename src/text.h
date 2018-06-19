@@ -36,9 +36,4 @@ namespace text
     using TextID = utils::ID<Text>; 
 
     void updateTexts();
-
-    struct Printer
-    {
-
-    };
 }

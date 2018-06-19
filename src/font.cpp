@@ -11,7 +11,6 @@
 gl::VAO fontVAO;
 shader::Program fontShader;
 glm::vec2 text::pixel_size = glm::vec2( 2.0f / (float)1920, 2.0f / (float)1080 );
-std::vector<text::Font> text::fonts;
 
 void text::setTargetResolution( const unsigned int rx, const unsigned int ry )
 {
@@ -40,8 +39,8 @@ void text::loadFonts()
     liberationfont.setLoadSize( 16 );
     liberationfont.read( "LiberationMono-Regular.ttf" );
 
-    fonts.push_back( Font( terminusfont ) );
-    fonts.push_back( Font( liberationfont ) );
+    FontID::container.push_back( Font( terminusfont ) );
+    FontID::container.push_back( Font( liberationfont ) );
 }
 
 text::Font::Font( const FontFile& fontfile )
@@ -124,7 +123,7 @@ void text::Font::uploadPositions() const
 
 void text::updateFonts()
 {
-    for ( const Font& font : fonts ) {
+    for ( const Font& font : FontID::container ) {
         font.uploadChars();
         font.uploadPositions();
     }
@@ -152,7 +151,7 @@ void text::Font::render() const
 
 void text::renderFonts()
 {
-    for ( const Font& font : fonts ) {
+    for ( const Font& font : FontID::container ) {
         font.render();
     }
 }
