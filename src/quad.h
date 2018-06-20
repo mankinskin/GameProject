@@ -16,6 +16,9 @@ namespace gui
             :data( pData )
         {}
         glm::vec4 data;
+        void setPos( const glm::vec2 p );
+        void move( const glm::vec2 v );
+        void resize( const glm::vec2 v );
     };
 
     struct QuadID 
@@ -27,13 +30,15 @@ namespace gui
         QuadID( size_t i )
             :utils::ID<Quad>( i )
         {}
-        void move( const glm::vec2 pV ) const;
-        void resize( const glm::vec2 pV ) const;
-        void color( const gl::ColorID pColor ) const; 
+        void setPos( const glm::vec2 p ) const;
+        void move( const glm::vec2 v ) const;
+        void resize( const glm::vec2 v ) const;
+        void color( const gl::ColorID c ) const; 
     };
 
     const unsigned int MAX_QUAD_COUNT = 10000;
-    void setQuadPos( const QuadID pQuad, const glm::vec2 pPos );
+    void setQuadPos( const QuadID q, const glm::vec2 p );
+    void moveQuad( const QuadID q, const glm::vec2 v );
 
     void initQuadBuffer();
     void updateQuadBuffer();

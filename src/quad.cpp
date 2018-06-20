@@ -18,31 +18,53 @@ void gui::initQuadBuffer()
 
 void gui::updateQuadBuffer()
 {
-    //printf( "quadCount: %u\n", quadCount );
-    //for( unsigned int q = 0; q < quadCount; ++q ) {
-    //    printf( "%f, %f, %f, %f\n", allQuads[q].x, allQuads[q].y, allQuads[q].z, allQuads[q].w );
-    //}
     if ( QuadID::container.size() ) {
         gl::uploadStorage( quadBuffer, 
                 sizeof( glm::vec4 )*QuadID::container.size(), &QuadID::container[0] );
     }
 }
 
-void gui::QuadID::move( const glm::vec2 pV ) const
+void gui::Quad::setPos( const glm::vec2 p )
 {
-    this->operator*().data += glm::vec4( pV.x, pV.y, 0.0f, 0.0f );
+    data = glm::vec4( p.x, p.y, data.z, data.w );
 }
 
-void gui::QuadID::resize( const glm::vec2 pV ) const
+void gui::Quad::move( const glm::vec2 v )
 {
-    this->operator*().data += glm::vec4( 0.0f, 0.0f, pV.x, pV.y );
-}
-void gui::QuadID::color( const gl::ColorID pColor ) const
-{
-    colorQuad( index, pColor );
+    data += glm::vec4( v.x, v.y, 0.0f, 0.0f );
 }
 
-//void gui::setQuadPos( const Quad pQuad, const glm::vec2 pPos )
-//{
-//    std::memcpy( &getQuadData( pQuad ), &pPos, sizeof( glm::vec2 ) );
-//}
+void gui::Quad::resize( const glm::vec2 v )
+{
+    data += glm::vec4( 0.0f, 0.0f, v.x, v.y );
+}
+
+void gui::QuadID::setPos( const glm::vec2 p ) const
+{
+    this->get().setPos( p );
+}
+
+void gui::QuadID::move( const glm::vec2 v ) const
+{
+    this->get().move( v );
+}
+
+void gui::QuadID::resize( const glm::vec2 v ) const
+{
+    this->get().resize( v );
+}
+
+void gui::QuadID::color( const gl::ColorID c ) const
+{
+    colorQuad( index, c );
+}
+
+void gui::setQuadPos( const QuadID q, const glm::vec2 p )
+{
+    q.setPos( p );
+}
+void gui::moveQuad( const QuadID q, const glm::vec2 v )
+{
+    q.move( v );
+}
+
