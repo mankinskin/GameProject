@@ -10,6 +10,7 @@
 #include "utils/id.h"
 #include "element.h"
 #include "element_utils.h"
+#include "utils/array_utils.h"
 
 
 //-----Widgets
@@ -22,111 +23,112 @@
 
 namespace gui 
 {
-    //template<typename... Subs>
-    //    struct Widget
-    //    {
-    //        public:
-    //            static const size_t COUNT = sizeof...(Subs);
-    //            using SubWidgets = utils::Element<Subs...>;
-    //            using Colors = utils::Element<typename Subs::Colors...>;
-    //            using MovePolicy = utils::gen_Element_t<glm::vec2, COUNT>;
-    //            using ResizePolicy = utils::gen_Element_t<glm::vec4, COUNT>;
-    //            using Initer = utils::Element<typename Subs::Initer...>;
+    template<size_t COUNT>
+        struct Widget
+        {
+            public:
+                using Colors = std::array<gl::ColorID, COUNT>;
+                using MovePolicy = std::array<glm::vec2, COUNT>;
+                using ResizePolicy = std::array<glm::vec4, COUNT>;
+                using QuadPreset = std::array<Quad, COUNT>;
+                using Quads = std::array<QuadID, COUNT>;
 
-    //            struct Preset
-    //            {
-    //                Preset( Initer pIniter, Colors pColors, 
-    //                        MovePolicy pMovePolicy, ResizePolicy pResizePolicy )
-    //                    :initer( pIniter ), 
-    //                    colors( pColors ),
-    //                    movepolicy( pMovePolicy ), 
-    //                    resizepolicy( pResizePolicy )
-    //                {
-    //                }
-    //                const Initer initer;
-    //                const Colors colors;
-    //                const MovePolicy movepolicy;
-    //                const ResizePolicy resizepolicy;
-    //            }; 
-    //            const SubWidgets subwidgets;
-    //            const Colors colors;
-    //            const MovePolicy movepolicy;
-    //            const ResizePolicy resizepolicy;
+                struct Preset
+                {
+                    Preset( QuadPreset qs, Colors cs, 
+                            MovePolicy mp, ResizePolicy rp )
+                        :quads( qs ), 
+                        colors( cs ),
+                        movepolicy( mp ), 
+                        resizepolicy( rp )
+                    {
+                    }
+                    const QuadPreset quads;
+                    const Colors colors;
+                    const MovePolicy movepolicy;
+                    const ResizePolicy resizepolicy;
+                }; 
+                const Quads quads;
+                const Colors colors;
+                const MovePolicy movepolicy;
+                const ResizePolicy resizepolicy;
 
-    //            Widget( Preset pPreset )
-    //                :subwidgets( pPreset.initer ), 
-    //                colors( pPreset.colors ),
-    //                movepolicy( pPreset.movepolicy ), 
-    //                resizepolicy( pPreset.resizepolicy )
-    //        {
-    //            color( colors );
-    //        }
+                Widget( Preset preset )
+                    :quads( utils::convert_array<QuadID>( preset.quads ) ), 
+                    colors( preset.colors ),
+                    movepolicy( preset.movepolicy ), 
+                    resizepolicy( preset.resizepolicy )
+            {
+                color( colors );
+            }
 
-    //            Widget( Initer pIniter, Colors pColors, 
-    //                    MovePolicy pMovePolicy, ResizePolicy pResizePolicy )
-    //                :subwidgets( pIniter ), 
-    //                colors( pColors ),
-    //                movepolicy( pMovePolicy ), 
-    //                resizepolicy( pResizePolicy )
-    //        {
-    //            color( colors );
-    //        }
+                    Widget( QuadPreset qs, Colors cs, 
+                            MovePolicy mp, ResizePolicy rp )
+                        :quads( utils::convert_array<QuadID>( qs ) ), 
+                        colors( cs ),
+                        movepolicy( mp ), 
+                        resizepolicy( rp )
+            {
+                color( colors );
+            }
 
-    //            void move_n( utils::_index<0> i, const glm::vec2 pV ) const
-    //            {
-    //            }
-    //            template<size_t N>
-    //                void move_n( utils::_index<N> i, const glm::vec2 pV ) const
-    //                {
-    //                    move_n( utils::_index<N-1>(), pV );
-    //                    std::get<N-1>( subwidgets.subelements ).move( pV * std::get<N - 1>( movepolicy.subelements ) );
-    //                }
-    //            void resize_n( utils::_index<0> i, const glm::vec2 pV ) const
-    //            {
-    //            }
-    //            template<size_t N>
-    //                void resize_n( utils::_index<N> i, const glm::vec2 pV ) const
-    //                {
-    //                    resize_n( utils::_index<N-1>(), pV );
-    //                    std::get<N-1>( subwidgets.subelements ).resize( pV * std::get<N - 1>( resizepolicy.subelements ) );
-    //                }
-    //            void color_n( utils::_index<0> i, Colors pColors ) const
-    //            {
-    //            }
-    //            template<size_t N>
-    //                void color_n( utils::_index<N> i, Colors pColors ) const
-    //                {
-    //                    color_n( utils::_index<N-1>(), pColors );
-    //                    std::get<N - 1>(subwidgets.subelements).color( std::get<N - 1>(pColors.subelements) );
-    //                }
-    //            void move( const glm::vec2 pV ) const
-    //            {
-    //                move_n( utils::_index<COUNT>(), pV );   
-    //            }
-    //            void resize( const glm::vec2 pV ) const
-    //            {
-    //                resize_n( utils::_index<COUNT>(), pV );   
-    //            }
-    //            void color( Colors pColors ) const
-    //            {
-    //                color_n( utils::_index<COUNT>(), pColors );   
-    //            }
-    //    };
+                void move_n( utils::_index<0> i, const glm::vec2 v ) const
+                {
+                }
+                template<size_t N>
+                    void move_n( utils::_index<N> i, const glm::vec2 v ) const
+                    {
+                        move_n( utils::_index<N-1>(), v );
+                        quads[N - 1].move( v * movepolicy[N - 1] );
+                    }
+                void resize_n( utils::_index<0> i, const glm::vec2 v ) const
+                {
+                }
+                template<size_t N>
+                    void resize_n( utils::_index<N> i, const glm::vec2 v ) const
+                    {
+                        resize_n( utils::_index<N-1>(), v );
+                        const glm::vec4& pol = resizepolicy[N - 1];
+                        quads[N-1].move( v * glm::vec2( pol.x, pol.y ) );
+                        quads[N-1].resize( v * glm::vec2( pol.z, pol.w ) );
+                    }
+                void color_n( utils::_index<0> i, Colors pColors ) const
+                {
+                }
+                template<size_t N>
+                    void color_n( utils::_index<N> i, Colors pColors ) const
+                    {
+                        color_n( utils::_index<N-1>(), pColors );
+                        quads[N - 1].color( colors[N - 1] );
+                    }
+                void move( const glm::vec2 v ) const
+                {
+                    move_n( utils::_index<COUNT>(), v );   
+                }
+                void resize( const glm::vec2 v ) const
+                {
+                    resize_n( utils::_index<COUNT>(), v );   
+                }
+                void color( Colors pColors ) const
+                {
+                    color_n( utils::_index<COUNT>(), pColors );   
+                }
+        };
 
-    //template<typename... Subs>
-    //    void moveWidget( Widget<Subs...> pWidget, glm::vec2& pV )
-    //    {
-    //        pWidget.move( pV );
-    //    }
-    //template<typename... Subs>
-    //    void resizeWidget( Widget<Subs...> pWidget, glm::vec2& pV )
-    //    {
-    //        pWidget.resize( pV );
-    //    }
-    //template<typename... Subs>
-    //    void colorWidget( Widget<Subs...> pWidget, 
-    //            typename Widget<Subs...>::Colors& pColors )
-    //    {
-    //        pWidget.color( pColors );
-    //    }
+    template<size_t COUNT>
+        void moveWidget( Widget<COUNT> pWidget, glm::vec2& pV )
+        {
+            pWidget.move( pV );
+        }
+    template<size_t COUNT>
+        void resizeWidget( Widget<COUNT> pWidget, glm::vec2& pV )
+        {
+            pWidget.resize( pV );
+        }
+    template<size_t COUNT>
+        void colorWidget( Widget<COUNT> pWidget, 
+                typename Widget<COUNT>::Colors& pColors )
+        {
+            pWidget.color( pColors );
+        }
 }

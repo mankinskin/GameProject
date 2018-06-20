@@ -40,50 +40,50 @@ void gui::initWidgets()
     using namespace input;
     using namespace signals;
 
-    //using Button = Widget<Quad, Quad>;
+    using Button = Widget<2>;
 
-    //float button_width = gui::pixel_size.x * 100.0f;
-    //float button_height = gui::pixel_size.x * 70.0f;
-    //glm::vec2 margin = gui::pixel_size * 3.0f;
+    float button_width = gui::pixel_size.x * 100.0f;
+    float button_height = gui::pixel_size.x * 70.0f;
+    glm::vec2 margin = gui::pixel_size * 3.0f;
 
-    //Button::Initer button_initer( 
-    //        glm::vec4(0.0f, 0.0f, button_width, button_height ),
-    //        glm::vec4( margin.x, -margin.y, 
-    //            button_width - margin.x*2.0f, 
-    //            button_height - margin.y*2.0f ) );
+    Button::QuadPreset button_initer{ 
+            glm::vec4(0.0f, 0.0f, button_width, button_height ),
+            glm::vec4( margin.x, -margin.y, 
+                button_width - margin.x*2.0f, 
+                button_height - margin.y*2.0f ) };
 
-    //Button::Colors button_colors = Button::Colors( gl::getColor( "lightgrey" ), 
-    //        gl::getColor( "black" ) );
+    Button::Colors button_colors{ gl::getColor( "lightgrey" ), 
+            gl::getColor( "black" ) };
 
-    //Button::MovePolicy button_move_policy( 
-    //        glm::vec2( 1.0f, 1.0f ), 
-    //        glm::vec2( 1.0f, 1.0f ) );
-    //Button::ResizePolicy button_resize_policy(
-    //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), 
-    //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) );
+    Button::MovePolicy button_move_policy{ 
+            glm::vec2( 1.0f, 1.0f ), 
+            glm::vec2( 1.0f, 1.0f ) };
+    Button::ResizePolicy button_resize_policy{
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), 
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) };
 
-    //Button::Preset button_preset( button_initer, button_colors, 
-    //        button_move_policy, button_resize_policy );
-
-
-    //Button play_button( button_preset );
-    //Button quit_button( button_preset );
-
-    //play_button.move( glm::vec2( -0.95f, -0.6f ) );
-    //quit_button.move( glm::vec2( -0.95f, -0.8f ) );
+    Button::Preset button_preset( button_initer, button_colors, 
+            button_move_policy, button_resize_policy );
 
 
-    //ButtonEvents<Event> play_button_events( 
-    //        createEvent( QuadEvent( play_button.subwidgets.element<1>().ID, 1 ) ), 
-    //        createEvent( QuadEvent( play_button.subwidgets.element<1>().ID, 0 ) ) );
+    Button play_button( button_preset );
+    Button quit_button( button_preset );
 
-    //gate<and_op, decltype( play_button_events.hold_evt ), decltype( lmb.on_evt )> play_press_evt( and_op(), 
-    //        play_button_events.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( play_press_evt ), decltype( lmb.off_evt )> play_lmb( play_press_evt, lmb.off_evt );
-    //auto move_play_func = 
-    //    createFunctor<void, Button, glm::vec2&>( moveWidget, play_button, cursorFrameDelta );
+    play_button.move( glm::vec2( -0.95f, -0.6f ) );
+    quit_button.move( glm::vec2( -0.95f, -0.8f ) );
 
-    //move_play_func.set_triggers( { play_lmb.hold } );
+
+    ButtonEvents<Event> play_button_events( 
+            createEvent( QuadEvent( play_button.quads[1].index, 1 ) ), 
+            createEvent( QuadEvent( play_button.quads[1].index, 0 ) ) );
+
+    gate<and_op, decltype( play_button_events.hold_evt ), decltype( lmb.on_evt )> play_press_evt( and_op(), 
+            play_button_events.hold_evt, lmb.on_evt );
+    ButtonEvents<decltype( play_press_evt ), decltype( lmb.off_evt )> play_lmb( play_press_evt, lmb.off_evt );
+    auto move_play_func = 
+        createFunctor<void, Button, glm::vec2&>( moveWidget, play_button, cursorFrameDelta );
+
+    move_play_func.set_triggers( { play_lmb.hold } );
 
 
     //ButtonEvents<Event> quit_button_events( 
