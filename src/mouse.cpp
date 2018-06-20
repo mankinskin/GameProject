@@ -82,15 +82,16 @@ void input::getCursorQuadEvents()
     last_hovered_quad = hovered_quad;
     hovered_quad = gui::readQuadIndexMap( absoluteCursorPosition.x, absoluteCursorPosition.y );
     float quad_depth = gui::readQuadDepthMap( absoluteCursorPosition.x, absoluteCursorPosition.y );
+    //printf("Hovering quad %u\n", hovered_quad );
     if( last_hovered_quad != hovered_quad ){
         //quad change
         if ( last_hovered_quad ) {
             //button leave event
-            pushEvent( QuadEvent( last_hovered_quad, 0 ) );
+            pushEvent( QuadEvent( last_hovered_quad - 1, 0 ) );
         }
         if ( hovered_quad ) {
             //button enter event
-            pushEvent( QuadEvent( hovered_quad, 1 ) );
+            pushEvent( QuadEvent( hovered_quad - 1, 1 ) );
         }
     }
 }

@@ -23,7 +23,7 @@ namespace events
             public:
                 EventSlot( unsigned int pStateIndex, EventType&& pEvent )
                     :event_signature( pEvent ), stateIndex( pStateIndex )
-                {		}
+                {}
                 static void reserve_slots( unsigned int pCount ) {
                     allEventStates.reserve( allEventStates.size() + pCount );
                     slots.reserve( slots.size() + pCount );
@@ -80,7 +80,8 @@ namespace events
         return l.src == r.src;
     }
     template<class EventType>
-        Event createEvent( EventType pEvent ) {
+        Event createEvent( EventType pEvent ) 
+        {
             if ( !EventSlot<EventType>::slots.size() ) {
                 eventCheckers.push_back( EventSlot<EventType>::checkEvents );
                 eventDestructors.push_back( EventSlot<EventType>::clear_slots );

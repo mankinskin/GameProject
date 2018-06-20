@@ -31,7 +31,7 @@ namespace input
             :quad_index( 0 ), enter( 0 ) 
         {}
         QuadEvent( unsigned int pQuad, int pEnter )
-            :quad_index( pQuad ), enter( pEnter ) 
+            :quad_index( pQuad + 1 ), enter( pEnter ) 
         {}
         unsigned int quad_index;// 0 if none
         int enter;
