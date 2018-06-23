@@ -133,7 +133,6 @@ void sequencer::frame()
     input::getCursorQuadEvents();
     input::getMouseKeyEvents();
     events::checkEvents();
-    signals::checkSignals();
     functors::callFunctors();
 
     camera::main_camera.look( input::cursorFrameDelta );
