@@ -10,10 +10,15 @@ namespace utils
             using Container = typename std::vector<T>;
             using size_type = typename Container::size_type;
             static Container container;
+            ID()
+                :index( container.size() )
+            {
+                container.push_back( T() );
+            }
             ID( size_type I )
                 :index( I )
             {}
-            ID( const T& data )
+            ID( const T data )
                 :index( container.size() )
             {
                 container.push_back( data );

@@ -88,9 +88,9 @@ void text::Text::writeChars()
     cursor = 0.0f;
 }
 
-void text::Text::setFont( FontID pFontID )
+void text::Text::setFont( Font::ID pFont )
 {
-    font = pFontID;
+    font = pFont;
 }
 
 void text::updateTexts()

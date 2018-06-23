@@ -8,6 +8,9 @@ namespace text
 {
     struct Font
     {
+        using ID = utils::ID<Font>;
+        typename ID::Container& all = ID::container;
+
         Font()
         {
         }
@@ -48,7 +51,6 @@ namespace text
     void setTargetResolution( const unsigned int, const unsigned int );
     void setTargetResolution( const glm::uvec2 );
     extern glm::vec2 pixel_size;
-    using FontID = utils::ID<Font>;
 
     inline glm::vec2 pixel_quantize( glm::vec2 v )
     {

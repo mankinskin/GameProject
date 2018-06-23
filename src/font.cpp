@@ -39,8 +39,8 @@ void text::loadFonts()
     liberationfont.setLoadSize( 16 );
     liberationfont.read( "LiberationMono-Regular.ttf" );
 
-    FontID::container.push_back( Font( terminusfont ) );
-    FontID::container.push_back( Font( liberationfont ) );
+    Font::ID::container.push_back( Font( terminusfont ) );
+    Font::ID::container.push_back( Font( liberationfont ) );
 }
 
 text::Font::Font( const FontFile& fontfile )
@@ -123,7 +123,7 @@ void text::Font::uploadPositions() const
 
 void text::updateFonts()
 {
-    for ( const Font& font : FontID::container ) {
+    for ( const Font& font : Font::ID::container ) {
         font.uploadChars();
         font.uploadPositions();
     }
@@ -151,7 +151,7 @@ void text::Font::render() const
 
 void text::renderFonts()
 {
-    for ( const Font& font : FontID::container ) {
+    for ( const Font& font : Font::ID::container ) {
         font.render();
     }
 }
