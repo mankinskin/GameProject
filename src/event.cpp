@@ -1,28 +1,19 @@
 #include "event.h"
 
-std::vector<bool> events::allEventStates;
-std::vector<void( * )()> events::eventCheckers = std::vector<void( * )()>();
-std::vector<void( * )()> events::eventDestructors = std::vector<void( * )()>();
-std::vector<void( * )()> events::eventResetters = std::vector<void( * )()>();
+std::vector<void(*)()> events::checkers = std::vector<void(*)()>();
+std::vector<void(*)()> events::resetters = std::vector<void(*)()>();
 
 void events::checkEvents() 
 {
-    for ( void( *&checker )() : eventCheckers ) {
+    for ( void( *&checker )() : checkers ) {
         checker();
-    }
-}
-void events::clearEvents() 
-{
-    for ( void( *&destructor )() : eventDestructors ) {
-        destructor();
     }
 }
 
 void events::resetEvents() 
 {
-    for ( unsigned int i = 0; i < eventResetters.size(); ++i ) {
-        eventResetters[i]();
+    for ( void( *&resetter )() : resetters ) {
+        resetter();
     }
-    std::fill( allEventStates.begin(), allEventStates.end(), false );
 }
 

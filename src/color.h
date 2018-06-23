@@ -6,7 +6,7 @@
 #include <glm.hpp>
 #include <array>
 
-namespace gl 
+namespace gl
 {
     typedef glm::vec4 Color;
     const size_t MAX_COLOR_COUNT = 100;
