@@ -1,20 +1,11 @@
 #include "functor.h"
 #include "event.h"
-
-std::vector<void( * )( unsigned int )> functors::functorInvokers = std::vector<void( * )( unsigned int )>();
-std::vector<void( * )()> functors::functorDestructors = std::vector<void( * )()>();
-std::vector<std::pair<unsigned int, unsigned int>> functors::functorOrder = std::vector<std::pair<unsigned int, unsigned int>>();
-
+std::vector<void(*)(const size_t)> functors::invokers = std::vector<void(*)(const size_t)>();
+std::vector<void( * )()> functors::destructors = std::vector<void( * )()>();
 
 void functors::clearFunctors() 
 {
-    for ( void( *&destructor )() : functorDestructors ) {
+    for ( void( *&destructor )() : destructors ) {
         destructor();
-    }
-}
-void functors::callFunctors()
-{
-    for ( std::pair<unsigned int, unsigned int>& funi : functorOrder ) {
-        functorInvokers[funi.first]( funi.second );
     }
 }

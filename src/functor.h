@@ -6,6 +6,7 @@
 #include <functional>
 #include <algorithm>
 #include <tuple>
+#include "utils/id.h"
 
 namespace functors 
 {
@@ -26,120 +27,101 @@ namespace functors
                     applier<N - 1, R, Args...>::func( pF, pArgTuple, std::get<N - 1>( pArgTuple ), pExArgs... );
                 }
         };
+
     template<typename R, typename... Args>
         struct applier<0, R, Args...> 
         {
             template<typename... ExArgs>
-                static void func( R( &pF )( Args... ), std::tuple<Args...> pArgTuple, ExArgs&&... pExArgs ) 
+                static void func( R( &pF )( Args... ), std::tuple<Args...> pArgTuple, ExArgs&&... pExArgs )
                 {
                     pF( pExArgs... );
                 }
         };
-
+    // used to extract parameter pack from tuple
     template<typename R, typename... Args>
-        void function_caller( R( &pF )( Args... ), std::tuple<Args...> pArgTuple ) 
+        void function_caller( R( &pF )( Args... ), std::tuple<Args...> pArgTuple )
         {
             applier<sizeof...( Args ), R, Args...>::func( pF, pArgTuple );
         }
+    //
+    // Invoke functors using a functor-global array of invokers taking a local index
+    extern std::vector<void(*)(const size_t)> invokers;
+    extern std::vector<void(*)()> destructors;
 
     template<typename R, typename... Args>
-        class Functor 
+        class Functor
         {
             public:
-                Functor( unsigned int pIndex, R( &pF )( Args... ), Args... pArgs )
-                    :func( pF ), 
-                    args( std::forward_as_tuple<Args...>( std::forward<Args>( pArgs )... ) ), 
-                    slot_index( pIndex )
-            { }
-                static void clear() 
-                {
-                    slots.clear();
-                }
-                static void reserve_slots( unsigned int pCount ) 
-                {
-                    slots.reserve( pCount );
-                }
-                void invoke() const 
+                Functor( R( &pF )( Args... ), Args&&... pArgs )
+                    : func( pF )
+                    , args( pArgs... )
+                {}
+
+                void invoke() const
                 {
                     function_caller( func, args );
                 }
-                static void call( unsigned int pFunc ) 
-                {
-                    if ( slots[pFunc].check() ) 
-                    {
-                        slots[pFunc].invoke();
-                    }
-                }
-                bool check() 
-                {
-                    for ( unsigned int s = 0; s < signalSet.size(); ++s ) 
-                    {
-                        if ( signals::allSignals[signalSet[s]] ) 
-                        {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-                void set_triggers( std::initializer_list<unsigned int> pSet ) 
-                {
-                    signalSet = pSet;
-                }
-                void add_trigger( unsigned int pSignal )
-                {
 
+                //invoke instance by index
+                static void invoke( const size_t i )
+                {
+                    all[i].invoke();
                 }
-                static unsigned int invoker_index;
-                static std::vector<Functor<R, Args...>> slots;
-                unsigned int slot_index;
+                static void clear()
+                {
+                    all.clear();
+                }
+                static std::vector<Functor<R, Args...>> all;
+                static size_t invoker_index;
             private:
-                std::vector<unsigned int> signalSet;
                 R( &func )( Args... );
                 std::tuple<Args...> args;
+                struct At_Init
+                {
+                    At_Init()
+                    {
+                        Functor<R, Args...>::invoker_index = invokers.size();
+                        invokers.push_back( Functor<R, Args...>::invoke );
+                        destructors.push_back( Functor<R, Args...>::clear );
+                    }
+                };
+                static At_Init at_init;
         };
 
     template<typename R, typename... Args>
-        std::vector<Functor<R, Args...>> Functor<R, Args...>::slots = std::vector<Functor<R, Args...>>();
-    template<typename R, typename... Args>
-        unsigned int Functor<R, Args...>::invoker_index = 0;
-
-    extern std::vector<void( * )( unsigned int )> functorInvokers;//invokes all functor templates
-    extern std::vector<void( * )()> functorDestructors;//destroys all functor templates
-    extern std::vector<std::pair<unsigned int, unsigned int>> functorOrder;
-
-    template<typename R, class...Args>
-        struct FunctorRef 
-        {
-            FunctorRef( unsigned int pIndex ) :index( pIndex ) 
-            {}
-            void set_triggers( std::initializer_list<unsigned int> pSet ) 
-            {
-                Functor<R, Args...>::slots[index].set_triggers( pSet );
-            }
-
-            unsigned int index;
-        };
-    template<typename R, class...Args>
-        FunctorRef<R, Args...> createFunctor( R( &pF )( Args... ), Args... pArgs ) 
-        {
-            unsigned int ind = Functor<R, Args...>::slots.size();
-            if ( !ind ) 
-            {
-                Functor<R, Args...>::invoker_index = functorInvokers.size();
-                functorInvokers.push_back( Functor<R, Args...>::call );
-                functorDestructors.push_back( Functor<R, Args...>::clear );
-            }
-            functorOrder.emplace_back( Functor<R, Args...>::invoker_index, ind );
-            Functor<R, Args...>::slots.emplace_back( ind, pF, pArgs... );
-            return ind;
-        }
+        std::vector<Functor<R, Args...>> Functor<R, Args...>::all = std::vector<Functor<R, Args...>>();
 
     template<typename R, typename... Args>
-        void reserve_functors( unsigned int pCount ) 
+        size_t Functor<R, Args...>::invoker_index = 0;
+
+    template<typename R, typename... Args>
+        typename Functor<R, Args...>::At_Init Functor<R, Args...>::at_init = Functor<R, Args...>::At_Init();
+
+    struct FunctorID
+    {
+        template<typename R, typename... Args>
+            FunctorID( R( &pF )( Args... ), Args&&... pArgs )
+            : invoker( Functor<R, Args...>::invoker_index )
+            , index( Functor<R, Args...>::all.size() )
         {
-            Functor<R, Args...>::reserve_slots( pCount );
+            Functor<R, Args...>::all.push_back( Functor<R, Args...>( pF, pArgs... ) ); 
         }
 
-    void callFunctors();
+        template<typename R, typename... Args>
+            FunctorID( const Functor<R, Args...> pFunctor )
+            : invoker( Functor<R, Args...>::invoker_index )
+              , index( Functor<R, Args...>::all.size() )
+        {
+            Functor<R, Args...>::all.push_back( pFunctor ); 
+        }
+        void invoke() const
+        {
+            (*invokers[invoker])(index);
+        }
+            
+        const size_t invoker; // invoker in functorInvokers
+        const size_t index;   // local index for functor
+    };
+
     void clearFunctors();
 }

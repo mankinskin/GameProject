@@ -104,49 +104,46 @@ void input::setupControls()
     key_l = input::KeySignal( GLFW_KEY_L );
     key_lshift = input::KeySignal( GLFW_KEY_LEFT_SHIFT );
     key_x = input::KeySignal( GLFW_KEY_X );
-    lmb = events::ButtonEvents<events::Event>( events::createEvent( input::MouseKeyEvent( 0, 1 ) ), events::createEvent( input::MouseKeyEvent( 0, 0 ) ) );
-    rmb = events::ButtonEvents<events::Event>( events::createEvent( input::MouseKeyEvent( 1, 1 ) ), events::createEvent( input::MouseKeyEvent( 1, 0 ) ) );
-    always = signals::createSignal( signals::Source( true ), true );
 
     {
-        FunctorRef<void> toggle_cull_func = createFunctor( mesh::toggleCullFace );
-        FunctorRef<void> toggle_cursor_func = createFunctor( input::toggleCursor );
-        FunctorRef<void, camera::Camera&> toggle_look_func = createFunctor<void, camera::Camera&>( camera::toggleLook, camera::main_camera );
-        FunctorRef<void> toggle_grid_func = createFunctor( glDebug::toggleGrid );
-        FunctorRef<void> toggle_coord_func = createFunctor( glDebug::toggleCoord );
-        FunctorRef<void> toggle_info_func = createFunctor( debug::togglePrintInfo );
-        FunctorRef<void> toggle_normals_func = createFunctor( mesh::toggleNormals );
-        FunctorRef<void, camera::Camera&> cycle_modes_func = createFunctor<void, camera::Camera&>( camera::cycleModes, camera::main_camera );
-        FunctorRef<void, camera::Camera&, float> higher_cam_speed_func = createFunctor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 1.0f );
-        FunctorRef<void, camera::Camera&, float> normal_cam_speed_func = createFunctor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 0.3f );
+        //FunctorRef<void> toggle_cull_func = createFunctor( mesh::toggleCullFace );
+        //FunctorRef<void> toggle_cursor_func = createFunctor( input::toggleCursor );
+        //FunctorRef<void, camera::Camera&> toggle_look_func = createFunctor<void, camera::Camera&>( camera::toggleLook, camera::main_camera );
+        //FunctorRef<void> toggle_grid_func = createFunctor( glDebug::toggleGrid );
+        //FunctorRef<void> toggle_coord_func = createFunctor( glDebug::toggleCoord );
+        //FunctorRef<void> toggle_info_func = createFunctor( debug::togglePrintInfo );
+        //FunctorRef<void> toggle_normals_func = createFunctor( mesh::toggleNormals );
+        //FunctorRef<void, camera::Camera&> cycle_modes_func = createFunctor<void, camera::Camera&>( camera::cycleModes, camera::main_camera );
+        //FunctorRef<void, camera::Camera&, float> higher_cam_speed_func = createFunctor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 1.0f );
+        //FunctorRef<void, camera::Camera&, float> normal_cam_speed_func = createFunctor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 0.3f );
 
-        toggle_cull_func.set_triggers( { key_i.press } );
-        toggle_cursor_func.set_triggers( { key_c.press, rmb.on, rmb.off } );
-        toggle_look_func.set_triggers( { key_c.press, rmb.on, rmb.off } );
-        toggle_grid_func.set_triggers( { key_g.press } );
-        toggle_coord_func.set_triggers( { key_h.press } );
-        toggle_info_func.set_triggers( { key_i.press } );
-        toggle_normals_func.set_triggers( { key_n.press } );
-        cycle_modes_func.set_triggers( { key_j.press } );
+        //toggle_cull_func.add_triggers( { key_i.press } );
+        //toggle_cursor_func.add_triggers( { key_c.press } );
+        //toggle_look_func.add_triggers( { key_c.press } );
+        //toggle_grid_func.add_triggers( { key_g.press } );
+        //toggle_coord_func.add_triggers( { key_h.press } );
+        //toggle_info_func.add_triggers( { key_i.press } );
+        //toggle_normals_func.add_triggers( { key_n.press } );
+        //cycle_modes_func.add_triggers( { key_j.press } );
 
-        higher_cam_speed_func.set_triggers( { key_lshift.press } );
-        normal_cam_speed_func.set_triggers( { key_lshift.release } );
+        //higher_cam_speed_func.add_triggers( { key_lshift.press } );
+        //normal_cam_speed_func.add_triggers( { key_lshift.release } );
     }
 
     {//camera
-        FunctorRef<void, camera::Camera&> forward_func = createFunctor<void, camera::Camera&>( camera::forward, camera::main_camera );
-        FunctorRef<void, camera::Camera&> backward_func = createFunctor<void, camera::Camera&>( camera::back, camera::main_camera );
-        FunctorRef<void, camera::Camera&> left_func = createFunctor<void, camera::Camera&>( camera::left, camera::main_camera );
-        FunctorRef<void, camera::Camera&> right_func = createFunctor<void, camera::Camera&>( camera::right, camera::main_camera );
-        FunctorRef<void, camera::Camera&> up_func = createFunctor<void, camera::Camera&>( camera::up, camera::main_camera );
-        FunctorRef<void, camera::Camera&> down_func = createFunctor<void, camera::Camera&>( camera::down, camera::main_camera );
+        FunctorID forward_func( camera::forward, camera::main_camera );
+        FunctorID backward_func( camera::back, camera::main_camera );
+        FunctorID left_func( camera::left, camera::main_camera );
+        FunctorID right_func( camera::right, camera::main_camera );
+        FunctorID up_func( camera::up, camera::main_camera );
+        FunctorID down_func( camera::down, camera::main_camera );
 
-        forward_func.set_triggers( { key_w.hold } );
-        backward_func.set_triggers( { key_s.hold } );
-        left_func.set_triggers( { key_a.hold } );
-        right_func.set_triggers( { key_d.hold } );
-        up_func.set_triggers( { key_space.hold } );
-        down_func.set_triggers( { key_z.hold } );
+        //forward_func.add_triggers( { key_w.hold } );
+        //backward_func.add_triggers( { key_s.hold } );
+        //left_func.add_triggers( { key_a.hold } );
+        //right_func.add_triggers( { key_d.hold } );
+        //up_func.add_triggers( { key_space.hold } );
+        //down_func.add_triggers( { key_z.hold } );
     }
 }
 

@@ -96,7 +96,7 @@ void gui::initWidgets()
     //auto quit_func = 
     //    createFunctor<void>( app::quit );
 
-    //quit_func.set_triggers( { quit_lmb.on, input::key_esc.press } );
+    //quit_func.add_triggers( { quit_lmb.on, input::key_esc.press } );
 
     //ButtonEvents<Event> border_btn( 
     //        createEvent( QuadEvent( quitButton.element<0>().index, 1 ) ), 
@@ -131,8 +131,8 @@ void gui::initWidgets()
     //    createFunctor( gui::colorQuad<gl::Color>, quitButton.element<0>().index, gl::getColor( "white" ) );
     //FunctorRef<void, unsigned int, gl::ColorIt> unlight_button = 
     //    createFunctor( gui::colorQuad<gl::Color>, quitButton.element<0>().index, gl::getColor( button_border_color_name ) );
-    //light_button.set_triggers( { button_enter } );
-    //unlight_button.set_triggers( { button_leave } );
+    //light_button.add_triggers( { button_enter } );
+    //unlight_button.add_triggers( { button_leave } );
 
     //gate<and_op, decltype( on_button ), decltype( lmb.on_evt )> button_press( and_op(), on_button, lmb.on_evt );
     //unsigned int quit_button_press = createSignal( button_press );
@@ -221,7 +221,7 @@ void gui::initWidgets()
     //auto move_window_func = 
     //    createFunctor<void, Window::Quads, Window::MoveRule, glm::vec2&>( moveQuadsScaled, window_quads, window_move_policy, cursorFrameDelta );
 
-    //move_window_func.set_triggers( { header_lmb.hold } );
+    //move_window_func.add_triggers( { header_lmb.hold } );
 
     //ButtonEvents<Event> right( 
     //        createEvent( QuadEvent( window_quads.element<0>().element<5>().ID, 1 ) ), 
@@ -248,13 +248,13 @@ void gui::initWidgets()
 
     //auto resize_window_func = 
     //    createFunctor<void, Window::Quads, Window::MoveRule, glm::vec2&>( resizeQuadsScaled, window_quads, window_move_policy, cursorFrameDelta );
-    //resize_window_func.set_triggers( { bottom_right_and_lmb.hold } );
+    //resize_window_func.add_triggers( { bottom_right_and_lmb.hold } );
 
     //FunctorRef<void, Window, float&, float> resize_window_x_func = createFunctor<void, Window, float&, float>( resize_widget, window, cursorFrameDelta.x, 0.0f );
-    //resize_window_x_func.set_triggers( { right_and_lmb.hold } );
+    //resize_window_x_func.add_triggers( { right_and_lmb.hold } );
 
     //FunctorRef<void, Window, float, float&> resize_window_y_func = createFunctor<void, Window, float, float&>( resize_widget, window, 0.0f, cursorFrameDelta.y );
-    //resize_window_y_func.set_triggers( { bottom_and_lmb.hold } );
+    //resize_window_y_func.add_triggers( { bottom_and_lmb.hold } );
 
     ////Slider
     //using Slider = QuadGroup<2>;
@@ -299,7 +299,7 @@ void gui::initWidgets()
     //};
 
     //FunctorRef<void, Quad, float&> move_slide_func = createFunctor<void, Quad, float&>( move_quad_to, slider.element<1>().index, relativeCursorPosition.x );
-    //move_slide_func.set_triggers( { slider_lmb.hold } );
+    //move_slide_func.add_triggers( { slider_lmb.hold } );
 
     //void( *lim_quad )( Quad, Quad ) = []( Quad pTar, Quad pLim )->void {
     //    float l_dist = glm::vec2( pLim.get_pos() - pTar.get_pos() ).x;
@@ -308,7 +308,7 @@ void gui::initWidgets()
     //};
 
     //FunctorRef<void, Quad, Quad> limit_slide_func = createFunctor( lim_quad, slider.element<1>(), slider.element<0>() );
-    //limit_slide_func.set_triggers( { slider_lmb.hold } );
+    //limit_slide_func.add_triggers( { slider_lmb.hold } );
 
     //void( *set_slide_target )( glm::vec4&, Quad, Quad ) = []( glm::vec4& pTarget, Quad pBox, Quad pSlide )->void {
     //    float half_width = pSlide.get_size().x / 2.0f;
@@ -319,7 +319,7 @@ void gui::initWidgets()
     //    pTarget = glm::vec4( amt, amt, amt, amt )*10.0f;
     //};
     //FunctorRef<void, glm::vec4&, Quad, Quad> set_slide_target_func = createFunctor<void, glm::vec4&, Quad, Quad>( set_slide_target, lights::getLightColor( 0 ), slider.element<0>(), slider.element<1>() );
-    //set_slide_target_func.set_triggers( { slider_lmb.hold } );
+    //set_slide_target_func.add_triggers( { slider_lmb.hold } );
 
     //text
     //gui::text::createTextboxMetrics( 0, 1.0, 1.0, 1.0, 1.0 );
