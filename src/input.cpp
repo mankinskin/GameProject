@@ -33,32 +33,6 @@
    - callButtons
    */
 
-input::KeySignal input::key_esc;
-input::KeySignal input::key_c;
-input::KeySignal input::key_g;
-input::KeySignal input::key_h;
-input::KeySignal input::key_i;
-input::KeySignal input::key_w;
-input::KeySignal input::key_s;
-input::KeySignal input::key_a;
-input::KeySignal input::key_d;
-input::KeySignal input::key_space;
-input::KeySignal input::key_z;
-input::KeySignal input::key_f;
-input::KeySignal input::key_n;
-input::KeySignal input::key_j;
-input::KeySignal input::key_up;
-input::KeySignal input::key_down;
-input::KeySignal input::key_left;
-input::KeySignal input::key_right;
-input::KeySignal input::key_o;
-input::KeySignal input::key_l;
-input::KeySignal input::key_lshift;
-input::KeySignal input::key_x;
-events::ButtonEvents<events::Event> input::lmb;
-events::ButtonEvents<events::Event> input::rmb;
-unsigned int input::always;
-
 void input::init()
 {
     puts( "Setting GLFW Callbacks..." );
@@ -80,7 +54,6 @@ void input::setupControls()
     using namespace signals;
     using namespace gates;
 
-    reserveKeySignals( 20 );
     puts( "Initializing Key Listeners..." );
     key_esc = input::KeySignal( GLFW_KEY_ESCAPE );
     key_c = input::KeySignal( GLFW_KEY_C );

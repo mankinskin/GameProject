@@ -6,41 +6,43 @@
 using namespace signals;
 using namespace events;
 
-#define SCANCODE_SPACE 56
-int deriveScancode( int pKey ) 
-{
-    if ( pKey == GLFW_KEY_SPACE ) {
-        return SCANCODE_SPACE;
-    }
-    return 0;
-}
+input::KeySignal input::key_esc;
+input::KeySignal input::key_c;
+input::KeySignal input::key_g;
+input::KeySignal input::key_h;
+input::KeySignal input::key_i;
+input::KeySignal input::key_w;
+input::KeySignal input::key_s;
+input::KeySignal input::key_a;
+input::KeySignal input::key_d;
+input::KeySignal input::key_space;
+input::KeySignal input::key_z;
+input::KeySignal input::key_f;
+input::KeySignal input::key_n;
+input::KeySignal input::key_j;
+input::KeySignal input::key_up;
+input::KeySignal input::key_down;
+input::KeySignal input::key_left;
+input::KeySignal input::key_right;
+input::KeySignal input::key_o;
+input::KeySignal input::key_l;
+input::KeySignal input::key_lshift;
+input::KeySignal input::key_x;
+
+
 input::KeyEvent::KeyEvent( int pKey, KeyCondition pChange )
     :key( pKey ), change( pChange ) 
 {}
 input::KeyEvent::KeyEvent( int pKey, int pAction )
     :key( pKey ), change( KeyCondition( pAction ) ) 
 {}
-input::KeyEvent input::KeyEventFromScancode( int pScancode, int pAction )
-{
-    return KeyEvent( GLFW_KEY_UNKNOWN, pAction );
-}
+
 input::KeySignal::KeySignal( int pKey )
 {
-    int scancode = 0;
-    scancode = deriveScancode( pKey );
-    Event press_evt = createEvent( KeyEvent( pKey, KeyCondition( 1 ) ) );
-    Event release_evt = createEvent( KeyEvent( pKey, KeyCondition( 0 ) ) );
-    press = createSignal( press_evt );
-    release = createSignal( release_evt );
-    gates::switch_gate<Event, Event> togglers( press_evt, release_evt );
-    hold = createSignal( togglers );
+    press = Event<KeyEvent>::ID( KeyEvent( pKey, KeyCondition( 1 ) ) )->signal;
+    release = Event<KeyEvent>::ID( KeyEvent( pKey, KeyCondition( 0 ) ) )->signal;
 }
 
-void input::reserveKeySignals( unsigned int pCount ) 
-{
-    allSignals.reserve( allSignals.size() + pCount );
-    EventSlot<KeyEvent>::reserve_slots( pCount*3 );
-}
 void input::key_Callback( GLFWwindow * window, int pKey, int pScancode, int pAction, int pMods )
 {
     pushEvent( KeyEvent( pKey, pAction ) );

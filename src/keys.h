@@ -1,5 +1,6 @@
 #pragma once
 #include "contextwindow.h"
+#include "signal.h"
 
 namespace input 
 {
@@ -40,18 +41,39 @@ namespace input
     {
         return l.key == r.key && l.change == r.change;
     }
-    KeyEvent KeyEventFromScancode( int pScancode, int pAction );
     struct KeySignal 
     {
         KeySignal()
         {}
         KeySignal( int pKey );
-        unsigned int hold;
-        unsigned int press;
-        unsigned int release;
+        signals::Signal::ID hold;
+        signals::Signal::ID press;
+        signals::Signal::ID release;
     };
 
-    void reserveKeySignals( unsigned int pCount );
+    extern KeySignal key_esc;
+    extern KeySignal key_c;
+    extern KeySignal key_g;
+    extern KeySignal key_h;
+    extern KeySignal key_i;
+    extern KeySignal key_w;
+    extern KeySignal key_s;
+    extern KeySignal key_a;
+    extern KeySignal key_d;
+    extern KeySignal key_space;
+    extern KeySignal key_z;
+    extern KeySignal key_f;
+    extern KeySignal key_n;
+    extern KeySignal key_j;
+    extern KeySignal key_up;
+    extern KeySignal key_down;
+    extern KeySignal key_left;
+    extern KeySignal key_right;
+    extern KeySignal key_o;
+    extern KeySignal key_l;
+    extern KeySignal key_lshift;
+    extern KeySignal key_x;
+
     void key_Callback( GLFWwindow* window, int pKey, int pScancode, int pAction, int pMods );
     void char_Callback( GLFWwindow* window, unsigned int pCodepoint );
 }
