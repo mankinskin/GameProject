@@ -123,5 +123,11 @@ namespace functors
         const size_t index;   // local index for functor
     };
 
+    template<typename R, typename... Args>
+        FunctorID createFunctor( R( &pF )( Args... ), Args&&... pArgs )
+        {
+            return FunctorID( pF, pArgs... );
+        }
+    
     void clearFunctors();
 }

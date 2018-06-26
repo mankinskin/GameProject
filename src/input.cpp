@@ -104,12 +104,12 @@ void input::setupControls()
     }
 
     {//camera
-        FunctorID forward_func( camera::forward, camera::main_camera );
-        FunctorID backward_func( camera::back, camera::main_camera );
-        FunctorID left_func( camera::left, camera::main_camera );
-        FunctorID right_func( camera::right, camera::main_camera );
-        FunctorID up_func( camera::up, camera::main_camera );
-        FunctorID down_func( camera::down, camera::main_camera );
+        FunctorID forward_func = createFunctor( camera::forward, camera::main_camera );
+        FunctorID backward_func = createFunctor( camera::back, camera::main_camera );
+        FunctorID left_func = createFunctor( camera::left, camera::main_camera );
+        FunctorID right_func = createFunctor( camera::right, camera::main_camera );
+        FunctorID up_func = createFunctor( camera::up, camera::main_camera );
+        FunctorID down_func = createFunctor( camera::down, camera::main_camera );
 
         //forward_func.add_triggers( { key_w.hold } );
         //backward_func.add_triggers( { key_s.hold } );
