@@ -9,7 +9,7 @@ namespace text
     struct Font
     {
         using ID = utils::ID<Font>;
-        typename ID::Container& all = ID::container;
+        static constexpr typename ID::Container& all = ID::container;
 
         Font()
         {
