@@ -52,10 +52,12 @@ namespace functors
         class Functor
         {
             public:
-                Functor( R( &pF )( Args... ), Args&&... pArgs )
-                    : func( pF )
-                    , args( pArgs... )
-                {}
+                Functor( R( &&pF )( Args... ), Args&&... pArgs )
+                    : func( std::forward<R( Args... )>( pF ) )
+                    , args( std::forward<Args>( pArgs )... )
+                {
+                    (void)init;
+                }
 
                 void invoke() const
                 {
@@ -80,12 +82,13 @@ namespace functors
                 {
                     At_Init()
                     {
+                        printf("New functor type\n" );
                         Functor<R, Args...>::invoker_index = invokers.size();
                         invokers.push_back( Functor<R, Args...>::invoke );
                         destructors.push_back( Functor<R, Args...>::clear );
                     }
                 };
-                static At_Init at_init;
+                static At_Init init;
         };
 
     template<typename R, typename... Args>
@@ -95,16 +98,16 @@ namespace functors
         size_t Functor<R, Args...>::invoker_index = 0;
 
     template<typename R, typename... Args>
-        typename Functor<R, Args...>::At_Init Functor<R, Args...>::at_init = Functor<R, Args...>::At_Init();
+        typename Functor<R, Args...>::At_Init Functor<R, Args...>::init = Functor<R, Args...>::At_Init();
 
     struct FunctorID
     {
         template<typename R, typename... Args>
-            FunctorID( R( &pF )( Args... ), Args&&... pArgs )
+            FunctorID( R( &&pF )( Args... ), Args&&... pArgs )
             : invoker( Functor<R, Args...>::invoker_index )
             , index( Functor<R, Args...>::all.size() )
         {
-            Functor<R, Args...>::all.push_back( Functor<R, Args...>( pF, pArgs... ) ); 
+            Functor<R, Args...>::all.push_back( Functor<R, Args...>( std::forward<R( Args... )>( pF ), std::forward<Args>( pArgs )... ) ); 
         }
 
         template<typename R, typename... Args>
@@ -124,9 +127,9 @@ namespace functors
     };
 
     template<typename R, typename... Args>
-        FunctorID createFunctor( R( &pF )( Args... ), Args&&... pArgs )
+        FunctorID createFunctor( R( &&pF )( Args... ), Args&&... pArgs )
         {
-            return FunctorID( pF, pArgs... );
+            return FunctorID( std::forward<R( Args... )>( pF ), std::forward<Args>( pArgs )... );
         }
     
     void clearFunctors();
