@@ -19,6 +19,7 @@
 #include "font.h"
 #include "text.h"
 #include "functor.h"
+#include "action.h"
 
 // Initialization
 void sequencer::initialize()
@@ -133,6 +134,7 @@ void sequencer::frame()
     input::getCursorQuadEvents();
     input::getMouseKeyEvents();
     events::checkEvents();
+    events::invokeAllActions();
 
     camera::main_camera.look( input::cursorFrameDelta );
     camera::main_camera.update();
