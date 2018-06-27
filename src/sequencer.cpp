@@ -159,7 +159,6 @@ void sequencer::frame()
     glfwSwapBuffers(app::mainWindow.window );
 
     events::resetEvents();
-    signals::resetSignals();
     input::end();
 
     app::updateTime();
@@ -182,6 +181,5 @@ void sequencer::gameloop()
     }
 
     functors::clearFunctors();
-    signals::clearSignals();
 }
 

@@ -3,7 +3,6 @@
 #include "event.h"
 #include "gates.h"
 
-using namespace signals;
 using namespace events;
 
 input::KeySignal input::key_esc;

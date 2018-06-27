@@ -38,7 +38,6 @@ void gui::initWidgets()
     using namespace events;
     using namespace functors;
     using namespace input;
-    using namespace signals;
 
     using Button = Widget<2>;
 
