@@ -39,6 +39,7 @@ void camera::Camera::translateLocal( float pX, float pY, float pZ )
 {
     translateLocal( glm::vec3( pX, pY, pZ ) );
 }
+
 void camera::Camera::translateLocal( glm::vec3 pDir )
 {
     glm::vec3 d = 
@@ -126,7 +127,8 @@ void camera::Camera::down()
     move( glm::vec3( 0.0f, -1.0f, 0.0f ) );
 }
 
-void camera::Camera::move( glm::vec3 pDir ) {
+void camera::Camera::move( glm::vec3 pDir )
+{
     mov += pDir;
 }
 
@@ -194,14 +196,17 @@ void camera::cycleModes( Camera & pCam )
 {
     pCam.nextMode();
 }
+
 void camera::setSpeed( Camera & pCam, float pSpeed )
 {
     pCam.setSpeed( pSpeed );
 }
+
 void camera::setSensitivity( Camera & pCam, float pSensitivity )
 {
     pCam.setSensitivity( pSensitivity );
 }
+
 void camera::Camera::nextMode() {
     mode = CAMERA_MODES[( mode.id + 1 ) % CAMERA_MODE_COUNT];
     mode.apply( this );
