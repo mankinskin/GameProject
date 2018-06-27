@@ -48,5 +48,5 @@ namespace utils
         };
 
     template<typename T>
-        typename ID<T>::Container ID<T>::container;
+        typename ID<T>::Container ID<T>::container = ID<T>::Container();
 }
