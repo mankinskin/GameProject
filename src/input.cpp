@@ -10,6 +10,7 @@
 #include "gui.h"
 #include "line.h"
 #include "widget.h"
+#include "action.h"
 #include <tuple>
 #include <functional>
 #include <algorithm>
@@ -78,17 +79,20 @@ void input::setupControls()
     key_x = input::KeySignal( GLFW_KEY_X );
 
     {
-        //FunctorRef<void> toggle_cull_func = createFunctor( mesh::toggleCullFace );
-        //FunctorRef<void> toggle_cursor_func = createFunctor( input::toggleCursor );
-        //FunctorRef<void, camera::Camera&> toggle_look_func = createFunctor<void, camera::Camera&>( camera::toggleLook, camera::main_camera );
-        //FunctorRef<void> toggle_grid_func = createFunctor( glDebug::toggleGrid );
-        //FunctorRef<void> toggle_coord_func = createFunctor( glDebug::toggleCoord );
-        //FunctorRef<void> toggle_info_func = createFunctor( debug::togglePrintInfo );
-        //FunctorRef<void> toggle_normals_func = createFunctor( mesh::toggleNormals );
-        //FunctorRef<void, camera::Camera&> cycle_modes_func = createFunctor<void, camera::Camera&>( camera::cycleModes, camera::main_camera );
-        //FunctorRef<void, camera::Camera&, float> higher_cam_speed_func = createFunctor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 1.0f );
-        //FunctorRef<void, camera::Camera&, float> normal_cam_speed_func = createFunctor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 0.3f );
+        FunctorID toggle_cull_func = createFunctor( mesh::toggleCullFace );
+        FunctorID toggle_cursor_func = createFunctor( input::toggleCursor );
+        FunctorID toggle_look_func = createFunctor<void, camera::Camera&>( camera::toggleLook, camera::main_camera );
+        FunctorID toggle_grid_func = createFunctor( glDebug::toggleGrid );
+        FunctorID toggle_coord_func = createFunctor( glDebug::toggleCoord );
+        FunctorID toggle_info_func = createFunctor( debug::togglePrintInfo );
+        FunctorID toggle_normals_func = createFunctor( mesh::toggleNormals );
+        FunctorID cycle_modes_func = createFunctor<void, camera::Camera&>( camera::cycleModes, camera::main_camera );
+        FunctorID higher_cam_speed_func = createFunctor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 1.0f );
+        FunctorID normal_cam_speed_func = createFunctor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 0.3f );
 
+
+        events::Action::ID toggle_look( events::Action( toggle_look_func, key_c.press ) );
+        events::Action::ID toggle_cursor( events::Action( toggle_cursor_func, key_c.press ) );
         //toggle_cull_func.add_triggers( { key_i.press } );
         //toggle_cursor_func.add_triggers( { key_c.press } );
         //toggle_look_func.add_triggers( { key_c.press } );
@@ -110,12 +114,9 @@ void input::setupControls()
         FunctorID up_func = createFunctor( camera::up, camera::main_camera );
         FunctorID down_func = createFunctor( camera::down, camera::main_camera );
 
-        //forward_func.add_triggers( { key_w.hold } );
-        //backward_func.add_triggers( { key_s.hold } );
-        //left_func.add_triggers( { key_a.hold } );
-        //right_func.add_triggers( { key_d.hold } );
-        //up_func.add_triggers( { key_space.hold } );
-        //down_func.add_triggers( { key_z.hold } );
+        ListenerID w_press = listenForEvent( KeyEvent( GLFW_KEY_W, 1 ) );
+
+        events::Action::ID forward( events::Action( forward_func, w_press ) );
     }
 }
 
