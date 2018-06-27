@@ -103,6 +103,10 @@ namespace events
 
     struct ListenerID
     {
+        ListenerID()
+            : templateIndex( 0 )
+            , instanceIndex( 0 )
+        {}
         template<typename Event>
             ListenerID( const Listener<Event> pListener )
             : templateIndex( Listener<Event>::templateIndex )
