@@ -1,6 +1,6 @@
 #pragma once
 #include "contextwindow.h"
-#include "signal.h"
+#include "event.h"
 
 namespace input 
 {
@@ -46,9 +46,8 @@ namespace input
         KeySignal()
         {}
         KeySignal( int pKey );
-        signals::Signal::ID hold;
-        signals::Signal::ID press;
-        signals::Signal::ID release;
+        events::ListenerID press;
+        events::ListenerID release;
     };
 
     extern KeySignal key_esc;

@@ -38,8 +38,8 @@ input::KeyEvent::KeyEvent( int pKey, int pAction )
 
 input::KeySignal::KeySignal( int pKey )
 {
-    press = Event<KeyEvent>::ID( KeyEvent( pKey, KeyCondition( 1 ) ) )->signal;
-    release = Event<KeyEvent>::ID( KeyEvent( pKey, KeyCondition( 0 ) ) )->signal;
+    press = events::listenForEvent( KeyEvent( pKey, KeyCondition( 1 ) ) );
+    release = events::listenForEvent( KeyEvent( pKey, KeyCondition( 0 ) ) );
 }
 
 void input::key_Callback( GLFWwindow * window, int pKey, int pScancode, int pAction, int pMods )
