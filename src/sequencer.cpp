@@ -160,7 +160,6 @@ void sequencer::frame()
 
     glfwSwapBuffers(app::mainWindow.window );
 
-    events::resetEvents();
     input::end();
 
     app::updateTime();

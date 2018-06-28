@@ -2,20 +2,20 @@
 
 std::vector<void(*)()> events::checkers = std::vector<void(*)()>();
 std::vector<bool(*)(size_t)> events::staters = std::vector<bool(*)(size_t)>();
-std::vector<void(*)()> events::resetters = std::vector<void(*)()>();
+std::vector<void(*)()> events::clearers = std::vector<void(*)()>();
 size_t events::template_count = 0;
 
-void events::checkEvents() 
+void events::checkEvents()
 {
     for ( void( *&checker )() : checkers ) {
         checker();
     }
 }
 
-void events::resetEvents() 
+void events::clearEvents()
 {
-    for ( void( *&resetter )() : resetters ) {
-        resetter();
+    for ( void( *&clearer )() : clearers ) {
+        clearer();
     }
 }
 
