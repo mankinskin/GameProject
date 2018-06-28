@@ -10,7 +10,7 @@ namespace events
         using ID = utils::ID<Action>;
         static constexpr typename ID::Container& all = ID::container;
 
-        Action( functors::FunctorID pFunctor, ListenerID pListener )
+        Action( events::FunctorID pFunctor, ListenerID pListener )
             : functor( pFunctor )
             , listener( pListener )
         {}
@@ -21,7 +21,7 @@ namespace events
                 functor.invoke();
             }
         }
-        functors::FunctorID functor;
+        events::FunctorID functor;
         ListenerID listener;
     };
 

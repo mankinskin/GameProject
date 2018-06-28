@@ -25,8 +25,8 @@ using gl::ColorID;
 
 void gui::init()
 {
-    pixel_size = glm::vec2( 
-            2.0f / gl::getWidth(), 
+    pixel_size = glm::vec2(
+            2.0f / gl::getWidth(),
             2.0f / gl::getHeight() );
     //text::initFonts();
 }
@@ -35,7 +35,7 @@ void gui::initWidgets()
 {
     using namespace gates;
     using namespace events;
-    using namespace functors;
+    using namespace events;
     using namespace input;
 
     using Button = Widget<2>;
@@ -44,23 +44,23 @@ void gui::initWidgets()
     float button_height = gui::pixel_size.x * 70.0f;
     glm::vec2 margin = gui::pixel_size * 3.0f;
 
-    Button::QuadPreset button_initer{ 
+    Button::QuadPreset button_initer{
             glm::vec4(0.0f, 0.0f, button_width, button_height ),
-            glm::vec4( margin.x, -margin.y, 
-                button_width - margin.x*2.0f, 
+            glm::vec4( margin.x, -margin.y,
+                button_width - margin.x*2.0f,
                 button_height - margin.y*2.0f ) };
 
-    Button::Colors button_colors{ gl::getColor( "lightgrey" ), 
+    Button::Colors button_colors{ gl::getColor( "lightgrey" ),
             gl::getColor( "black" ) };
 
-    Button::MovePolicy button_move_policy{ 
-            glm::vec2( 1.0f, 1.0f ), 
+    Button::MovePolicy button_move_policy{
+            glm::vec2( 1.0f, 1.0f ),
             glm::vec2( 1.0f, 1.0f ) };
     Button::ResizePolicy button_resize_policy{
-            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), 
+            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ),
             glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) };
 
-    Button::Preset button_preset( button_initer, button_colors, 
+    Button::Preset button_preset( button_initer, button_colors,
             button_move_policy, button_resize_policy );
 
 
@@ -71,52 +71,52 @@ void gui::initWidgets()
     quit_button.move( glm::vec2( -0.95f, -0.8f ) );
 
 
-    //ButtonEvents<Event> play_button_events( 
-    //        createEvent( QuadEvent( play_button.quads[1].index, 1 ) ), 
+    //ButtonEvents<Event> play_button_events(
+    //        createEvent( QuadEvent( play_button.quads[1].index, 1 ) ),
     //        createEvent( QuadEvent( play_button.quads[1].index, 0 ) ) );
 
-    //gate<and_op, decltype( play_button_events.hold_evt ), decltype( lmb.on_evt )> play_press_evt( and_op(), 
+    //gate<and_op, decltype( play_button_events.hold_evt ), decltype( lmb.on_evt )> play_press_evt( and_op(),
     //        play_button_events.hold_evt, lmb.on_evt );
     //ButtonEvents<decltype( play_press_evt ), decltype( lmb.off_evt )> play_lmb( play_press_evt, lmb.off_evt );
-    //auto move_play_func = 
+    //auto move_play_func =
     //    createFunctor<void, Button, glm::vec2&>( moveWidget, play_button, cursorFrameDelta );
 
     //move_play_func.add_triggers( { play_lmb.hold } );
 
 
-    //ButtonEvents<Event> quit_button_events( 
-    //        createEvent( QuadEvent( quit_button.subwidgets.element<1>().ID, 1 ) ), 
+    //ButtonEvents<Event> quit_button_events(
+    //        createEvent( QuadEvent( quit_button.subwidgets.element<1>().ID, 1 ) ),
     //        createEvent( QuadEvent( quit_button.subwidgets.element<1>().ID, 0 ) ) );
 
-    //gate<and_op, decltype( quit_button_events.hold_evt ), decltype( lmb.on_evt )> quit_press_evt( and_op(), 
+    //gate<and_op, decltype( quit_button_events.hold_evt ), decltype( lmb.on_evt )> quit_press_evt( and_op(),
     //        quit_button_events.hold_evt, lmb.on_evt );
     //ButtonEvents<decltype( quit_press_evt ), decltype( lmb.off_evt )> quit_lmb( quit_press_evt, lmb.off_evt );
-    //auto quit_func = 
+    //auto quit_func =
     //    createFunctor<void>( app::quit );
 
     //quit_func.add_triggers( { quit_lmb.on, input::key_esc.press } );
 
-    //ButtonEvents<Event> border_btn( 
-    //        createEvent( QuadEvent( quitButton.element<0>().index, 1 ) ), 
+    //ButtonEvents<Event> border_btn(
+    //        createEvent( QuadEvent( quitButton.element<0>().index, 1 ) ),
     //        createEvent( QuadEvent( quitButton.element<0>().index, 0 ) ) );
-    //ButtonEvents<Event> center_btn( 
-    //        createEvent( QuadEvent( quitButton.element<1>().index, 1 ) ), 
+    //ButtonEvents<Event> center_btn(
+    //        createEvent( QuadEvent( quitButton.element<1>().index, 1 ) ),
     //        createEvent( QuadEvent( quitButton.element<1>().index, 0 ) ) );
 
     ////all enter and leave events through or_gates
-    //gate<or_op, Event, Event> button_enters_srcs( 
+    //gate<or_op, Event, Event> button_enters_srcs(
     //        border_btn.on_evt, center_btn.on_evt );
-    //gate<or_op, Event, Event> button_leaves_srcs( 
+    //gate<or_op, Event, Event> button_leaves_srcs(
     //        border_btn.off_evt, center_btn.off_evt );
 
     ////outputs true when an enter occurred and no leave occurred
-    //gate<and_op, decltype( button_enters_srcs ), not_gate<decltype( button_leaves_srcs )>> button_enters_src( 
+    //gate<and_op, decltype( button_enters_srcs ), not_gate<decltype( button_leaves_srcs )>> button_enters_src(
     //        and_op(), button_enters_srcs, not_gate<decltype( button_leaves_srcs )>( button_leaves_srcs ) );
     ////outputs true when a leave occurred and no enter occurred
-    //gate<and_op, decltype( button_leaves_srcs ), not_gate<decltype( button_enters_srcs )>> button_leaves_src( 
+    //gate<and_op, decltype( button_leaves_srcs ), not_gate<decltype( button_enters_srcs )>> button_leaves_src(
     //        and_op(), button_leaves_srcs, not_gate<decltype( button_enters_srcs )>( button_enters_srcs ) );
     ////a switch which is turned on by
-    //gate<or_op, decltype( button_enters_src ), decltype( button_leaves_src )> ent_or_lea( 
+    //gate<or_op, decltype( button_enters_src ), decltype( button_leaves_src )> ent_or_lea(
     //        or_op(), button_enters_src, button_leaves_src );
     //toggle_gate<decltype( ent_or_lea )> on_button( ent_or_lea );
 
@@ -125,9 +125,9 @@ void gui::initWidgets()
     //unsigned int button_leave = createSignal( button_leaves_src );
 
 
-    //FunctorRef<void, unsigned int, gl::ColorIt> light_button = 
+    //FunctorRef<void, unsigned int, gl::ColorIt> light_button =
     //    createFunctor( gui::colorQuad<gl::Color>, quitButton.element<0>().index, gl::getColor( "white" ) );
-    //FunctorRef<void, unsigned int, gl::ColorIt> unlight_button = 
+    //FunctorRef<void, unsigned int, gl::ColorIt> unlight_button =
     //    createFunctor( gui::colorQuad<gl::Color>, quitButton.element<0>().index, gl::getColor( button_border_color_name ) );
     //light_button.add_triggers( { button_enter } );
     //unlight_button.add_triggers( { button_leave } );
@@ -143,7 +143,7 @@ void gui::initWidgets()
     //using WindowFrame = Widget<Quad, Quad, Quad, Quad, Quad, Quad, Quad, Quad, Quad>;
     //using Window = Widget<WindowFrame, WindowHeader>;
 
-    //WindowFrame::Colors window_frame_colors( { 
+    //WindowFrame::Colors window_frame_colors( {
     //        gl::getColor( "grey" ), gl::getColor( "grey" ),  gl::getColor( "grey" ),
     //        gl::getColor( "grey" ),  gl::getColor( "white" ),  gl::getColor( "grey" ),
     //        gl::getColor( "grey" ), gl::getColor( "grey" ), gl::getColor( "grey" ) } );
@@ -184,10 +184,10 @@ void gui::initWidgets()
     //        glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f ), glm::vec2( 1.0f, 1.0f )
     //        );
     //WindowFrame::ResizePolicy window_frame_resize_policy(
-    //        glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ), 
-    //        glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), 
+    //        glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 1.0f, 0.0f ),
+    //        glm::vec4( 1.0f, 0.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ),
     //        glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ),
-    //        glm::vec4( 0.0f, 1.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 1.0f, 1.0f, 0.0f ), 
+    //        glm::vec4( 0.0f, 1.0f, 0.0f, 0.0f ), glm::vec4( 0.0f, 1.0f, 1.0f, 0.0f ),
     //        glm::vec4( 1.0f, 1.0f, 0.0f, 0.0f )
     //        );
 
@@ -205,46 +205,46 @@ void gui::initWidgets()
     //        glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)
     //        );
 
-    //Window window( window_quad_initer, window_colors, 
+    //Window window( window_quad_initer, window_colors,
     //        window_move_policy, window_resize_policy );
 
 
-    //ButtonEvents<Event> header_button( 
-    //        createEvent( QuadEvent( window_quads.element<1>().element<1>().ID, 1 ) ), 
+    //ButtonEvents<Event> header_button(
+    //        createEvent( QuadEvent( window_quads.element<1>().element<1>().ID, 1 ) ),
     //        createEvent( QuadEvent( window_quads.element<1>().element<1>().ID, 0 ) ) );
 
-    //gate<and_op, decltype( header_button.hold_evt ), decltype( lmb.on_evt )> header_press_evt( and_op(), 
+    //gate<and_op, decltype( header_button.hold_evt ), decltype( lmb.on_evt )> header_press_evt( and_op(),
     //        header_button.hold_evt, lmb.on_evt );
     //ButtonEvents<decltype( header_press_evt ), decltype( lmb.off_evt )> header_lmb( header_press_evt, lmb.off_evt );
-    //auto move_window_func = 
+    //auto move_window_func =
     //    createFunctor<void, Window::Quads, Window::MoveRule, glm::vec2&>( moveQuadsScaled, window_quads, window_move_policy, cursorFrameDelta );
 
     //move_window_func.add_triggers( { header_lmb.hold } );
 
-    //ButtonEvents<Event> right( 
-    //        createEvent( QuadEvent( window_quads.element<0>().element<5>().ID, 1 ) ), 
+    //ButtonEvents<Event> right(
+    //        createEvent( QuadEvent( window_quads.element<0>().element<5>().ID, 1 ) ),
     //        createEvent( QuadEvent( window_quads.element<0>().element<5>().ID, 0 ) ) );
-    //gate<and_op, decltype( right.hold_evt ), decltype( lmb.on_evt )> 
+    //gate<and_op, decltype( right.hold_evt ), decltype( lmb.on_evt )>
     //    right_press_evt( and_op(), right.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( right_press_evt ), decltype( lmb.off_evt )> right_and_lmb( 
+    //ButtonEvents<decltype( right_press_evt ), decltype( lmb.off_evt )> right_and_lmb(
     //        right_press_evt, lmb.off_evt );
 
-    //ButtonEvents<Event> bottom( 
-    //        createEvent( QuadEvent( window_quads.element<0>().element<7>().ID, 1 ) ), 
+    //ButtonEvents<Event> bottom(
+    //        createEvent( QuadEvent( window_quads.element<0>().element<7>().ID, 1 ) ),
     //        createEvent( QuadEvent( window_quads.element<0>().element<7>().ID, 0 ) ) );
-    //gate<and_op, decltype( bottom.hold_evt ), decltype( lmb.on_evt )> bottom_press_evt( and_op(), 
+    //gate<and_op, decltype( bottom.hold_evt ), decltype( lmb.on_evt )> bottom_press_evt( and_op(),
     //        bottom.hold_evt, lmb.on_evt );
-    //ButtonEvents<decltype( bottom_press_evt ), decltype( lmb.off_evt )> bottom_and_lmb( 
+    //ButtonEvents<decltype( bottom_press_evt ), decltype( lmb.off_evt )> bottom_and_lmb(
     //        bottom_press_evt, lmb.off_evt );
 
-    //ButtonEvents<Event> bottom_right( 
-    //        createEvent( QuadEvent( window_quads.element<0>().element<8>().ID, 1 ) ), 
+    //ButtonEvents<Event> bottom_right(
+    //        createEvent( QuadEvent( window_quads.element<0>().element<8>().ID, 1 ) ),
     //        createEvent( QuadEvent( window_quads.element<0>().element<8>().ID, 0 ) ) );
     //gate<and_op, decltype( bottom_right.hold_evt ), decltype( lmb.on_evt )> bottom_right_press_evt( and_op(), bottom_right.hold_evt, lmb.on_evt );
     //ButtonEvents<decltype( bottom_right_press_evt ), decltype( lmb.off_evt )> bottom_right_and_lmb( bottom_right_press_evt, lmb.off_evt );
 
 
-    //auto resize_window_func = 
+    //auto resize_window_func =
     //    createFunctor<void, Window::Quads, Window::MoveRule, glm::vec2&>( resizeQuadsScaled, window_quads, window_move_policy, cursorFrameDelta );
     //resize_window_func.add_triggers( { bottom_right_and_lmb.hold } );
 

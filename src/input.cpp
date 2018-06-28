@@ -51,7 +51,7 @@ void input::setupControls()
 {
     using namespace gui;
     using namespace events;
-    using namespace functors;
+    using namespace events;
     using namespace gates;
 
     puts( "Initializing Key Listeners..." );

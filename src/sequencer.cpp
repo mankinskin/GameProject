@@ -118,9 +118,9 @@ void sequencer::clearFramebuffers()
     static GLfloat g_clear_color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
     static GLfloat g_clear_depth = 1.0f;
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    glClearNamedFramebufferuiv( texture::guiFBO, 
+    glClearNamedFramebufferuiv( texture::guiFBO,
             GL_COLOR, 0, ( GLuint* ) gui_clear_index );
-    glClearNamedFramebufferfv( texture::guiFBO, 
+    glClearNamedFramebufferfv( texture::guiFBO,
             GL_DEPTH, 0, &g_clear_depth );
 }
 
@@ -177,11 +177,12 @@ void sequencer::gameloop()
     text::TextID term_box( text::Text( glm::vec2( -0.5f, 0.0f ), glm::vec2( 0.5f, 1.0f ) ) );
     term_box->setChars( "1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item" );
     text::updateTexts();
-    while ( app::state == app::Running ) 
+    while ( app::state == app::Running )
     {
         frame();
     }
 
-    functors::clearFunctors();
+    events::clearFunctors();
+    events::clearEvents();
 }
 

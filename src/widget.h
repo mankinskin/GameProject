@@ -21,7 +21,7 @@
 // - the initial data to be loaded into each element(quad) of the widget
 // - the policies about how the element should pass an input command to its subelements
 
-namespace gui 
+namespace gui
 {
     template<size_t COUNT>
         struct Widget
@@ -35,11 +35,11 @@ namespace gui
 
                 struct Preset
                 {
-                    Preset( QuadPreset qs, Colors cs, 
+                    Preset( QuadPreset qs, Colors cs,
                             MovePolicy mp, ResizePolicy rp )
-                        :quads( qs ), 
+                        :quads( qs ),
                         colors( cs ),
-                        movepolicy( mp ), 
+                        movepolicy( mp ),
                         resizepolicy( rp )
                     {
                     }
@@ -47,26 +47,26 @@ namespace gui
                     const Colors colors;
                     const MovePolicy movepolicy;
                     const ResizePolicy resizepolicy;
-                }; 
+                };
                 const Quads quads;
                 const Colors colors;
                 const MovePolicy movepolicy;
                 const ResizePolicy resizepolicy;
 
                 Widget( Preset preset )
-                    :quads( utils::convert_array<QuadID>( preset.quads ) ), 
+                    :quads( utils::convert_array<QuadID>( preset.quads ) ),
                     colors( preset.colors ),
-                    movepolicy( preset.movepolicy ), 
+                    movepolicy( preset.movepolicy ),
                     resizepolicy( preset.resizepolicy )
             {
                 color( colors );
             }
 
-                    Widget( QuadPreset qs, Colors cs, 
+                    Widget( QuadPreset qs, Colors cs,
                             MovePolicy mp, ResizePolicy rp )
-                        :quads( utils::convert_array<QuadID>( qs ) ), 
+                        :quads( utils::convert_array<QuadID>( qs ) ),
                         colors( cs ),
-                        movepolicy( mp ), 
+                        movepolicy( mp ),
                         resizepolicy( rp )
             {
                 color( colors );
@@ -103,15 +103,15 @@ namespace gui
                     }
                 void move( const glm::vec2 v ) const
                 {
-                    move_n( utils::_index<COUNT>(), v );   
+                    move_n( utils::_index<COUNT>(), v );
                 }
                 void resize( const glm::vec2 v ) const
                 {
-                    resize_n( utils::_index<COUNT>(), v );   
+                    resize_n( utils::_index<COUNT>(), v );
                 }
                 void color( Colors pColors ) const
                 {
-                    color_n( utils::_index<COUNT>(), pColors );   
+                    color_n( utils::_index<COUNT>(), pColors );
                 }
         };
 
@@ -126,7 +126,7 @@ namespace gui
             pWidget.resize( pV );
         }
     template<size_t COUNT>
-        void colorWidget( Widget<COUNT> pWidget, 
+        void colorWidget( Widget<COUNT> pWidget,
                 typename Widget<COUNT>::Colors& pColors )
         {
             pWidget.color( pColors );

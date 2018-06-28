@@ -2,11 +2,11 @@
 #include <vector>
 #include <functional>
 
-namespace utils 
+namespace utils
 {
     template<typename T>
         struct ID
-        {   
+        {
             using Container = typename std::vector<T>;
             using size_type = typename Container::size_type;
             static Container container;
