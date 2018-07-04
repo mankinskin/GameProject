@@ -3,7 +3,7 @@
 #include "event.h"
 #include "gates.h"
 
-using namespace events;
+using namespace signals;
 
 input::KeySignal input::key_esc;
 input::KeySignal input::key_c;
@@ -30,16 +30,16 @@ input::KeySignal input::key_x;
 
 
 input::KeyEvent::KeyEvent( int pKey, KeyCondition pChange )
-    :key( pKey ), change( pChange ) 
+    :key( pKey ), change( pChange )
 {}
 input::KeyEvent::KeyEvent( int pKey, int pAction )
-    :key( pKey ), change( KeyCondition( pAction ) ) 
+    :key( pKey ), change( KeyCondition( pAction ) )
 {}
 
 input::KeySignal::KeySignal( int pKey )
 {
-    press = events::listenForEvent( KeyEvent( pKey, KeyCondition( 1 ) ) );
-    release = events::listenForEvent( KeyEvent( pKey, KeyCondition( 0 ) ) );
+    press = signals::listenForEvent( KeyEvent( pKey, KeyCondition( 1 ) ) );
+    release = signals::listenForEvent( KeyEvent( pKey, KeyCondition( 0 ) ) );
 }
 
 void input::key_Callback( GLFWwindow * window, int pKey, int pScancode, int pAction, int pMods )

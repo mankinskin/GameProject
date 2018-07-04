@@ -6,7 +6,7 @@
 
 namespace input 
 {
-    struct MouseKeyEvent    // events thrown when a mouse key changes 
+    struct MouseKeyEvent    // signals thrown when a mouse key changes 
     {
         MouseKeyEvent()
             :key( -1 ) 
@@ -25,7 +25,7 @@ namespace input
         return l.key == r.key && l.change == r.change;
     }
 
-    struct QuadEvent    // events thrown when entering or leaving quads with the cursor
+    struct QuadEvent    // signals thrown when entering or leaving quads with the cursor
     {
         QuadEvent()
             :quad_index( 0 ), enter( 0 ) 

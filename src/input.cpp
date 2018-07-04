@@ -28,8 +28,8 @@
    - iterate through buttons
    - get button state and compare it to previous state
    - if different -> generate event
-   - check for relevant events/wheater callbacks should be called
-   - iterate through all events
+   - check for relevant signals/wheater callbacks should be called
+   - iterate through all signals
    - check buttonID-specific range in functor array
    - callButtons
    */
@@ -50,8 +50,8 @@ void input::init()
 void input::setupControls()
 {
     using namespace gui;
-    using namespace events;
-    using namespace events;
+    using namespace signals;
+    using namespace signals;
     using namespace gates;
 
     puts( "Initializing Key Listeners..." );
@@ -91,8 +91,8 @@ void input::setupControls()
         FunctorID normal_cam_speed_func = createFunctor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 0.3f );
 
 
-        events::Action::ID toggle_look( events::Action( toggle_look_func, key_c.press ) );
-        events::Action::ID toggle_cursor( events::Action( toggle_cursor_func, key_c.press ) );
+        signals::Action::ID toggle_look( signals::Action( toggle_look_func, key_c.press ) );
+        signals::Action::ID toggle_cursor( signals::Action( toggle_cursor_func, key_c.press ) );
         //toggle_cull_func.add_triggers( { key_i.press } );
         //toggle_cursor_func.add_triggers( { key_c.press } );
         //toggle_look_func.add_triggers( { key_c.press } );
@@ -115,8 +115,10 @@ void input::setupControls()
         FunctorID down_func = createFunctor( camera::down, camera::main_camera );
 
         ListenerID w_press = listenForEvent( KeyEvent( GLFW_KEY_W, 1 ) );
+        using KeyEventListener = EventListener<KeyEvent>;
+        ListenerID forward_trigger( SignalListener<And, KeyEventListener, KeyEventListener>( KeyEventListener::ID( KeyEventListener( KeyEvent( GLFW_KEY_W, 1 ) ) ), KeyEventListener::ID( KeyEventListener( KeyEvent( GLFW_KEY_S, 1 ) ) ) ) );
 
-        events::Action::ID forward( events::Action( forward_func, w_press ) );
+        signals::Action::ID forward( signals::Action( forward_func, forward_trigger ) );
     }
 }
 

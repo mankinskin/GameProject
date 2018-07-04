@@ -1,14 +1,13 @@
 #pragma once
 #include "gates.h"
 #include "utils/id.h"
-#include "utils/tuple_utils.h"
 #include <vector>
 #include <tuple>
 
-namespace events
+namespace signals
 {
     // Events set signals when their signature gets pushed into its queue ( with pushEvent )
-    // Events are templated, thus events of any type can be tracked.
+    // Events are templated, thus signals of any type can be tracked.
 
     void checkEvents();
     void clearEvents();
@@ -22,7 +21,8 @@ namespace events
         class EventListener
         {
             public:
-                static std::vector<EventListener<Event>> all;
+                using ID = utils::ID<EventListener<Event>>;
+                static constexpr typename ID::Container& all = ID::container;
                 EventListener( const Event pSignature )
                     : signature( pSignature )
                     , occurred( false )
@@ -32,7 +32,7 @@ namespace events
 
                 static void push( Event pEvent )
                 {
-                    if ( all.size() ) {  // if listening for any events
+                    if ( all.size() ) {  // if listening for any signals
                         eventBuffer.push_back( pEvent );
                     }
                 }
@@ -66,18 +66,22 @@ namespace events
                     clearBuffer();
                 }
 
+                bool stat() const
+                {
+                    return occurred;
+                }
+
                 static bool stat( size_t i )
                 {
-                    return all[i].occurred;
+                    return all[i].stat();
                 }
 
                 const Event signature;
                 bool occurred = false;
 
                 static std::vector<Event> eventBuffer;
-            private:
-                friend struct ListenerID;
                 static size_t templateIndex;  // the index of the template instantiation
+            private:
                 struct At_Init
                 {
                     At_Init()
@@ -95,9 +99,6 @@ namespace events
         std::vector<Event> EventListener<Event>::eventBuffer = std::vector<Event>();
 
     template<typename Event>
-        std::vector<EventListener<Event>> EventListener<Event>::all = std::vector<EventListener<Event>>();
-
-    template<typename Event>
         size_t EventListener<Event>::templateIndex = 0;
 
     template<typename Event>
@@ -108,95 +109,4 @@ namespace events
         {
             EventListener<Event>::push( pEvent );
         }
-
-    struct ListenerID
-    {
-        ListenerID()
-            : templateIndex( 0 )
-            , instanceIndex( 0 )
-        {}
-        template<typename Event>
-            ListenerID( const EventListener<Event> pListener )
-            : templateIndex( EventListener<Event>::templateIndex )
-            , instanceIndex( EventListener<Event>::all.size() )
-        {
-            EventListener<Event>::all.push_back( pListener );
-        }
-
-        bool stat() const
-        {
-            return staters[templateIndex]( instanceIndex );
-        }
-        private:
-        size_t templateIndex;
-        size_t instanceIndex;
-    };
-
-    template<typename Event>
-        ListenerID listenForEvent( Event pEvent )
-        {
-            return ListenerID( EventListener<Event>( pEvent ) );
-        }
-
-    template<typename... Signals>
-        class SignalListener
-        {
-            public:
-                SignalListener( Signals... pSignals )
-                    : signals{ pSignals... }
-                {
-                    (void)init;
-                }
-
-                bool stat_n( utils::_index<0> i )
-                {
-                    return std::get<0>( signals );
-                }
-
-                template<size_t N>
-                bool stat_n( utils::_index<N> i )
-                {
-                    return std::get<N>( signals ).stat() && stat_n( utils::_index<N-1>() );
-                }
-
-                bool stat()
-                {
-                    return stat_n( utils::_index<sizeof...(Signals)>() );
-                }
-
-                static bool stat( size_t i )
-                {
-                    return all[i].stat();
-                }
-
-                static void clear()
-                {
-                    all.clear();
-                }
-
-                std::tuple<Signals...> signals;
-                static std::vector<SignalListener<Signals...>> all;
-            private:
-                static size_t templateIndex;  // the index of the template instantiation
-                struct At_Init
-                {
-                    At_Init()
-                    {
-                        templateIndex = template_count++;
-                        staters.push_back( stat );
-                        clearers.push_back( clear );
-                    }
-                };
-                static At_Init init;
-        };
-
-    template<typename... Signals>
-        std::vector<SignalListener<Signals...>> SignalListener<Signals...>::all = std::vector<SignalListener<Signals...>>();
-
-    template<typename... Signals>
-        size_t SignalListener<Signals...>::templateIndex = 0;
-
-    template<typename... Signals>
-        typename SignalListener<Signals...>::At_Init SignalListener<Signals...>::init = SignalListener<Signals...>::At_Init();
-
 }

@@ -1,10 +1,10 @@
 #include "functor.h"
 #include "event.h"
 
-std::vector<void(*)(const size_t)> events::invokers = std::vector<void(*)(const size_t)>();
-std::vector<void( * )()> events::destructors = std::vector<void( * )()>();
+std::vector<void(*)(const size_t)> signals::invokers = std::vector<void(*)(const size_t)>();
+std::vector<void( * )()> signals::destructors = std::vector<void( * )()>();
 
-void events::clearFunctors()
+void signals::clearFunctors()
 {
     for ( void( *&destructor )() : destructors ) {
         destructor();

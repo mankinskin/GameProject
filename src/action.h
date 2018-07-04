@@ -3,14 +3,14 @@
 #include "event.h"
 #include "utils/id.h"
 
-namespace events
+namespace signals
 {
     struct Action
     {
         using ID = utils::ID<Action>;
         static constexpr typename ID::Container& all = ID::container;
 
-        Action( events::FunctorID pFunctor, ListenerID pListener )
+        Action( signals::FunctorID pFunctor, ListenerID pListener )
             : functor( pFunctor )
             , listener( pListener )
         {}
@@ -21,7 +21,7 @@ namespace events
                 functor.invoke();
             }
         }
-        events::FunctorID functor;
+        signals::FunctorID functor;
         ListenerID listener;
     };
 

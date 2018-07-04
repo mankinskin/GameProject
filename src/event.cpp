@@ -1,18 +1,18 @@
 #include "event.h"
 
-std::vector<void(*)()> events::checkers = std::vector<void(*)()>();
-std::vector<bool(*)(size_t)> events::staters = std::vector<bool(*)(size_t)>();
-std::vector<void(*)()> events::clearers = std::vector<void(*)()>();
-size_t events::template_count = 0;
+std::vector<void(*)()> signals::checkers = std::vector<void(*)()>();
+std::vector<bool(*)(size_t)> signals::staters = std::vector<bool(*)(size_t)>();
+std::vector<void(*)()> signals::clearers = std::vector<void(*)()>();
+size_t signals::template_count = 0;
 
-void events::checkEvents()
+void signals::checkEvents()
 {
     for ( void( *&checker )() : checkers ) {
         checker();
     }
 }
 
-void events::clearEvents()
+void signals::clearEvents()
 {
     for ( void( *&clearer )() : clearers ) {
         clearer();

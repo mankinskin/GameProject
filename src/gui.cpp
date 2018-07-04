@@ -34,8 +34,8 @@ void gui::init()
 void gui::initWidgets()
 {
     using namespace gates;
-    using namespace events;
-    using namespace events;
+    using namespace signals;
+    using namespace signals;
     using namespace input;
 
     using Button = Widget<2>;
@@ -71,12 +71,12 @@ void gui::initWidgets()
     quit_button.move( glm::vec2( -0.95f, -0.8f ) );
 
 
-    //ButtonEvents<Event> play_button_events(
+    //ButtonEvents<Event> play_button_signals(
     //        createEvent( QuadEvent( play_button.quads[1].index, 1 ) ),
     //        createEvent( QuadEvent( play_button.quads[1].index, 0 ) ) );
 
-    //gate<and_op, decltype( play_button_events.hold_evt ), decltype( lmb.on_evt )> play_press_evt( and_op(),
-    //        play_button_events.hold_evt, lmb.on_evt );
+    //gate<and_op, decltype( play_button_signals.hold_evt ), decltype( lmb.on_evt )> play_press_evt( and_op(),
+    //        play_button_signals.hold_evt, lmb.on_evt );
     //ButtonEvents<decltype( play_press_evt ), decltype( lmb.off_evt )> play_lmb( play_press_evt, lmb.off_evt );
     //auto move_play_func =
     //    createFunctor<void, Button, glm::vec2&>( moveWidget, play_button, cursorFrameDelta );
@@ -84,12 +84,12 @@ void gui::initWidgets()
     //move_play_func.add_triggers( { play_lmb.hold } );
 
 
-    //ButtonEvents<Event> quit_button_events(
+    //ButtonEvents<Event> quit_button_signals(
     //        createEvent( QuadEvent( quit_button.subwidgets.element<1>().ID, 1 ) ),
     //        createEvent( QuadEvent( quit_button.subwidgets.element<1>().ID, 0 ) ) );
 
-    //gate<and_op, decltype( quit_button_events.hold_evt ), decltype( lmb.on_evt )> quit_press_evt( and_op(),
-    //        quit_button_events.hold_evt, lmb.on_evt );
+    //gate<and_op, decltype( quit_button_signals.hold_evt ), decltype( lmb.on_evt )> quit_press_evt( and_op(),
+    //        quit_button_signals.hold_evt, lmb.on_evt );
     //ButtonEvents<decltype( quit_press_evt ), decltype( lmb.off_evt )> quit_lmb( quit_press_evt, lmb.off_evt );
     //auto quit_func =
     //    createFunctor<void>( app::quit );
@@ -103,7 +103,7 @@ void gui::initWidgets()
     //        createEvent( QuadEvent( quitButton.element<1>().index, 1 ) ),
     //        createEvent( QuadEvent( quitButton.element<1>().index, 0 ) ) );
 
-    ////all enter and leave events through or_gates
+    ////all enter and leave signals through or_gates
     //gate<or_op, Event, Event> button_enters_srcs(
     //        border_btn.on_evt, center_btn.on_evt );
     //gate<or_op, Event, Event> button_leaves_srcs(

@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <array>
 
-using namespace events;
+using namespace signals;
 glm::vec2 input::relativeCursorPosition;
 glm::uvec2 input::absoluteCursorPosition;
 glm::vec2 input::cursorFrameDelta;

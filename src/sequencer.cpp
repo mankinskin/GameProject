@@ -133,8 +133,8 @@ void sequencer::frame()
 
     input::getCursorQuadEvents();
     input::getMouseKeyEvents();
-    events::checkEvents();
-    events::invokeAllActions();
+    signals::checkEvents();
+    signals::invokeAllActions();
 
     camera::main_camera.look( input::cursorFrameDelta );
     camera::main_camera.update();
@@ -181,7 +181,7 @@ void sequencer::gameloop()
         frame();
     }
 
-    events::clearFunctors();
-    events::clearEvents();
+    signals::clearFunctors();
+    signals::clearEvents();
 }
 

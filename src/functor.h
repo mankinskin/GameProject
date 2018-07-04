@@ -8,7 +8,7 @@
 #include <tuple>
 #include "utils/id.h"
 
-namespace events
+namespace signals
 {
     /*
        Each functor holds a function pointer and a tuple for the arguments.

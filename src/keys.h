@@ -1,17 +1,18 @@
 #pragma once
 #include "contextwindow.h"
+#include "signal.h"
 #include "event.h"
 
-namespace input 
+namespace input
 {
-    class KeyCondition 
+    class KeyCondition
     {
         public:
             KeyCondition()
-                :action( 0 ) // 0 = release, 1 = press
+                : action( 0 ) // 0 = release, 1 = press
             {}
             KeyCondition( int pAction )
-                :action( pAction )
+                : action( pAction )
             {}
             int action;
     };
@@ -20,15 +21,16 @@ namespace input
     {
         return l.action == r.action;
     }
-    inline bool operator!=( KeyCondition const & l, KeyCondition const& r ) 
+    inline bool operator!=( KeyCondition const & l, KeyCondition const& r )
     {
         return l.action != r.action;
     }
 
-    struct KeyEvent 
+    struct KeyEvent
     {
         KeyEvent()
-            :key( -1 ), change( KeyCondition() ) 
+            : key( -1 )
+            , change( KeyCondition() )
         {}
         KeyEvent( int pKey, KeyCondition pChange );
         KeyEvent( int pKey, int pAction );
@@ -37,17 +39,17 @@ namespace input
         KeyCondition change;
     };
 
-    inline bool operator==( KeyEvent const & l, KeyEvent const& r ) 
+    inline bool operator==( KeyEvent const & l, KeyEvent const& r )
     {
         return l.key == r.key && l.change == r.change;
     }
-    struct KeySignal 
+    struct KeySignal
     {
         KeySignal()
         {}
         KeySignal( int pKey );
-        events::ListenerID press;
-        events::ListenerID release;
+        signals::ListenerID press;
+        signals::ListenerID release;
     };
 
     extern KeySignal key_esc;
