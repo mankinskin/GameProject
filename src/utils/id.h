@@ -15,33 +15,28 @@ namespace utils
             {
                 container.push_back( T() );
             }
-            ID( size_type I )
-                :index( I )
+
+            ID( const size_t i )
+                :index( i )
             {}
-            ID( const T data )
+
+            ID( const T obj )
                 :index( container.size() )
             {
-                container.push_back( data );
+                container.push_back( obj );
             }
             size_type index;
 
-            operator size_type() const
-            {
-                return index;
-            }
             T& get() const
             {
                 return container[index];
             }
+
             T* operator->() const
             {
                 return &get();
             }
             T& operator*() const
-            {
-                return get();
-            }
-            operator T() const
             {
                 return get();
             }

@@ -44,15 +44,15 @@ void glDebug::toggleCoord()
     gui::toggleLineGroup( coord_line_group );
 }
 
-unsigned int glDebug::generateDebugGrid( std::string pName, 
-        float pTileSize, unsigned int pTileCount, 
+unsigned int glDebug::generateDebugGrid( std::string pName,
+        float pTileSize, unsigned int pTileCount,
         float pColorR, float pColorG, float pColorB, float pAlpha )
 {
     return generateDebugGrid( pName, pTileSize, pTileSize, pTileCount, pTileCount, pColorR, pColorG, pColorB, pAlpha );
 }
 
-unsigned int glDebug::generateDebugGrid( std::string pName, 
-        float pTileSizeX, float pTileSizeY, unsigned int pTileCountX, unsigned int pTileCountY, 
+unsigned int glDebug::generateDebugGrid( std::string pName,
+        float pTileSizeX, float pTileSizeY, unsigned int pTileCountX, unsigned int pTileCountY,
         float pColorR, float pColorG, float pColorB, float pAlpha )
 {
     //generate grid vertices and indices
@@ -61,7 +61,7 @@ unsigned int glDebug::generateDebugGrid( std::string pName,
 
     const unsigned int lineOffset = gui::getLineCount();
     unsigned int lineCount = pTileCountX + pTileCountY +2;
-    gl::ColorID grid_color = gl::createColor( glm::vec4( pColorR, pColorG, pColorB, pAlpha ), pName + "_color" );
+    size_t grid_color = gl::createColor( glm::vec4( pColorR, pColorG, pColorB, pAlpha ), pName + "_color" ).index;
     unsigned int vertexOffset = vertexCount;
     verts.resize( vertexCount );
     vertexCount = 0;
@@ -76,14 +76,14 @@ unsigned int glDebug::generateDebugGrid( std::string pName,
         gui::createLine( verts[y * 2], verts[y * 2 + 1], grid_color );
         vertexCount += 2;
     }
-    //vertical borders 
+    //vertical borders
     unsigned int v = 0;
     unsigned int ind = 0;
     //verticals
     for ( unsigned int x = 0; x < pTileCountX - 1; ++x ) {
         for ( unsigned int y = 0; y < 2; ++y ) {
-            verts[vertexCount + x * 2 + y] = gui::createLineVertexPos( glm::vec4( 
-                        xMin + ( x+1 )*pTileSizeX, 0.0f, 
+            verts[vertexCount + x * 2 + y] = gui::createLineVertexPos( glm::vec4(
+                        xMin + ( x+1 )*pTileSizeX, 0.0f,
                         yMin + y * pTileSizeY * pTileCountY, 1.0f ) );
         }
         gui::createLine( verts[vertexCount + x * 2], verts[vertexCount + x * 2 + 1] , grid_color );
@@ -108,9 +108,9 @@ unsigned int glDebug::initCoordinateSystem( std::string pName )
     verts[5] = gui::createLineVertexPos( glm::vec4( 0.0f, 0.0f, -50.0f, 1.0f ) );
     verts[6] = gui::createLineVertexPos( glm::vec4( 0.0f, 0.0f, 50.0f, 1.0f ) );
 
-    unsigned int red_color_i = gl::getColor( "red" );
-    unsigned int green_color_i = gl::getColor( "green" );
-    unsigned int blue_color_i = gl::getColor( "blue" );
+    unsigned int red_color_i = gl::getColor( "red" ).index;
+    unsigned int green_color_i = gl::getColor( "green" ).index;
+    unsigned int blue_color_i = gl::getColor( "blue" ).index;
 
 
     gui::createLine( verts[0], verts[1], red_color_i );
