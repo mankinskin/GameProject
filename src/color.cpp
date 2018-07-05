@@ -44,7 +44,7 @@ gl::ColorID gl::getColor( std::string pColorName )
             colorNames.begin() + colorCount, pColorName ); 
     if ( nameIt == colorNames.end() ) {
         printf( "Color %s not found!\n", pColorName.c_str() );
-        return ColorID( 0 );
+        return ColorID( utils::INVALID_ID );
     }
     unsigned int i = nameIt - colorNames.begin();
     return ColorID( i );
