@@ -6,9 +6,9 @@
 #include <glfw3.h>
 #include <vector>
 
-namespace app 
+namespace app
 {
-    struct Monitor 
+    struct Monitor
     {
         Monitor();
         Monitor( unsigned int pIndex, GLFWmonitor* pMonitor );
@@ -29,7 +29,7 @@ namespace app
 
     using MonitorID = utils::ID<Monitor>;
 
-    struct Window 
+    struct Window
     {
         const static unsigned int DEFAULT_WIDTH = 1000;
         const static unsigned int DEFAULT_HEIGHT = 700;
@@ -49,12 +49,12 @@ namespace app
         void updateMonitor();
         void updatePos();
 
-        GLFWwindow* operator=( const Window& obj ) const 
+        GLFWwindow* operator=( const Window& obj ) const
         {
             return window;
         }
 
-        Window& operator=( const Window obj ) 
+        Window& operator=( const Window obj )
         {
             name = obj.name;
             xpos = obj.xpos;
@@ -71,7 +71,7 @@ namespace app
         }
 
         GLFWwindow* window = nullptr;
-        MonitorID monitor;        
+        MonitorID monitor;
         unsigned int xpos = 0;
         unsigned int ypos = 0;
         unsigned int width;

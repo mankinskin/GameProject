@@ -37,12 +37,11 @@ namespace gui
                 {
                     Preset( QuadPreset qs, Colors cs,
                             MovePolicy mp, ResizePolicy rp )
-                        :quads( qs ),
-                        colors( cs ),
-                        movepolicy( mp ),
-                        resizepolicy( rp )
-                    {
-                    }
+                        : quads( qs )
+                        , colors( cs )
+                        , movepolicy( mp )
+                        , resizepolicy( rp )
+                    {}
                     const QuadPreset quads;
                     const Colors colors;
                     const MovePolicy movepolicy;
@@ -54,10 +53,10 @@ namespace gui
                 const ResizePolicy resizepolicy;
 
                 Widget( Preset preset )
-                    :quads( utils::convert_array<QuadID>( preset.quads ) ),
-                    colors( preset.colors ),
-                    movepolicy( preset.movepolicy ),
-                    resizepolicy( preset.resizepolicy )
+                    : quads( utils::convert_array<QuadID>( preset.quads ) )
+                    , colors( preset.colors )
+                    , movepolicy( preset.movepolicy )
+                    , resizepolicy( preset.resizepolicy )
             {
                 color( colors );
             }

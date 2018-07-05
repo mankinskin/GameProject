@@ -33,7 +33,7 @@ app::Monitor::Monitor( unsigned int pIndex, GLFWmonitor* pMonitor )
 
 void app::Monitor::print()
 {
-    printf("Monitor %u\nPosX: %u\tPosY: %u\nWidth: %u\tHeight: %u\n", 
+    printf("Monitor %u\nPosX: %u\tPosY: %u\nWidth: %u\tHeight: %u\n",
             index, pos.x, pos.y, width, height );
 }
 

@@ -8,9 +8,9 @@
 #include "vao.h"
 #include "color.h"
 
-namespace gui 
+namespace gui
 {
-    struct Quad 
+    struct Quad
     {
         Quad( glm::vec4 pData )
             :data( pData )
@@ -21,7 +21,7 @@ namespace gui
         void resize( const glm::vec2 v );
     };
 
-    struct QuadID 
+    struct QuadID
         : public utils::ID<Quad>
     {
         QuadID( const Quad& q )
@@ -33,7 +33,7 @@ namespace gui
         void setPos( const glm::vec2 p ) const;
         void move( const glm::vec2 v ) const;
         void resize( const glm::vec2 v ) const;
-        void color( const gl::ColorID c ) const; 
+        void color( const gl::ColorID c ) const;
     };
 
     const unsigned int MAX_QUAD_COUNT = 10000;

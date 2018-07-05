@@ -23,6 +23,7 @@ namespace signals
             public:
                 using ID = utils::ID<EventListener<Event>>;
                 static constexpr typename ID::Container& all = ID::container;
+
                 EventListener( const Event pSignature )
                     : signature( pSignature )
                     , occurred( false )
