@@ -109,4 +109,10 @@ namespace signals
         {
             EventListener<Event>::push( pEvent );
         }
+
+    template<typename Event>
+        constexpr utils::ID<EventListener<Event>> eventsignal( const Event pEvent )
+        {
+            return utils::ID<EventListener<Event>>( pEvent );
+        }
 }

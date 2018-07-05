@@ -11,7 +11,7 @@ namespace signals
                 using ID = utils::ID<SignalListener<Op, Signals...>>;
                 static constexpr typename ID::Container& all = ID::container;
 
-                SignalListener( typename Signals::ID... sigs )
+                SignalListener( const typename Signals::ID... sigs )
                     : Op<Signals...>( sigs... )
                 {
                     (void)init;
@@ -76,7 +76,7 @@ namespace signals
     class And
     {
         public:
-        And( typename SignalL::ID lhs, typename SignalR::ID rhs )
+        And( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
             : signalL( lhs )
             , signalR( rhs )
         {}
@@ -94,7 +94,7 @@ namespace signals
     class Or
     {
         public:
-        Or( typename SignalL::ID lhs, typename SignalR::ID rhs )
+        Or( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
             : signalL( lhs )
             , signalR( rhs )
         {}
@@ -112,7 +112,7 @@ namespace signals
     class Xor
     {
         public:
-        Xor( typename SignalL::ID lhs, typename SignalR::ID rhs )
+        Xor( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
             : signalL( lhs )
             , signalR( rhs )
         {}
@@ -130,7 +130,7 @@ namespace signals
     class Nor
     {
         public:
-        Nor( typename SignalL::ID lhs, typename SignalR::ID rhs )
+        Nor( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
             : signalL( lhs )
             , signalR( rhs )
         {}
@@ -148,7 +148,7 @@ namespace signals
     class Equal
     {
         public:
-        Equal( typename SignalL::ID lhs, typename SignalR::ID rhs )
+        Equal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
             : signalL( lhs )
             , signalR( rhs )
         {}
@@ -166,7 +166,7 @@ namespace signals
     class Not
     {
         public:
-        Not( typename Signal::ID s )
+        Not( const typename Signal::ID s )
             : signal( s )
         {}
 
@@ -179,39 +179,39 @@ namespace signals
     };
 
     template<typename SignalL, typename SignalR>
-    typename SignalListener<And, SignalL, SignalR>::ID andsignal( typename SignalL::ID lhs, typename SignalR::ID rhs )
+    typename SignalListener<And, SignalL, SignalR>::ID andsignal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
     {
-        return typename SignalListener<And, SignalL, SignalR>::ID( lhs, rhs );
+        return utils::ID<SignalListener<And, SignalL, SignalR>>( SignalListener<Equal, SignalL, SignalR>( lhs, rhs ) );
     }
 
     template<typename SignalL, typename SignalR>
-    typename SignalListener<Or, SignalL, SignalR>::ID orsignal( typename SignalL::ID lhs, typename SignalR::ID rhs )
+    typename SignalListener<Or, SignalL, SignalR>::ID orsignal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
     {
-        return typename SignalListener<Or, SignalL, SignalR>::ID( lhs, rhs );
+        return utils::ID<SignalListener<Or, SignalL, SignalR>>( SignalListener<Equal, SignalL, SignalR>( lhs, rhs ) );
     }
 
     template<typename SignalL, typename SignalR>
-    typename SignalListener<Xor, SignalL, SignalR>::ID xorsignal( typename SignalL::ID lhs, typename SignalR::ID rhs )
+    typename SignalListener<Xor, SignalL, SignalR>::ID xorsignal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
     {
-        return typename SignalListener<Xor, SignalL, SignalR>::ID( lhs, rhs );
+        return utils::ID<SignalListener<Xor, SignalL, SignalR>>( SignalListener<Equal, SignalL, SignalR>( lhs, rhs ) );
     }
 
     template<typename SignalL, typename SignalR>
-    typename SignalListener<Nor, SignalL, SignalR>::ID norsignal( typename SignalL::ID lhs, typename SignalR::ID rhs )
+    typename SignalListener<Nor, SignalL, SignalR>::ID norsignal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
     {
-        return typename SignalListener<Nor, SignalL, SignalR>::ID( lhs, rhs );
+        return utils::ID<SignalListener<Nor, SignalL, SignalR>>( SignalListener<Equal, SignalL, SignalR>( lhs, rhs ) );
     }
 
     template<typename SignalL, typename SignalR>
-    typename SignalListener<Equal, SignalL, SignalR>::ID equalsignal( typename SignalL::ID lhs, typename SignalR::ID rhs )
+    typename SignalListener<Equal, SignalL, SignalR>::ID equalsignal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
     {
-        return typename SignalListener<Equal, SignalL, SignalR>::ID( lhs, rhs );
+        return utils::ID<SignalListener<Equal, SignalL, SignalR>>( SignalListener<Equal, SignalL, SignalR>( lhs, rhs ) );
     }
 
     template<typename Signal>
-    typename SignalListener<Not, Signal>::ID notsignal( typename Signal::ID s )
+    constexpr typename SignalListener<Not, Signal>::ID notsignal( utils::ID<Signal> s )
     {
-        return typename SignalListener<Not, Signal>::ID( s );
+        return utils::ID<SignalListener<Not, Signal>>( SignalListener<Not, Signal>( s ) );
     }
 
     struct ListenerID
@@ -221,38 +221,36 @@ namespace signals
             , instanceIndex( 0 )
         {}
         template<typename Event>
-            ListenerID( const EventListener<Event> pListener )
+            ListenerID( const utils::ID<EventListener<Event>> pListener )
             : templateIndex( EventListener<Event>::templateIndex )
-            , instanceIndex( EventListener<Event>::all.size() )
-        {
-            EventListener<Event>::all.push_back( pListener );
-        }
+            , instanceIndex( pListener.index )
+        {}
 
         template<template<typename...> typename Op, typename... Signals>
-            ListenerID( const SignalListener<Op, Signals...> pListener )
+            ListenerID( const utils::ID<SignalListener<Op, Signals...>> pListener )
             : templateIndex( SignalListener<Op, Signals...>::templateIndex )
-            , instanceIndex( SignalListener<Op, Signals...>::all.size() )
-        {
-            SignalListener<Op, Signals...>::all.push_back( pListener );
-        }
+            , instanceIndex( pListener.index )
+        {}
 
         bool stat() const
         {
             return staters[templateIndex]( instanceIndex );
         }
+
         private:
         size_t templateIndex;
         size_t instanceIndex;
     };
 
     template<typename Event>
-        ListenerID listenForEvent( Event pEvent )
+        ListenerID listen( const utils::ID<EventListener<Event>> pEvent )
         {
-            return ListenerID( EventListener<Event>( pEvent ) );
+            return ListenerID( pEvent );
         }
+
     template<template<typename...> typename Op, typename... Signals>
-        ListenerID listenForSignals( typename Signals::ID... pSignals )
+        ListenerID listen( const utils::ID<SignalListener<Op, Signals...>> pSignal )
         {
-            return ListenerID( SignalListener<Op, Signals...>( pSignals... ) );
+            return ListenerID( pSignal );
         }
 }
