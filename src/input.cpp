@@ -11,6 +11,9 @@
 #include "line.h"
 #include "widget.h"
 #include "action.h"
+#include "event.h"
+#include "signal.h"
+#include "utils/id.h"
 #include <tuple>
 #include <functional>
 #include <algorithm>
@@ -50,7 +53,6 @@ void input::init()
 void input::setupControls()
 {
     using namespace gui;
-    using namespace signals;
     using namespace signals;
     using namespace gates;
 
@@ -114,11 +116,11 @@ void input::setupControls()
         FunctorID up_func = createFunctor( camera::up, camera::main_camera );
         FunctorID down_func = createFunctor( camera::down, camera::main_camera );
 
-        ListenerID w_press = listenForEvent( KeyEvent( GLFW_KEY_W, 1 ) );
-        using KeyEventListener = EventListener<KeyEvent>;
-        ListenerID forward_trigger( SignalListener<And, KeyEventListener, KeyEventListener>( KeyEventListener::ID( KeyEventListener( KeyEvent( GLFW_KEY_W, 1 ) ) ), KeyEventListener::ID( KeyEventListener( KeyEvent( GLFW_KEY_S, 1 ) ) ) ) );
+        puts("Camera control");
+        ListenerID forward_trigger = listen( eventsignal( KeyEvent( GLFW_KEY_W, 1 ) ) );
 
         signals::Action::ID forward( signals::Action( forward_func, forward_trigger ) );
+        puts("end");
     }
 }
 
