@@ -52,6 +52,8 @@ namespace signals
         class Functor
         {
             public:
+            using ID = utils::ID<Functor<R, Args...>>;
+            constexpr static typename ID::Container& all = ID::container;
                 Functor( R( &&pF )( Args... ), Args&&... pArgs )
                     : func( std::forward<R( Args... )>( pF ) )
                     , args( std::forward<Args>( pArgs )... )
@@ -71,9 +73,8 @@ namespace signals
                 }
                 static void clear()
                 {
-                    all.clear();
+                    ID::clear();
                 }
-                static std::vector<Functor<R, Args...>> all;
                 static size_t invoker_index;
 
             private:
@@ -83,8 +84,6 @@ namespace signals
                 {
                     At_Init()
                     {
-                        Functor<R, Args...>::invoker_index = invokers.size();
-                        invokers.push_back( Functor<R, Args...>::invoke );
                         destructors.push_back( Functor<R, Args...>::clear );
                     }
                 };
@@ -92,46 +91,12 @@ namespace signals
         };
 
     template<typename R, typename... Args>
-        std::vector<Functor<R, Args...>> Functor<R, Args...>::all = std::vector<Functor<R, Args...>>();
-
-    template<typename R, typename... Args>
-        size_t Functor<R, Args...>::invoker_index = 0;
-
-    template<typename R, typename... Args>
         typename Functor<R, Args...>::At_Init Functor<R, Args...>::init = Functor<R, Args...>::At_Init();
 
-    struct FunctorID
-    {
-        template<typename R, typename... Args>
-            FunctorID( R( &&pF )( Args... ), Args&&... pArgs )
-            : invoker( Functor<R, Args...>::invoker_index )
-            , index( Functor<R, Args...>::all.size() )
-        {
-            Functor<R, Args...>::all.push_back( Functor<R, Args...>( std::forward<R( Args... )>( pF ), std::forward<Args>( pArgs )... ) );
-        }
-
-        template<typename R, typename... Args>
-            FunctorID( const Functor<R, Args...> pFunctor )
-            : invoker( Functor<R, Args...>::invoker_index )
-            , index( Functor<R, Args...>::all.size() )
-        {
-            Functor<R, Args...>::all.push_back( pFunctor );
-        }
-
-        void invoke() const
-        {
-            (*invokers[invoker])(index);
-        }
-
-        const size_t invoker; // invoker in functorInvokers
-        const size_t index;   // local index for functor
-    };
-
     template<typename R, typename... Args>
-        FunctorID createFunctor( R( &&pF )( Args... ), Args&&... pArgs )
+        utils::ID<Functor<R, Args...>> functor( R( &&pF )( Args... ), Args&&... pArgs )
         {
-            return FunctorID( std::forward<R( Args... )>( pF ), std::forward<Args>( pArgs )... );
+            return utils::ID<Functor<R, Args...>>( Functor<R, Args...>( std::forward<R( Args... )>( pF ), std::forward<Args>( pArgs )... ) );
         }
-
-    void clearFunctors();
 }
+

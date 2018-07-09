@@ -4,9 +4,3 @@
 std::vector<void(*)(const size_t)> signals::invokers = std::vector<void(*)(const size_t)>();
 std::vector<void( * )()> signals::destructors = std::vector<void( * )()>();
 
-void signals::clearFunctors()
-{
-    for ( void( *&destructor )() : destructors ) {
-        destructor();
-    }
-}

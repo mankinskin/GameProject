@@ -54,5 +54,9 @@ namespace utils
             {
                 return get();
             }
+            static void clear()
+            {
+                container.clear();
+            }
         };
 }

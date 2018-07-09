@@ -10,7 +10,7 @@
 #include "gui.h"
 #include "line.h"
 #include "widget.h"
-#include "action.h"
+#include "procedure.h"
 #include "event.h"
 #include "signal.h"
 #include "utils/id.h"
@@ -81,20 +81,20 @@ void input::setupControls()
     key_x = input::KeySignal( GLFW_KEY_X );
 
     {
-        FunctorID toggle_cull_func = createFunctor( mesh::toggleCullFace );
-        FunctorID toggle_cursor_func = createFunctor( input::toggleCursor );
-        FunctorID toggle_look_func = createFunctor<void, camera::Camera&>( camera::toggleLook, camera::main_camera );
-        FunctorID toggle_grid_func = createFunctor( glDebug::toggleGrid );
-        FunctorID toggle_coord_func = createFunctor( glDebug::toggleCoord );
-        FunctorID toggle_info_func = createFunctor( debug::togglePrintInfo );
-        FunctorID toggle_normals_func = createFunctor( mesh::toggleNormals );
-        FunctorID cycle_modes_func = createFunctor<void, camera::Camera&>( camera::cycleModes, camera::main_camera );
-        FunctorID higher_cam_speed_func = createFunctor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 1.0f );
-        FunctorID normal_cam_speed_func = createFunctor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 0.3f );
+        auto toggle_cull_func = functor( mesh::toggleCullFace );
+        auto toggle_cursor_func = functor( input::toggleCursor );
+        auto toggle_look_func = functor<void, camera::Camera&>( camera::toggleLook, camera::main_camera );
+        auto toggle_grid_func = functor( glDebug::toggleGrid );
+        auto toggle_coord_func = functor( glDebug::toggleCoord );
+        auto toggle_info_func = functor( debug::togglePrintInfo );
+        auto toggle_normals_func = functor( mesh::toggleNormals );
+        auto cycle_modes_func = functor<void, camera::Camera&>( camera::cycleModes, camera::main_camera );
+        auto higher_cam_speed_func = functor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 1.0f );
+        auto normal_cam_speed_func = functor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 0.3f );
 
 
-        signals::Action::ID toggle_look( signals::Action( toggle_look_func, key_c.press ) );
-        signals::Action::ID toggle_cursor( signals::Action( toggle_cursor_func, key_c.press ) );
+        //Reaction::ID toggle_look = reaction( key_w.press, signals::procedure( toggle_look_func ) );
+        //Reaction::ID toggle_cursor = reaction( key_w.press, procedure( toggle_cursor_func ) );
         //toggle_cull_func.add_triggers( { key_i.press } );
         //toggle_cursor_func.add_triggers( { key_c.press } );
         //toggle_look_func.add_triggers( { key_c.press } );
@@ -109,17 +109,18 @@ void input::setupControls()
     }
 
     {//camera
-        FunctorID forward_func = createFunctor( camera::forward, camera::main_camera );
-        FunctorID backward_func = createFunctor( camera::back, camera::main_camera );
-        FunctorID left_func = createFunctor( camera::left, camera::main_camera );
-        FunctorID right_func = createFunctor( camera::right, camera::main_camera );
-        FunctorID up_func = createFunctor( camera::up, camera::main_camera );
-        FunctorID down_func = createFunctor( camera::down, camera::main_camera );
+        auto forward_func = functor( camera::forward, camera::main_camera );
+        auto backward_func = functor( camera::back, camera::main_camera );
+        auto left_func = functor( camera::left, camera::main_camera );
+        auto right_func = functor( camera::right, camera::main_camera );
+        auto up_func = functor( camera::up, camera::main_camera );
+        auto down_func = functor( camera::down, camera::main_camera );
 
         puts("Camera control");
         ListenerID forward_trigger = listen( eventsignal( KeyEvent( GLFW_KEY_W, 1 ) ) );
-
-        signals::Action::ID forward( signals::Action( forward_func, forward_trigger ) );
+        auto forward_proc = procedure( forward_func );
+        forward_proc->invoke();
+        Reaction::ID forward = reaction( forward_trigger, forward_proc );
         puts("end");
     }
 }
