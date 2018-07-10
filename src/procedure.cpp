@@ -3,9 +3,6 @@
 
 void signals::clearProcedures()
 {
-    for ( void( *&destructor )() : destructors ) {
-        destructor();
-    }
 }
 
 void signals::runReactions()

@@ -1,11 +1,9 @@
 #pragma once
 #include "signal.h"
-#include <vector>
-#include <unordered_map>
-#include <initializer_list>
 #include <functional>
 #include <algorithm>
 #include <tuple>
+#include <utility>
 #include "utils/id.h"
 
 namespace signals
@@ -18,85 +16,36 @@ namespace signals
        when checking all functors, the functorOrder queue is used. the invoker_index is used to determine the class of the functor and the slot_index is used to find the functor object to be invoked.
        */
 
-    template<unsigned int N, typename R, typename... Args>
-        struct applier
-        {
-            template<typename...ExArgs>
-                static void func( R( &pF )( Args... ), std::tuple<Args...> pArgTuple, ExArgs&&... pExArgs )
-                {
-                    applier<N - 1, R, Args...>::func( pF, pArgTuple, std::get<N - 1>( pArgTuple ), pExArgs... );
-                }
-        };
-
-    template<typename R, typename... Args>
-        struct applier<0, R, Args...>
-        {
-            template<typename... ExArgs>
-                static void func( R( &pF )( Args... ), std::tuple<Args...> pArgTuple, ExArgs&&... pExArgs )
-                {
-                    pF( pExArgs... );
-                }
-        };
-    // used to extract parameter pack from tuple
-    template<typename R, typename... Args>
-        void function_caller( R( &pF )( Args... ), std::tuple<Args...> pArgTuple )
-        {
-            applier<sizeof...( Args ), R, Args...>::func( pF, pArgTuple );
-        }
-    //
-    // Invoke functors using a functor-global array of invokers taking a local index
-    extern std::vector<void(*)(const size_t)> invokers;
-    extern std::vector<void(*)()> destructors;
-
     template<typename R, typename... Args>
         class Functor
         {
             public:
             using ID = utils::ID<Functor<R, Args...>>;
             constexpr static typename ID::Container& all = ID::container;
-                Functor( R( &&pF )( Args... ), Args&&... pArgs )
-                    : func( std::forward<R( Args... )>( pF ) )
-                    , args( std::forward<Args>( pArgs )... )
-                {
-                    (void)init;
-                }
+                Functor(R(&&pF)(Args...), Args&&... pArgs)
+                    : func(std::forward<R(Args...)>(pF))
+                    , args(std::forward<Args>(pArgs)...)
+                {}
 
+                template<size_t... Ns>
+                void invoke_ns(std::index_sequence<Ns...>) const
+                {
+                    func(std::get<Ns>(args)...);
+                }
                 void invoke() const
                 {
-                    function_caller( func, args );
+                    invoke_ns(std::make_index_sequence<sizeof...(Args)>());
                 }
-
-                //invoke instance by index
-                static void invoke( const size_t i )
-                {
-                    all[i].invoke();
-                }
-                static void clear()
-                {
-                    ID::clear();
-                }
-                static size_t invoker_index;
 
             private:
-                R( &func )( Args... );
-                std::tuple<Args...> args;
-                struct At_Init
-                {
-                    At_Init()
-                    {
-                        destructors.push_back( Functor<R, Args...>::clear );
-                    }
-                };
-                static At_Init init;
+                R(&func)(Args...);
+                const std::tuple<Args...> args;
         };
 
     template<typename R, typename... Args>
-        typename Functor<R, Args...>::At_Init Functor<R, Args...>::init = Functor<R, Args...>::At_Init();
-
-    template<typename R, typename... Args>
-        utils::ID<Functor<R, Args...>> functor( R( &&pF )( Args... ), Args&&... pArgs )
+        utils::ID<Functor<R, Args...>> functor(R(&&pF)(Args...), Args&&... pArgs)
         {
-            return utils::ID<Functor<R, Args...>>( Functor<R, Args...>( std::forward<R( Args... )>( pF ), std::forward<Args>( pArgs )... ) );
+            return utils::ID<Functor<R, Args...>>(Functor<R, Args...>(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...));
         }
 }
 
