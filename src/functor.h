@@ -1,51 +1,125 @@
 #pragma once
 #include "signal.h"
-#include <functional>
-#include <algorithm>
 #include <tuple>
+#include <vector>
 #include <utility>
 #include "utils/id.h"
+#include "utils/tuple_utils.h"
 
 namespace signals
 {
-    /*
-       Each functor holds a function pointer and a tuple for the arguments.
-       when a functor class is first instantited from the template, its static void call( unsigned int index ) function is pushed onto the functorInvokers.
-       this function will later be used to call a functor object by its index.
-       when a functor object is created, its template_index and its slot index is inserted into the order_queue, which ensures that all functors will always be called in the order in which they were created.
-       when checking all functors, the functorOrder queue is used. the invoker_index is used to determine the class of the functor and the slot_index is used to find the functor object to be invoked.
-       */
+    namespace hidden
+    {
+        extern std::vector<void(*)()> functorClearFuncs;
+        template<typename R, typename... Args>
+            class Functor
+            {
+                public:
+                    using ID = utils::ID<Functor<R, Args...>>;
+                    constexpr static typename ID::Container& all = ID::container;
 
-    template<typename R, typename... Args>
-        class Functor
-        {
-            public:
-            using ID = utils::ID<Functor<R, Args...>>;
-            constexpr static typename ID::Container& all = ID::container;
-                Functor(R(&&pF)(Args...), Args&&... pArgs)
-                    : func(std::forward<R(Args...)>(pF))
-                    , args(std::forward<Args>(pArgs)...)
+                    Functor(R(&&pF)(Args...), Args&&... pArgs)
+                        : func(std::forward<R(Args...)>(pF))
+                          , args(std::forward<Args>(pArgs)...)
                 {}
 
-                template<size_t... Ns>
-                void invoke_ns(std::index_sequence<Ns...>) const
-                {
-                    func(std::get<Ns>(args)...);
-                }
-                void invoke() const
-                {
-                    invoke_ns(std::make_index_sequence<sizeof...(Args)>());
-                }
+                    template<size_t... Ns>
+                        constexpr void invoke_unpacked(std::index_sequence<Ns...>)
+                        {
+                            func(std::get<Ns>(args)...);
+                        }
+                    constexpr void invoke()
+                    {
+                        invoke_unpacked(std::make_index_sequence<sizeof...(Args)>());
+                    }
 
-            private:
-                R(&func)(Args...);
-                const std::tuple<Args...> args;
-        };
+                    static void invoke( const size_t i )
+                    {
+                        all[i].invoke();
+                    }
 
+                private:
+                    R(&func)(Args...);
+                    const std::tuple<Args...> args;
+                    struct At_Init
+                    {
+                        At_Init()
+                        {
+                            functorClearFuncs.push_back(&Functor<R, Args...>::clear);
+                        }
+                    };
+                    static At_Init init;
+            };
+        template<typename R, typename... Args>
+            typename Functor<R, Args...>::At_Init Functor<R, Args...>::init;
+
+        template<typename... Funcs>
+            class Procedure
+            {
+                public:
+                    using ID = utils::ID<Procedure<Funcs...>>;
+                    constexpr static typename ID::Container& all = ID::container;
+
+                    Procedure(utils::ID<Funcs>... fs)
+                        : funcs(fs...)
+                    {
+                        (void)init;
+                    }
+
+                    constexpr void invoke_n(utils::_index<0>) const
+                    {}
+
+                    template<size_t N>
+                        constexpr void invoke_n(utils::_index<N>) const
+                        {
+                            invoke_n(utils::_index<N-1>());
+                            std::get<N-1>(funcs)->invoke();
+                        }
+
+                    constexpr void invoke()
+                    {
+                        invoke_n(utils::_index<sizeof...(Funcs)>());
+                    }
+
+                    static void invoke(const size_t i)
+                    {
+                        all[i].invoke();
+                    }
+
+                    static void clear()
+                    {
+                        all.clear();
+                    }
+
+                private:
+                    std::tuple<utils::ID<Funcs>...> funcs;
+                    struct At_Init
+                    {
+                        At_Init()
+                        {
+                            functorClearFuncs.push_back(&Procedure<Funcs...>::clear);
+                        }
+                    };
+                    static At_Init init;
+            };
+
+        template<typename... Funcs>
+            typename Procedure<Funcs...>::At_Init Procedure<Funcs...>::init;
+    }
+
+    // allocates a functor and returns an ID for it
     template<typename R, typename... Args>
-        utils::ID<Functor<R, Args...>> functor(R(&&pF)(Args...), Args&&... pArgs)
+        utils::ID<hidden::Functor<R, Args...>> functor(R(&&pF)(Args...), Args&&... pArgs)
         {
-            return utils::ID<Functor<R, Args...>>(Functor<R, Args...>(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...));
+            return utils::ID<hidden::Functor<R, Args...>>(hidden::Functor<R, Args...>(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...));
         }
+
+    template<typename... Funcs>
+        utils::ID<hidden::Procedure<Funcs...>> procedure(utils::ID<Funcs>... pFuncs)
+        {
+            return utils::ID<hidden::Procedure<Funcs...>>(hidden::Procedure<Funcs...>(pFuncs...));
+        }
+
+    void clearFunctors();
 }
 

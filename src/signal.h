@@ -4,8 +4,117 @@
 
 namespace signals
 {
-    template<template<typename...> typename Op, typename... Signals>
-        class SignalListener : public Op<Signals...>
+    namespace hidden
+    {
+        // plug these into signal listeners
+        template<typename SignalL, typename SignalR>
+            class And
+            {
+                public:
+                    And( const utils::ID<SignalL> lhs, const utils::ID<SignalR> rhs )
+                        : signalL( lhs )
+                          , signalR( rhs )
+                {}
+
+                    bool stat() const
+                    {
+                        return signalL->stat() && signalR->stat();
+                    }
+                private:
+                    const utils::ID<SignalL> signalL;
+                    const utils::ID<SignalR> signalR;
+            };
+
+        template<typename SignalL, typename SignalR>
+            class Or
+            {
+                public:
+                    Or( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
+                        : signalL( lhs )
+                          , signalR( rhs )
+                {}
+
+                    bool stat() const
+                    {
+                        return signalL->stat() || signalR->stat();
+                    }
+                private:
+                    const typename SignalL::ID signalL;
+                    const typename SignalR::ID signalR;
+            };
+
+        template<typename SignalL, typename SignalR>
+            class Xor
+            {
+                public:
+                    Xor( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
+                        : signalL( lhs )
+                          , signalR( rhs )
+                {}
+
+                    bool stat() const
+                    {
+                        return signalL->stat() != signalR->stat();
+                    }
+                private:
+                    const typename SignalL::ID signalL;
+                    const typename SignalR::ID signalR;
+            };
+
+        template<typename SignalL, typename SignalR>
+            class Nor
+            {
+                public:
+                    Nor( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
+                        : signalL( lhs )
+                          , signalR( rhs )
+                {}
+
+                    bool stat() const
+                    {
+                        return !signalL->stat() && !signalR->stat();
+                    }
+                private:
+                    const typename SignalL::ID signalL;
+                    const typename SignalR::ID signalR;
+            };
+
+        template<typename SignalL, typename SignalR>
+            class Equal
+            {
+                public:
+                    Equal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
+                        : signalL( lhs )
+                          , signalR( rhs )
+                {}
+
+                    bool stat() const
+                    {
+                        return signalL->stat() == signalR->stat();
+                    }
+                private:
+                    const typename SignalL::ID signalL;
+                    const typename SignalR::ID signalR;
+            };
+
+        template<typename Signal>
+            class Not
+            {
+                public:
+                    Not( const typename Signal::ID s )
+                        : signal( s )
+                    {}
+
+                    bool stat() const
+                    {
+                        return !signal->stat();
+                    }
+                private:
+                    const typename Signal::ID signal;
+            };
+        extern std::vector<void(*)()> signalClearFuncs;
+        template<template<typename...> typename Op, typename... Signals>
+            class SignalListener : public Op<Signals...>
         {
             public:
                 using ID = utils::ID<SignalListener<Op, Signals...>>;
@@ -13,244 +122,68 @@ namespace signals
 
                 SignalListener( const typename Signals::ID... sigs )
                     : Op<Signals...>( sigs... )
-                {
-                    (void)init;
-                }
-
-                //bool stat_n( utils::_index<0> i ) const
-                //{
-                //    return std::get<0>( signals )->stat();
-                //}
-
-                //template<size_t N>
-                //bool stat_n( utils::_index<N> i ) const
-                //{
-                //    return Op::op( std::get<N>( signals )->stat(), stat_n( utils::_index<N-1>() ) );
-                //}
-
-                //bool stat()
-                //{
-                //    return stat_n( utils::_index<sizeof...(Signals)-1>() );
-                //}
-
-                bool stat() const
-                {
-                    return Op<Signals...>::stat();
-                }
+                {}
 
                 static bool stat( size_t i )
                 {
                     return all[i].stat();
                 }
+                using Op<Signals...>::stat;
 
                 static void clear()
                 {
                     all.clear();
                 }
-
-                static size_t templateIndex;  // the index of the template instantiation
             private:
                 struct At_Init
                 {
                     At_Init()
                     {
-                        templateIndex = template_count++;
-                        staters.push_back( stat );
-                        clearers.push_back( clear );
+                        signalClearFuncs.push_back(&SignalListener<Op, Signals...>::clear);
                     }
                 };
                 static At_Init init;
         };
 
-    template<template<typename...> typename Op, typename... Signals>
-        size_t SignalListener<Op, Signals...>::templateIndex = 0;
-
-    template<template<typename...> typename Op, typename... Signals>
-        typename SignalListener<Op, Signals...>::At_Init SignalListener<Op, Signals...>::init = SignalListener<Op, Signals...>::At_Init();
-
-    //template<template<typename...> typename Op, typename Signals...>
-    //using Signal = SignalListener<Op, Signals...>::ID;
-
-    // plug these into signal listeners
-    template<typename SignalL, typename SignalR>
-    class And
-    {
-        public:
-        And( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-            : signalL( lhs )
-            , signalR( rhs )
-        {}
-
-        bool stat() const
-        {
-            return signalL->stat() && signalR->stat();
-        }
-        private:
-        const typename SignalL::ID signalL;
-        const typename SignalR::ID signalR;
-    };
-
-    template<typename SignalL, typename SignalR>
-    class Or
-    {
-        public:
-        Or( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-            : signalL( lhs )
-            , signalR( rhs )
-        {}
-
-        bool stat() const
-        {
-            return signalL->stat() || signalR->stat();
-        }
-        private:
-        const typename SignalL::ID signalL;
-        const typename SignalR::ID signalR;
-    };
-
-    template<typename SignalL, typename SignalR>
-    class Xor
-    {
-        public:
-        Xor( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-            : signalL( lhs )
-            , signalR( rhs )
-        {}
-
-        bool stat() const
-        {
-            return signalL->stat() != signalR->stat();
-        }
-        private:
-        const typename SignalL::ID signalL;
-        const typename SignalR::ID signalR;
-    };
-
-    template<typename SignalL, typename SignalR>
-    class Nor
-    {
-        public:
-        Nor( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-            : signalL( lhs )
-            , signalR( rhs )
-        {}
-
-        bool stat() const
-        {
-            return !signalL->stat() && !signalR->stat();
-        }
-        private:
-        const typename SignalL::ID signalL;
-        const typename SignalR::ID signalR;
-    };
-
-    template<typename SignalL, typename SignalR>
-    class Equal
-    {
-        public:
-        Equal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-            : signalL( lhs )
-            , signalR( rhs )
-        {}
-
-        bool stat() const
-        {
-            return signalL->stat() == signalR->stat();
-        }
-        private:
-        const typename SignalL::ID signalL;
-        const typename SignalR::ID signalR;
-    };
-
-    template<typename Signal>
-    class Not
-    {
-        public:
-        Not( const typename Signal::ID s )
-            : signal( s )
-        {}
-
-        bool stat() const
-        {
-            return !signal->stat();
-        }
-        private:
-        const typename Signal::ID signal;
-    };
-
-    template<typename SignalL, typename SignalR>
-    typename SignalListener<And, SignalL, SignalR>::ID andsignal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-    {
-        return utils::ID<SignalListener<And, SignalL, SignalR>>( SignalListener<Equal, SignalL, SignalR>( lhs, rhs ) );
-    }
-
-    template<typename SignalL, typename SignalR>
-    typename SignalListener<Or, SignalL, SignalR>::ID orsignal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-    {
-        return utils::ID<SignalListener<Or, SignalL, SignalR>>( SignalListener<Equal, SignalL, SignalR>( lhs, rhs ) );
-    }
-
-    template<typename SignalL, typename SignalR>
-    typename SignalListener<Xor, SignalL, SignalR>::ID xorsignal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-    {
-        return utils::ID<SignalListener<Xor, SignalL, SignalR>>( SignalListener<Equal, SignalL, SignalR>( lhs, rhs ) );
-    }
-
-    template<typename SignalL, typename SignalR>
-    typename SignalListener<Nor, SignalL, SignalR>::ID norsignal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-    {
-        return utils::ID<SignalListener<Nor, SignalL, SignalR>>( SignalListener<Equal, SignalL, SignalR>( lhs, rhs ) );
-    }
-
-    template<typename SignalL, typename SignalR>
-    typename SignalListener<Equal, SignalL, SignalR>::ID equalsignal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-    {
-        return utils::ID<SignalListener<Equal, SignalL, SignalR>>( SignalListener<Equal, SignalL, SignalR>( lhs, rhs ) );
-    }
-
-    template<typename Signal>
-    constexpr typename SignalListener<Not, Signal>::ID notsignal( utils::ID<Signal> s )
-    {
-        return utils::ID<SignalListener<Not, Signal>>( SignalListener<Not, Signal>( s ) );
-    }
-
-    struct ListenerID
-    {
-        ListenerID()
-            : templateIndex( 0 )
-            , instanceIndex( 0 )
-        {}
-        template<typename Event>
-            ListenerID( const utils::ID<EventListener<Event>> pListener )
-            : templateIndex( EventListener<Event>::templateIndex )
-            , instanceIndex( pListener.index )
-        {}
-
         template<template<typename...> typename Op, typename... Signals>
-            ListenerID( const utils::ID<SignalListener<Op, Signals...>> pListener )
-            : templateIndex( SignalListener<Op, Signals...>::templateIndex )
-            , instanceIndex( pListener.index )
-        {}
+            typename SignalListener<Op, Signals...>::At_Init SignalListener<Op, Signals...>::init;
 
-        bool stat() const
-        {
-            return staters[templateIndex]( instanceIndex );
-        }
+    }
+    template<typename SignalL, typename SignalR>
+    utils::ID<hidden::SignalListener<hidden::And, SignalL, SignalR>> andsignal( utils::ID<SignalL> lhs, utils::ID<SignalR> rhs )
+    {
+        return utils::ID<hidden::SignalListener<hidden::And, SignalL, SignalR>>( hidden::SignalListener<hidden::And, SignalL, SignalR>( lhs, rhs ) );
+    }
 
-        private:
-        size_t templateIndex;
-        size_t instanceIndex;
-    };
+    template<typename SignalL, typename SignalR>
+    utils::ID<hidden::SignalListener<hidden::Or, SignalL, SignalR>> orsignal( utils::ID<SignalL> lhs, utils::ID<SignalR> rhs )
+    {
+        return utils::ID<hidden::SignalListener<hidden::Or, SignalL, SignalR>>( hidden::SignalListener<hidden::Or, SignalL, SignalR>( lhs, rhs ) );
+    }
 
-    template<typename Event>
-        ListenerID listen( const utils::ID<EventListener<Event>> pEvent )
-        {
-            return ListenerID( pEvent );
-        }
+    template<typename SignalL, typename SignalR>
+    utils::ID<hidden::SignalListener<hidden::Xor, SignalL, SignalR>> xorsignal( utils::ID<SignalL> lhs, utils::ID<SignalR> rhs )
+    {
+        return utils::ID<hidden::SignalListener<hidden::Xor, SignalL, SignalR>>( hidden::SignalListener<hidden::Xor, SignalL, SignalR>( lhs, rhs ) );
+    }
 
-    template<template<typename...> typename Op, typename... Signals>
-        ListenerID listen( const utils::ID<SignalListener<Op, Signals...>> pSignal )
-        {
-            return ListenerID( pSignal );
-        }
+    template<typename SignalL, typename SignalR>
+    utils::ID<hidden::SignalListener<hidden::Nor, SignalL, SignalR>> norsignal( utils::ID<SignalL> lhs, utils::ID<SignalR> rhs )
+    {
+        return utils::ID<hidden::SignalListener<hidden::Nor, SignalL, SignalR>>( hidden::SignalListener<hidden::Nor, SignalL, SignalR>( lhs, rhs ) );
+    }
+
+    template<typename SignalL, typename SignalR>
+    utils::ID<hidden::SignalListener<hidden::Equal, SignalL, SignalR>> equalsignal( utils::ID<SignalL> lhs, utils::ID<SignalR> rhs )
+    {
+        return utils::ID<hidden::SignalListener<hidden::Equal, SignalL, SignalR>>( hidden::SignalListener<hidden::Equal, SignalL, SignalR>( lhs, rhs ) );
+    }
+
+    template<typename Signal>
+    constexpr utils::ID<hidden::SignalListener<hidden::Not, Signal>> notsignal( utils::ID<Signal> s )
+    {
+        return utils::ID<hidden::SignalListener<hidden::Not, Signal>>( hidden::SignalListener<hidden::Not, Signal>( s ) );
+    }
+
+    void clearSignals();
 }

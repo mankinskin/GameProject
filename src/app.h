@@ -2,7 +2,7 @@
 #include <glew.h>
 #include <glm.hpp>
 
-namespace app 
+namespace app
 {
     void init();
     void initGLFW();
@@ -22,7 +22,7 @@ namespace app
     extern double minFrameMS;
     extern glm::vec3 node_mov;
 
-    enum State 
+    enum State
     {
         Init,
         MainMenu,

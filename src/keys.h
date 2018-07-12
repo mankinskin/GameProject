@@ -2,6 +2,7 @@
 #include "contextwindow.h"
 #include "signal.h"
 #include "event.h"
+#include "reaction.h"
 
 namespace input
 {
@@ -48,8 +49,8 @@ namespace input
         KeySignal()
         {}
         KeySignal( int pKey );
-        signals::ListenerID press;
-        signals::ListenerID release;
+        signals::Listener::ID press;
+        signals::Listener::ID release;
     };
 
     extern KeySignal key_esc;

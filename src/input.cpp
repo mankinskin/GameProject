@@ -10,7 +10,7 @@
 #include "gui.h"
 #include "line.h"
 #include "widget.h"
-#include "procedure.h"
+#include "reaction.h"
 #include "event.h"
 #include "signal.h"
 #include "utils/id.h"
@@ -67,6 +67,7 @@ void input::setupControls()
     key_a = input::KeySignal( GLFW_KEY_A );
     key_d = input::KeySignal( GLFW_KEY_D );
     key_space = input::KeySignal( GLFW_KEY_SPACE );
+    key_lshift = input::KeySignal( GLFW_KEY_LEFT_SHIFT );
     key_z = input::KeySignal( GLFW_KEY_Z );
     key_f = input::KeySignal( GLFW_KEY_F );
     key_n = input::KeySignal( GLFW_KEY_N );
@@ -79,8 +80,8 @@ void input::setupControls()
     key_l = input::KeySignal( GLFW_KEY_L );
     key_lshift = input::KeySignal( GLFW_KEY_LEFT_SHIFT );
     key_x = input::KeySignal( GLFW_KEY_X );
-
     {
+        auto exit_func = functor(app::quit);
         auto toggle_cull_func = functor( mesh::toggleCullFace );
         auto toggle_cursor_func = functor( input::toggleCursor );
         auto toggle_look_func = functor<void, camera::Camera&>( camera::toggleLook, camera::main_camera );
@@ -92,9 +93,9 @@ void input::setupControls()
         auto higher_cam_speed_func = functor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 1.0f );
         auto normal_cam_speed_func = functor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 0.3f );
 
-
-        //Reaction::ID toggle_look = reaction( key_w.press, signals::procedure( toggle_look_func ) );
-        //Reaction::ID toggle_cursor = reaction( key_w.press, procedure( toggle_cursor_func ) );
+        reaction(key_c.press, toggle_look_func);
+        reaction(key_c.press, toggle_cursor_func);
+        reaction(key_esc.press, exit_func);
         //toggle_cull_func.add_triggers( { key_i.press } );
         //toggle_cursor_func.add_triggers( { key_c.press } );
         //toggle_look_func.add_triggers( { key_c.press } );
@@ -117,10 +118,12 @@ void input::setupControls()
         auto down_func = functor( camera::down, camera::main_camera );
 
         puts("Camera control");
-        ListenerID forward_trigger = listen( eventsignal( KeyEvent( GLFW_KEY_W, 1 ) ) );
-        auto forward_proc = procedure( forward_func );
-        forward_proc->invoke();
-        Reaction::ID forward = reaction( forward_trigger, forward_proc );
+        reaction( key_w.press, forward_func );
+        reaction( key_s.press, backward_func );
+        reaction( key_a.press, left_func );
+        reaction( key_d.press, right_func );
+        reaction( key_space.press, up_func );
+        reaction( key_lshift.press, down_func );
         puts("end");
     }
 }
