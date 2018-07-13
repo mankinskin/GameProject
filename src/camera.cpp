@@ -77,16 +77,12 @@ void camera::Camera::lookAtCenter()
 
 void camera::Camera::update()
 {
-
-
     cross = glm::normalize( glm::cross( lookAt, *( glm::vec3* )mode.look.cross_up_off ) );
     normal = glm::normalize( glm::cross( cross, lookAt ) );
     //update camera matrices
     if ( mov != glm::vec3() ) {
         translateLocal( normalize( mov ) );
-        mov = glm::vec3();
     }
-
 
     viewMatrix = glm::lookAt( pos, pos + lookAt, normal );
 }
@@ -99,32 +95,32 @@ void camera::Camera::setMode( CameraMode pMode )
 
 void camera::Camera::forward()
 {
-    move( glm::vec3( 0.0f, 0.0f, -1.0f ) );
+    mov.z -= 1.0f;
 }
 
 void camera::Camera::back()
 {
-    move( glm::vec3( 0.0f, 0.0f, 1.0f ) );
+    mov.z += 1.0f;
 }
 
 void camera::Camera::left()
 {
-    move( glm::vec3( -1.0f, 0.0f, 0.0f ) );
+    mov.x -= 1.0f;
 }
 
 void camera::Camera::right()
 {
-    move( glm::vec3( 1.0f, 0.0f, 0.0f ) );
+    mov.x += 1.0f;
 }
 
 void camera::Camera::up()
 {
-    move( glm::vec3( 0.0f, 1.0f, 0.0f ) );
+    mov.y += 1.0f;
 }
 
 void camera::Camera::down()
 {
-    move( glm::vec3( 0.0f, -1.0f, 0.0f ) );
+    mov.y -= 1.0f;
 }
 
 void camera::Camera::move( glm::vec3 pDir )

@@ -89,21 +89,17 @@ void input::setupControls()
         auto toggle_coord_func = functor( glDebug::toggleCoord );
         auto toggle_info_func = functor( debug::togglePrintInfo );
         auto toggle_normals_func = functor( mesh::toggleNormals );
-        auto cycle_modes_func = functor<void, camera::Camera&>( camera::cycleModes, camera::main_camera );
+        auto cycle_cam_modes_func = functor<void, camera::Camera&>( camera::cycleModes, camera::main_camera );
         auto higher_cam_speed_func = functor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 1.0f );
         auto normal_cam_speed_func = functor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 0.3f );
 
-        reaction(key_c.press, toggle_look_func);
-        reaction(key_c.press, toggle_cursor_func);
-        reaction(key_esc.press, exit_func);
-        //toggle_cull_func.add_triggers( { key_i.press } );
-        //toggle_cursor_func.add_triggers( { key_c.press } );
-        //toggle_look_func.add_triggers( { key_c.press } );
-        //toggle_grid_func.add_triggers( { key_g.press } );
-        //toggle_coord_func.add_triggers( { key_h.press } );
-        //toggle_info_func.add_triggers( { key_i.press } );
-        //toggle_normals_func.add_triggers( { key_n.press } );
-        //cycle_modes_func.add_triggers( { key_j.press } );
+        link(key_c.press, toggle_look_func);
+        link(key_c.press, toggle_cursor_func);
+        link(key_esc.press, exit_func);
+        link(key_g.press, toggle_grid_func);
+        link(key_h.press, toggle_coord_func);
+        link(key_n.press, toggle_normals_func);
+        link(key_j.press, cycle_cam_modes_func );
 
         //higher_cam_speed_func.add_triggers( { key_lshift.press } );
         //normal_cam_speed_func.add_triggers( { key_lshift.release } );
@@ -118,12 +114,18 @@ void input::setupControls()
         auto down_func = functor( camera::down, camera::main_camera );
 
         puts("Camera control");
-        reaction( key_w.press, forward_func );
-        reaction( key_s.press, backward_func );
-        reaction( key_a.press, left_func );
-        reaction( key_d.press, right_func );
-        reaction( key_space.press, up_func );
-        reaction( key_lshift.press, down_func );
+        link( key_w.press, forward_func );
+        link( key_w.release, backward_func );
+        link( key_s.press, backward_func );
+        link( key_s.release, forward_func );
+        link( key_a.press, left_func );
+        link( key_a.release, right_func );
+        link( key_d.press, right_func );
+        link( key_d.release, left_func );
+        link( key_space.press, up_func );
+        link( key_space.release, down_func );
+        link( key_lshift.press, down_func );
+        link( key_lshift.release, up_func );
         puts("end");
     }
 }
