@@ -59,4 +59,10 @@ namespace utils
                 container.clear();
             }
         };
+
+    template<typename T>
+        ID<T> makeID(const T t)
+        {
+            return ID<T>(t);
+        }
 }
