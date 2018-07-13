@@ -23,6 +23,10 @@ namespace signals
             : stater( hidden::SignalListener<Op, Signals...>::stat )
             , index( pListener.index )
         {}
+            Listener( const utils::ID<Listener> pListener )
+            : stater( pListener->stater )
+            , index( pListener->index )
+        {}
 
         bool stat() const
         {
@@ -84,24 +88,24 @@ namespace signals
             const size_t index;
         };
 
-        extern std::vector<std::pair<utils::ID<Listener>, Invoker>> reactions;
+        extern std::vector<std::pair<Listener, Invoker>> reactions;
     }
 
-    template<typename R, typename... Args>
-        void reaction(utils::ID<Listener> pListener, R(&&pF)(Args...), Args&&... pArgs)
+    template<typename Signal, typename R, typename... Args>
+        void reaction(utils::ID<Signal> pSignal, R(&&pF)(Args...), Args&&... pArgs)
         {
-            hidden::reactions.push_back(std::make_pair(pListener, Invoker(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...)));
+            hidden::reactions.push_back(std::make_pair(Listener(pSignal), Invoker(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...)));
         }
 
-    template<typename... Funcs>
-        void reaction(utils::ID<Listener> pListener, utils::ID<Funcs>... pFuncs)
+    template<typename Signal, typename... Funcs>
+        void reaction(utils::ID<Signal> pSignal, utils::ID<Funcs>... pFuncs)
         {
-            hidden::reactions.push_back(std::make_pair(pListener, hidden::Invoker(pFuncs...)));
+            hidden::reactions.push_back(std::make_pair(Listener(pSignal), hidden::Invoker(pFuncs...)));
         }
-    template<typename R, typename... Args>
-        void reaction(utils::ID<Listener> pListener, utils::ID<hidden::Functor<R, Args...>> pFunc)
+    template<typename Signal, typename R, typename... Args>
+        void reaction(utils::ID<Signal> pSignal, utils::ID<hidden::Functor<R, Args...>> pFunc)
         {
-            hidden::reactions.push_back(std::make_pair(pListener, hidden::Invoker(pFunc)));
+            hidden::reactions.push_back(std::make_pair(Listener(pSignal), hidden::Invoker(pFunc)));
         }
 
     template<typename... Funcs>
