@@ -88,30 +88,30 @@ namespace signals
             const size_t index;
         };
 
-        extern std::vector<std::pair<Listener, Invoker>> reactions;
+        extern std::vector<std::pair<Listener, Invoker>> links;
     }
 
     template<typename Signal, typename R, typename... Args>
-        void reaction(utils::ID<Signal> pSignal, R(&&pF)(Args...), Args&&... pArgs)
+        void link(utils::ID<Signal> pSignal, R(&&pF)(Args...), Args&&... pArgs)
         {
-            hidden::reactions.push_back(std::make_pair(Listener(pSignal), Invoker(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...)));
+            hidden::links.push_back(std::make_pair(Listener(pSignal), Invoker(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...)));
         }
 
     template<typename Signal, typename... Funcs>
-        void reaction(utils::ID<Signal> pSignal, utils::ID<Funcs>... pFuncs)
+        void link(utils::ID<Signal> pSignal, utils::ID<Funcs>... pFuncs)
         {
-            hidden::reactions.push_back(std::make_pair(Listener(pSignal), hidden::Invoker(pFuncs...)));
+            hidden::links.push_back(std::make_pair(Listener(pSignal), hidden::Invoker(pFuncs...)));
         }
     template<typename Signal, typename R, typename... Args>
-        void reaction(utils::ID<Signal> pSignal, utils::ID<hidden::Functor<R, Args...>> pFunc)
+        void link(utils::ID<Signal> pSignal, utils::ID<hidden::Functor<R, Args...>> pFunc)
         {
-            hidden::reactions.push_back(std::make_pair(Listener(pSignal), hidden::Invoker(pFunc)));
+            hidden::links.push_back(std::make_pair(Listener(pSignal), hidden::Invoker(pFunc)));
         }
 
     template<typename... Funcs>
-        void reaction(utils::ID<Listener> pListener, utils::ID<hidden::Procedure<Funcs...>> pProc)
+        void link(utils::ID<Listener> pListener, utils::ID<hidden::Procedure<Funcs...>> pProc)
         {
-            hidden::reactions.push_back(std::make_pair(pListener, hidden::Invoker(pProc)));
+            hidden::links.push_back(std::make_pair(pListener, hidden::Invoker(pProc)));
         }
 }
 
