@@ -1,5 +1,4 @@
 #pragma once
-#include "signal.h"
 #include <tuple>
 #include <vector>
 #include <utility>
@@ -21,7 +20,9 @@ namespace signals
                     Functor(R(&&pF)(Args...), Args&&... pArgs)
                         : func(std::forward<R(Args...)>(pF))
                           , args(std::forward<Args>(pArgs)...)
-                {}
+                {
+                    initialize();
+                }
 
                     template<size_t... Ns>
                         constexpr void invoke_unpacked(std::index_sequence<Ns...>)
@@ -38,6 +39,11 @@ namespace signals
                         all[i].invoke();
                     }
 
+                    static void clear()
+                    {
+                        all.clear();
+                    }
+
                 private:
                     R(&func)(Args...);
                     const std::tuple<Args...> args;
@@ -48,10 +54,11 @@ namespace signals
                             functorClearFuncs.push_back(&Functor<R, Args...>::clear);
                         }
                     };
-                    static At_Init init;
+                    static void initialize()
+                    {
+                        static At_Init init;
+                    }
             };
-        template<typename R, typename... Args>
-            typename Functor<R, Args...>::At_Init Functor<R, Args...>::init;
 
         template<typename... Funcs>
             class Procedure
@@ -63,7 +70,7 @@ namespace signals
                     Procedure(utils::ID<Funcs>... fs)
                         : funcs(fs...)
                     {
-                        (void)init;
+                        initialize();
                     }
 
                     constexpr void invoke_n(utils::_index<0>) const
@@ -100,24 +107,58 @@ namespace signals
                             functorClearFuncs.push_back(&Procedure<Funcs...>::clear);
                         }
                     };
-                    static At_Init init;
+                    static void initialize()
+                    {
+                        static At_Init init;
+                    }
             };
-
-        template<typename... Funcs>
-            typename Procedure<Funcs...>::At_Init Procedure<Funcs...>::init;
     }
 
+    struct Invoker
+    {
+        template<typename R, typename... Args>
+            Invoker(R(&&pF)(Args...), Args&&... pArgs)
+            : invoker(hidden::Functor<R, Args...>::invoke)
+              , index(functor(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...).index)
+        {}
+
+        template<typename... Funcs>
+            Invoker(utils::ID<Funcs>... pFuncs)
+            : invoker(hidden::Procedure<Funcs...>::invoke)
+              , index(procedure(pFuncs...).index)
+        {}
+
+        template<typename R, typename... Args>
+            Invoker(utils::ID<hidden::Functor<R, Args...>> pFunc)
+            : invoker(hidden::Functor<R, Args...>::invoke)
+              , index(pFunc.index)
+        {}
+
+        template<typename... Funcs>
+            Invoker(utils::ID<hidden::Procedure<Funcs...>> pProc)
+            : invoker(hidden::Procedure<Funcs...>::invoke)
+              , index(pProc.index)
+        {}
+
+        void invoke() const
+        {
+            invoker(index);
+        }
+
+        void(&invoker)(const size_t);
+        const size_t index;
+    };
     // allocates a functor and returns an ID for it
     template<typename R, typename... Args>
         utils::ID<hidden::Functor<R, Args...>> functor(R(&&pF)(Args...), Args&&... pArgs)
         {
-            return utils::ID<hidden::Functor<R, Args...>>(hidden::Functor<R, Args...>(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...));
+            return utils::makeID(hidden::Functor<R, Args...>(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...));
         }
 
     template<typename... Funcs>
         utils::ID<hidden::Procedure<Funcs...>> procedure(utils::ID<Funcs>... pFuncs)
         {
-            return utils::ID<hidden::Procedure<Funcs...>>(hidden::Procedure<Funcs...>(pFuncs...));
+            return utils::makeID(hidden::Procedure<Funcs...>(pFuncs...));
         }
 
     void clearFunctors();

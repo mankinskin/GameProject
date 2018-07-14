@@ -1,6 +1,29 @@
 #include "signal.h"
 
+std::vector<void(*)()> signals::hidden::eventCheckFuncs;
 std::vector<void(*)()> signals::hidden::signalClearFuncs;
+std::vector<std::pair<signals::Listener, signals::Invoker>> signals::hidden::links;
+
+void signals::processLinks()
+{
+    for (std::pair<Listener, Invoker>& link : hidden::links) {
+        if (link.first.stat()) {
+            link.second.invoke();
+        }
+    }
+}
+
+void signals::hidden::link(Listener pListener, Invoker pInvoker)
+{
+    links.emplace_back(pListener, pInvoker);
+}
+
+void signals::checkEvents()
+{
+    for (void(*&check)() : hidden::eventCheckFuncs) {
+        check();
+    }
+}
 
 void signals::clearSignals()
 {

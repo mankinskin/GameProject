@@ -10,8 +10,8 @@
 #include "gui.h"
 #include "line.h"
 #include "widget.h"
-#include "reaction.h"
-#include "event.h"
+#include "signal.h"
+#include "signal.h"
 #include "signal.h"
 #include "utils/id.h"
 #include <tuple>
@@ -80,6 +80,9 @@ void input::setupControls()
     key_l = input::KeySignal( GLFW_KEY_L );
     key_lshift = input::KeySignal( GLFW_KEY_LEFT_SHIFT );
     key_x = input::KeySignal( GLFW_KEY_X );
+
+    auto rmb_down = listen(MouseKeyEvent(GLFW_MOUSE_BUTTON_RIGHT, 1));
+    auto rmb_up = listen(MouseKeyEvent(GLFW_MOUSE_BUTTON_RIGHT, 0));
     {
         auto exit_func = functor(app::quit);
         auto toggle_cull_func = functor( mesh::toggleCullFace );
@@ -93,8 +96,8 @@ void input::setupControls()
         auto higher_cam_speed_func = functor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 1.0f );
         auto normal_cam_speed_func = functor<void, camera::Camera&, float>( camera::setSpeed, camera::main_camera, 0.3f );
 
-        link(key_c.press, toggle_look_func);
-        link(key_c.press, toggle_cursor_func);
+        link(orsignal(orsignal(key_c.press, rmb_down), rmb_up), toggle_look_func);
+        link(orsignal(orsignal(key_c.press, rmb_down), rmb_up), toggle_cursor_func);
         link(key_esc.press, exit_func);
         link(key_g.press, toggle_grid_func);
         link(key_h.press, toggle_coord_func);

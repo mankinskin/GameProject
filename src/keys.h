@@ -1,8 +1,8 @@
 #pragma once
 #include "contextwindow.h"
 #include "signal.h"
-#include "event.h"
-#include "reaction.h"
+#include "signal.h"
+#include "signal.h"
 
 namespace input
 {

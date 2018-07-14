@@ -1,6 +1,6 @@
 #include "keys.h"
 #include "signal.h"
-#include "event.h"
+#include "signal.h"
 #include "gates.h"
 
 using namespace signals;

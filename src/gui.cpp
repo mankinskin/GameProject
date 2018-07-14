@@ -9,7 +9,7 @@
 #include "widget.h"
 #include "input.h"
 #include "gates.h"
-#include "event.h"
+#include "signal.h"
 #include "functor.h"
 #include "mouse.h"
 #include "signal.h"

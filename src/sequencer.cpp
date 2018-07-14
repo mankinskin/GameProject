@@ -19,7 +19,7 @@
 #include "font.h"
 #include "text.h"
 #include "functor.h"
-#include "reaction.h"
+#include "signal.h"
 
 // Initialization
 void sequencer::initialize()
@@ -134,7 +134,7 @@ void sequencer::frame()
     input::getCursorQuadEvents();
     input::getMouseKeyEvents();
     signals::checkEvents();
-    signals::processReactions();
+    signals::processLinks();
 
     camera::main_camera.look( input::cursorFrameDelta );
     camera::main_camera.update();
@@ -181,7 +181,6 @@ void sequencer::gameloop()
     {
         frame();
     }
-    signals::clearEvents();
     signals::clearSignals();
     signals::clearFunctors();
 }
