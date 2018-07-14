@@ -61,6 +61,12 @@ namespace utils
         };
 
     template<typename T>
+        inline bool operator==(const utils::ID<T> l, const utils::ID<T> r)
+        {
+            return l.index == r.index;
+        }
+
+    template<typename T>
         ID<T> makeID(const T t)
         {
             return ID<T>(t);
