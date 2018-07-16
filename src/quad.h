@@ -25,12 +25,10 @@ namespace gui
 
     struct QuadEvent    // signals thrown when entering or leaving quads with the cursor
     {
-        QuadEvent()
-        {}
-        QuadEvent(utils::ID<Quad> pQuad, int pEnter)
+        QuadEvent(const utils::ID<Quad> pQuad, int pEnter)
             :quad(pQuad), enter(pEnter)
         {}
-        utils::ID<Quad> quad;
+        const utils::ID<Quad> quad;
         int enter;
     };
 

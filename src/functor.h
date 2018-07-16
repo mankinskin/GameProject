@@ -20,7 +20,7 @@ namespace signals
 
                     Functor(F&& pF, Args&&... pArgs)
                         : func(std::forward<F>(pF))
-                          , args(std::forward<Args>(pArgs)...)
+                        , args(std::forward<Args>(pArgs)...)
                 {
                     initialize();
                 }
@@ -46,7 +46,7 @@ namespace signals
                     }
 
                 private:
-                    F func;
+                    const F func;
                     const std::tuple<Args...> args;
                     struct At_Init
                     {

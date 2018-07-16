@@ -74,7 +74,7 @@ void gui::initWidgets()
     play_button.move(glm::vec2(-0.95f, -0.6f));
     quit_button.move(glm::vec2(-0.95f, -0.8f));
 
-    utils::ID<Quad> q = play_button.quads[0];
+    const utils::ID<Quad>& q = play_button.quads[0];
     QuadEvent quad0_on(q, 1);
     QuadEvent quad0_off(q, 0);
     auto on_quad = listen(KeyEvent(GLFW_KEY_T, 1));

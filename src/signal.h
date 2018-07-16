@@ -173,9 +173,9 @@ namespace signals
                     initialize();
                 }
 
-                    static void pushEvent(const Event pEvent)
+                    static void pushEvent(const Event& pEvent)
                     {
-                        eventBuffer.push_back(pEvent);
+                        eventBuffer.emplace_back(pEvent);
                     }
 
                     bool stat() const
@@ -185,6 +185,7 @@ namespace signals
 
                     const Event signature;
                     bool occurred = false;
+
                 private:
                     static std::vector<Event> eventBuffer;
                     static void check()
@@ -288,7 +289,7 @@ namespace signals
     };
 
     template<typename Event>
-        void pushEvent(const Event pEvent)
+        void pushEvent(const Event&& pEvent)
         {
             hidden::EventSignal<Event>::pushEvent(pEvent);
         }
@@ -343,3 +344,4 @@ namespace signals
     void checkEvents();
     void clearSignals();
 }
+
