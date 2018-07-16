@@ -4,21 +4,22 @@
 #include <utility>
 #include "utils/id.h"
 #include "utils/tuple_utils.h"
+#include <type_traits>
 
 namespace signals
 {
     namespace hidden
     {
         extern std::vector<void(*)()> functorClearFuncs;
-        template<typename R, typename... Args>
+        template<typename F, typename... Args>
             class Functor
             {
                 public:
-                    using ID = utils::ID<Functor<R, Args...>>;
+                    using ID = utils::ID<Functor<F, Args...>>;
                     constexpr static typename ID::Container& all = ID::container;
 
-                    Functor(R(&&pF)(Args...), Args&&... pArgs)
-                        : func(std::forward<R(Args...)>(pF))
+                    Functor(F&& pF, Args&&... pArgs)
+                        : func(std::forward<F>(pF))
                           , args(std::forward<Args>(pArgs)...)
                 {
                     initialize();
@@ -34,7 +35,7 @@ namespace signals
                         invoke_unpacked(std::make_index_sequence<sizeof...(Args)>());
                     }
 
-                    static void invoke( const size_t i )
+                    static void invoke(const size_t i)
                     {
                         all[i].invoke();
                     }
@@ -45,13 +46,13 @@ namespace signals
                     }
 
                 private:
-                    R(&func)(Args...);
+                    F func;
                     const std::tuple<Args...> args;
                     struct At_Init
                     {
                         At_Init()
                         {
-                            functorClearFuncs.push_back(&Functor<R, Args...>::clear);
+                            functorClearFuncs.push_back(&Functor<F, Args...>::clear);
                         }
                     };
                     static void initialize()
@@ -116,21 +117,9 @@ namespace signals
 
     struct Invoker
     {
-        template<typename R, typename... Args>
-            Invoker(R(&&pF)(Args...), Args&&... pArgs)
-            : invoker(hidden::Functor<R, Args...>::invoke)
-              , index(functor(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...).index)
-        {}
-
-        template<typename... Funcs>
-            Invoker(utils::ID<Funcs>... pFuncs)
-            : invoker(hidden::Procedure<Funcs...>::invoke)
-              , index(procedure(pFuncs...).index)
-        {}
-
-        template<typename R, typename... Args>
-            Invoker(utils::ID<hidden::Functor<R, Args...>> pFunc)
-            : invoker(hidden::Functor<R, Args...>::invoke)
+        template<typename F, typename... Args>
+            Invoker(utils::ID<hidden::Functor<F, Args...>> pFunc)
+            : invoker(hidden::Functor<F, Args...>::invoke)
               , index(pFunc.index)
         {}
 
@@ -144,19 +133,24 @@ namespace signals
         {
             invoker(index);
         }
+        //void operator()() const
+        //{
+        //    invoker(index);
+        //}
 
         void(&invoker)(const size_t);
         const size_t index;
     };
+
     // allocates a functor and returns an ID for it
-    template<typename R, typename... Args>
-        utils::ID<hidden::Functor<R, Args...>> functor(R(&&pF)(Args...), Args&&... pArgs)
+    template<typename F, typename... Args>
+        constexpr utils::ID<hidden::Functor<F, Args...>> functor(F&& pF, Args&&... pArgs)
         {
-            return utils::makeID(hidden::Functor<R, Args...>(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...));
+            return utils::makeID(hidden::Functor<F, Args...>(std::forward<F>(pF), std::forward<Args>(pArgs)...));
         }
 
     template<typename... Funcs>
-        utils::ID<hidden::Procedure<Funcs...>> procedure(utils::ID<Funcs>... pFuncs)
+        constexpr utils::ID<hidden::Procedure<Funcs...>> procedure(utils::ID<Funcs>... pFuncs)
         {
             return utils::makeID(hidden::Procedure<Funcs...>(pFuncs...));
         }
