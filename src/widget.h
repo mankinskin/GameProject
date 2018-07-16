@@ -53,7 +53,7 @@ namespace gui
                 const ResizePolicy resizepolicy;
 
                 Widget(Preset preset)
-                    : quads(utils::convert_array<const QuadID>(preset.quads))
+                    : quads(utils::convert_array<const QuadID>(preset.quads, utils::makeID<Quad>))
                     , colors(preset.colors)
                     , movepolicy(preset.movepolicy)
                     , resizepolicy(preset.resizepolicy)
@@ -63,7 +63,7 @@ namespace gui
 
                     Widget(QuadPreset qs, Colors cs,
                             MovePolicy mp, ResizePolicy rp)
-                        : quads(utils::convert_array<const QuadID>(qs))
+                        : quads(utils::convert_array<const QuadID>(qs, utils::makeID<Quad>))
                         , colors(cs)
                         , movepolicy(mp)
                         , resizepolicy(rp)

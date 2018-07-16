@@ -35,7 +35,7 @@ void gl::createDefaultColors()
 const utils::ID<gl::Color> gl::createColor(const Color pColor, const std::string pColorName)
 {
     colorNames[ colorCount++ ] = pColorName;
-    return ColorID(pColor);
+    return utils::makeID(pColor);
 }
 
 const utils::ID<gl::Color> gl::getColor(const std::string pColorName)

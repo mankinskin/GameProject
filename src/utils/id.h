@@ -32,12 +32,6 @@ namespace utils
                 :index( i )
             {}
 
-            ID( T obj )
-                :index( container.size() )
-            {
-                container.push_back( obj );
-            }
-
             size_type index;
 
             Type& get() const
@@ -67,8 +61,10 @@ namespace utils
         }
 
     template<typename T>
-        ID<T> makeID(const T t)
+        ID<T> makeID(const T& t)
         {
-            return ID<T>(t);
+            size_t id = ID<T>::container.size();
+            ID<T>::container.push_back(t);
+            return ID<T>(id);
         }
 }

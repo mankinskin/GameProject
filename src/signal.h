@@ -296,7 +296,7 @@ namespace signals
     template<typename Event>
         utils::ID<Listener> listen(const utils::ID<hidden::SignalListener<hidden::EventSignal, Event>> pEvent)
         {
-            return utils::ID<Listener>(pEvent);
+            return utils::makeID(Listener(pEvent));
         }
     template<typename Event>
         utils::ID<Listener> listen(const Event pEvent)
@@ -307,7 +307,7 @@ namespace signals
     template<template<typename...> typename Op, typename... Signals>
         utils::ID<Listener> listen(const utils::ID<hidden::SignalListener<Op, Signals...>> pSignal)
         {
-            return utils::ID<Listener>(pSignal);
+            return utils::makeID(Listener(pSignal));
         }
 
     void processLinks();

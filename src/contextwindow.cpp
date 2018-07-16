@@ -51,14 +51,14 @@ void app::initMonitors()
             debug::pushError("GLFW could not find any monitor!", debug::Error::Fatal);
         }
         else {
-            MonitorID(Monitor(0, primaryMonitor));
+            utils::makeID(Monitor(0, primaryMonitor));
         }
     }
     else {
         printf("%u Monitors detected.\n", monitorCount);
         MonitorID::container.reserve(monitorCount);
         for(unsigned int m = 0; m < monitorCount; ++m) {
-            MonitorID(Monitor(m, allMonitorPtrs[m]));
+            utils::makeID(Monitor(m, allMonitorPtrs[m]));
         }
     }
 }
@@ -105,7 +105,7 @@ void app::Window::init()
 
     window = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr);
     if (window == nullptr) {
-        puts("Failed to create GLFW Window!");  
+        puts("Failed to create GLFW Window!");
         return;
     }
     center();
