@@ -33,6 +33,12 @@ void func_void_constintref(const int& in)
 {
     printf("func_void_constintref %d\n", in);
 }
+
+void func_void_conststrref(const std::string in)
+{
+    printf("func_void_conststrref %s\n", in.c_str());
+}
+
 int main()
 {
     using namespace signals;
@@ -49,5 +55,9 @@ int main()
     const int& constintref = 4;
     auto f4 = functor(func_void_constintref, constintref);
     f4->invoke();
+
+    const std::string& conststrref("constrstrref");
+    auto f5 = functor(func_void_conststrref, conststrref);
+    f5->invoke();
     return 0;
 }
