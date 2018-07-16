@@ -29,25 +29,22 @@ input::KeySignal input::key_lshift;
 input::KeySignal input::key_x;
 
 
-input::KeyEvent::KeyEvent( int pKey, KeyCondition pChange )
-    :key( pKey ), change( pChange )
-{}
-input::KeyEvent::KeyEvent( int pKey, int pAction )
-    :key( pKey ), change( KeyCondition( pAction ) )
+input::KeyEvent::KeyEvent(int pKey, int pAction)
+    :key(pKey), change(pAction)
 {}
 
-input::KeySignal::KeySignal( int pKey )
+input::KeySignal::KeySignal(int pKey)
 {
-    press = listen( eventsignal( KeyEvent( pKey, KeyCondition( 1 ) ) ) );
-    release = listen( eventsignal( KeyEvent( pKey, KeyCondition( 0 ) ) ) );
+    press = listen(KeyEvent(pKey, 1));
+    release = listen(KeyEvent(pKey, 0));
 }
 
-void input::key_Callback( GLFWwindow * window, int pKey, int pScancode, int pAction, int pMods )
+void input::key_Callback(GLFWwindow* window, int pKey, int pScancode, int pAction, int pMods)
 {
-    pushEvent( KeyEvent( pKey, pAction ) );
+    pushEvent(KeyEvent(pKey, pAction));
 }
 
-void input::char_Callback( GLFWwindow * window, unsigned int pCodepoint )
+void input::char_Callback(GLFWwindow* window, unsigned int pCodepoint)
 {
-    //printf( "char callBack! Char: %c\n", pCodepoint );
+    //printf("char callBack! Char: %c\n", pCodepoint);
 }

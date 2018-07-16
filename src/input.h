@@ -11,7 +11,7 @@
 #include <utility>
 #include <initializer_list>
 
-namespace input 
+namespace input
 {
     void init();
     void setupControls();

@@ -12,7 +12,7 @@ namespace gl {
     void init();
     void loadShaders();
     void bindUniformBufferLocations();
-    void setViewport( app::Window& pViewport );
+    void setViewport(app::Window& pViewport);
     void getOpenGLInitValues();
     void initGLEW();
 

@@ -11,7 +11,7 @@ namespace app
     struct Monitor
     {
         Monitor();
-        Monitor( unsigned int pIndex, GLFWmonitor* pMonitor );
+        Monitor(unsigned int pIndex, GLFWmonitor* pMonitor);
         //~Monitor();
         GLFWmonitor* ptr;
         int videoModeCount = 0;
@@ -34,27 +34,27 @@ namespace app
         const static unsigned int DEFAULT_WIDTH = 1000;
         const static unsigned int DEFAULT_HEIGHT = 700;
         const static std::string DEFAULT_NAME;
-        Window( std::string pName, unsigned int pWidth = DEFAULT_WIDTH, unsigned int pHeight = DEFAULT_HEIGHT );
-        Window( unsigned int pWidth, unsigned int pHeight );
+        Window(std::string pName, unsigned int pWidth = DEFAULT_WIDTH, unsigned int pHeight = DEFAULT_HEIGHT);
+        Window(unsigned int pWidth, unsigned int pHeight);
         Window();
 
-        void setSize( unsigned int pWidth, unsigned int pHeight );
+        void setSize(unsigned int pWidth, unsigned int pHeight);
         void setFullscreen();
         void unsetFullscreen();
         void toggleFullscreen();
-        void setMonitor( MonitorID pMonitor = MonitorID( 0 ) );
+        void setMonitor(MonitorID pMonitor = MonitorID(0));
         void destroy();
         void center();
-        void setPos( unsigned int x, unsigned int y );
+        void setPos(unsigned int x, unsigned int y);
         void updateMonitor();
         void updatePos();
 
-        GLFWwindow* operator=( const Window& obj ) const
+        GLFWwindow* operator=(const Window& obj) const
         {
             return window;
         }
 
-        Window& operator=( const Window obj )
+        Window& operator=(const Window obj)
         {
             name = obj.name;
             xpos = obj.xpos;
@@ -67,7 +67,7 @@ namespace app
 
         void print()
         {
-            printf("Window %s\nWidth: %u\nHeight: %u\n", name.c_str(), width, height );
+            printf("Window %s\nWidth: %u\nHeight: %u\n", name.c_str(), width, height);
         }
 
         GLFWwindow* window = nullptr;

@@ -10,7 +10,7 @@
 #include "vao.h"
 #include "quad.h"
 
-namespace gui 
+namespace gui
 {
     extern gl::VAO colorQuadVAO;
     extern gl::StreamStorage<unsigned int> colorQuadBuffer;
@@ -23,6 +23,6 @@ namespace gui
     void initColorQuadVAO();
     void updateColorQuads();
     void renderColorQuads();
-    void colorQuad( const QuadID pID, const gl::ColorID pColor );
+    void colorQuad(const utils::ID<Quad> pID, const utils::ID<gl::Color> pColor);
 }
 

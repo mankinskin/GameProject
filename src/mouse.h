@@ -3,42 +3,24 @@
 #include <glew.h>
 #include <glfw3.h>
 #include <glm.hpp>
+#include "quad.h"
 
-namespace input 
+namespace input
 {
-    struct MouseKeyEvent    // signals thrown when a mouse key changes 
+    struct MouseKeyEvent    // signals thrown when a mouse key changes
     {
         MouseKeyEvent()
-            :key( -1 ) 
+            :key(-1)
         {}
-        MouseKeyEvent( int pKey, KeyCondition pChange )
-            :key( pKey ), change( pChange ) 
-        {}
-        MouseKeyEvent( int pKey, int pAction )
-            :key( pKey ), change( KeyCondition( pAction ) ) 
+        MouseKeyEvent(int pKey, int pAction)
+            :key(pKey), change(pAction)
         {}
         int key;
-        KeyCondition change;
+        int change;
     };
-    inline bool operator==( MouseKeyEvent const & l, MouseKeyEvent const& r ) 
+    inline bool operator==(MouseKeyEvent const & l, MouseKeyEvent const& r)
     {
         return l.key == r.key && l.change == r.change;
-    }
-
-    struct QuadEvent    // signals thrown when entering or leaving quads with the cursor
-    {
-        QuadEvent()
-            :quad_index( 0 ), enter( 0 ) 
-        {}
-        QuadEvent( unsigned int pQuad, int pEnter )
-            :quad_index( pQuad + 1 ), enter( pEnter ) 
-        {}
-        unsigned int quad_index;// 0 if none
-        int enter;
-    };
-    inline bool operator==( QuadEvent const & l, QuadEvent const& r ) 
-    {
-        return l.quad_index == r.quad_index && l.enter == r.enter;
     }
 
     extern glm::vec2 relativeCursorPosition;
@@ -50,8 +32,8 @@ namespace input
     void getCursorQuadEvents();
     void getMouseKeyEvents();
 
-    void mouseKey_Callback( GLFWwindow* window, int pKey, int pAction, int pMods );
-    void cursorPosition_Callback( GLFWwindow* window, double pX, double pY );
-    void cursorEnter_Callback( GLFWwindow * window, int pEntered );
-    void scroll_Callback( GLFWwindow* window, double pX, double pY );
+    void mouseKey_Callback(GLFWwindow* window, int pKey, int pAction, int pMods);
+    void cursorPosition_Callback(GLFWwindow* window, double pX, double pY);
+    void cursorEnter_Callback(GLFWwindow * window, int pEntered);
+    void scroll_Callback(GLFWwindow* window, double pX, double pY);
 }

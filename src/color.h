@@ -20,9 +20,6 @@ namespace gl
     void initColorBuffer();
     void updateColorBuffer();
 
-    ColorID createColor( glm::vec4 pColor, std::string pColorName );
-    ColorID getColor( std::string pColorName );
-
-    Color getColorData( ColorID colorIndex );
-    Color getColorData( std::string colorName );
+    const utils::ID<Color> createColor(const glm::vec4 pColor, const std::string pColorName);
+    const utils::ID<Color> getColor(const std::string pColorName);
 }

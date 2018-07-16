@@ -3,7 +3,7 @@
 #include "vao.h"
 #include "shader.h"
 
-namespace gui 
+namespace gui
 {
     void rasterQuadIndices();
 
@@ -11,10 +11,10 @@ namespace gui
     void initQuadIndexShader();
     void setupQuadIndexShader();
     void readQuadIndexBuffer();
-    unsigned int readQuadIndexMap( const unsigned int pPos );
-    unsigned int readQuadIndexMap( const unsigned int pXPos, const unsigned int pYPos );
-    float readQuadDepthMap( const unsigned int pPos );
-    float readQuadDepthMap( const unsigned int pXPos, const unsigned int pYPos );
+    unsigned int readQuadIndexMap(const unsigned int pPos);
+    unsigned int readQuadIndexMap(const unsigned int pXPos, const unsigned int pYPos);
+    float readQuadDepthMap(const unsigned int pPos);
+    float readQuadDepthMap(const unsigned int pXPos, const unsigned int pYPos);
 
     extern shader::Program quadIndexShader;
     extern gl::VAO quadIndexVAO;

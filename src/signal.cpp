@@ -15,7 +15,7 @@ void signals::processLinks()
 
 void signals::hidden::link(Listener pListener, Invoker pInvoker)
 {
-    links.emplace_back(pListener, pInvoker);
+    links.push_back(std::make_pair(pListener, pInvoker));
 }
 
 void signals::checkEvents()

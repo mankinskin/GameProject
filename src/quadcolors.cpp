@@ -16,58 +16,58 @@ gl::StreamStorage<unsigned int> gui::colorQuadBuffer;
 gl::VAO gui::colorQuadVAO;
 static shader::Program colorQuadShader;
 
-void gui::initColorQuadVAO() 
+void gui::initColorQuadVAO()
 {
-    colorQuadVAO = gl::VAO( "colorQuadVAO" );
+    colorQuadVAO = gl::VAO("colorQuadVAO");
 
-    colorQuadVAO.elementBuffer( gl::quadEBO );
-    colorQuadVAO.vertexBuffer( 0, gl::quadVBO );
-    colorQuadVAO.vertexAttrib( 0, 0, 2, GL_FLOAT, 0 );
+    colorQuadVAO.elementBuffer(gl::quadEBO);
+    colorQuadVAO.vertexBuffer(0, gl::quadVBO);
+    colorQuadVAO.vertexAttrib(0, 0, 2, GL_FLOAT, 0);
 
-    colorQuadBuffer = gl::StreamStorage<unsigned int>( "QuadColorBuffer", 
-            MAX_QUAD_COUNT, GL_MAP_WRITE_BIT );
-    colorQuadBuffer.setTarget( GL_UNIFORM_BUFFER );
+    colorQuadBuffer = gl::StreamStorage<unsigned int>("QuadColorBuffer",
+            MAX_QUAD_COUNT, GL_MAP_WRITE_BIT);
+    colorQuadBuffer.setTarget(GL_UNIFORM_BUFFER);
 }
 
-void gui::initColorQuadShader() 
+void gui::initColorQuadShader()
 {
-    colorQuadShader = shader::Program( "colorQuadShader", 
-            shader::Stage( "colorQuadShader.vert" ), 
-            shader::Stage( "colorQuadShader.frag" ) );
-    colorQuadShader.addVertexAttribute( "corner_pos", 0 );
+    colorQuadShader = shader::Program("colorQuadShader",
+            shader::Stage("colorQuadShader.vert"),
+            shader::Stage("colorQuadShader.frag"));
+    colorQuadShader.addVertexAttribute("corner_pos", 0);
 }
 
-void gui::setupColorQuadShader() 
+void gui::setupColorQuadShader()
 {
     colorQuadShader.build();
-    colorQuadShader.bindUniformBuffer( quadBuffer, "QuadBuffer" );
-    colorQuadShader.bindUniformBuffer( colorQuadBuffer, "QuadColorBuffer" );
-    colorQuadShader.bindUniformBuffer( gl::colorBuffer, "ColorBuffer" );
+    colorQuadShader.bindUniformBuffer(quadBuffer, "QuadBuffer");
+    colorQuadShader.bindUniformBuffer(colorQuadBuffer, "QuadColorBuffer");
+    colorQuadShader.bindUniformBuffer(gl::colorBuffer, "ColorBuffer");
 }
 
 void gui::updateColorQuads()
 {
-    gl::uploadStorage( colorQuadBuffer, sizeof( unsigned int ) * QuadID::container.size(), &quadColors[0] );
+    gl::uploadStorage(colorQuadBuffer, sizeof(unsigned int) * QuadID::container.size(), &quadColors[0]);
 }
 
-void gui::renderColorQuads() 
+void gui::renderColorQuads()
 {
-    glDepthFunc( GL_LEQUAL );
+    glDepthFunc(GL_LEQUAL);
 
     colorQuadVAO.bind();
     colorQuadShader.use();
 
-    glDrawElementsInstanced( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, QuadID::container.size() );
+    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, QuadID::container.size());
 
     shader::Program::unuse();
     colorQuadVAO.unbind();
 
-    glDepthFunc( GL_LESS );
+    glDepthFunc(GL_LESS);
 }
 
-void gui::colorQuad( const QuadID pID, const gl::ColorID pColor )
+void gui::colorQuad(const utils::ID<Quad> pID, const utils::ID<gl::Color> pColor)
 {
-    printf( "Coloring Quad %u with color %u\n", pID, pColor.index );
+    printf("Coloring Quad %u with color %u\n", pID, pColor.index);
     quadColors[ pID.index ] = pColor.index;
 }
 

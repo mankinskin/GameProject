@@ -25,9 +25,9 @@ glm::vec3 app::node_mov = glm::vec3();
 
 void app::init()
 {
-    puts( "Hello" );
+    puts("Hello");
     state = Running;
-    setMaxFPS( 50 );
+    setMaxFPS(50);
     // Windows and gl Context
     initGLFW();
     startContextwindow();
@@ -38,27 +38,27 @@ void app::init()
 
     debug::printErrors();
 
-    while ( app::state != app::State::Exit ) {
+    while (app::state != app::State::Exit) {
         sequencer::gameloop();
     }
 }
 
 void app::initGLFW()
 {
-    std::puts( "Initializing GLFW..." );
+    std::puts("Initializing GLFW...");
     unsigned int glfw = glfwInit();
-    if ( glfw != GLFW_TRUE ) {
-        debug::pushError( ( "app::init() - Unable to initialize GLFW ( glfwInit() return code: %i )\n" + glfw ), debug::Error::Severity::Fatal );
-        //while ( !getch() ) {}
-        exit( glfw );
+    if (glfw != GLFW_TRUE) {
+        debug::pushError(("app::init() - Unable to initialize GLFW (glfwInit() return code: %i)\n" + glfw), debug::Error::Severity::Fatal);
+        //while (!getch()) {}
+        exit(glfw);
     }
-    std::puts( "Initialized GLFW successfully." );
+    std::puts("Initialized GLFW successfully.");
 }
 
 //--Global Time--
 void app::updateTime()
 {
-    double thisFrameMS = ( glfwGetTime() * 1000.0 );
+    double thisFrameMS = (glfwGetTime() * 1000.0);
     lastFrameMS = thisFrameMS - totalMS;
     totalMS = thisFrameMS;
 }
@@ -66,9 +66,9 @@ void app::updateTime()
 void app::limitFPS()
 {
     lastFrameLimitedMS = lastFrameMS;
-    if ( lastFrameMS < minFrameMS ) {
+    if (lastFrameMS < minFrameMS) {
         lastFrameLimitedMS = minFrameMS;
-        std::this_thread::sleep_for( std::chrono::milliseconds( ( int )( minFrameMS - lastFrameMS ) ) );
+        std::this_thread::sleep_for(std::chrono::milliseconds((int)(minFrameMS - lastFrameMS)));
     }
 }
 
@@ -77,9 +77,9 @@ void app::updateTimeFactor()
     timeFactor = 1.0f;
 }
 
-void app::setMaxFPS( unsigned int pMaxFPS )
+void app::setMaxFPS(unsigned int pMaxFPS)
 {
-    minFrameMS = ( unsigned int )( 1000.0f / ( float )pMaxFPS );
+    minFrameMS = (unsigned int)(1000.0f / (float)pMaxFPS);
 }
 
 void app::run() 

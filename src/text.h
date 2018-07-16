@@ -11,20 +11,20 @@ namespace text
         public:
             glm::vec2 position;
             glm::vec2 size;
-            Text( glm::vec2 pPos = glm::vec2( 0.0f, 0.0f ), glm::vec2 pSize = glm::vec2( 1.0f, 1.0f ) )
-                :font( Font::ID( 0 ) ), position( pixel_quantize( pPos ) ), size( pixel_quantize( pSize ) )
+            Text(glm::vec2 pPos = glm::vec2(0.0f, 0.0f), glm::vec2 pSize = glm::vec2(1.0f, 1.0f))
+                :font(Font::ID(0)), position(pixel_quantize(pPos)), size(pixel_quantize(pSize))
             {
             }
-            void setChars( const std::string& str );
+            void setChars(const std::string& str);
             void writeChars();
-            void writeWord( unsigned int start, unsigned int length );
-            void setFont( Font::ID );
+            void writeWord(unsigned int start, unsigned int length);
+            void setFont(Font::ID);
             size_t lineCount()
             {
-                return floor( size.y / font->linegap );
+                return floor(size.y / font->linegap);
             }
         private:
-            void writeChar( const unsigned char& c, glm::vec2 pos );
+            void writeChar(const unsigned char& c, glm::vec2 pos);
             void lineBreak();
             float cursor; // relative to pos
             size_t line;

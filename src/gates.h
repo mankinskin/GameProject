@@ -14,36 +14,36 @@ namespace gates
     template<typename Op, typename... Srcs>
         struct gate 
         {
-            gate( Op pOp, Srcs... pSrcs) :op( pOp ), srcs( pSrcs... ) 
+            gate(Op pOp, Srcs... pSrcs) :op(pOp), srcs(pSrcs...) 
             {}
-            gate( Srcs... pSrcs) :op( Op() ), srcs( pSrcs... ) 
+            gate(Srcs... pSrcs) :op(Op()), srcs(pSrcs...) 
             {}
             std::tuple<Srcs...> srcs;
             Op op;
             template<unsigned int I, typename Dummy=float>// Dummy enables template specialization in class scope
                 struct evaluator 
                 {
-                    static bool next( std::tuple<Srcs...>& pSrcs )
+                    static bool next(std::tuple<Srcs...>& pSrcs)
                     {
-                        return Op::eval( std::get<I>( pSrcs )(), evaluator<I - 1>::next( pSrcs ) );
+                        return Op::eval(std::get<I>(pSrcs)(), evaluator<I - 1>::next(pSrcs));
                     }
                 };
 
             template<typename Dummy>
                 struct evaluator<0, Dummy> 
                 {
-                    static bool next( std::tuple<Srcs...>& pSrcs ) 
+                    static bool next(std::tuple<Srcs...>& pSrcs) 
                     {
-                        return std::get<0>( pSrcs )();
+                        return std::get<0>(pSrcs)();
                     }
                 };
             bool operator()() 
             {
-                return evaluator<sizeof...( Srcs )-1>::next( srcs );
+                return evaluator<sizeof...(Srcs)-1>::next(srcs);
             }
         };
     template<typename Op, typename... Srcs>
-        inline bool operator==( gate<Op, Srcs...> const & l, gate<Op, Srcs...> const& r ) 
+        inline bool operator==(gate<Op, Srcs...> const & l, gate<Op, Srcs...> const& r) 
         {
             return l.srcs == r.srcs && l.op == r.op;
         }
@@ -51,7 +51,7 @@ namespace gates
     {
         and_op()
         {}
-        static inline bool eval( bool lhs, bool rhs ) 
+        static inline bool eval(bool lhs, bool rhs) 
         {
             return lhs && rhs;
         }
@@ -60,7 +60,7 @@ namespace gates
     {
         nand_op() 
         {}
-        static inline bool eval( bool lhs, bool rhs ) 
+        static inline bool eval(bool lhs, bool rhs) 
         {
             return !lhs && !rhs;
         }
@@ -69,7 +69,7 @@ namespace gates
     {
         or_op() 
         {}
-        static inline bool eval( bool lhs, bool rhs ) 
+        static inline bool eval(bool lhs, bool rhs) 
         {
             return lhs || rhs;
         }
@@ -77,7 +77,7 @@ namespace gates
     struct xor_op 
     {
         xor_op() {}
-        static inline bool eval( bool lhs, bool rhs ) 
+        static inline bool eval(bool lhs, bool rhs) 
         {
             return !lhs != !rhs;
         }
@@ -86,7 +86,7 @@ namespace gates
     {
         nor_op() 
         {}
-        static inline bool eval( bool lhs, bool rhs ) 
+        static inline bool eval(bool lhs, bool rhs) 
         {
             return !lhs && !rhs;
         }
@@ -95,7 +95,7 @@ namespace gates
     {
         xnor_op() 
         {}
-        static inline bool eval( bool lhs, bool rhs ) 
+        static inline bool eval(bool lhs, bool rhs) 
         {
             return !lhs == !rhs;
         }
@@ -105,14 +105,14 @@ namespace gates
     template<typename Source>
         struct toggle_gate 
         {
-            toggle_gate( Source pSource, bool pStartAs = false ) 
-                :src( std::forward<Source>( pSource ) ), state( pStartAs ) 
+            toggle_gate(Source pSource, bool pStartAs = false) 
+                :src(std::forward<Source>(pSource)), state(pStartAs) 
             {}
             Source src;
             bool state;
             bool operator()() 
             {
-                if ( src() ) 
+                if (src()) 
                 {
                     src();
                     state = !state;
@@ -121,20 +121,20 @@ namespace gates
             }
         };
     template<typename Source>
-        inline bool operator==( toggle_gate<Source> const & l, toggle_gate<Source> const& r ) 
+        inline bool operator==(toggle_gate<Source> const & l, toggle_gate<Source> const& r) 
         {
             return l.src == r.src && l.state == r.state;
         }
     template<typename Source>
         struct clicker_gate {//fires once when the input changes
-            clicker_gate( Source pSource, bool pStartWith = false ) 
-                :src( std::forward<Source>( pSource ) ), last_state( pStartWith ) 
+            clicker_gate(Source pSource, bool pStartWith = false) 
+                :src(std::forward<Source>(pSource)), last_state(pStartWith) 
             {}
             Source src;
             bool last_state;
             bool operator()() 
             {
-                if ( src() != last_state ) 
+                if (src() != last_state) 
                 {
                     last_state = !last_state;
                     return true;
@@ -143,7 +143,7 @@ namespace gates
             }
         };
     template<typename Source>
-        inline bool operator==( clicker_gate<Source> const & l, clicker_gate<Source> const& r ) 
+        inline bool operator==(clicker_gate<Source> const & l, clicker_gate<Source> const& r) 
         {
             return l.src == r.src && l.last_state == r.last_state;
         }
@@ -153,10 +153,10 @@ namespace gates
         {
             switch_gate() 
             {}
-            switch_gate( On pOnSource, Off pOffSource, bool pStartWith = false ) 
-                :on_src( std::forward<On>( pOnSource ) ), 
-                off_src( std::forward<Off>( pOffSource ) ), 
-                state( pStartWith ) 
+            switch_gate(On pOnSource, Off pOffSource, bool pStartWith = false) 
+                :on_src(std::forward<On>(pOnSource)), 
+                off_src(std::forward<Off>(pOffSource)), 
+                state(pStartWith) 
             {}
             On on_src;
             Off off_src;
@@ -166,7 +166,7 @@ namespace gates
                 //on_src can switch state on and off_src can switch state off
                 bool on = on_src();
                 bool off = off_src();
-                if ( on != off ) 
+                if (on != off) 
                 {
                     state = on;
                 }
@@ -174,15 +174,15 @@ namespace gates
             }
         };
     template<typename On, typename Off>
-        inline bool operator==( switch_gate<On, Off> const & l, switch_gate<On, Off> const& r ) 
+        inline bool operator==(switch_gate<On, Off> const & l, switch_gate<On, Off> const& r) 
         {
             return l.on_src == r.on_src && l.off_src == r.off_src && l.state == r.state;
         }
     template<typename Source>
         struct not_gate 
         {
-            not_gate( Source pSource ) 
-                :src( std::forward<Source>( pSource ) ) 
+            not_gate(Source pSource) 
+                :src(std::forward<Source>(pSource)) 
             {}
             Source src;
             bool operator()() 
@@ -191,7 +191,7 @@ namespace gates
             }
         };
     template<typename Source>
-        inline bool operator==( not_gate<Source> const & l, not_gate<Source> const& r ) 
+        inline bool operator==(not_gate<Source> const & l, not_gate<Source> const& r) 
         {
             return l.src == r.src;
         }

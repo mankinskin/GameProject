@@ -11,16 +11,16 @@ namespace entities
     void updateEntityBuffers();
 
     void updateEntityMatrices();
-    void createEntities( unsigned int pCount, unsigned int* pEntityIDs );
-    void createEntity( unsigned int* pEntityID );
-    void newEntityID( unsigned int & pNode );
-    void reserveEntities( unsigned int pCount );
+    void createEntities(unsigned int pCount, unsigned int* pEntityIDs);
+    void createEntity(unsigned int* pEntityID);
+    void newEntityID(unsigned int & pNode);
+    void reserveEntities(unsigned int pCount);
 
-    void setPos( unsigned int pNodeID, glm::vec3 pPos );
-    void setRotation( unsigned int pNodeID, glm::vec4 pRotation );
-    void setScale( unsigned int pNodeID, glm::vec3 pScale );
+    void setPos(unsigned int pNodeID, glm::vec3 pPos);
+    void setRotation(unsigned int pNodeID, glm::vec4 pRotation);
+    void setScale(unsigned int pNodeID, glm::vec3 pScale);
 
-    void translate( unsigned int pNodeID, glm::vec3 pPos );
+    void translate(unsigned int pNodeID, glm::vec3 pPos);
 
 
     extern gl::StreamStorage<glm::mat4> entityMatrixBuffer;

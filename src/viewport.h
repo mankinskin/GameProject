@@ -5,7 +5,7 @@ namespace gl {
 
     struct Viewport{
         Viewport();
-        Viewport( app::Window pWindow, float res = 1.0f );
+        Viewport(app::Window pWindow, float res = 1.0f);
         void bind();
 
         unsigned int width;

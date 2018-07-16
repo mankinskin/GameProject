@@ -14,14 +14,14 @@ struct Image
         Image()
         {
         }
-        Image( std::string pFilename );
-        Image( unsigned int pWidth, unsigned int pHeight, 
-                unsigned int pChannels, unsigned int pBitDepth, unsigned char* pData );
+        Image(std::string pFilename);
+        Image(unsigned int pWidth, unsigned int pHeight, 
+                unsigned int pChannels, unsigned int pBitDepth, unsigned char* pData);
 
         ~Image();
 
-        void write( FILE* file );
-        void write( std::string pFilename );
-        void read( FILE* file );
-        void read( std::string pFilename );
+        void write(FILE* file);
+        void write(std::string pFilename);
+        void read(FILE* file);
+        void read(std::string pFilename);
 };

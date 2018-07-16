@@ -14,27 +14,27 @@ namespace gui
     const int DEFAULT_LINE_GROUP_FLAGS = 1;
 
     struct LineGroup {
-        LineGroup( unsigned int pLineOffset, unsigned int pLineCount, 
-                int pFlags = DEFAULT_LINE_GROUP_FLAGS );
+        LineGroup(unsigned int pLineOffset, unsigned int pLineCount, 
+                int pFlags = DEFAULT_LINE_GROUP_FLAGS);
         unsigned int lineOffset;
         unsigned int lineCount;
         int flags;
     };
 
-    void toggleLineGroup( unsigned int pLineGroup );
-    unsigned int createLineGroup( unsigned int pLineOffset, 
-            unsigned int pLineCount, int pFlags = DEFAULT_LINE_GROUP_FLAGS );
+    void toggleLineGroup(unsigned int pLineGroup);
+    unsigned int createLineGroup(unsigned int pLineOffset, 
+            unsigned int pLineCount, int pFlags = DEFAULT_LINE_GROUP_FLAGS);
     //struct LineVertex{
     //    LinePointIt vertex;
     //    gl::ColorID color;
     //};
 
 
-    glm::uvec2 createLine( unsigned int pPosA, unsigned int pPosB, unsigned int pColorA, unsigned int pColorB );
-    glm::uvec2 createLine( unsigned int pPosA, unsigned int pPosB, unsigned int pColor );
-    unsigned int createLineVertexPos( glm::vec4 pPos );
-    unsigned int createLineVertex( unsigned int pVertex, unsigned int pColor = 0 );
-    void setLineVertexColor( unsigned int pVertex, unsigned int pColor );
+    glm::uvec2 createLine(unsigned int pPosA, unsigned int pPosB, unsigned int pColorA, unsigned int pColorB);
+    glm::uvec2 createLine(unsigned int pPosA, unsigned int pPosB, unsigned int pColor);
+    unsigned int createLineVertexPos(glm::vec4 pPos);
+    unsigned int createLineVertex(unsigned int pVertex, unsigned int pColor = 0);
+    void setLineVertexColor(unsigned int pVertex, unsigned int pColor);
 
 
     void initLineVAO();

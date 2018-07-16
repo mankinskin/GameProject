@@ -12,9 +12,9 @@ namespace signals
             class And
             {
                 public:
-                    And( const utils::ID<SignalL> lhs, const utils::ID<SignalR> rhs )
-                        : signalL( lhs )
-                          , signalR( rhs )
+                    And(const utils::ID<SignalL> lhs, const utils::ID<SignalR> rhs)
+                        : signalL(lhs)
+                          , signalR(rhs)
                 {}
 
                     constexpr bool stat()
@@ -30,9 +30,9 @@ namespace signals
             class Or
             {
                 public:
-                    Or( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-                        : signalL( lhs )
-                          , signalR( rhs )
+                    Or(const typename SignalL::ID lhs, const typename SignalR::ID rhs)
+                        : signalL(lhs)
+                          , signalR(rhs)
                 {}
 
                     constexpr bool stat()
@@ -48,9 +48,9 @@ namespace signals
             class Xor
             {
                 public:
-                    Xor( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-                        : signalL( lhs )
-                          , signalR( rhs )
+                    Xor(const typename SignalL::ID lhs, const typename SignalR::ID rhs)
+                        : signalL(lhs)
+                          , signalR(rhs)
                 {}
 
                     constexpr bool stat()
@@ -66,9 +66,9 @@ namespace signals
             class Nor
             {
                 public:
-                    Nor( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-                        : signalL( lhs )
-                          , signalR( rhs )
+                    Nor(const typename SignalL::ID lhs, const typename SignalR::ID rhs)
+                        : signalL(lhs)
+                          , signalR(rhs)
                 {}
 
                     constexpr bool stat()
@@ -85,9 +85,9 @@ namespace signals
             class Equal
             {
                 public:
-                    Equal( const typename SignalL::ID lhs, const typename SignalR::ID rhs )
-                        : signalL( lhs )
-                          , signalR( rhs )
+                    Equal(const typename SignalL::ID lhs, const typename SignalR::ID rhs)
+                        : signalL(lhs)
+                          , signalR(rhs)
                 {}
 
                     constexpr bool stat()
@@ -103,8 +103,8 @@ namespace signals
             class Not
             {
                 public:
-                    Not( const typename Signal::ID s )
-                        : signal( s )
+                    Not(const typename Signal::ID s)
+                        : signal(s)
                     {}
 
                     constexpr bool stat()
@@ -126,18 +126,18 @@ namespace signals
                 using ID = utils::ID<SignalListener<Op, Signals...>>;
                 static constexpr typename ID::Container& all = ID::container;
 
-                SignalListener( const Signals... sigs )
-                    : Op<Signals...>( sigs... )
+                SignalListener(const Signals... sigs)
+                    : Op<Signals...>(sigs...)
                 {
                     initialize();
                 }
-                SignalListener( const utils::ID<Signals>... sigs )
-                    : Op<Signals...>( sigs... )
+                SignalListener(const utils::ID<Signals>... sigs)
+                    : Op<Signals...>(sigs...)
                 {
                     initialize();
                 }
 
-                static bool stat( size_t i )
+                static bool stat(size_t i)
                 {
                     return all[i].stat();
                 }
@@ -175,7 +175,7 @@ namespace signals
 
                     static void pushEvent(const Event pEvent)
                     {
-                        eventBuffer.push_back( pEvent );
+                        eventBuffer.push_back(pEvent);
                     }
 
                     bool stat() const
@@ -257,7 +257,7 @@ namespace signals
         }
 
     template<typename Signal>
-        constexpr utils::ID<hidden::SignalListener<hidden::Not, Signal>> notsignal( utils::ID<Signal> s )
+        constexpr utils::ID<hidden::SignalListener<hidden::Not, Signal>> notsignal(utils::ID<Signal> s)
         {
             return utils::makeID(hidden::SignalListener<hidden::Not, Signal>(s));
         }
@@ -268,13 +268,13 @@ namespace signals
         constexpr static typename ID::Container& all = ID::container;
 
         template<template<typename...> typename Op, typename... Signals>
-            Listener( const utils::ID<hidden::SignalListener<Op, Signals...>> pListener )
-            : stater( hidden::SignalListener<Op, Signals...>::stat )
-            , index( pListener.index )
+            Listener(const utils::ID<hidden::SignalListener<Op, Signals...>> pListener)
+            : stater(hidden::SignalListener<Op, Signals...>::stat)
+            , index(pListener.index)
         {}
-            Listener( const utils::ID<Listener> pListener )
-            : stater( pListener->stater )
-            , index( pListener->index )
+            Listener(const utils::ID<Listener> pListener)
+            : stater(pListener->stater)
+            , index(pListener->index)
         {}
 
         bool stat() const
@@ -294,20 +294,20 @@ namespace signals
         }
 
     template<typename Event>
-        utils::ID<Listener> listen( const utils::ID<hidden::SignalListener<hidden::EventSignal, Event>> pEvent )
+        utils::ID<Listener> listen(const utils::ID<hidden::SignalListener<hidden::EventSignal, Event>> pEvent)
         {
-            return utils::ID<Listener>( pEvent );
+            return utils::ID<Listener>(pEvent);
         }
     template<typename Event>
-        utils::ID<Listener> listen( const Event pEvent )
+        utils::ID<Listener> listen(const Event pEvent)
         {
-            return listen( utils::makeID( hidden::SignalListener<hidden::EventSignal, Event>(pEvent)));
+            return listen(utils::makeID(hidden::SignalListener<hidden::EventSignal, Event>(pEvent)));
         }
 
     template<template<typename...> typename Op, typename... Signals>
-        utils::ID<Listener> listen( const utils::ID<hidden::SignalListener<Op, Signals...>> pSignal )
+        utils::ID<Listener> listen(const utils::ID<hidden::SignalListener<Op, Signals...>> pSignal)
         {
-            return utils::ID<Listener>( pSignal );
+            return utils::ID<Listener>(pSignal);
         }
 
     void processLinks();

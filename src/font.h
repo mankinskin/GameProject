@@ -14,15 +14,15 @@ namespace text
         Font()
         {
         }
-        Font( const FontFile& font );
+        Font(const FontFile& font);
 
         struct Metric
         {
             Metric()
             {
             }
-            Metric( float adv, float bx, float by )
-                :advance ( adv ), bearing( glm::vec2( bx, by ) )
+            Metric(float adv, float bx, float by)
+                :advance (adv), bearing(glm::vec2(bx, by))
             {
             }
 
@@ -48,13 +48,13 @@ namespace text
         texture::Texture2D atlasTexture;
     };
 
-    void setTargetResolution( const unsigned int, const unsigned int );
-    void setTargetResolution( const glm::uvec2 );
+    void setTargetResolution(const unsigned int, const unsigned int);
+    void setTargetResolution(const glm::uvec2);
     extern glm::vec2 pixel_size;
 
-    inline glm::vec2 pixel_quantize( glm::vec2 v )
+    inline glm::vec2 pixel_quantize(glm::vec2 v)
     {
-        return glm::round( v / pixel_size ) * pixel_size;
+        return glm::round(v / pixel_size) * pixel_size;
     }
 
     void loadFonts();

@@ -10,7 +10,7 @@ namespace app
     void quit();
     void mainmenu();
 
-    void setMaxFPS( unsigned int );
+    void setMaxFPS(unsigned int);
     void updateTime();
     void updateTimeFactor();
     void limitFPS();

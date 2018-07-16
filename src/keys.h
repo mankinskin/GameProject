@@ -6,41 +6,19 @@
 
 namespace input
 {
-    class KeyCondition
-    {
-        public:
-            KeyCondition()
-                : action( 0 ) // 0 = release, 1 = press
-            {}
-            KeyCondition( int pAction )
-                : action( pAction )
-            {}
-            int action;
-    };
-
-    inline bool operator==( KeyCondition const & l, KeyCondition const& r )
-    {
-        return l.action == r.action;
-    }
-    inline bool operator!=( KeyCondition const & l, KeyCondition const& r )
-    {
-        return l.action != r.action;
-    }
-
     struct KeyEvent
     {
         KeyEvent()
-            : key( -1 )
-            , change( KeyCondition() )
+            : key(-1)
+            , change(-1)
         {}
-        KeyEvent( int pKey, KeyCondition pChange );
-        KeyEvent( int pKey, int pAction );
+        KeyEvent(int pKey, int pAction);
 
         int key;
-        KeyCondition change;
+        int change;
     };
 
-    inline bool operator==( KeyEvent const & l, KeyEvent const& r )
+    inline bool operator==(KeyEvent const & l, KeyEvent const& r)
     {
         return l.key == r.key && l.change == r.change;
     }
@@ -48,7 +26,7 @@ namespace input
     {
         KeySignal()
         {}
-        KeySignal( int pKey );
+        KeySignal(int pKey);
         signals::Listener::ID press;
         signals::Listener::ID release;
     };
@@ -76,6 +54,6 @@ namespace input
     extern KeySignal key_lshift;
     extern KeySignal key_x;
 
-    void key_Callback( GLFWwindow* window, int pKey, int pScancode, int pAction, int pMods );
-    void char_Callback( GLFWwindow* window, unsigned int pCodepoint );
+    void key_Callback(GLFWwindow* window, int pKey, int pScancode, int pAction, int pMods);
+    void char_Callback(GLFWwindow* window, unsigned int pCodepoint);
 }

@@ -36,8 +36,8 @@ namespace neural
 
     struct Synapse {
         Synapse() {}
-        Synapse( unsigned int pFrom, unsigned int pTo, float pInitialRating = 0.0f )
-            :from( pFrom ), to( pTo ), rating( pInitialRating ){}
+        Synapse(unsigned int pFrom, unsigned int pTo, float pInitialRating = 0.0f)
+            :from(pFrom), to(pTo), rating(pInitialRating){}
         unsigned int from;
         unsigned int to;
         float rating;
@@ -45,7 +45,7 @@ namespace neural
 
     struct Circuit {
         void step();
-        void stepSynapse( unsigned int n, unsigned int s );
+        void stepSynapse(unsigned int n, unsigned int s);
 
         std::vector<Neuron> neurons;
         std::vector<std::vector<Synapse>> synapses;

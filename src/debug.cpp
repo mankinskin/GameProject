@@ -14,26 +14,26 @@ const std::array<const std::string, 3> debug::Error::severityStrings =
     "Fatal Error"
 };
 
-void debug::pushError( std::string pMessage, Error::Severity errorSeverity )
+void debug::pushError(std::string pMessage, Error::Severity errorSeverity)
 {
-    errorBuffer.emplace_back( pMessage, errorSeverity );
+    errorBuffer.emplace_back(pMessage, errorSeverity);
 }
 
 void debug::printErrors()
 {
-    if ( errorBuffer.size() ) {
+    if (errorBuffer.size()) {
         bool fatal = 0;
-        for ( Error& err : errorBuffer ) {
-            if ( err.severity == Error::Severity::Fatal ) {
+        for (Error& err : errorBuffer) {
+            if (err.severity == Error::Severity::Fatal) {
                 fatal = true;
             }
-            printf( "%s: %s\n", Error::severityStrings[ err.severity ].c_str(), err.msg.c_str() );
+            printf("%s: %s\n", Error::severityStrings[ err.severity ].c_str(), err.msg.c_str());
         }
         errorBuffer.clear();
-        if ( fatal ) {
+        if (fatal) {
             app::state = app::State::Exit;
-            puts( "Fatal Errors occured.\nPress any key to quit..." );
-            while ( !getch() ) {};
+            puts("Fatal Errors occured.\nPress any key to quit...");
+            while (!getch()) {};
         }
     }
 }
@@ -45,12 +45,12 @@ void debug::togglePrintInfo()
 
 void debug::printInfo()
 {
-    if ( shouldPrintInfo ) {
-        app::lastFrameMS = std::max( 1.0, app::lastFrameMS );
-        printf( "\nlastFrameMS %i\n", ( int )app::lastFrameMS );
-        printf( "FPS\nActual %i\nPotential %i\n", 
-                ( int )( 1000 / ( std::max( app::minFrameMS, app::lastFrameMS ) ) ), 
-                ( int )( 1000 / ( app::lastFrameMS ) ) );
+    if (shouldPrintInfo) {
+        app::lastFrameMS = std::max(1.0, app::lastFrameMS);
+        printf("\nlastFrameMS %i\n", (int)app::lastFrameMS);
+        printf("FPS\nActual %i\nPotential %i\n", 
+                (int)(1000 / (std::max(app::minFrameMS, app::lastFrameMS))), 
+                (int)(1000 / (app::lastFrameMS)));
 
     }
 }
