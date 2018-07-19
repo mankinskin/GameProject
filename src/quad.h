@@ -34,7 +34,7 @@ namespace gui
 
     inline bool operator==(const QuadEvent& l, const QuadEvent& r)
     {
-        return l.quad == r.quad;
+        return l.quad == r.quad && l.enter == r.enter;
     }
 
     typedef utils::ID<Quad> QuadID;

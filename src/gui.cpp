@@ -28,21 +28,15 @@ void gui::init()
     pixel_size = glm::vec2(
             2.0f / gl::getWidth(),
             2.0f / gl::getHeight());
-    //text::initFonts();
-}
-
-void colorquad(const utils::ID<gui::Quad> q)
-{
-    colorQuad(q, gl::getColor("yellow"));
 }
 
 void gui::initWidgets()
 {
-    using namespace gates;
     using namespace signals;
     using namespace input;
 
-    using Button = Widget<2>;
+
+    using Button = gui::Widget<2>;
 
     float button_width = gui::pixel_size.x * 100.0f;
     float button_height = gui::pixel_size.x * 70.0f;
@@ -51,10 +45,11 @@ void gui::initWidgets()
     Button::QuadPreset button_initer{
             glm::vec4(0.0f, 0.0f, button_width, button_height),
             glm::vec4(margin.x, -margin.y,
-                button_width - margin.x*2.0f,
-                button_height - margin.y*2.0f) };
+                      button_width - margin.x*2.0f,
+                      button_height - margin.y*2.0f) };
 
-    Button::Colors button_colors{ gl::getColor("lightgrey"),
+    Button::Colors button_colors{
+            gl::getColor("lightgrey"),
             gl::getColor("black") };
 
     Button::MovePolicy button_move_policy{
@@ -67,21 +62,23 @@ void gui::initWidgets()
     Button::Preset button_preset(button_initer, button_colors,
             button_move_policy, button_resize_policy);
 
+    utils::ID<Button> play_button = utils::makeID(Button(button_preset));
+    utils::ID<Button> quit_button = utils::makeID(Button(button_preset));
 
-    const Button play_button(button_preset);
-    const Button quit_button(button_preset);
 
-    play_button.move(glm::vec2(-0.95f, -0.6f));
-    quit_button.move(glm::vec2(-0.95f, -0.8f));
+    play_button->move(glm::vec2(-0.95f, -0.6f));
+    quit_button->move(glm::vec2(-0.95f, -0.8f));
 
-    const utils::ID<Quad>& q = play_button.quads[0];
+    const utils::ID<Quad>& q = play_button->quads[0];
     QuadEvent quad0_on(q, 1);
     QuadEvent quad0_off(q, 0);
-    auto on_quad = listen(KeyEvent(GLFW_KEY_T, 1));
+    auto on_quad = listen(quad0_on);
+    auto off_quad = listen(quad0_off);
 
-    auto func_highlight_on = functor(colorquad, q);
+    auto func_highlight_on = functor(colorQuad, q, gl::getColor("yellow"));
+    auto func_highlight_off = functor(colorQuad, play_button->quads[0], play_button->colors[0]);
     link(on_quad, func_highlight_on);
-    //auto func_highlight_off = functor(colorQuad, play_button.quads[0], play_button.colors[0]);
+    link(off_quad, func_highlight_off);
 
     //gate<and_op, decltype(play_button_signals.hold_evt), decltype(lmb.on_evt)> play_press_evt(and_op(),
     //        play_button_signals.hold_evt, lmb.on_evt);

@@ -18,7 +18,7 @@ namespace signals
                     using ID = utils::ID<Functor<F, Args...>>;
                     constexpr static typename ID::Container& all = ID::container;
 
-                    Functor(F&& pF, Args&&... pArgs)
+                    constexpr Functor(F&& pF, Args&&... pArgs) noexcept
                         : func(std::forward<F>(pF))
                         , args(std::forward<Args>(pArgs)...)
                 {
@@ -133,10 +133,6 @@ namespace signals
         {
             invoker(index);
         }
-        //void operator()() const
-        //{
-        //    invoker(index);
-        //}
 
         void(&invoker)(const size_t);
         const size_t index;
