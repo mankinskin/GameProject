@@ -10,20 +10,19 @@
 
 namespace gui
 {
-    struct Quad
+    struct Quad : public glm::vec4
     {
         using ID = utils::ID<Quad>;
         constexpr static typename ID::Container& all = ID::container;
         Quad(glm::vec4 pData)
-            :data(pData)
+            : glm::vec4(pData)
         {}
-        glm::vec4 data;
         void setPos(const glm::vec2 p);
         void move(const glm::vec2 v);
         void resize(const glm::vec2 v);
     };
 
-    struct QuadEvent    // signals thrown when entering or leaving quads with the cursor
+    struct QuadEvent
     {
         QuadEvent(const utils::ID<Quad> pQuad, int pEnter)
             :quad(pQuad), enter(pEnter)
@@ -43,6 +42,7 @@ namespace gui
     const unsigned int MAX_QUAD_COUNT = 10000;
     void setQuadPos(const utils::ID<Quad> q, const glm::vec2 p);
     void moveQuad(const utils::ID<Quad> q, const glm::vec2 v);
+    utils::ID<Quad> topQuadAtPosition(const float x, const float y);
 
     void initQuadBuffer();
     void updateQuadBuffer();

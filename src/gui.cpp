@@ -38,9 +38,9 @@ void gui::initWidgets()
 
     using Button = gui::Widget<2>;
 
-    float button_width = gui::pixel_size.x * 100.0f;
-    float button_height = gui::pixel_size.x * 70.0f;
-    glm::vec2 margin = gui::pixel_size * 3.0f;
+    float button_width = 0.5f;
+    float button_height = 0.4f;
+    glm::vec2 margin = glm::vec2(0.1f, 0.1f);
 
     Button::QuadPreset button_initer{
             glm::vec4(0.0f, 0.0f, button_width, button_height),
@@ -65,9 +65,8 @@ void gui::initWidgets()
     utils::ID<Button> play_button = utils::makeID(Button(button_preset));
     utils::ID<Button> quit_button = utils::makeID(Button(button_preset));
 
-
-    play_button->move(glm::vec2(-0.95f, -0.6f));
-    quit_button->move(glm::vec2(-0.95f, -0.8f));
+    play_button->move(glm::vec2(0.5f, 0.5f));
+    quit_button->move(glm::vec2(-0.5f, -0.5f));
 
     const utils::ID<Quad>& q = play_button->quads[0];
     QuadEvent quad0_on(q, 1);

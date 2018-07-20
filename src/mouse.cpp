@@ -1,7 +1,6 @@
 #include "mouse.h"
 #include "app.h"
 #include "contextwindow.h"
-#include "quadindex.h"
 #include "gl.h"
 #include "viewport.h"
 #include "signal.h"
@@ -16,23 +15,23 @@ glm::vec2 input::cursorFrameDelta;
 std::array<int, 3> mouseKeys;
 int scroll = 0;
 int disableCursor = 0;
-unsigned int hovered_quad = 0;
-unsigned int last_hovered_quad = 0;
+utils::ID<gui::Quad> hovered_quad = 0;
+utils::ID<gui::Quad> last_hovered_quad = 0;
 
 void input::updateMouse()
 {
-    //update cursor pos
-    double ax = 0.0;//absolute positions
+    // absolute positions
+    double ax = 0.0;
     double ay = 0.0;
 
-    //GLFW window coordinates are from top to bottom all others are bottom to top
+    // GLFW window coordinates are from top to bottom all others are bottom to top
     glfwGetCursorPos(app::mainWindow.window, &ax, &ay);
     float rx = (float)ax;
     float ry = (float)ay;
     ax = glm::clamp(ax*gl::Viewport::current->resolution, 0.0, (double)(app::mainWindow.width*gl::Viewport::current->resolution) - 1.0);
     ay = glm::clamp(ay*gl::Viewport::current->resolution, 0.0, (double)(app::mainWindow.height*gl::Viewport::current->resolution) - 1.0);
     if (!disableCursor) {
-        rx = (float)ax;//clamp relative positions too if cursor is not disabled
+        rx = (float)ax;// clamp relative positions too if cursor is not disabled
         ry = (float)ay;
     }
     absoluteCursorPosition = glm::uvec2((unsigned int)ax, (app::mainWindow.height*gl::Viewport::current->resolution) - (unsigned int)ay - 1);
@@ -43,10 +42,7 @@ void input::updateMouse()
     cursorFrameDelta = glm::vec2(newRelativeCursorPosition.x - relativeCursorPosition.x,
             newRelativeCursorPosition.y - relativeCursorPosition.y);
     relativeCursorPosition = newRelativeCursorPosition;
-
-    //printf("RelPos: %.2f\t%.2f\n", relativeCursorPosition.x, relativeCursorPosition.y);
-    //printf("AbsPos: %u\t%u\n", absoluteCursorPosition.x, absoluteCursorPosition.y);
-    //printf("Delta: %.2f\t%.2f\n", cursorFrameDelta.x, cursorFrameDelta.y);
+    //printf("%f\t%f\n", relativeCursorPosition.x, relativeCursorPosition.y);
 }
 
 void input::resetMouse()
@@ -59,8 +55,7 @@ void input::toggleCursor()
     disableCursor = !disableCursor;
     if (disableCursor) {
         glfwSetInputMode(app::mainWindow.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    }
-    else {
+    } else {
         glfwSetInputMode(app::mainWindow.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 }
@@ -68,7 +63,6 @@ void input::toggleCursor()
 void input::getMouseKeyEvents()
 {
     static std::array<int, 3> lastMouseKeys;
-
     for (unsigned int c = 0; c < 3; ++c) {
         if (mouseKeys[c] != lastMouseKeys[c]) {//mouse key change event
             pushEvent(MouseKeyEvent(c, mouseKeys[c]));
@@ -76,21 +70,18 @@ void input::getMouseKeyEvents()
         }
     }
 }
+
 void input::getCursorQuadEvents()
 {
     last_hovered_quad = hovered_quad;
-    hovered_quad = gui::readQuadIndexMap(absoluteCursorPosition.x, absoluteCursorPosition.y);
-    float quad_depth = gui::readQuadDepthMap(absoluteCursorPosition.x, absoluteCursorPosition.y);
-    //printf("Hovering quad %u\n", hovered_quad);
-    if(last_hovered_quad != hovered_quad){
-        //quad change
-        if (last_hovered_quad) {
-            //button leave event
-            pushEvent(gui::QuadEvent(last_hovered_quad - 1, 0));
+    hovered_quad = gui::topQuadAtPosition(relativeCursorPosition.x, relativeCursorPosition.y);
+    //printf("Hovering quad %u\n", hovered_quad.index);
+    if (hovered_quad != last_hovered_quad) {
+        if (last_hovered_quad != utils::INVALID_ID) {
+            pushEvent(gui::QuadEvent(last_hovered_quad, 0));
         }
-        if (hovered_quad) {
-            //button enter event
-            pushEvent(gui::QuadEvent(hovered_quad - 1, 1));
+        if (hovered_quad != utils::INVALID_ID) {
+            pushEvent(gui::QuadEvent(hovered_quad, 1));
         }
     }
 }

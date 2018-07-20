@@ -48,6 +48,10 @@ namespace utils
             {
                 return get();
             }
+            operator size_t() const
+            {
+                return index;
+            }
             static void clear()
             {
                 container.clear();

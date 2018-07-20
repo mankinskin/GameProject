@@ -15,7 +15,6 @@
 #include "line.h"
 #include "quad.h"
 #include "quadcolors.h"
-#include "quadindex.h"
 #include "font.h"
 #include "text.h"
 #include "functor.h"
@@ -33,7 +32,6 @@ void sequencer::includeShaders()
 {
     gui::initLineShader();
     gui::initColorQuadShader();
-    gui::initQuadIndexShader();
     text::initFontShader();
     //mesh::initMeshShader();
     //mesh::initBlendMeshShader();
@@ -48,7 +46,6 @@ void sequencer::buildShaders()
     puts("Building Shaders...");
     gui::setupLineShader();
     gui::setupColorQuadShader();
-    gui::setupQuadIndexShader();
     text::setupFontShader();
     //mesh::setupMeshShader();
     //lights::setupLightShader();
@@ -74,8 +71,6 @@ void sequencer::initializeVAOs()
     gui::initQuadBuffer();
 
     gui::initColorQuadVAO();
-
-    gui::initQuadIndexBuffer();
 }
 
 void sequencer::initModules()
@@ -148,11 +143,6 @@ void sequencer::frame()
     gui::updateLinePositions();
     gui::updateLineColors();
     text::updateFonts();
-
-    glBindFramebuffer(GL_FRAMEBUFFER, texture::guiFBO);
-    gui::rasterQuadIndices();
-    gui::readQuadIndexBuffer();
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     gui::renderLines();
     gui::renderColorQuads();
