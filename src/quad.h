@@ -5,7 +5,6 @@
 #include <tuple>
 #include "utils/id.h"
 #include "storage.h"
-#include "vao.h"
 #include "color.h"
 
 namespace gui

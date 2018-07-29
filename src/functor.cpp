@@ -1,10 +1,10 @@
 #include "functor.h"
 
-std::vector<void(*)()> signals::hidden::functorClearFuncs;
+std::vector<void(*)()> signals::functorClearFuncs;
 
 void signals::clearFunctors()
 {
-    for (void(*&clear)() : hidden::functorClearFuncs) {
+    for (void(*&clear)() : functorClearFuncs) {
         clear();
     }
 }

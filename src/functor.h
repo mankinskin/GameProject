@@ -8,8 +8,6 @@
 
 namespace signals
 {
-    namespace hidden
-    {
         extern std::vector<void(*)()> functorClearFuncs;
         template<typename F, typename... Args>
             class Functor
@@ -113,19 +111,18 @@ namespace signals
                         static At_Init init;
                     }
             };
-    }
 
     struct Invoker
     {
         template<typename F, typename... Args>
-            Invoker(utils::ID<hidden::Functor<F, Args...>> pFunc)
-            : invoker(hidden::Functor<F, Args...>::invoke)
+            Invoker(utils::ID<Functor<F, Args...>> pFunc)
+            : invoker(Functor<F, Args...>::invoke)
               , index(pFunc.index)
         {}
 
         template<typename... Funcs>
-            Invoker(utils::ID<hidden::Procedure<Funcs...>> pProc)
-            : invoker(hidden::Procedure<Funcs...>::invoke)
+            Invoker(utils::ID<Procedure<Funcs...>> pProc)
+            : invoker(Procedure<Funcs...>::invoke)
               , index(pProc.index)
         {}
 
@@ -140,15 +137,15 @@ namespace signals
 
     // allocates a functor and returns an ID for it
     template<typename F, typename... Args>
-        constexpr utils::ID<hidden::Functor<F, Args...>> functor(F&& pF, Args&&... pArgs)
+        constexpr utils::ID<Functor<F, Args...>> functor(F&& pF, Args&&... pArgs)
         {
-            return utils::makeID(hidden::Functor<F, Args...>(std::forward<F>(pF), std::forward<Args>(pArgs)...));
+            return utils::makeID(Functor<F, Args...>(std::forward<F>(pF), std::forward<Args>(pArgs)...));
         }
 
     template<typename... Funcs>
-        constexpr utils::ID<hidden::Procedure<Funcs...>> procedure(utils::ID<Funcs>... pFuncs)
+        constexpr utils::ID<Procedure<Funcs...>> procedure(utils::ID<Funcs>... pFuncs)
         {
-            return utils::makeID(hidden::Procedure<Funcs...>(pFuncs...));
+            return utils::makeID(Procedure<Funcs...>(pFuncs...));
         }
 
     void clearFunctors();

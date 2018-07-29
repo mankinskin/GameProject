@@ -96,8 +96,8 @@ void input::setupControls()
         auto higher_cam_speed_func = functor(camera::setSpeed, camera::main_camera, 1.0f);
         auto normal_cam_speed_func = functor(camera::setSpeed, camera::main_camera, 0.3f);
 
-        link(orsignal(orsignal(key_c.press, rmb_down), rmb_up), toggle_look_func);
-        link(orsignal(orsignal(key_c.press, rmb_down), rmb_up), toggle_cursor_func);
+        link(ifAny(key_c.press, rmb_down, rmb_up), toggle_look_func);
+        link(ifAny(key_c.press, rmb_down, rmb_up), toggle_cursor_func);
         link(key_esc.press, exit_func);
         link(key_g.press, toggle_grid_func);
         link(key_h.press, toggle_coord_func);

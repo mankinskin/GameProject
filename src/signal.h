@@ -1,123 +1,216 @@
 #pragma once
 #include "utils/id.h"
+#include "utils/id.h"
 #include "functor.h"
 #include <tuple>
 
 namespace signals
 {
-    namespace hidden
-    {
         // plug these into signal listeners
-        template<typename SignalL, typename SignalR>
+        template<typename... Signals>
             class And
             {
                 public:
-                    And(const utils::ID<SignalL> lhs, const utils::ID<SignalR> rhs)
-                        : signalL(lhs)
-                          , signalR(rhs)
+                    And(const Signals... sigs)
+                        : signals(sigs...)
                 {}
 
-                    constexpr bool stat()
+                    constexpr bool stat_n(utils::_index<0>) const
                     {
-                        return signalL->stat() && signalR->stat();
+                        return std::get<sizeof...(Signals) - 1>(signals)->stat();
+                    }
+                    template<size_t N>
+                        constexpr bool stat_n(utils::_index<N>) const
+                        {
+                            return std::get<(sizeof...(Signals) - 1) - N>(signals)->stat() && stat_n(utils::_index<N-1>());
+                        }
+                    constexpr bool stat() const
+                    {
+                        return stat_n(utils::_index<sizeof...(Signals) - 1>());
                     }
                 private:
-                    const utils::ID<SignalL> signalL;
-                    const utils::ID<SignalR> signalR;
+                    const std::tuple<const Signals...> signals;
             };
 
-        template<typename SignalL, typename SignalR>
+        template<typename... Signals>
             class Or
             {
                 public:
-                    Or(const typename SignalL::ID lhs, const typename SignalR::ID rhs)
-                        : signalL(lhs)
-                          , signalR(rhs)
+                    Or(const Signals... sigs)
+                        : signals(sigs...)
                 {}
 
-                    constexpr bool stat()
+                    constexpr bool stat_n(utils::_index<0>) const
                     {
-                        return signalL->stat() || signalR->stat();
+                        return std::get<sizeof...(Signals) - 1>(signals)->stat();
+                    }
+                    template<size_t N>
+                        constexpr bool stat_n(utils::_index<N>) const
+                        {
+                            return std::get<(sizeof...(Signals) - 1) - N>(signals)->stat() || stat_n(utils::_index<N-1>());
+                        }
+                    constexpr bool stat() const
+                    {
+                        return stat_n(utils::_index<sizeof...(Signals) - 1>());
                     }
                 private:
-                    const typename SignalL::ID signalL;
-                    const typename SignalR::ID signalR;
+                    const std::tuple<const Signals...> signals;
             };
 
-        template<typename SignalL, typename SignalR>
+        template<typename... Signals>
             class Xor
             {
                 public:
-                    Xor(const typename SignalL::ID lhs, const typename SignalR::ID rhs)
-                        : signalL(lhs)
-                          , signalR(rhs)
+                    Xor(const Signals... sigs)
+                        : signals(sigs...)
                 {}
 
-                    constexpr bool stat()
+                    constexpr bool stat_n(utils::_index<0>) const
                     {
-                        return signalL->stat() != signalR->stat();
+                        return false;
+                    }
+                    template<size_t N>
+                        constexpr bool stat_n(utils::_index<N>) const
+                        {
+                            return !((std::get<(sizeof...(Signals) - 1) - N>(signals)->stat() ==
+                                        std::get<(sizeof...(Signals) - 1) - (N - 1)>(signals)->stat())
+                                    && !stat_n(utils::_index<N-1>()));
+                        }
+                    constexpr bool stat() const
+                    {
+                        return stat_n(utils::_index<sizeof...(Signals) - 1>());
                     }
                 private:
-                    const typename SignalL::ID signalL;
-                    const typename SignalR::ID signalR;
+                    const std::tuple<const Signals...> signals;
             };
 
-        template<typename SignalL, typename SignalR>
+        template<typename... Signals>
             class Nor
             {
                 public:
-                    Nor(const typename SignalL::ID lhs, const typename SignalR::ID rhs)
-                        : signalL(lhs)
-                          , signalR(rhs)
+                    Nor(const Signals... sigs)
+                        : signals(sigs...)
                 {}
 
-                    constexpr bool stat()
+                    constexpr bool stat_n(utils::_index<0>) const
                     {
-                        return !signalL->stat() && !signalR->stat();
+                        return !std::get<sizeof...(Signals) - 1>(signals)->stat();
+                    }
+                    template<size_t N>
+                        constexpr bool stat_n(utils::_index<N>) const
+                        {
+                            return !std::get<(sizeof...(Signals) - 1) - N>(signals)->stat() && stat_n(utils::_index<N-1>());
+                        }
+                    constexpr bool stat() const
+                    {
+                        return stat_n(utils::_index<sizeof...(Signals) - 1>());
                     }
 
                 private:
-                    const typename SignalL::ID signalL;
-                    const typename SignalR::ID signalR;
+                    const std::tuple<const Signals...> signals;
             };
 
-        template<typename SignalL, typename SignalR>
+        template<typename... Signals>
             class Equal
             {
                 public:
-                    Equal(const typename SignalL::ID lhs, const typename SignalR::ID rhs)
-                        : signalL(lhs)
-                          , signalR(rhs)
+                    Equal(const Signals... sigs)
+                        : signals(sigs...)
                 {}
 
+                    constexpr bool stat_n(utils::_index<0>)
+                    {
+                        return std::get<sizeof...(Signals) - 1>(signals)->stat();
+                    }
+                    template<size_t N>
+                        constexpr bool stat_n(utils::_index<N>)
+                        {
+                            return std::get<(sizeof...(Signals) - 1) - N>(signals)->stat() == stat_n(utils::_index<N-1>());
+                        }
                     constexpr bool stat()
                     {
-                        return signalL->stat() == signalR->stat();
+                        return stat_n(utils::_index<sizeof...(Signals) - 1>());
                     }
                 private:
-                    const typename SignalL::ID signalL;
-                    const typename SignalR::ID signalR;
-            };
-
-        template<typename Signal>
-            class Not
-            {
-                public:
-                    Not(const typename Signal::ID s)
-                        : signal(s)
-                    {}
-
-                    constexpr bool stat()
-                    {
-                        return !signal->stat();
-                    }
-                private:
-                    const typename Signal::ID signal;
+                    const std::tuple<const Signals...> signals;
             };
 
         extern std::vector<void(*)()> signalClearFuncs;
         extern std::vector<void(*)()> eventCheckFuncs;
         extern std::vector<void(*)()> eventInstanceClearFuncs;
+
+        template<typename Event>
+            class EventListener
+            {
+                public:
+                using ID = utils::ID<EventListener<Event>>;
+                static constexpr typename ID::Container& all = ID::container;
+                    EventListener(const Event pSignature)
+                        : signature(pSignature)
+                          , occurred(false)
+                {
+                    initialize();
+                }
+
+                    static void pushEvent(const Event& pEvent)
+                    {
+                        eventBuffer.emplace_back(pEvent);
+                    }
+
+                    bool stat() const
+                    {
+                        return occurred;
+                    }
+
+                    static bool stat(size_t i)
+                    {
+                        return all[i].stat();
+                    }
+                    static void clear()
+                    {
+                        all.clear();
+                    }
+
+                    const EventListener* operator->() const
+                    {
+                        this;
+                    }
+
+                    const Event signature;
+                    bool occurred = false;
+
+                private:
+                    static std::vector<Event> eventBuffer;
+                    static void check()
+                    {
+                        for (EventListener<Event>& instance : all) {
+                            instance.occurred = false;
+                            for (const Event& event : EventListener<Event>::eventBuffer) {
+                                if(instance.signature == event) {
+                                    instance.occurred = true;
+                                    break;
+                                }
+                            }
+                        }
+                        eventBuffer.clear();
+                    }
+                    static void initialize()
+                    {
+                        static At_Init init;
+                    }
+
+                    struct At_Init
+                    {
+                        At_Init()
+                        {
+                            eventCheckFuncs.push_back(&check);
+                            signalClearFuncs.push_back(&clear);
+                        }
+                    };
+            };
+
+        template<typename Event>
+            std::vector<Event> EventListener<Event>::eventBuffer = std::vector<Event>();
 
         template<template<typename...> typename Op, typename... Signals>
             class SignalListener : public Op<Signals...>
@@ -125,16 +218,15 @@ namespace signals
             public:
                 using ID = utils::ID<SignalListener<Op, Signals...>>;
                 static constexpr typename ID::Container& all = ID::container;
-
                 SignalListener(const Signals... sigs)
                     : Op<Signals...>(sigs...)
                 {
                     initialize();
                 }
-                SignalListener(const utils::ID<Signals>... sigs)
-                    : Op<Signals...>(sigs...)
+
+                constexpr const Op<Signals...>* operator->() const
                 {
-                    initialize();
+                    this;
                 }
 
                 static bool stat(size_t i)
@@ -162,105 +254,40 @@ namespace signals
                     };
         };
 
-        template<typename Event>
-            class EventSignal
-            {
-                public:
-                    EventSignal(const Event pSignature)
-                        : signature(pSignature)
-                          , occurred(false)
-                {
-                    initialize();
-                }
-
-                    static void pushEvent(const Event& pEvent)
-                    {
-                        eventBuffer.emplace_back(pEvent);
-                    }
-
-                    bool stat() const
-                    {
-                        return occurred;
-                    }
-
-                    const Event signature;
-                    bool occurred = false;
-
-                private:
-                    static std::vector<Event> eventBuffer;
-                    static void check()
-                    {
-                        for (SignalListener<EventSignal, Event>& instance : SignalListener<EventSignal, Event>::all) {
-                            instance.occurred = false;
-                            for (const Event& event : EventSignal<Event>::eventBuffer) {
-                                if(instance.signature == event) {
-                                    instance.occurred = true;
-                                    break;
-                                }
-                            }
-                        }
-                        eventBuffer.clear();
-                    }
-                    static void initialize()
-                    {
-                        static At_Init init;
-                    }
-
-                    struct At_Init
-                    {
-                        At_Init()
-                        {
-                            eventCheckFuncs.push_back(&check);
-                        }
-                    };
-            };
-
-        template<typename Event>
-            std::vector<Event> EventSignal<Event>::eventBuffer = std::vector<Event>();
-
-
-    }
     template<typename Event>
-        utils::ID<hidden::SignalListener<hidden::EventSignal, Event>> eventsignal(const Event pEvent)
+        utils::ID<EventListener<Event>> ifEvent(const Event pEvent)
         {
-            return utils::makeID(hidden::SignalListener<hidden::EventSignal, Event>(pEvent));
+            return utils::makeID(EventListener<Event>(pEvent));
         }
 
-
-    template<typename SignalL, typename SignalR>
-        utils::ID<hidden::SignalListener<hidden::And, SignalL, SignalR>> andsignal(utils::ID<SignalL> lhs, utils::ID<SignalR> rhs)
+    template<typename... Signals>
+        SignalListener<And, Signals...> ifAll(const Signals... sigs)
         {
-            return utils::makeID(hidden::SignalListener<hidden::And, SignalL, SignalR>(lhs, rhs));
+            return SignalListener<And, Signals...>(sigs...);
         }
 
-    template<typename SignalL, typename SignalR>
-        utils::ID<hidden::SignalListener<hidden::Or, SignalL, SignalR>> orsignal(utils::ID<SignalL> lhs, utils::ID<SignalR> rhs)
+    template<typename... Signals>
+        SignalListener<Or, Signals...> ifAny(const Signals... sigs)
         {
-            return utils::makeID(hidden::SignalListener<hidden::Or, SignalL, SignalR>(lhs, rhs));
+            return SignalListener<Or, Signals...>(sigs...);
         }
 
-    template<typename SignalL, typename SignalR>
-        utils::ID<hidden::SignalListener<hidden::Xor, SignalL, SignalR>> xorsignal(utils::ID<SignalL> lhs, utils::ID<SignalR> rhs)
+    template<typename... Signals>
+        SignalListener<Xor, Signals...> ifNotEqual(const Signals... sigs)
         {
-            return utils::makeID(hidden::SignalListener<hidden::Xor, SignalL, SignalR>(lhs, rhs));
+            return SignalListener<Xor, Signals...>(sigs...);
         }
 
-    template<typename SignalL, typename SignalR>
-        utils::ID<hidden::SignalListener<hidden::Nor, SignalL, SignalR>> norsignal(utils::ID<SignalL> lhs, utils::ID<SignalR> rhs)
+    template<typename... Signals>
+        SignalListener<Nor, Signals...> ifNone(const Signals... sigs)
         {
-            return utils::makeID(hidden::SignalListener<hidden::Nor, SignalL, SignalR>(lhs, rhs));
+            return SignalListener<Nor, Signals...>(sigs...);
         }
 
-    template<typename SignalL, typename SignalR>
-        utils::ID<hidden::SignalListener<hidden::Equal, SignalL, SignalR>> equalsignal(utils::ID<SignalL> lhs, utils::ID<SignalR> rhs)
+    template<typename... Signals>
+        SignalListener<Equal, Signals...> ifEqual(const Signals... sigs)
         {
-            return utils::makeID(hidden::SignalListener<hidden::Equal, SignalL, SignalR>(lhs, rhs));
-        }
-
-    template<typename Signal>
-        constexpr utils::ID<hidden::SignalListener<hidden::Not, Signal>> notsignal(utils::ID<Signal> s)
-        {
-            return utils::makeID(hidden::SignalListener<hidden::Not, Signal>(s));
+            return SignalListener<Equal, Signals...>(sigs...);
         }
 
     struct Listener
@@ -268,10 +295,20 @@ namespace signals
         using ID = utils::ID<Listener>;
         constexpr static typename ID::Container& all = ID::container;
 
-        template<template<typename...> typename Op, typename... Signals>
-            Listener(const utils::ID<hidden::SignalListener<Op, Signals...>> pListener)
-            : stater(hidden::SignalListener<Op, Signals...>::stat)
+        template<typename Event>
+            Listener(const utils::ID<EventListener<Event>> pListener)
+            : stater(EventListener<Event>::stat)
             , index(pListener.index)
+        {}
+        template<template<typename...> typename Op, typename... Signals>
+            Listener(const utils::ID<SignalListener<Op, Signals...>> pListener)
+            : stater(SignalListener<Op, Signals...>::stat)
+            , index(pListener.index)
+        {}
+        template<template<typename...> typename Op, typename... Signals>
+            Listener(const SignalListener<Op, Signals...> pListener)
+            : stater(SignalListener<Op, Signals...>::stat)
+            , index(utils::makeID(pListener).index)
         {}
             Listener(const utils::ID<Listener> pListener)
             : stater(pListener->stater)
@@ -291,55 +328,52 @@ namespace signals
     template<typename Event>
         void pushEvent(const Event&& pEvent)
         {
-            hidden::EventSignal<Event>::pushEvent(pEvent);
+            EventListener<Event>::pushEvent(pEvent);
         }
 
     template<typename Event>
-        utils::ID<Listener> listen(const utils::ID<hidden::SignalListener<hidden::EventSignal, Event>> pEvent)
+        utils::ID<Listener> listen(const utils::ID<EventListener<Event>> pEvent)
         {
             return utils::makeID(Listener(pEvent));
         }
     template<typename Event>
         utils::ID<Listener> listen(const Event pEvent)
         {
-            return listen(utils::makeID(hidden::SignalListener<hidden::EventSignal, Event>(pEvent)));
+            return listen(utils::makeID(EventListener<Event>(pEvent)));
         }
 
     template<template<typename...> typename Op, typename... Signals>
-        utils::ID<Listener> listen(const utils::ID<hidden::SignalListener<Op, Signals...>> pSignal)
+        utils::ID<Listener> listen(const SignalListener<Op, Signals...> pSignal)
         {
-            return utils::makeID(Listener(pSignal));
+            return utils::makeID(Listener(utils::makeID(pSignal)));
         }
 
     void processLinks();
 
-    namespace hidden
-    {
         extern std::vector<std::pair<Listener, Invoker>> links;
         void link(Listener pListener, Invoker pInvoker);
-    }
 
     template<typename Signal, typename R, typename... Args>
-        void link(utils::ID<Signal> pSignal, R(&&pF)(Args...), Args&&... pArgs)
+        void link(const Signal pListener, R(&&pF)(Args...), Args&&... pArgs)
         {
-            hidden::link(Listener(pSignal), Invoker(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...));
+            link(Listener(pListener), Invoker(std::forward<R(Args...)>(pF), std::forward<Args>(pArgs)...));
         }
 
     template<typename Signal, typename... Funcs>
-        void link(utils::ID<Signal> pSignal, utils::ID<Funcs>... pFuncs)
+        void link(const Signal pListener, utils::ID<Funcs>... pFuncs)
         {
-            hidden::link(Listener(pSignal), Invoker(pFuncs...));
+            link(Listener(pListener), Invoker(pFuncs...));
         }
     template<typename Signal, typename R, typename... Args>
-        void link(utils::ID<Signal> pSignal, utils::ID<hidden::Functor<R, Args...>> pFunc)
+        void link(const Signal pListener, utils::ID<Functor<R, Args...>> pFunc)
         {
-            hidden::link(Listener(pSignal), Invoker(pFunc));
+            link(Listener(pListener), Invoker(pFunc));
         }
 
     template<typename Signal, typename... Funcs>
-        void link(utils::ID<Signal> pSignal, utils::ID<hidden::Procedure<Funcs...>> pProc)
+        void link(const Signal pListener, utils::ID<Procedure<Funcs...>> pProc)
         {
-            hidden::link(Listener(pSignal), Invoker(pProc));
+            link(Listener(pListener), Invoker(pProc));
         }
     void checkEvents();
     void clearSignals();

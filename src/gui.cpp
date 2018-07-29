@@ -8,7 +8,6 @@
 #include "framebuffer.h"
 #include "widget.h"
 #include "input.h"
-#include "gates.h"
 #include "signal.h"
 #include "functor.h"
 #include "mouse.h"
