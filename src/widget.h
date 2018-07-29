@@ -8,7 +8,6 @@
 #include "quad.h"
 #include "quadcolors.h"
 #include "utils/id.h"
-#include "element.h"
 #include "utils/array_utils.h"
 #include "utils/tuple_utils.h"
 

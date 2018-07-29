@@ -16,7 +16,6 @@
 #include "app.h"
 #include "light.h"
 #include "viewport.h"
-#include "element.h"
 
 glm::vec2 gui::pixel_size;
 
