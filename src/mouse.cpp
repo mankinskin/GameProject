@@ -15,8 +15,8 @@ glm::vec2 input::cursorFrameDelta;
 std::array<int, 3> mouseKeys;
 int scroll = 0;
 int disableCursor = 0;
-utils::ID<gui::Quad> hovered_quad = 0;
-utils::ID<gui::Quad> last_hovered_quad = 0;
+utils::ID<gui::Quad> hovered_quad = utils::INVALID_ID;
+utils::ID<gui::Quad> last_hovered_quad = utils::INVALID_ID;
 
 void input::updateMouse()
 {
