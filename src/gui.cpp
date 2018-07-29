@@ -33,49 +33,50 @@ void gui::initWidgets()
     using namespace signals;
     using namespace input;
 
+    using ColorQuad = QuadWidget<gl::ColorID>;
+    using Button = gui::Widget<ColorQuad, ColorQuad>;
 
-    using Button = gui::Widget<2>;
-
-    float button_width = 0.5f;
-    float button_height = 0.4f;
-    glm::vec2 margin = glm::vec2(0.1f, 0.1f);
-
-    Button::QuadPreset button_initer{
-            glm::vec4(0.0f, 0.0f, button_width, button_height),
-            glm::vec4(margin.x, -margin.y,
-                      button_width - margin.x*2.0f,
-                      button_height - margin.y*2.0f) };
-
-    Button::Colors button_colors{
-            gl::getColor("lightgrey"),
-            gl::getColor("black") };
+    float button_width = gui::pixel_size.x * 70.0f;
+    float button_height = gui::pixel_size.y * 20.0f;
+    glm::vec2 margin = gui::pixel_size * glm::vec2(2.0f, 2.0f);
 
     Button::MovePolicy button_move_policy{
             glm::vec2(1.0f, 1.0f),
-            glm::vec2(1.0f, 1.0f) };
+            glm::vec2(1.0f, 1.0f)};
     Button::ResizePolicy button_resize_policy{
             glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-            glm::vec4(0.0f, 0.0f, 1.0f, 1.0f) };
+            glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)};
 
-    Button::Preset button_preset(button_initer, button_colors,
-            button_move_policy, button_resize_policy);
+    Button::Preset button_preset{
+        {ColorQuad::Preset(glm::vec4(0.0f, 0.0f, button_width, button_height), gl::getColor("white")),
+            ColorQuad::Preset(glm::vec4(margin.x, -margin.y, button_width - margin.x*2.0f, button_height - margin.y*2.0f), gl::getColor("black")) },
+            button_move_policy, button_resize_policy};
+
+
+    using ButtonList = Widget<Button, Button>;
+
+    ButtonList::Preset buttonlist_preset({button_preset, button_preset},
+                button_move_policy, button_resize_policy);
+
 
     utils::ID<Button> play_button = utils::makeID(Button(button_preset));
     utils::ID<Button> quit_button = utils::makeID(Button(button_preset));
 
+    utils::ID<ButtonList> button_list = utils::makeID(ButtonList(buttonlist_preset));
+
+    auto enter_button = listen(play_button->event(true));
+    auto leave_button = listen(play_button->event(false));
+
+    auto func_highlight_on = functor(colorQuad, std::get<0>(play_button->elements).quad, gl::getColor("yellow"));
+    auto func_highlight_off = functor(colorQuad, std::get<0>(play_button->elements).quad, std::get<0>(play_button->elements).color);
+    link(enter_button, func_highlight_on);
+    link(leave_button, func_highlight_off);
+
     play_button->move(glm::vec2(0.5f, 0.5f));
     quit_button->move(glm::vec2(-0.5f, -0.5f));
+    std::get<1>(button_list->elements).move(glm::vec2(0.0f, button_height));
+    button_list->move(glm::vec2(-0.5f, 0.0f));
 
-    const utils::ID<Quad>& q = play_button->quads[0];
-    QuadEvent quad0_on(q, 1);
-    QuadEvent quad0_off(q, 0);
-    auto on_quad = listen(quad0_on);
-    auto off_quad = listen(quad0_off);
-
-    auto func_highlight_on = functor(colorQuad, q, gl::getColor("yellow"));
-    auto func_highlight_off = functor(colorQuad, play_button->quads[0], play_button->colors[0]);
-    link(on_quad, func_highlight_on);
-    link(off_quad, func_highlight_off);
 
     //gate<and_op, decltype(play_button_signals.hold_evt), decltype(lmb.on_evt)> play_press_evt(and_op(),
     //        play_button_signals.hold_evt, lmb.on_evt);
