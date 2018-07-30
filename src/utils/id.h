@@ -36,7 +36,7 @@ namespace utils
 
             Type& get() const
             {
-                assert( container.size() );
+                assert(container.size());
                 return container[index];
             }
 

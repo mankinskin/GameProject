@@ -13,7 +13,7 @@ namespace signals
                 public:
                     And(const Signals... sigs)
                         : signals(sigs...)
-                {}
+                    {}
 
                     constexpr bool stat_n(utils::_index<0>) const
                     {
@@ -38,7 +38,7 @@ namespace signals
                 public:
                     Or(const Signals... sigs)
                         : signals(sigs...)
-                {}
+                    {}
 
                     constexpr bool stat_n(utils::_index<0>) const
                     {
@@ -63,7 +63,7 @@ namespace signals
                 public:
                     Xor(const Signals... sigs)
                         : signals(sigs...)
-                {}
+                    {}
 
                     constexpr bool stat_n(utils::_index<0>) const
                     {
@@ -90,7 +90,7 @@ namespace signals
                 public:
                     Nor(const Signals... sigs)
                         : signals(sigs...)
-                {}
+                    {}
 
                     constexpr bool stat_n(utils::_index<0>) const
                     {
@@ -116,24 +116,69 @@ namespace signals
                 public:
                     Equal(const Signals... sigs)
                         : signals(sigs...)
-                {}
+                    {}
 
-                    constexpr bool stat_n(utils::_index<0>)
+                    constexpr bool stat_n(utils::_index<0>) const
                     {
                         return std::get<sizeof...(Signals) - 1>(signals)->stat();
                     }
                     template<size_t N>
-                        constexpr bool stat_n(utils::_index<N>)
+                        constexpr bool stat_n(utils::_index<N>) const
                         {
                             return std::get<(sizeof...(Signals) - 1) - N>(signals)->stat() == stat_n(utils::_index<N-1>());
                         }
-                    constexpr bool stat()
+                    constexpr bool stat() const
                     {
                         return stat_n(utils::_index<sizeof...(Signals) - 1>());
                     }
                 private:
                     const std::tuple<const Signals...> signals;
             };
+
+
+        struct Signal
+        {
+            Signal(bool s)
+                : status(s)
+            {}
+
+            void set(bool s)
+            {
+                status = s;
+            }
+
+            constexpr bool stat() const
+            {
+                return status;
+            }
+            private:
+            bool status;
+        };
+
+        template<typename Set, typename Reset>
+            struct Flip
+            {
+                Flip(const Set pA, const Reset pB, bool startAs = false)
+                    : set(pA)
+                    , reset(pB)
+                    , on(utils::makeID(Signal(startAs)))
+                    , off(utils::makeID(Signal(!startAs)))
+                {}
+                constexpr bool stat() const
+                {
+                    Signal& s_on = *on;
+                    Signal& s_off = *off;
+                    s_on.set(!(reset.stat() || s_off.stat()));
+                    s_off.set(!(set.stat() || s_on.stat()));
+                    return s_on.stat();
+                }
+                private:
+                const utils::ID<Signal> on;
+                const utils::ID<Signal> off;
+                const Set set;
+                const Reset reset;
+            };
+
 
         extern std::vector<void(*)()> signalClearFuncs;
         extern std::vector<void(*)()> eventCheckFuncs;
@@ -143,14 +188,14 @@ namespace signals
             class EventListener
             {
                 public:
-                using ID = utils::ID<EventListener<Event>>;
-                static constexpr typename ID::Container& all = ID::container;
-                    EventListener(const Event pSignature)
+                    using ID = utils::ID<EventListener<Event>>;
+                    static constexpr typename ID::Container& all = ID::container;
+                    constexpr EventListener(const Event pSignature)
                         : signature(pSignature)
-                          , occurred(false)
-                {
-                    initialize();
-                }
+                        , occurred(false)
+                    {
+                        initialize();
+                    }
 
                     static void pushEvent(const Event& pEvent)
                     {
@@ -201,7 +246,7 @@ namespace signals
 
                     struct At_Init
                     {
-                        At_Init()
+                        constexpr At_Init()
                         {
                             eventCheckFuncs.push_back(&check);
                             signalClearFuncs.push_back(&clear);
@@ -218,13 +263,18 @@ namespace signals
             public:
                 using ID = utils::ID<SignalListener<Op, Signals...>>;
                 static constexpr typename ID::Container& all = ID::container;
-                SignalListener(const Signals... sigs)
+                constexpr SignalListener(const Signals... sigs)
                     : Op<Signals...>(sigs...)
                 {
                     initialize();
                 }
+                constexpr SignalListener(Op<Signals...> op)
+                    : Op<Signals...>(op)
+                {
+                    initialize();
+                }
 
-                constexpr const Op<Signals...>* operator->() const
+                constexpr Op<Signals...>* operator->() const
                 {
                     this;
                 }
@@ -247,7 +297,7 @@ namespace signals
                 template<template<typename...> typename O, typename... S>
                     struct At_Init
                     {
-                        At_Init()
+                        constexpr At_Init()
                         {
                             signalClearFuncs.push_back(&SignalListener<O, S...>::clear);
                         }
@@ -255,39 +305,45 @@ namespace signals
         };
 
     template<typename Event>
-        utils::ID<EventListener<Event>> ifEvent(const Event pEvent)
+        constexpr const utils::ID<EventListener<Event>> ifEvent(const Event pEvent)
         {
             return utils::makeID(EventListener<Event>(pEvent));
         }
 
     template<typename... Signals>
-        SignalListener<And, Signals...> ifAll(const Signals... sigs)
+        constexpr const SignalListener<And, Signals...> ifAll(const Signals... sigs)
         {
             return SignalListener<And, Signals...>(sigs...);
         }
 
     template<typename... Signals>
-        SignalListener<Or, Signals...> ifAny(const Signals... sigs)
+        constexpr const SignalListener<Or, Signals...> ifAny(const Signals... sigs)
         {
             return SignalListener<Or, Signals...>(sigs...);
         }
 
     template<typename... Signals>
-        SignalListener<Xor, Signals...> ifNotEqual(const Signals... sigs)
+        constexpr const SignalListener<Xor, Signals...> ifNotEqual(const Signals... sigs)
         {
             return SignalListener<Xor, Signals...>(sigs...);
         }
 
     template<typename... Signals>
-        SignalListener<Nor, Signals...> ifNone(const Signals... sigs)
+        constexpr const SignalListener<Nor, Signals...> ifNone(const Signals... sigs)
         {
             return SignalListener<Nor, Signals...>(sigs...);
         }
 
     template<typename... Signals>
-        SignalListener<Equal, Signals...> ifEqual(const Signals... sigs)
+        constexpr const SignalListener<Equal, Signals...> ifEqual(const Signals... sigs)
         {
             return SignalListener<Equal, Signals...>(sigs...);
+        }
+
+    template<typename Set, typename Reset>
+        constexpr const SignalListener<Flip, Set, Reset> flip(const Set set, const Reset reset, bool startAs = false)
+        {
+            return SignalListener<Flip, Set, Reset>(Flip<Set, Reset>(set, reset, startAs));
         }
 
     struct Listener
@@ -332,18 +388,18 @@ namespace signals
         }
 
     template<typename Event>
-        utils::ID<Listener> listen(const utils::ID<EventListener<Event>> pEvent)
+        const utils::ID<Listener> listen(const utils::ID<EventListener<Event>> pEvent)
         {
             return utils::makeID(Listener(pEvent));
         }
     template<typename Event>
-        utils::ID<Listener> listen(const Event pEvent)
+        const utils::ID<Listener> listen(const Event pEvent)
         {
             return listen(utils::makeID(EventListener<Event>(pEvent)));
         }
 
     template<template<typename...> typename Op, typename... Signals>
-        utils::ID<Listener> listen(const SignalListener<Op, Signals...> pSignal)
+        const utils::ID<Listener> listen(SignalListener<Op, Signals...> pSignal)
         {
             return utils::makeID(Listener(utils::makeID(pSignal)));
         }
