@@ -19,6 +19,7 @@ namespace utils
     template<typename T>
         struct ID
         {
+            using Preset = T;
             using Type = ID_Type<T>;
             using Container = ID_Container<Type>;
             using size_type = typename Container::size_type;

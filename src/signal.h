@@ -2,6 +2,7 @@
 #include "utils/id.h"
 #include "utils/id.h"
 #include "functor.h"
+#include "event.h"
 #include <tuple>
 
 namespace signals
@@ -28,6 +29,11 @@ namespace signals
                     {
                         return stat_n(utils::_index<sizeof...(Signals) - 1>());
                     }
+
+                    constexpr const And* operator->() const
+                    {
+                        this;
+                    }
                 private:
                     const std::tuple<const Signals...> signals;
             };
@@ -52,6 +58,10 @@ namespace signals
                     constexpr bool stat() const
                     {
                         return stat_n(utils::_index<sizeof...(Signals) - 1>());
+                    }
+                    constexpr const Or* operator->() const
+                    {
+                        this;
                     }
                 private:
                     const std::tuple<const Signals...> signals;
@@ -80,6 +90,10 @@ namespace signals
                     {
                         return stat_n(utils::_index<sizeof...(Signals) - 1>());
                     }
+                    constexpr const Xor* operator->() const
+                    {
+                        this;
+                    }
                 private:
                     const std::tuple<const Signals...> signals;
             };
@@ -106,6 +120,10 @@ namespace signals
                         return stat_n(utils::_index<sizeof...(Signals) - 1>());
                     }
 
+                    constexpr const Nor* operator->() const
+                    {
+                        this;
+                    }
                 private:
                     const std::tuple<const Signals...> signals;
             };
@@ -131,131 +149,15 @@ namespace signals
                     {
                         return stat_n(utils::_index<sizeof...(Signals) - 1>());
                     }
+                    constexpr const Equal* operator->() const
+                    {
+                        this;
+                    }
                 private:
                     const std::tuple<const Signals...> signals;
             };
 
 
-        struct Signal
-        {
-            Signal(bool s)
-                : status(s)
-            {}
-
-            void set(bool s)
-            {
-                status = s;
-            }
-
-            constexpr bool stat() const
-            {
-                return status;
-            }
-            private:
-            bool status;
-        };
-
-        template<typename Set, typename Reset>
-            struct Flip
-            {
-                Flip(const Set pA, const Reset pB, bool startAs = false)
-                    : set(pA)
-                    , reset(pB)
-                    , on(utils::makeID(Signal(startAs)))
-                    , off(utils::makeID(Signal(!startAs)))
-                {}
-                constexpr bool stat() const
-                {
-                    Signal& s_on = *on;
-                    Signal& s_off = *off;
-                    s_on.set(!(reset.stat() || s_off.stat()));
-                    s_off.set(!(set.stat() || s_on.stat()));
-                    return s_on.stat();
-                }
-                private:
-                const utils::ID<Signal> on;
-                const utils::ID<Signal> off;
-                const Set set;
-                const Reset reset;
-            };
-
-
-        extern std::vector<void(*)()> signalClearFuncs;
-        extern std::vector<void(*)()> eventCheckFuncs;
-        extern std::vector<void(*)()> eventInstanceClearFuncs;
-
-        template<typename Event>
-            class EventListener
-            {
-                public:
-                    using ID = utils::ID<EventListener<Event>>;
-                    static constexpr typename ID::Container& all = ID::container;
-                    constexpr EventListener(const Event pSignature)
-                        : signature(pSignature)
-                        , occurred(false)
-                    {
-                        initialize();
-                    }
-
-                    static void pushEvent(const Event& pEvent)
-                    {
-                        eventBuffer.emplace_back(pEvent);
-                    }
-
-                    bool stat() const
-                    {
-                        return occurred;
-                    }
-
-                    static bool stat(size_t i)
-                    {
-                        return all[i].stat();
-                    }
-                    static void clear()
-                    {
-                        all.clear();
-                    }
-
-                    const EventListener* operator->() const
-                    {
-                        this;
-                    }
-
-                    const Event signature;
-                    bool occurred = false;
-
-                private:
-                    static std::vector<Event> eventBuffer;
-                    static void check()
-                    {
-                        for (EventListener<Event>& instance : all) {
-                            instance.occurred = false;
-                            for (const Event& event : EventListener<Event>::eventBuffer) {
-                                if(instance.signature == event) {
-                                    instance.occurred = true;
-                                    break;
-                                }
-                            }
-                        }
-                        eventBuffer.clear();
-                    }
-                    static void initialize()
-                    {
-                        static At_Init init;
-                    }
-
-                    struct At_Init
-                    {
-                        constexpr At_Init()
-                        {
-                            eventCheckFuncs.push_back(&check);
-                            signalClearFuncs.push_back(&clear);
-                        }
-                    };
-            };
-
-        template<typename Event>
-            std::vector<Event> EventListener<Event>::eventBuffer = std::vector<Event>();
 
         template<template<typename...> typename Op, typename... Signals>
             class SignalListener : public Op<Signals...>
@@ -304,11 +206,6 @@ namespace signals
                     };
         };
 
-    template<typename Event>
-        constexpr const utils::ID<EventListener<Event>> ifEvent(const Event pEvent)
-        {
-            return utils::makeID(EventListener<Event>(pEvent));
-        }
 
     template<typename... Signals>
         constexpr const SignalListener<And, Signals...> ifAll(const Signals... sigs)
@@ -340,10 +237,77 @@ namespace signals
             return SignalListener<Equal, Signals...>(sigs...);
         }
 
-    template<typename Set, typename Reset>
-        constexpr const SignalListener<Flip, Set, Reset> flip(const Set set, const Reset reset, bool startAs = false)
+        struct Signal
         {
-            return SignalListener<Flip, Set, Reset>(Flip<Set, Reset>(set, reset, startAs));
+            Signal(bool s = false)
+                : status(s)
+            {}
+
+            constexpr void set(bool s)
+            {
+                status = s;
+            }
+
+            constexpr bool stat() const
+            {
+                return status;
+            }
+            constexpr const Signal* operator->() const
+            {
+                this;
+            }
+            private:
+            bool status;
+        };
+
+        template<typename Set, typename Reset>
+            struct Flip
+            {
+                Flip(const Set pA, const Reset pB, bool startAs = false)
+                    : set(std::forward<const Set>(pA))
+                    , reset(std::forward<const Reset>(pB))
+                    , on(utils::makeID(Signal(startAs)))
+                    , off(utils::makeID(Signal(!startAs)))
+                {}
+                constexpr bool stat() const
+                {
+                    if (set->stat() && reset->stat())
+                        return on->stat();
+                    off->set(!(on->stat() || set->stat()));
+                    on->set(!(off->stat() || reset->stat()));
+                    return on->stat();
+                }
+                constexpr const Set ifSet() const
+                {
+                    return set;
+                }
+                constexpr const Reset ifReset() const
+                {
+                    return reset;
+                }
+                constexpr const auto ifOn() const
+                {
+                    return ifAll(on);
+                }
+                constexpr auto ifOff() const
+                {
+                    return ifAll(off);
+                }
+                constexpr const Flip* operator->() const
+                {
+                    this;
+                }
+                private:
+                const utils::ID<Signal> on;
+                const utils::ID<Signal> off;
+                const Set set;
+                const Reset reset;
+            };
+
+    template<typename Set, typename Reset>
+        constexpr const SignalListener<Flip, Set, Reset> flip(Set&& set, Reset&& reset, bool startAs = false)
+        {
+            return SignalListener<Flip, Set, Reset>(Flip<Set, Reset>(std::forward<Set>(set), std::forward<Reset>(reset), startAs));
         }
 
     struct Listener
@@ -351,9 +315,9 @@ namespace signals
         using ID = utils::ID<Listener>;
         constexpr static typename ID::Container& all = ID::container;
 
-        template<typename Event>
-            Listener(const utils::ID<EventListener<Event>> pListener)
-            : stater(EventListener<Event>::stat)
+        template<typename E>
+            Listener(const utils::ID<EventListener<E>> pListener)
+            : stater(EventListener<E>::stat)
             , index(pListener.index)
         {}
         template<template<typename...> typename Op, typename... Signals>
@@ -381,21 +345,15 @@ namespace signals
         private:
     };
 
-    template<typename Event>
-        void pushEvent(const Event&& pEvent)
-        {
-            EventListener<Event>::pushEvent(pEvent);
-        }
-
-    template<typename Event>
-        const utils::ID<Listener> listen(const utils::ID<EventListener<Event>> pEvent)
+    template<typename E>
+        const utils::ID<Listener> listen(const utils::ID<EventListener<E>> pEvent)
         {
             return utils::makeID(Listener(pEvent));
         }
-    template<typename Event>
-        const utils::ID<Listener> listen(const Event pEvent)
+    template<typename E>
+        const utils::ID<Listener> listen(const E pEvent)
         {
-            return listen(utils::makeID(EventListener<Event>(pEvent)));
+            return listen(utils::makeID(EventListener<E>(pEvent)));
         }
 
     template<template<typename...> typename Op, typename... Signals>
@@ -433,5 +391,85 @@ namespace signals
         }
     void checkEvents();
     void clearSignals();
+
+    template<typename... Ts>
+    struct ButtonSignals
+    {
+        constexpr ButtonSignals(Ts... os)
+            : elements(os...)
+        {}
+        constexpr ButtonSignals(const std::tuple<Ts...> os)
+            : elements(os)
+        {}
+        template<size_t... Ns>
+            constexpr const auto gen_event(bool state, std::index_sequence<Ns...>) const
+            {
+                return ifAll(ifAny(std::get<Ns>(elements).event(state)...), ifNone(std::get<Ns>(elements).event(!state)...));
+            }
+        constexpr const auto event(bool state) const
+        {
+            return gen_event(state, std::make_index_sequence<sizeof...(Ts)>());
+        }
+
+        constexpr auto on() const
+        {
+            return event(true);
+        }
+        constexpr auto off() const
+        {
+            return event(false);
+        }
+
+        constexpr auto hold() const
+        {
+            return signals::flip(event(true), event(false));
+        }
+
+        constexpr auto enter() const { return on(); }
+        constexpr auto leave() const { return off(); }
+        constexpr auto down() const { return on(); }
+        constexpr auto up() const { return off(); }
+        constexpr auto press() const { return on(); }
+        constexpr auto release() const { return off(); }
+        constexpr auto hover() const { return hold(); }
+
+        protected:
+        const std::tuple<Ts...> elements;
+    };
+    template<typename T>
+    struct ButtonSignals<T>
+    {
+        constexpr ButtonSignals(T e)
+            : elem(e)
+        {}
+        constexpr auto event(bool state) const
+        {
+            return ifEvent(Event<T, bool>(elem, state));
+        }
+        constexpr auto on() const
+        {
+            return event(true);
+        }
+        constexpr auto off() const
+        {
+            return event(false);
+        }
+
+        constexpr auto hold() const
+        {
+            return signals::flip(event(true), event(false));
+        }
+
+        constexpr auto enter() const { return on(); }
+        constexpr auto leave() const { return off(); }
+        constexpr auto down() const { return on(); }
+        constexpr auto up() const { return off(); }
+        constexpr auto press() const { return on(); }
+        constexpr auto release() const { return off(); }
+        constexpr auto hover() const { return hold(); }
+
+        protected:
+        const T elem;
+    };
 }
 
