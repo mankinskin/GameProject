@@ -66,17 +66,29 @@ void gui::initWidgets()
 
     auto enter_button = listen(play_button->event(true));
     auto leave_button = listen(play_button->event(false));
+    auto hover_button = listen(play_button->hold());
+    auto click_button = listen(ifAll(play_button->hover(), Mouse::lmb.down()));
+    auto release_button = listen(ifAny(play_button->leave(), ifAll(play_button->hover(), Mouse::lmb.up())));
 
-    auto func_highlight_on = functor(colorQuad, std::get<0>(play_button->elements).quad, gl::getColor("yellow"));
-    auto func_highlight_off = functor(colorQuad, std::get<0>(play_button->elements).quad, std::get<0>(play_button->elements).color);
+    auto func_highlight_on = functor(colorQuad, std::get<0>(play_button->elements).elem, gl::getColor("yellow"));
+    auto func_highlight_off = functor(colorQuad, std::get<0>(play_button->elements).elem, std::get<0>(play_button->elements).color);
     link(enter_button, func_highlight_on);
     link(leave_button, func_highlight_off);
+
+    auto func_highlight2_on = functor(colorQuad, std::get<1>(play_button->elements).elem, gl::getColor("red"));
+    auto func_highlight2_off = functor(colorQuad, std::get<1>(play_button->elements).elem, std::get<1>(play_button->elements).color);
+    link(click_button, func_highlight2_on);
+    link(release_button, func_highlight2_off);
+
+    //auto func_move_on = functor(moveWidget, play_button, input::relativeMouseDelta);
+    //auto func_move_off = functor(colorQuad, std::get<0>(play_button->elements).quad, std::get<0>(play_button->elements).color);
+    //link(enter_button, func_highlight_on);
+    //link(leave_button, func_highlight_off);
 
     play_button->move(glm::vec2(0.5f, 0.5f));
     quit_button->move(glm::vec2(-0.5f, -0.5f));
     std::get<1>(button_list->elements).move(glm::vec2(0.0f, button_height));
     button_list->move(glm::vec2(-0.5f, 0.0f));
-
 
     //gate<and_op, decltype(play_button_signals.hold_evt), decltype(lmb.on_evt)> play_press_evt(and_op(),
     //        play_button_signals.hold_evt, lmb.on_evt);

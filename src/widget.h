@@ -12,6 +12,8 @@
 #include "utils/tuple_utils.h"
 #include "signal.h"
 #include "functor.h"
+#include "mouse.h"
+#include "event.h"
 
 
 //-----Widgets
@@ -25,59 +27,14 @@
 
 namespace gui
 {
-    template<typename Color>
-    struct QuadWidget
-    {
-        public:
-            using SignalType = utils::ID<signals::EventListener<QuadEvent>>;
-
-            struct Preset
-            {
-                Preset(Quad q, Color c)
-                    : quad(q)
-                    , color(c)
-                {}
-                Quad quad;
-                Color color;
-            };
-
-            QuadID quad;
-            Color color;
-
-            QuadWidget(Preset preset)
-                : quad(utils::makeID(preset.quad))
-                , color(preset.color)
-            {
-                colorQuad(quad, color);
-            }
-
-            const SignalType event(bool enter) const
-            {
-                return signals::ifEvent(QuadEvent(quad, enter));
-            }
-
-            void move(const glm::vec2 v) const
-            {
-                quad->move(v);
-            }
-
-            void resize(const glm::vec2 v) const
-            {
-                quad->resize(v);
-            }
-    };
 
     template<typename... Elems>
-        struct Widget
+        struct Widget : public signals::ButtonSignals<Elems...>
         {
             public:
-                using SignalType = signals::SignalListener<signals::And,
-                      signals::SignalListener<signals::Or, typename Elems::SignalType...>,
-                      signals::SignalListener<signals::Nor, typename Elems::SignalType...>>;
                 constexpr static const size_t COUNT = sizeof...(Elems);
                 using SubPresets = std::tuple<typename Elems::Preset...>;
 
-                using Elements = std::tuple<Elems...>;
                 using MovePolicy = std::array<glm::vec2, COUNT>;
                 using ResizePolicy = std::array<glm::vec4, COUNT>;
 
@@ -92,25 +49,17 @@ namespace gui
                     const MovePolicy movepolicy;
                     const ResizePolicy resizepolicy;
                 };
-                const Elements elements;
                 const MovePolicy movepolicy;
                 const ResizePolicy resizepolicy;
 
                 Widget(Preset preset)
-                    : elements(utils::convert_tuple<Elems...>(preset.subpresets))
+                    : signals::ButtonSignals<Elems...>(utils::convert_tuple<Elems...>(preset.subpresets))
                     , movepolicy(preset.movepolicy)
                     , resizepolicy(preset.resizepolicy)
                 {}
 
-                template<size_t... Ns>
-                    const SignalType gen_event(bool enter, std::index_sequence<Ns...>) const
-                    {
-                        return ifAll(ifAny(std::get<Ns>(elements).event(enter)...), ifNone(std::get<Ns>(elements).event(!enter)...));
-                    }
-                constexpr const SignalType event(bool enter) const
-                {
-                    return gen_event(enter, std::make_index_sequence<sizeof...(Elems)>());
-                }
+
+                using signals::ButtonSignals<Elems...>::elements;
 
                 void move_n(utils::_index<0> i, const glm::vec2 v) const
                 {}
@@ -138,27 +87,63 @@ namespace gui
                 {
                     resize_n(utils::_index<COUNT>(), v);
                 }
-                template<size_t N>
-                    constexpr auto getElement() const
-                    {
-                        return std::get<N>(elements);
-                    }
         };
 
-    //template<size_t COUNT>
-    //    void moveWidget(Widget<COUNT> pWidget, glm::vec2& pV)
-    //    {
-    //        pWidget.move(pV);
-    //    }
-    //template<size_t COUNT>
-    //    void resizeWidget(Widget<COUNT> pWidget, glm::vec2& pV)
-    //    {
-    //        pWidget.resize(pV);
-    //    }
-    //template<size_t COUNT>
-    //    void colorWidget(Widget<COUNT> pWidget,
-    //            typename Widget<COUNT>::Colors& pColors)
-    //    {
-    //        //pWidget.color(pColors);
-    //    }
+
+    template<typename Elem>
+    struct Widget<Elem> : public signals::ButtonSignals<Elem>
+    {
+        public:
+            using Preset = typename Elem::Preset;
+
+            Widget(Preset preset)
+                : signals::ButtonSignals<QuadID>(utils::makeID(preset))
+            {}
+            using signals::ButtonSignals<QuadID>::elem;
+            void move(const glm::vec2 v) const
+            {
+                elem->move(v);
+            }
+
+            void resize(const glm::vec2 v) const
+            {
+                elem->resize(v);
+            }
+    };
+
+    template<typename Color>
+    struct QuadWidget : public Widget<QuadID>
+    {
+        public:
+            struct Preset
+            {
+                Preset(typename Widget<QuadID>::Preset q, Color c)
+                    : quad(q)
+                    , color(c)
+                {}
+                typename Widget<QuadID>::Preset quad;
+                Color color;
+            };
+
+            Color color;
+
+            QuadWidget(Preset preset)
+                : Widget<QuadID>(preset.quad)
+                , color(preset.color)
+            {
+                colorQuad(elem, color);
+            }
+    };
+
+    template<typename... Elems>
+        void moveWidget(Widget<Elems...> pWidget, glm::vec2& pV)
+        {
+            pWidget.move(pV);
+        }
+
+    template<typename... Elems>
+        void resizeWidget(Widget<Elems...> pWidget, glm::vec2& pV)
+        {
+            pWidget.resize(pV);
+        }
 }
