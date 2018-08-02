@@ -3,25 +3,23 @@
 #include <glew.h>
 #include <glfw3.h>
 #include <glm.hpp>
+#include "signal.h"
 #include "quad.h"
+#include "event.h"
 
 namespace input
 {
-    struct MouseKeyEvent    // signals thrown when a mouse key changes
+    typedef int MouseKey;
+
+    namespace Mouse
     {
-        MouseKeyEvent()
-            :key(-1)
-        {}
-        MouseKeyEvent(int pKey, int pAction)
-            :key(pKey), change(pAction)
-        {}
-        int key;
-        int change;
+        const MouseKey button_left = 0;
+        const MouseKey button_right = 1;
+        const MouseKey button_middle = 2;
+        const signals::ButtonSignals<MouseKey> lmb = signals::ButtonSignals<MouseKey>(button_left);
+        const signals::ButtonSignals<MouseKey> rmb = signals::ButtonSignals<MouseKey>(button_right);
+        const signals::ButtonSignals<MouseKey> mmb = signals::ButtonSignals<MouseKey>(button_middle);
     };
-    inline bool operator==(MouseKeyEvent const & l, MouseKeyEvent const& r)
-    {
-        return l.key == r.key && l.change == r.change;
-    }
 
     extern glm::vec2 relativeCursorPosition;
     extern glm::uvec2 absoluteCursorPosition;

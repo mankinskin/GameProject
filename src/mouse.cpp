@@ -3,7 +3,6 @@
 #include "contextwindow.h"
 #include "gl.h"
 #include "viewport.h"
-#include "signal.h"
 #include <algorithm>
 #include <array>
 
@@ -12,7 +11,7 @@ glm::vec2 input::relativeCursorPosition;
 glm::uvec2 input::absoluteCursorPosition;
 glm::vec2 input::cursorFrameDelta;
 
-std::array<int, 3> mouseKeys;
+std::array<bool, 3> mouseKeys;
 int scroll = 0;
 int disableCursor = 0;
 utils::ID<gui::Quad> hovered_quad = utils::INVALID_ID;
@@ -62,10 +61,10 @@ void input::toggleCursor()
 
 void input::getMouseKeyEvents()
 {
-    static std::array<int, 3> lastMouseKeys;
+    static std::array<bool, 3> lastMouseKeys;
     for (unsigned int c = 0; c < 3; ++c) {
         if (mouseKeys[c] != lastMouseKeys[c]) {//mouse key change event
-            pushEvent(MouseKeyEvent(c, mouseKeys[c]));
+            pushEvent(Event<MouseKey, bool>(c, mouseKeys[c]));
             lastMouseKeys[c] = mouseKeys[c];
         }
     }
@@ -78,10 +77,10 @@ void input::getCursorQuadEvents()
     //printf("Hovering quad %u\n", hovered_quad.index);
     if (hovered_quad != last_hovered_quad) {
         if (last_hovered_quad != utils::INVALID_ID) {
-            pushEvent(gui::QuadEvent(last_hovered_quad, 0));
+            pushEvent(Event<gui::QuadID, bool>(last_hovered_quad, 0));
         }
         if (hovered_quad != utils::INVALID_ID) {
-            pushEvent(gui::QuadEvent(hovered_quad, 1));
+            pushEvent(Event<gui::QuadID, bool>(hovered_quad, 1));
         }
     }
 }
@@ -89,7 +88,7 @@ void input::getCursorQuadEvents()
 void input::mouseKey_Callback(GLFWwindow * window, int pKey, int pAction, int pMods)
 {
     if (pKey < 3 && pKey >= 0) {
-        mouseKeys[pKey] = pAction;
+        mouseKeys[pKey] = (bool)pAction;
     }
 }
 

@@ -81,8 +81,6 @@ void input::setupControls()
     key_lshift = input::KeySignal(GLFW_KEY_LEFT_SHIFT);
     key_x = input::KeySignal(GLFW_KEY_X);
 
-    auto rmb_down = listen(MouseKeyEvent(GLFW_MOUSE_BUTTON_RIGHT, 1));
-    auto rmb_up = listen(MouseKeyEvent(GLFW_MOUSE_BUTTON_RIGHT, 0));
     {
         auto exit_func = functor(app::quit);
         auto toggle_cull_func = functor(mesh::toggleCullFace);
@@ -96,8 +94,8 @@ void input::setupControls()
         auto higher_cam_speed_func = functor(camera::setSpeed, camera::main_camera, 1.0f);
         auto normal_cam_speed_func = functor(camera::setSpeed, camera::main_camera, 0.3f);
 
-        link(ifAny(key_c.press, rmb_down, rmb_up), toggle_look_func);
-        link(ifAny(key_c.press, rmb_down, rmb_up), toggle_cursor_func);
+        link(ifAny(key_c.press, Mouse::rmb.down(), Mouse::rmb.up()), toggle_look_func);
+        link(ifAny(key_c.press, Mouse::rmb.down(), Mouse::rmb.up()), toggle_cursor_func);
         link(key_esc.press, exit_func);
         link(key_g.press, toggle_grid_func);
         link(key_h.press, toggle_coord_func);

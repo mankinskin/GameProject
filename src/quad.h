@@ -21,20 +21,6 @@ namespace gui
         void resize(const glm::vec2 v);
     };
 
-    struct QuadEvent
-    {
-        QuadEvent(const utils::ID<Quad> pQuad, int pEnter)
-            :quad(pQuad), enter(pEnter)
-        {}
-        const utils::ID<Quad> quad;
-        int enter;
-    };
-
-    inline bool operator==(const QuadEvent& l, const QuadEvent& r)
-    {
-        return l.quad == r.quad && l.enter == r.enter;
-    }
-
     typedef utils::ID<Quad> QuadID;
 
 
