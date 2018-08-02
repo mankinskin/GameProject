@@ -17,7 +17,7 @@ OBJ_FILES=$(SRC_FILES:cpp=o)
 OBJ_TARGETS=$(patsubst %, build/%, $(OBJ_FILES))
 H_FILES=$(shell ls src | grep -e '\.h')
 
-all: build tags $(OBJ_TARGETS) 
+all: build tags $(OBJ_TARGETS) tests
 	$(GCC) -o main $(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_GLFW) $(INCLUDE_SOIL) $(OBJ_TARGETS) $(INCLUDE_LIB_PATHS) $(INCLUDE_LIBS)
 
 build/%.o: src/%.cpp 
@@ -39,4 +39,7 @@ fresh: clean all
 
 freshrun: fresh run
 
-.PHONY: clean fresh tags all
+tests:
+	make run -C tests
+
+.PHONY: clean fresh tags all tests

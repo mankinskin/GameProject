@@ -3,6 +3,7 @@
 #include <tuple>
 #include <utility>
 #include "functor.h"
+#include "tester.h"
 
 void func_void_void()
 {
@@ -59,5 +60,6 @@ int main()
     const std::string& conststrref("constrstrref");
     auto f5 = functor(func_void_conststrref, conststrref);
     f5->invoke();
+    Tester::pass();
     return 0;
 }
