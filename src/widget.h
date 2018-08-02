@@ -97,9 +97,9 @@ namespace gui
             using Preset = typename Elem::Preset;
 
             Widget(Preset preset)
-                : signals::ButtonSignals<QuadID>(utils::makeID(preset))
+                : signals::ButtonSignals<Elem>(utils::makeID(preset))
             {}
-            using signals::ButtonSignals<QuadID>::elem;
+            using signals::ButtonSignals<Elem>::elem;
             void move(const glm::vec2 v) const
             {
                 elem->move(v);
