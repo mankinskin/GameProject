@@ -71,7 +71,7 @@ void gui::initWidgets()
 {
     using namespace signals;
     using namespace input;
-    Button::Preset buttonPreset(70, 20, 2, 2, gl::getColor("black"), gl::getColor("white"));
+    Button::Preset buttonPreset(70, 20, 2, 2, gl::getColor("grey"), gl::getColor("black"));
     utils::ID<Button> play_button = utils::makeID(Button(buttonPreset));
     utils::ID<Button> quit_button = utils::makeID(Button(buttonPreset));
 
