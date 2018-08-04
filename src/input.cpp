@@ -85,14 +85,14 @@ void input::setupControls()
         auto exit_func = functor(app::quit);
         auto toggle_cull_func = functor(mesh::toggleCullFace);
         auto toggle_cursor_func = functor(input::toggleCursor);
-        auto toggle_look_func = functor(camera::toggleLook, camera::main_camera);
+        auto toggle_look_func = functor<void(camera::Camera&), camera::Camera&>(camera::toggleLook, camera::main_camera);
         auto toggle_grid_func = functor(glDebug::toggleGrid);
         auto toggle_coord_func = functor(glDebug::toggleCoord);
         auto toggle_info_func = functor(debug::togglePrintInfo);
         auto toggle_normals_func = functor(mesh::toggleNormals);
-        auto cycle_cam_modes_func = functor(camera::cycleModes, camera::main_camera);
-        auto higher_cam_speed_func = functor(camera::setSpeed, camera::main_camera, 1.0f);
-        auto normal_cam_speed_func = functor(camera::setSpeed, camera::main_camera, 0.3f);
+        auto cycle_cam_modes_func = functor<void(camera::Camera&), camera::Camera&>(camera::cycleModes, camera::main_camera);
+        auto higher_cam_speed_func = functor<void(camera::Camera&, float), camera::Camera&, float>(camera::setSpeed, camera::main_camera, 1.0f);
+        auto normal_cam_speed_func = functor<void(camera::Camera&, float), camera::Camera&, float>(camera::setSpeed, camera::main_camera, 0.3f);
 
         link(ifAny(key_c.press, Mouse::rmb.down(), Mouse::rmb.up()), toggle_look_func);
         link(ifAny(key_c.press, Mouse::rmb.down(), Mouse::rmb.up()), toggle_cursor_func);
@@ -107,12 +107,12 @@ void input::setupControls()
     }
 
     {//camera
-        auto forward_func = functor(camera::forward, camera::main_camera);
-        auto backward_func = functor(camera::back, camera::main_camera);
-        auto left_func = functor(camera::left, camera::main_camera);
-        auto right_func = functor(camera::right, camera::main_camera);
-        auto up_func = functor(camera::up, camera::main_camera);
-        auto down_func = functor(camera::down, camera::main_camera);
+        auto forward_func = functor<void(camera::Camera&), camera::Camera&>(camera::forward, camera::main_camera);
+        auto backward_func = functor<void(camera::Camera&), camera::Camera&>(camera::back, camera::main_camera);
+        auto left_func = functor<void(camera::Camera&), camera::Camera&>(camera::left, camera::main_camera);
+        auto right_func = functor<void(camera::Camera&), camera::Camera&>(camera::right, camera::main_camera);
+        auto up_func = functor<void(camera::Camera&), camera::Camera&>(camera::up, camera::main_camera);
+        auto down_func = functor<void(camera::Camera&), camera::Camera&>(camera::down, camera::main_camera);
 
         puts("Camera control");
         link(key_w.press, forward_func);

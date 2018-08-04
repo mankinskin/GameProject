@@ -17,7 +17,7 @@ namespace signals
                     constexpr static typename ID::Container& all = ID::container;
 
                     constexpr Functor(F&& pF, Args&&... pArgs) noexcept
-                        : func(std::forward<F>(pF))
+                        : func(std::forward<F&>(pF))
                         , args(std::forward<Args>(pArgs)...)
                 {
                     initialize();
@@ -44,8 +44,8 @@ namespace signals
                     }
 
                 private:
-                    const F func;
-                    const std::tuple<Args...> args;
+                    const F& func;
+                    std::tuple<Args...> args;
                     struct At_Init
                     {
                         At_Init()
@@ -137,7 +137,7 @@ namespace signals
 
     // allocates a functor and returns an ID for it
     template<typename F, typename... Args>
-        constexpr utils::ID<Functor<F, Args...>> functor(F&& pF, Args&&... pArgs)
+        constexpr utils::ID<Functor<F, Args...>> functor(F&& pF, Args... pArgs)
         {
             return utils::makeID(Functor<F, Args...>(std::forward<F>(pF), std::forward<Args>(pArgs)...));
         }
