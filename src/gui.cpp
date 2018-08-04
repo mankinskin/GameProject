@@ -64,11 +64,11 @@ void gui::initWidgets()
 
     utils::ID<ButtonList> button_list = utils::makeID(ButtonList(buttonlist_preset));
 
-    auto enter_button = listen(play_button->event(true));
-    auto leave_button = listen(play_button->event(false));
-    auto hover_button = listen(play_button->hold());
-    auto click_button = listen(ifAll(play_button->hover(), Mouse::lmb.down()));
-    auto release_button = listen(ifAny(play_button->leave(), ifAll(play_button->hover(), Mouse::lmb.up())));
+    auto enter_button = play_button->event(true);
+    auto leave_button = play_button->event(false);
+    auto hover_button = play_button->hold();
+    auto click_button = ifAll(play_button->hover(), Mouse::lmb.down());
+    auto release_button = ifAny(play_button->leave(), ifAll(play_button->hover(), Mouse::lmb.up()));
 
     auto func_highlight_on = functor(colorQuad, std::get<0>(play_button->elements).elem, gl::getColor("yellow"));
     auto func_highlight_off = functor(colorQuad, std::get<0>(play_button->elements).elem, std::get<0>(play_button->elements).color);

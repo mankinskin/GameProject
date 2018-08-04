@@ -32,7 +32,7 @@ namespace signals
 
                     constexpr const And* operator->() const
                     {
-                        this;
+                        return this;
                     }
                 private:
                     const std::tuple<const Signals...> signals;
@@ -61,7 +61,7 @@ namespace signals
                     }
                     constexpr const Or* operator->() const
                     {
-                        this;
+                        return this;
                     }
                 private:
                     const std::tuple<const Signals...> signals;
@@ -92,7 +92,7 @@ namespace signals
                     }
                     constexpr const Xor* operator->() const
                     {
-                        this;
+                        return this;
                     }
                 private:
                     const std::tuple<const Signals...> signals;
@@ -122,7 +122,7 @@ namespace signals
 
                     constexpr const Nor* operator->() const
                     {
-                        this;
+                        return this;
                     }
                 private:
                     const std::tuple<const Signals...> signals;
@@ -151,7 +151,7 @@ namespace signals
                     }
                     constexpr const Equal* operator->() const
                     {
-                        this;
+                        return this;
                     }
                 private:
                     const std::tuple<const Signals...> signals;
@@ -178,7 +178,7 @@ namespace signals
 
                 constexpr Op<Signals...>* operator->() const
                 {
-                    this;
+                    return (Op<Signals...>*)(this);
                 }
 
                 static bool stat(size_t i)
@@ -254,7 +254,7 @@ namespace signals
             }
             constexpr const Signal* operator->() const
             {
-                this;
+                return this;
             }
             private:
             bool status;
@@ -295,7 +295,7 @@ namespace signals
                 }
                 constexpr const Flip* operator->() const
                 {
-                    this;
+                    return this;
                 }
                 private:
                 const utils::ID<Signal> on;
@@ -337,7 +337,7 @@ namespace signals
 
         bool stat() const
         {
-            stater(index);
+            return stater(index);
         }
 
         bool(&stater)(const size_t);
