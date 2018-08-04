@@ -15,8 +15,9 @@
 #include "app.h"
 #include "light.h"
 #include "viewport.h"
+#include "layouts/button.h"
 
-glm::vec2 gui::pixel_size;
+static glm::vec2 pixel_size;
 
 using gl::Color;
 using gl::ColorID;
@@ -28,57 +29,52 @@ void gui::init()
             2.0f / gl::getHeight());
 }
 
+float gui::pixel_round_x(const float pIn)
+{
+    return pixel_size.x * round(pIn / pixel_size.x);
+}
+float gui::pixel_round_y(const float pIn)
+{
+    return pixel_size.y * round(pIn / pixel_size.y);
+}
+glm::vec2 gui::pixel_round(const glm::vec2 pIn)
+{
+    return pixel_size * round(pIn / pixel_size);
+}
+
+size_t gui::toPixelsX(const float screenX)
+{
+    return (size_t)round(screenX / pixel_size.x);
+}
+size_t gui::toPixelsY(const float screenY)
+{
+    return (size_t)round(screenY / pixel_size.y);
+}
+glm::uvec2 gui::toPixels(const glm::vec2 screen)
+{
+    return glm::uvec2(toPixelsX(screen.x), toPixelsY(screen.y));
+}
+float gui::toScreenX(const size_t pixelsX)
+{
+    return pixelsX * pixel_size.x;
+}
+float gui::toScreenY(const size_t pixelsY)
+{
+    return pixelsY * pixel_size.y;
+}
+glm::vec2 gui::toScreen(const glm::uvec2 pixels)
+{
+    return glm::vec2(toScreenX(pixels.x), toScreenY(pixels.y));
+}
+
 void gui::initWidgets()
 {
     using namespace signals;
     using namespace input;
+    Button::Preset buttonPreset(70, 20, 2, 2, gl::getColor("black"), gl::getColor("white"));
+    utils::ID<Button> play_button = utils::makeID(Button(buttonPreset));
+    utils::ID<Button> quit_button = utils::makeID(Button(buttonPreset));
 
-    using ColorQuad = QuadWidget<gl::ColorID>;
-    using Button = gui::Widget<ColorQuad, ColorQuad>;
-
-    float button_width = gui::pixel_size.x * 70.0f;
-    float button_height = gui::pixel_size.y * 20.0f;
-    glm::vec2 margin = gui::pixel_size * glm::vec2(2.0f, 2.0f);
-
-    Button::MovePolicy button_move_policy{
-            glm::vec2(1.0f, 1.0f),
-            glm::vec2(1.0f, 1.0f)};
-    Button::ResizePolicy button_resize_policy{
-            glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-            glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)};
-
-    Button::Preset button_preset{
-        {ColorQuad::Preset(glm::vec4(0.0f, 0.0f, button_width, button_height), gl::getColor("white")),
-            ColorQuad::Preset(glm::vec4(margin.x, -margin.y, button_width - margin.x*2.0f, button_height - margin.y*2.0f), gl::getColor("black")) },
-            button_move_policy, button_resize_policy};
-
-
-    using ButtonList = Widget<Button, Button>;
-
-    ButtonList::Preset buttonlist_preset({button_preset, button_preset},
-                button_move_policy, button_resize_policy);
-
-
-    utils::ID<Button> play_button = utils::makeID(Button(button_preset));
-    utils::ID<Button> quit_button = utils::makeID(Button(button_preset));
-
-    utils::ID<ButtonList> button_list = utils::makeID(ButtonList(buttonlist_preset));
-
-    auto enter_button = play_button->event(true);
-    auto leave_button = play_button->event(false);
-    auto hover_button = play_button->hold();
-    auto click_button = ifAll(play_button->hover(), Mouse::lmb.down());
-    auto release_button = ifAny(play_button->leave(), ifAll(play_button->hover(), Mouse::lmb.up()));
-
-    auto func_highlight_on = functor(colorQuad, std::get<0>(play_button->elements).elem, gl::getColor("yellow"));
-    auto func_highlight_off = functor(colorQuad, std::get<0>(play_button->elements).elem, std::get<0>(play_button->elements).color);
-    link(enter_button, func_highlight_on);
-    link(leave_button, func_highlight_off);
-
-    auto func_highlight2_on = functor(colorQuad, std::get<1>(play_button->elements).elem, gl::getColor("red"));
-    auto func_highlight2_off = functor(colorQuad, std::get<1>(play_button->elements).elem, std::get<1>(play_button->elements).color);
-    link(click_button, func_highlight2_on);
-    link(release_button, func_highlight2_off);
 
     //auto func_move_on = functor(moveWidget, play_button, input::relativeMouseDelta);
     //auto func_move_off = functor(colorQuad, std::get<0>(play_button->elements).quad, std::get<0>(play_button->elements).color);
@@ -87,8 +83,6 @@ void gui::initWidgets()
 
     play_button->move(glm::vec2(0.5f, 0.5f));
     quit_button->move(glm::vec2(-0.5f, -0.5f));
-    std::get<1>(button_list->elements).move(glm::vec2(0.0f, button_height));
-    button_list->move(glm::vec2(-0.5f, 0.0f));
 
     //gate<and_op, decltype(play_button_signals.hold_evt), decltype(lmb.on_evt)> play_press_evt(and_op(),
     //        play_button_signals.hold_evt, lmb.on_evt);
@@ -346,12 +340,3 @@ void gui::initWidgets()
     //gui::text::setTextboxString(fps_tb, "FPS");
 }
 
-glm::vec2 gui::pixel_round(glm::vec2 pIn) {
-    return pixel_size * round(pIn / pixel_size);
-}
-float gui::pixel_round_x(float pIn) {
-    return pixel_size.x * round(pIn / pixel_size.x);
-}
-float gui::pixel_round_y(float pIn) {
-    return pixel_size.y * round(pIn / pixel_size.y);
-}
