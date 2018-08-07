@@ -39,7 +39,9 @@ fresh: clean all
 
 freshrun: fresh run
 
-tests:
+tests: build_tests
 	make run -C tests
+build_tests:
+	make all -C tests
 
-.PHONY: clean fresh tags all tests
+.PHONY: clean fresh tags all tests build_tests

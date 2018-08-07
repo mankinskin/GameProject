@@ -3,6 +3,8 @@ INCLUDE=-I../src/
 
 tests: $(BUILDDIR)/functor $(BUILDDIR)/signal
 
+all: functor signal
+
 functor: $(BUILDDIR)
 	g++ -o $(BUILDDIR)/functor functor.cpp ../src/functor.cpp $(INCLUDE)
 
@@ -11,6 +13,7 @@ signal: $(BUILDDIR)
 
 $(BUILDDIR):
 	mkdir $(BUILDDIR)
+
 clean:
 	rm -rf $(BUILDDIR)
 
