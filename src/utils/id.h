@@ -25,13 +25,18 @@ namespace utils
             using size_type = typename Container::size_type;
             constexpr static Container& container = id_container<Type>;
 
-            ID()
-                :index(INVALID_ID)
+            constexpr ID()
+                : index(INVALID_ID)
             {}
 
-            ID( const size_t i )
-                :index( i )
+            constexpr ID(const size_t i)
+                : index(i)
             {}
+            constexpr ID(const T t)
+                : index(container.size())
+            {
+                container.push_back(t);
+            }
 
             size_type index;
 

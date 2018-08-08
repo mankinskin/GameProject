@@ -77,14 +77,6 @@ namespace gui
         SignalType offSignal;
     };
 
-    template<typename T>
-    struct WidgetSignals<T> : public signals::ButtonSignals<T, bool>
-    {
-        constexpr WidgetSignals(const std::tuple<T> o)
-            : signals::ButtonSignals<T, bool>(std::get<0>(o))
-        {}
-    };
-
     template<typename... Elems>
         struct WidgetElements : public WidgetSignals<Elems...>
         {
@@ -96,7 +88,7 @@ namespace gui
 
             struct Preset
             {
-                Preset(SubPresets qs, MovePolicy mp, ResizePolicy rp)
+                Preset(const SubPresets qs, const MovePolicy mp, const ResizePolicy rp)
                     : subpresets(qs)
                       , movepolicy(mp)
                       , resizepolicy(rp)
@@ -105,85 +97,66 @@ namespace gui
                 const MovePolicy movepolicy;
                 const ResizePolicy resizepolicy;
             };
-            WidgetElements(const std::tuple<Elems...> elems, const MovePolicy mov, const ResizePolicy res)
-                : WidgetSignals<Elems...>(elems)
-                , elements(elems)
-                , movepolicy(mov)
-                , resizepolicy(res)
+
+            struct Data
+            {
+                Data(const Preset preset)
+                    : elems(utils::convert_tuple<Elems...>(preset.subpresets))
+                      , movepolicy(preset.movepolicy)
+                      , resizepolicy(preset.resizepolicy)
+                {}
+                Data(const std::tuple<Elems...> qs, const MovePolicy mp, const ResizePolicy rp)
+                    : elems(qs)
+                      , movepolicy(mp)
+                      , resizepolicy(rp)
+                {}
+                const std::tuple<Elems...> elems;
+                const MovePolicy movepolicy;
+                const ResizePolicy resizepolicy;
+            };
+
+
+            WidgetElements(const Data data)
+                : WidgetSignals<Elems...>(data.elems)
+                , elements(data.elems)
+                , movepolicy(data.movepolicy)
+                , resizepolicy(data.resizepolicy)
             {}
             const std::tuple<Elems...> elements;
             const MovePolicy movepolicy;
             const ResizePolicy resizepolicy;
 
-                void move_n(utils::_index<0> i, const glm::vec2 v) const
-                {}
-                template<size_t N>
-                    void move_n(utils::_index<N> i, const glm::vec2 v) const
-                    {
-                        move_n(utils::_index<N-1>(), v);
-                        std::get<N-1>(elements).move(v * movepolicy[N-1]);
-                    }
-                void resize_n(utils::_index<0> i, const glm::vec2 v) const
-                {}
-                template<size_t N>
-                    void resize_n(utils::_index<N> i, const glm::vec2 v) const
-                    {
-                        resize_n(utils::_index<N-1>(), v);
-                        const glm::vec4& pol = resizepolicy[N-1];
-                        std::get<N-1>(elements).move(v * glm::vec2(pol.x, pol.y));
-                        std::get<N-1>(elements).resize(v * glm::vec2(pol.z, pol.w));
-                    }
-                void move(const glm::vec2 v) const
-                {
-                    move_n(utils::_index<COUNT>(), v);
-                }
-                void resize(const glm::vec2 v) const
-                {
-                    resize_n(utils::_index<COUNT>(), v);
-                }
-        };
-
-    template<typename Elem>
-    struct WidgetElements<Elem> : public WidgetSignals<Elem>
-    {
-        public:
-            using MovePolicy = std::array<glm::vec2, 1>;
-            using ResizePolicy = std::array<glm::vec4, 1>;
-
-            struct Preset
-            {
-                Preset(typename Elem::Preset qs, MovePolicy mp, ResizePolicy rp)
-                    : subpreset(qs)
-                      , movepolicy(mp)
-                      , resizepolicy(rp)
-                {}
-                const typename Elem::Preset subpreset;
-                const MovePolicy movepolicy;
-                const ResizePolicy resizepolicy;
-            };
-
-            WidgetElements(const Elem e, const MovePolicy mov, const ResizePolicy res)
-                : WidgetSignals<Elem>(e)
-                , elements(e)
-                , movepolicy(mov)
-                , resizepolicy(res)
+            void move_n(utils::_index<0> i, const glm::vec2 v) const
             {}
-            const std::tuple<Elem> elements;
-            const MovePolicy movepolicy;
-            const ResizePolicy resizepolicy;
+            template<size_t N>
+                void move_n(utils::_index<N> i, const glm::vec2 v) const
+                {
+                    move_n(utils::_index<N-1>(), v);
+                    std::get<N-1>(elements)->move(v * movepolicy[N-1]);
+                }
+            void resize_n(utils::_index<0> i, const glm::vec2 v) const
+            {}
+            template<size_t N>
+                void resize_n(utils::_index<N> i, const glm::vec2 v) const
+                {
+                    resize_n(utils::_index<N-1>(), v);
+                    const glm::vec4& pol = resizepolicy[N-1];
+                    std::get<N-1>(elements)->move(v * glm::vec2(pol.x, pol.y));
+                    std::get<N-1>(elements)->resize(v * glm::vec2(pol.z, pol.w));
+                }
             void move(const glm::vec2 v) const
             {
-                std::get<0>(elements)->move(v * movepolicy[0]);
+                move_n(utils::_index<COUNT>(), v);
             }
-
             void resize(const glm::vec2 v) const
             {
-                const glm::vec4& pol = resizepolicy[0];
-                std::get<0>(elements).move(v * glm::vec2(pol.x, pol.y));
-                std::get<0>(elements).resize(v * glm::vec2(pol.z, pol.w));
+                resize_n(utils::_index<COUNT>(), v);
             }
-    };
-
+            const WidgetElements<Elems...>* operator->() const
+            {
+                return this;
+            }
+        };
 
     template<typename... Colors>
         struct WidgetColors
@@ -197,7 +170,7 @@ namespace gui
             const std::tuple<Colors...> colors;
         };
 
-        void applyColor(const gl::ColorID col, const QuadID elem);
+        void applyColor(const gl::ColorID col, const QuadElement elem);
 
     template<typename... Colors, typename... Elems>
         void applyColor_n(const WidgetColors<Colors...> cols, const WidgetElements<Elems...> elem, utils::_index<0>)
@@ -214,28 +187,31 @@ namespace gui
             applyColor_n(cols, elem, utils::_index<sizeof...(Colors)>());
         }
 
-    template<typename... Elems>
-        struct Widget : public WidgetElements<Elems...>
+    template<typename Elem, typename Color>
+        struct Widget : public Elem, Color
         {
             public:
-                using Preset = typename WidgetElements<Elems...>::Preset;
+                using ElementPreset = typename Elem::Preset;
+                struct Preset
+                {
+                    Preset(const ElementPreset e, const Color c)
+                        : elem(e)
+                        , col(c)
+                    {}
+
+                    const ElementPreset elem;
+                    const Color col;
+                };
+                using Data = typename Elem::Data;
+                using Color::colors;
 
                 Widget(Preset preset)
-                    : WidgetElements<Elems...>(utils::convert_tuple<Elems...>(preset.subpresets), preset.movepolicy, preset.resizepolicy)
-                {}
+                    : Elem(Data(preset.elem))
+                    , Color(preset.col)
+                {
+                    applyColor((Color)*this, (Elem)*this);
+                }
         };
-
-
-    template<typename Elem>
-    struct Widget<Elem> : public WidgetElements<Elem>
-    {
-        public:
-            using Preset = typename WidgetElements<Elem>::Preset;
-
-            Widget(Preset preset)
-                : WidgetElements<Elem>(utils::makeID(preset.subpreset), preset.movepolicy, preset.resizepolicy)
-            {}
-    };
 
     template<typename... Elems>
         void moveWidget(Widget<Elems...> pWidget, glm::vec2& pV)

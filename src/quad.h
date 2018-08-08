@@ -6,6 +6,7 @@
 #include "utils/id.h"
 #include "storage.h"
 #include "color.h"
+#include "signal.h"
 
 namespace gui
 {
@@ -23,6 +24,13 @@ namespace gui
 
     typedef utils::ID<Quad> QuadID;
 
+    struct QuadElement : public utils::ID<Quad>, signals::ButtonSignals<utils::ID<Quad>>
+    {
+        QuadElement(const std::tuple<utils::ID<Quad>> id)
+            : utils::ID<Quad>(std::get<0>(id))
+            , signals::ButtonSignals<utils::ID<Quad>>(std::get<0>(id))
+        {}
+    };
 
     const unsigned int MAX_QUAD_COUNT = 10000;
     void setQuadPos(const utils::ID<Quad> q, const glm::vec2 p);
