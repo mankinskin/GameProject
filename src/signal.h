@@ -157,6 +157,56 @@ namespace signals
                     const std::tuple<const Signals...> signals;
             };
 
+        struct Signal
+        {
+            Signal(bool s = false)
+                : status(s)
+            {}
+
+            constexpr void set(bool s)
+            {
+                status = s;
+            }
+            constexpr bool stat() const
+            {
+                return status;
+            }
+            constexpr const Signal* operator->() const
+            {
+                return this;
+            }
+            private:
+            bool status;
+        };
+
+        template<typename Set, typename Reset>
+            struct Flip
+            {
+                Flip(const Set pA, const Reset pB, bool startAs = false)
+                    : set(pA)
+                    , reset(pB)
+                    , on(utils::makeID(Signal(startAs)))
+                    , off(utils::makeID(Signal(!startAs)))
+                {}
+                constexpr bool stat() const
+                {
+                    if (set->stat() && reset->stat())
+                        return on->stat();
+                    off->set(!(on->stat() || set->stat()));
+                    on->set(!(off->stat() || reset->stat()));
+                    return on->stat();
+                }
+                constexpr const Flip* operator->() const
+                {
+                    return this;
+                }
+                private:
+                const utils::ID<Signal> on;
+                const utils::ID<Signal> off;
+                const Set set;
+                const Reset reset;
+            };
+
 
 
         template<template<typename...> typename Op, typename... Signals>
@@ -170,7 +220,7 @@ namespace signals
                 {
                     initialize();
                 }
-                constexpr SignalListener(Op<Signals...> op)
+                constexpr SignalListener(const Op<Signals...> op)
                     : Op<Signals...>(op)
                 {
                     initialize();
@@ -237,77 +287,10 @@ namespace signals
             return SignalListener<Equal, Signals...>(sigs...);
         }
 
-        struct Signal
-        {
-            Signal(bool s = false)
-                : status(s)
-            {}
-
-            constexpr void set(bool s)
-            {
-                status = s;
-            }
-
-            constexpr bool stat() const
-            {
-                return status;
-            }
-            constexpr const Signal* operator->() const
-            {
-                return this;
-            }
-            private:
-            bool status;
-        };
-
-        template<typename Set, typename Reset>
-            struct Flip
-            {
-                Flip(const Set pA, const Reset pB, bool startAs = false)
-                    : set(std::forward<const Set>(pA))
-                    , reset(std::forward<const Reset>(pB))
-                    , on(utils::makeID(Signal(startAs)))
-                    , off(utils::makeID(Signal(!startAs)))
-                {}
-                constexpr bool stat() const
-                {
-                    if (set->stat() && reset->stat())
-                        return on->stat();
-                    off->set(!(on->stat() || set->stat()));
-                    on->set(!(off->stat() || reset->stat()));
-                    return on->stat();
-                }
-                constexpr const Set ifSet() const
-                {
-                    return set;
-                }
-                constexpr const Reset ifReset() const
-                {
-                    return reset;
-                }
-                constexpr const auto ifOn() const
-                {
-                    return ifAll(on);
-                }
-                constexpr auto ifOff() const
-                {
-                    return ifAll(off);
-                }
-                constexpr const Flip* operator->() const
-                {
-                    return this;
-                }
-                private:
-                const utils::ID<Signal> on;
-                const utils::ID<Signal> off;
-                const Set set;
-                const Reset reset;
-            };
-
     template<typename Set, typename Reset>
-        constexpr const SignalListener<Flip, Set, Reset> flip(Set&& set, Reset&& reset, bool startAs = false)
+        constexpr const SignalListener<Flip, Set, Reset> flip(const Set set, const Reset reset, bool startAs = false)
         {
-            return SignalListener<Flip, Set, Reset>(Flip<Set, Reset>(std::forward<Set>(set), std::forward<Reset>(reset), startAs));
+            return SignalListener<Flip, Set, Reset>(Flip<Set, Reset>(set, reset, startAs));
         }
 
     struct Listener
