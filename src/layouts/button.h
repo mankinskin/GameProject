@@ -5,27 +5,22 @@
 
 namespace gui
 {
-    using ColorQuad = QuadWidget<gl::ColorID>;
-
-    struct Button : public Widget<ColorQuad, ColorQuad>
+    struct Button : public Widget<Widget<QuadID>, Widget<QuadID>>
     {
-        using Widget = Widget<ColorQuad, ColorQuad>;
-        struct Preset : public Widget::Preset
+        using Wid = Widget<Widget<QuadID>, Widget<QuadID>>;
+        struct Preset : public Wid::Preset
         {
-            Preset(Widget::Preset preset)
-                : Widget::Preset(preset)
+            Preset(Wid::Preset preset)
+                : Wid::Preset(preset)
             {}
-            Preset(size_t pixWidth, size_t pixHeight, size_t pixMarginX, size_t pixMarginY,
-                    gl::ColorID outline, gl::ColorID fill)
-                : Widget::Preset({
-                        ColorQuad::Preset(
-                            glm::vec4(0.0f, 0.0f, toScreenX(pixWidth), toScreenY(pixHeight)),
-                            outline),
-                        ColorQuad::Preset(
+            Preset(size_t pixWidth, size_t pixHeight, size_t pixMarginX, size_t pixMarginY)
+                : Wid::Preset({
+                        Widget<QuadID>::Preset(
+                            glm::vec4(0.0f, 0.0f, toScreenX(pixWidth), toScreenY(pixHeight))),
+                        Widget<QuadID>::Preset(
                             glm::vec4(toScreenX(pixMarginX), -toScreenY(pixMarginY),
                                 toScreenX(pixWidth) - toScreenX(pixMarginX*2),
-                                toScreenY(pixHeight) - toScreenY(pixMarginY*2)),
-                            fill)},
+                                toScreenY(pixHeight) - toScreenY(pixMarginY*2)))},
                     {glm::vec2(1.0f, 1.0f),
                     glm::vec2(1.0f, 1.0f)},
                     {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
@@ -34,7 +29,7 @@ namespace gui
         };
 
         Button(Preset preset)
-            : Widget(preset)
+            : Wid(preset)
         {
             using namespace signals;
             using namespace input;
@@ -42,10 +37,10 @@ namespace gui
             auto release_button = ifAny(leave(), ifAll(hover(), Mouse::lmb.up()));
 
             link(enter(), functor(colorQuad, std::get<0>(std::get<0>(elements).elements), gl::getColor("yellow")));
-            link(leave(), functor(colorQuad, std::get<0>(std::get<0>(elements).elements), std::get<0>(elements).color));
+            //link(leave(), functor(colorQuad, std::get<0>(std::get<0>(elements).elements), std::get<0>(elements).color));
 
             link(click_button, functor(colorQuad, std::get<0>(std::get<1>(elements).elements), gl::getColor("red")));
-            link(release_button, functor(colorQuad, std::get<0>(std::get<1>(elements).elements), std::get<1>(elements).color));
+            //link(release_button, functor(colorQuad, std::get<0>(std::get<1>(elements).elements), std::get<1>(elements).color));
         }
     };
 }

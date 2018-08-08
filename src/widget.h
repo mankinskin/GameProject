@@ -99,6 +99,36 @@ namespace gui
             const std::tuple<Elems...> elements;
         };
 
+
+    template<typename... Colors>
+        struct WidgetColors
+        {
+            constexpr WidgetColors(Colors... cs)
+                : colors(cs...)
+            {}
+            constexpr WidgetColors(const std::tuple<Colors...> cs)
+                : colors(cs)
+            {}
+            const std::tuple<Colors...> colors;
+        };
+
+        void applyColor(const gl::ColorID col, const QuadID elem);
+
+    template<typename... Colors, typename... Elems>
+        void applyColor_n(const WidgetColors<Colors...> cols, const WidgetElements<Elems...> elem, utils::_index<0>)
+        {}
+    template<typename... Colors, typename... Elems, size_t N>
+        void applyColor_n(const WidgetColors<Colors...> cols, const WidgetElements<Elems...> elem, utils::_index<N>)
+        {
+            applyColor_n(cols, elem, utils::_index<N-1>());
+            applyColor(std::get<N-1>(cols.colors), std::get<N-1>(elem.elements));
+        }
+    template<typename... Colors, typename... Elems>
+        void applyColor(const WidgetColors<Colors...> cols, const WidgetElements<Elems...> elem)
+        {
+            applyColor_n(cols, elem, utils::_index<sizeof...(Colors)>());
+        }
+
     template<typename... Elems>
         struct Widget : public WidgetElements<Elems...>
         {
@@ -168,7 +198,7 @@ namespace gui
             using Preset = typename Elem::Preset;
 
             Widget(Preset preset)
-                : WidgetElements<Elem>(utils::makeID(preset))   // TODO: generalize
+                : WidgetElements<Elem>(utils::makeID(preset))
             {}
             using WidgetElements<Elem>::elements;
             void move(const glm::vec2 v) const
@@ -179,30 +209,6 @@ namespace gui
             void resize(const glm::vec2 v) const
             {
                 std::get<0>(elements)->resize(v);
-            }
-    };
-
-    template<typename Color>
-    struct QuadWidget : public Widget<QuadID>
-    {
-        public:
-            struct Preset
-            {
-                Preset(typename Widget<QuadID>::Preset q, Color c)
-                    : quad(q)
-                    , color(c)
-                {}
-                typename Widget<QuadID>::Preset quad;
-                Color color;
-            };
-
-            Color color;
-
-            QuadWidget(Preset preset)
-                : Widget<QuadID>(preset.quad)
-                , color(preset.color)
-            {
-                colorQuad(std::get<0>(elements), color);
             }
     };
 
