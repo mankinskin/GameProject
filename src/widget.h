@@ -33,7 +33,6 @@ namespace gui
     {
         using SignalType = signals::SignalListener<signals::And, signals::SignalListener<signals::Or, typename Ts::SignalType...>,
               signals::SignalListener<signals::Nor, typename Ts::SignalType...>>;
-        using HoldSignalType = signals::SignalListener<signals::Flip, SignalType, SignalType>;
         template<size_t... Ns>
             constexpr SignalType gen_event(const bool state, const std::tuple<Ts...> elems, const std::index_sequence<Ns...>) const
             {
@@ -59,18 +58,26 @@ namespace gui
         {
             return offSignal;
         }
-        constexpr const HoldSignalType hold() const
+        constexpr const auto hover() const
         {
             return signals::flip(onSignal, offSignal);
+        }
+        constexpr const auto press() const
+        {
+            return ifAll(hover(), input::Mouse::lmb.down());
+        }
+        constexpr const auto release() const
+        {
+            return ifAny(leave(), ifAll(hover(), input::Mouse::lmb.up()));
+        }
+        constexpr const auto hold() const
+        {
+            return flip(click(), ifAll(hover(), input::Mouse::lmb.up()));
         }
 
         constexpr const SignalType enter() const { return onSignal; }
         constexpr const SignalType leave() const { return offSignal; }
-        constexpr const SignalType down() const { return onSignal; }
-        constexpr const SignalType up() const { return offSignal; }
-        constexpr const SignalType press() const { return onSignal; }
-        constexpr const SignalType release() const { return offSignal; }
-        constexpr const HoldSignalType hover() const { return hold(); }
+        constexpr const auto click() const { return press(); }
 
         protected:
         SignalType onSignal;
@@ -213,15 +220,16 @@ namespace gui
                 }
         };
 
-    template<typename... Elems>
-        void moveWidget(Widget<Elems...> pWidget, glm::vec2& pV)
+    template<typename Wid>
+        void moveWidget(const utils::ID<Wid> pWidget, glm::vec2& pV)
         {
-            pWidget.move(pV);
+            printf("Move widget\n");
+            pWidget->move(pV);
         }
 
-    template<typename... Elems>
-        void resizeWidget(Widget<Elems...> pWidget, glm::vec2& pV)
+    template<typename Wid>
+        void resizeWidget(const utils::ID<Wid> pWidget, glm::vec2& pV)
         {
-            pWidget.resize(pV);
+            pWidget->resize(pV);
         }
 }

@@ -74,8 +74,8 @@ void gui::initWidgets()
     Button::ElementPreset buttonElementPreset(70, 20, 2, 2);
     Button::Colors buttonColors(gl::getColor("black"), gl::getColor("grey"));
     Button::Preset buttonPreset(buttonElementPreset, buttonColors);
-    utils::ID<Button> play_button = utils::makeID(Button(buttonPreset));
-    utils::ID<Button> quit_button = utils::makeID(Button(buttonPreset));
+    Button play_button(buttonPreset);
+    Button quit_button(buttonPreset);
 
 
     //auto func_move_on = functor(moveWidget, play_button, input::relativeMouseDelta);
@@ -83,8 +83,8 @@ void gui::initWidgets()
     //link(enter_button, func_highlight_on);
     //link(leave_button, func_highlight_off);
 
-    play_button->move(glm::vec2(0.5f, 0.5f));
-    quit_button->move(glm::vec2(-0.5f, -0.5f));
+    //play_button->move(glm::vec2(0.5f, 0.5f));
+    quit_button.wid->move(glm::vec2(-0.5f, -0.5f));
 
     //gate<and_op, decltype(play_button_signals.hold_evt), decltype(lmb.on_evt)> play_press_evt(and_op(),
     //        play_button_signals.hold_evt, lmb.on_evt);

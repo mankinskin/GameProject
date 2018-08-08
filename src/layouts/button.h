@@ -5,11 +5,12 @@
 
 namespace gui
 {
-    struct Button : public Widget<WidgetElements<QuadElement, QuadElement>, WidgetColors<gl::ColorID, gl::ColorID>>
+    struct Button
     {
         using Elements = WidgetElements<QuadElement, QuadElement>;
         using Colors = WidgetColors<gl::ColorID, gl::ColorID>;
         using Wid = Widget<Elements, Colors>;
+
         struct ElementPreset : public Wid::ElementPreset
         {
             ElementPreset(Wid::ElementPreset preset)
@@ -34,19 +35,20 @@ namespace gui
             {}
         };
 
+        const utils::ID<Wid> wid;
+
         Button(Preset preset)
-            : Wid(preset)
+            : wid(utils::makeID(Wid(preset)))
         {
             using namespace signals;
-            using namespace input;
-            auto click_button = ifAll(hover(), Mouse::lmb.down());
-            auto release_button = ifAny(leave(), ifAll(hover(), Mouse::lmb.up()));
 
-            link(enter(), functor(colorQuad, std::get<0>(elements), gl::getColor("yellow")));
-            link(leave(), functor(colorQuad, std::get<0>(elements), std::get<0>(colors)));
+            link(wid->enter(), functor(colorQuad, std::get<0>(wid->elements), gl::getColor("white")));
+            link(wid->leave(), functor(colorQuad, std::get<0>(wid->elements), std::get<0>(wid->colors)));
 
-            link(click_button, functor(colorQuad, std::get<1>(elements), gl::getColor("red")));
-            link(release_button, functor(colorQuad, std::get<1>(elements), std::get<1>(colors)));
+            link(wid->click(), functor(colorQuad, std::get<1>(wid->elements), gl::getColor("white")));
+            link(wid->release(), functor(colorQuad, std::get<1>(wid->elements), std::get<1>(wid->colors)));
+
+    link(wid->hold(), functor<decltype(moveWidget<Wid>), utils::ID<Wid>, glm::vec2&>(moveWidget<Wid>, wid, input::cursorFrameDelta));
         }
     };
 }
