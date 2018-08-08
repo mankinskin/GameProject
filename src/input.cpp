@@ -60,29 +60,29 @@ void input::setupControls()
     Mouse::rmb = ButtonSignals<MouseKey>(1);
     Mouse::mmb = ButtonSignals<MouseKey>(2);
     puts("Initializing Key Listeners...");
-    key_esc = input::KeySignal(GLFW_KEY_ESCAPE);
-    key_c = input::KeySignal(GLFW_KEY_C);
-    key_g = input::KeySignal(GLFW_KEY_G);
-    key_h = input::KeySignal(GLFW_KEY_H);
-    key_i = input::KeySignal(GLFW_KEY_I);
-    key_w = input::KeySignal(GLFW_KEY_W);
-    key_s = input::KeySignal(GLFW_KEY_S);
-    key_a = input::KeySignal(GLFW_KEY_A);
-    key_d = input::KeySignal(GLFW_KEY_D);
-    key_space = input::KeySignal(GLFW_KEY_SPACE);
-    key_lshift = input::KeySignal(GLFW_KEY_LEFT_SHIFT);
-    key_z = input::KeySignal(GLFW_KEY_Z);
-    key_f = input::KeySignal(GLFW_KEY_F);
-    key_n = input::KeySignal(GLFW_KEY_N);
-    key_j = input::KeySignal(GLFW_KEY_J);
-    key_up = input::KeySignal(GLFW_KEY_UP);
-    key_down = input::KeySignal(GLFW_KEY_DOWN);
-    key_left = input::KeySignal(GLFW_KEY_LEFT);
-    key_right = input::KeySignal(GLFW_KEY_RIGHT);
-    key_o = input::KeySignal(GLFW_KEY_O);
-    key_l = input::KeySignal(GLFW_KEY_L);
-    key_lshift = input::KeySignal(GLFW_KEY_LEFT_SHIFT);
-    key_x = input::KeySignal(GLFW_KEY_X);
+    key_esc = KeySignals(GLFW_KEY_ESCAPE);
+    key_c = KeySignals(GLFW_KEY_C);
+    key_g = KeySignals(GLFW_KEY_G);
+    key_h = KeySignals(GLFW_KEY_H);
+    key_i = KeySignals(GLFW_KEY_I);
+    key_w = KeySignals(GLFW_KEY_W);
+    key_s = KeySignals(GLFW_KEY_S);
+    key_a = KeySignals(GLFW_KEY_A);
+    key_d = KeySignals(GLFW_KEY_D);
+    key_space = KeySignals(GLFW_KEY_SPACE);
+    key_lshift = KeySignals(GLFW_KEY_LEFT_SHIFT);
+    key_z = KeySignals(GLFW_KEY_Z);
+    key_f = KeySignals(GLFW_KEY_F);
+    key_n = KeySignals(GLFW_KEY_N);
+    key_j = KeySignals(GLFW_KEY_J);
+    key_up = KeySignals(GLFW_KEY_UP);
+    key_down = KeySignals(GLFW_KEY_DOWN);
+    key_left = KeySignals(GLFW_KEY_LEFT);
+    key_right = KeySignals(GLFW_KEY_RIGHT);
+    key_o = KeySignals(GLFW_KEY_O);
+    key_l = KeySignals(GLFW_KEY_L);
+    key_lshift = KeySignals(GLFW_KEY_LEFT_SHIFT);
+    key_x = KeySignals(GLFW_KEY_X);
 
     {
         auto exit_func = functor(app::quit);
@@ -97,13 +97,13 @@ void input::setupControls()
         auto higher_cam_speed_func = functor<void(camera::Camera&, float), camera::Camera&, float>(camera::setSpeed, camera::main_camera, 1.0f);
         auto normal_cam_speed_func = functor<void(camera::Camera&, float), camera::Camera&, float>(camera::setSpeed, camera::main_camera, 0.3f);
 
-        link(ifAny(key_c.press, Mouse::rmb.down(), Mouse::rmb.up()), toggle_look_func);
-        link(ifAny(key_c.press, Mouse::rmb.down(), Mouse::rmb.up()), toggle_cursor_func);
-        link(key_esc.press, exit_func);
-        link(key_g.press, toggle_grid_func);
-        link(key_h.press, toggle_coord_func);
-        link(key_n.press, toggle_normals_func);
-        link(key_j.press, cycle_cam_modes_func);
+        link(ifAny(key_c.press(), Mouse::rmb.down(), Mouse::rmb.up()), toggle_look_func);
+        link(ifAny(key_c.press(), Mouse::rmb.down(), Mouse::rmb.up()), toggle_cursor_func);
+        link(key_esc.press(), exit_func);
+        link(key_g.press(), toggle_grid_func);
+        link(key_h.press(), toggle_coord_func);
+        link(key_n.press(), toggle_normals_func);
+        link(key_j.press(), cycle_cam_modes_func);
 
         //higher_cam_speed_func.add_triggers({ key_lshift.press });
         //normal_cam_speed_func.add_triggers({ key_lshift.release });
@@ -117,20 +117,18 @@ void input::setupControls()
         auto up_func = functor<void(camera::Camera&), camera::Camera&>(camera::up, camera::main_camera);
         auto down_func = functor<void(camera::Camera&), camera::Camera&>(camera::down, camera::main_camera);
 
-        puts("Camera control");
-        link(key_w.press, forward_func);
-        link(key_w.release, backward_func);
-        link(key_s.press, backward_func);
-        link(key_s.release, forward_func);
-        link(key_a.press, left_func);
-        link(key_a.release, right_func);
-        link(key_d.press, right_func);
-        link(key_d.release, left_func);
-        link(key_space.press, up_func);
-        link(key_space.release, down_func);
-        link(key_lshift.press, down_func);
-        link(key_lshift.release, up_func);
-        puts("end");
+        link(key_w.press(), forward_func);
+        link(key_w.release(), backward_func);
+        link(key_s.press(), backward_func);
+        link(key_s.release(), forward_func);
+        link(key_a.press(), left_func);
+        link(key_a.release(), right_func);
+        link(key_d.press(), right_func);
+        link(key_d.release(), left_func);
+        link(key_space.press(), up_func);
+        link(key_space.release(), down_func);
+        link(key_lshift.press(), down_func);
+        link(key_lshift.release(), up_func);
     }
 }
 

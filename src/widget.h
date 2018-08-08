@@ -28,6 +28,63 @@
 namespace gui
 {
 
+    template<typename... Ts>
+    struct WidgetSignals
+    {
+        using SignalType = signals::SignalListener<signals::And, signals::SignalListener<signals::Or, typename Ts::SignalType...>,
+              signals::SignalListener<signals::Nor, typename Ts::SignalType...>>;
+        using HoldSignalType = signals::SignalListener<signals::Flip, SignalType, SignalType>;
+        template<size_t... Ns>
+            constexpr SignalType gen_event(const bool state, const std::tuple<Ts...> elems, const std::index_sequence<Ns...>) const
+            {
+                return signals::ifAll(
+                        signals::ifAny(std::get<Ns>(elems).event(state)...),
+                        signals::ifNone(std::get<Ns>(elems).event(!state)...));
+            }
+        constexpr WidgetSignals()
+        {}
+        constexpr WidgetSignals(const std::tuple<Ts...> os)
+            : onSignal(gen_event(true, os, std::make_index_sequence<sizeof...(Ts)>()))
+            , offSignal(gen_event(false, os, std::make_index_sequence<sizeof...(Ts)>()))
+        {}
+        constexpr const SignalType event(const bool state) const
+        {
+            return state ? onSignal : offSignal;
+        }
+        constexpr const SignalType on() const
+        {
+            return onSignal;
+        }
+        constexpr const SignalType off() const
+        {
+            return offSignal;
+        }
+        constexpr const HoldSignalType hold() const
+        {
+            return signals::flip(onSignal, offSignal);
+        }
+
+        constexpr const SignalType enter() const { return onSignal; }
+        constexpr const SignalType leave() const { return offSignal; }
+        constexpr const SignalType down() const { return onSignal; }
+        constexpr const SignalType up() const { return offSignal; }
+        constexpr const SignalType press() const { return onSignal; }
+        constexpr const SignalType release() const { return offSignal; }
+        constexpr const HoldSignalType hover() const { return hold(); }
+
+        protected:
+        SignalType onSignal;
+        SignalType offSignal;
+    };
+
+    template<typename T>
+    struct WidgetSignals<T> : public signals::ButtonSignals<T, bool>
+    {
+        constexpr WidgetSignals(const std::tuple<T> o)
+            : signals::ButtonSignals<T, bool>(std::get<0>(o))
+        {}
+    };
+
     template<typename... Elems>
         struct WidgetElements
         {
@@ -41,7 +98,7 @@ namespace gui
         };
 
     template<typename... Elems>
-        struct Widget : public WidgetElements<Elems...>, signals::ButtonSignals<Elems...>
+        struct Widget : public WidgetElements<Elems...>, WidgetSignals<Elems...>
         {
             public:
                 constexpr static const size_t COUNT = sizeof...(Elems);
@@ -67,7 +124,7 @@ namespace gui
                 using WidgetElements<Elems...>::elements;
                 Widget(Preset preset)
                     : WidgetElements<Elems...>(utils::convert_tuple<Elems...>(preset.subpresets))
-                    , signals::ButtonSignals<Elems...>(elements)
+                    , WidgetSignals<Elems...>(elements)
                     , movepolicy(preset.movepolicy)
                     , resizepolicy(preset.resizepolicy)
                 {}
@@ -104,14 +161,14 @@ namespace gui
 
 
     template<typename Elem>
-    struct Widget<Elem> : public WidgetElements<Elem>, signals::ButtonSignals<Elem>
+    struct Widget<Elem> : public WidgetElements<Elem>, WidgetSignals<Elem>
     {
         public:
             using Preset = typename Elem::Preset;
 
             Widget(Preset preset)
                 : WidgetElements<Elem>(utils::makeID(preset))   // TODO: generalize
-                , signals::ButtonSignals<Elem>(WidgetElements<Elem>::elements)
+                , WidgetSignals<Elem>(elements)
             {}
             using WidgetElements<Elem>::elements;
             void move(const glm::vec2 v) const

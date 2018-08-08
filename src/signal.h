@@ -375,26 +375,19 @@ namespace signals
     void checkEvents();
     void clearSignals();
 
-    template<typename... Ts>
+    template<typename ObjectType, typename StateType = bool>
     struct ButtonSignals
     {
-        using SignalType = SignalListener<And, SignalListener<Or, typename Ts::SignalType...>,
-              SignalListener<Nor, typename Ts::SignalType...>>;
+        using EventType = Event<ObjectType, StateType>;
+        using SignalType = utils::ID<EventListener<EventType>>;
         using HoldSignalType = SignalListener<Flip, SignalType, SignalType>;
-        template<size_t... Ns>
-            constexpr SignalType gen_event(const bool state, const std::tuple<Ts...> elems, const std::index_sequence<Ns...>) const
-            {
-                return ifAll(
-                        ifAny(std::get<Ns>(elems).event(state)...),
-                        ifNone(std::get<Ns>(elems).event(!state)...));
-            }
         constexpr ButtonSignals()
         {}
-        constexpr ButtonSignals(const std::tuple<Ts...> os)
-            : onSignal(gen_event(true, os, std::make_index_sequence<sizeof...(Ts)>()))
-            , offSignal(gen_event(false, os, std::make_index_sequence<sizeof...(Ts)>()))
+        constexpr ButtonSignals(const ObjectType o)
+            : onSignal(ifEvent(EventType(o, true)))
+            , offSignal(ifEvent(EventType(o, false)))
         {}
-        constexpr const SignalType event(const bool state) const
+        constexpr const SignalType event(const StateType state) const
         {
             return state ? onSignal : offSignal;
         }
@@ -408,51 +401,7 @@ namespace signals
         }
         constexpr const HoldSignalType hold() const
         {
-            return signals::flip(onSignal, offSignal);
-        }
-
-        constexpr const SignalType enter() const { return onSignal; }
-        constexpr const SignalType leave() const { return offSignal; }
-        constexpr const SignalType down() const { return onSignal; }
-        constexpr const SignalType up() const { return offSignal; }
-        constexpr const SignalType press() const { return onSignal; }
-        constexpr const SignalType release() const { return offSignal; }
-        constexpr const HoldSignalType hover() const { return hold(); }
-
-        protected:
-        SignalType onSignal;
-        SignalType offSignal;
-    };
-    template<typename T>
-    struct ButtonSignals<T>
-    {
-        using SignalType = utils::ID<EventListener<Event<T, bool>>>;
-        using HoldSignalType = SignalListener<Flip, SignalType, SignalType>;
-        constexpr ButtonSignals()
-        {}
-        constexpr ButtonSignals(const T e)
-            : onSignal(ifEvent(Event<T, bool>(e, true)))
-            , offSignal(ifEvent(Event<T, bool>(e, false)))
-        {}
-        constexpr ButtonSignals(const std::tuple<T> e)
-            : onSignal(ifEvent(Event<T, bool>(std::get<0>(e), true)))
-            , offSignal(ifEvent(Event<T, bool>(std::get<0>(e), false)))
-        {}
-        constexpr const SignalType event(const bool state) const
-        {
-            return state ? onSignal : offSignal;
-        }
-        constexpr const SignalType on() const
-        {
-            return onSignal;
-        }
-        constexpr const SignalType off() const
-        {
-            return offSignal;
-        }
-        constexpr const HoldSignalType hold() const
-        {
-            return signals::flip(onSignal, offSignal);
+            return flip(onSignal, offSignal);
         }
 
         constexpr const SignalType enter() const { return onSignal; }
