@@ -13,12 +13,9 @@ namespace input
 
     namespace Mouse
     {
-        const MouseKey button_left = 0;
-        const MouseKey button_right = 1;
-        const MouseKey button_middle = 2;
-        const signals::ButtonSignals<MouseKey> lmb(button_left);
-        const signals::ButtonSignals<MouseKey> rmb(button_right);
-        const signals::ButtonSignals<MouseKey> mmb(button_middle);
+        extern signals::ButtonSignals<MouseKey> lmb;
+        extern signals::ButtonSignals<MouseKey> rmb;
+        extern signals::ButtonSignals<MouseKey> mmb;
     };
 
     extern glm::vec2 relativeCursorPosition;

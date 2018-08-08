@@ -29,7 +29,19 @@ namespace gui
 {
 
     template<typename... Elems>
-        struct Widget : public signals::ButtonSignals<Elems...>
+        struct WidgetElements
+        {
+            constexpr WidgetElements(Elems... es)
+                : elements(es...)
+            {}
+            constexpr WidgetElements(const std::tuple<Elems...> es)
+                : elements(es)
+            {}
+            const std::tuple<Elems...> elements;
+        };
+
+    template<typename... Elems>
+        struct Widget : public WidgetElements<Elems...>, signals::ButtonSignals<Elems...>
         {
             public:
                 constexpr static const size_t COUNT = sizeof...(Elems);
@@ -52,14 +64,15 @@ namespace gui
                 const MovePolicy movepolicy;
                 const ResizePolicy resizepolicy;
 
+                using WidgetElements<Elems...>::elements;
                 Widget(Preset preset)
-                    : signals::ButtonSignals<Elems...>(utils::convert_tuple<Elems...>(preset.subpresets))
+                    : WidgetElements<Elems...>(utils::convert_tuple<Elems...>(preset.subpresets))
+                    , signals::ButtonSignals<Elems...>(elements)
                     , movepolicy(preset.movepolicy)
                     , resizepolicy(preset.resizepolicy)
                 {}
 
 
-                using signals::ButtonSignals<Elems...>::elements;
 
                 void move_n(utils::_index<0> i, const glm::vec2 v) const
                 {}
@@ -91,23 +104,24 @@ namespace gui
 
 
     template<typename Elem>
-    struct Widget<Elem> : public signals::ButtonSignals<Elem>
+    struct Widget<Elem> : public WidgetElements<Elem>, signals::ButtonSignals<Elem>
     {
         public:
             using Preset = typename Elem::Preset;
 
             Widget(Preset preset)
-                : signals::ButtonSignals<Elem>(utils::makeID(preset))
+                : WidgetElements<Elem>(utils::makeID(preset))   // TODO: generalize
+                , signals::ButtonSignals<Elem>(WidgetElements<Elem>::elements)
             {}
-            using signals::ButtonSignals<Elem>::elem;
+            using WidgetElements<Elem>::elements;
             void move(const glm::vec2 v) const
             {
-                elem->move(v);
+                std::get<0>(elements)->move(v);
             }
 
             void resize(const glm::vec2 v) const
             {
-                elem->resize(v);
+                std::get<0>(elements)->resize(v);
             }
     };
 
@@ -131,7 +145,7 @@ namespace gui
                 : Widget<QuadID>(preset.quad)
                 , color(preset.color)
             {
-                colorQuad(elem, color);
+                colorQuad(std::get<0>(elements), color);
             }
     };
 

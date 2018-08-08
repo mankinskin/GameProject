@@ -56,6 +56,9 @@ void input::setupControls()
     using namespace signals;
     using namespace gates;
 
+    Mouse::lmb = ButtonSignals<MouseKey>(0);
+    Mouse::rmb = ButtonSignals<MouseKey>(1);
+    Mouse::mmb = ButtonSignals<MouseKey>(2);
     puts("Initializing Key Listeners...");
     key_esc = input::KeySignal(GLFW_KEY_ESCAPE);
     key_c = input::KeySignal(GLFW_KEY_C);

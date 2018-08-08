@@ -17,6 +17,10 @@ int disableCursor = 0;
 utils::ID<gui::Quad> hovered_quad = utils::INVALID_ID;
 utils::ID<gui::Quad> last_hovered_quad = utils::INVALID_ID;
 
+signals::ButtonSignals<input::MouseKey> input::Mouse::lmb;
+signals::ButtonSignals<input::MouseKey> input::Mouse::rmb;
+signals::ButtonSignals<input::MouseKey> input::Mouse::mmb;
+
 void input::updateMouse()
 {
     // absolute positions

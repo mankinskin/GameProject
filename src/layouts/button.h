@@ -41,11 +41,11 @@ namespace gui
             auto click_button = ifAll(hover(), Mouse::lmb.down());
             auto release_button = ifAny(leave(), ifAll(hover(), Mouse::lmb.up()));
 
-            link(enter(), functor(colorQuad, std::get<0>(elements).elem, gl::getColor("yellow")));
-            link(leave(), functor(colorQuad, std::get<0>(elements).elem, std::get<0>(elements).color));
+            link(enter(), functor(colorQuad, std::get<0>(std::get<0>(elements).elements), gl::getColor("yellow")));
+            link(leave(), functor(colorQuad, std::get<0>(std::get<0>(elements).elements), std::get<0>(elements).color));
 
-            link(click_button, functor(colorQuad, std::get<1>(elements).elem, gl::getColor("red")));
-            link(release_button, functor(colorQuad, std::get<1>(elements).elem, std::get<1>(elements).color));
+            link(click_button, functor(colorQuad, std::get<0>(std::get<1>(elements).elements), gl::getColor("red")));
+            link(release_button, functor(colorQuad, std::get<0>(std::get<1>(elements).elements), std::get<1>(elements).color));
         }
     };
 }
