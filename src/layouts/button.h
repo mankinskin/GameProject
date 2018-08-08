@@ -16,11 +16,13 @@ namespace gui
             Preset(size_t pixWidth, size_t pixHeight, size_t pixMarginX, size_t pixMarginY)
                 : Wid::Preset({
                         Widget<QuadID>::Preset(
-                            glm::vec4(0.0f, 0.0f, toScreenX(pixWidth), toScreenY(pixHeight))),
+                            glm::vec4(0.0f, 0.0f, toScreenX(pixWidth), toScreenY(pixHeight)),
+                            {glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}),
                         Widget<QuadID>::Preset(
                             glm::vec4(toScreenX(pixMarginX), -toScreenY(pixMarginY),
                                 toScreenX(pixWidth) - toScreenX(pixMarginX*2),
-                                toScreenY(pixHeight) - toScreenY(pixMarginY*2)))},
+                                toScreenY(pixHeight) - toScreenY(pixMarginY*2)),
+                            {glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)})},
                     {glm::vec2(1.0f, 1.0f),
                     glm::vec2(1.0f, 1.0f)},
                     {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
