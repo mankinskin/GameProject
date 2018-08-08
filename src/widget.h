@@ -86,19 +86,21 @@ namespace gui
     };
 
     template<typename... Elems>
-        struct WidgetElements
+        struct WidgetElements : public WidgetSignals<Elems...>
         {
             constexpr WidgetElements(Elems... es)
                 : elements(es...)
+                , WidgetSignals<Elems...>(es...)
             {}
             constexpr WidgetElements(const std::tuple<Elems...> es)
                 : elements(es)
+                , WidgetSignals<Elems...>(es)
             {}
             const std::tuple<Elems...> elements;
         };
 
     template<typename... Elems>
-        struct Widget : public WidgetElements<Elems...>, WidgetSignals<Elems...>
+        struct Widget : public WidgetElements<Elems...>
         {
             public:
                 constexpr static const size_t COUNT = sizeof...(Elems);
@@ -124,7 +126,6 @@ namespace gui
                 using WidgetElements<Elems...>::elements;
                 Widget(Preset preset)
                     : WidgetElements<Elems...>(utils::convert_tuple<Elems...>(preset.subpresets))
-                    , WidgetSignals<Elems...>(elements)
                     , movepolicy(preset.movepolicy)
                     , resizepolicy(preset.resizepolicy)
                 {}
@@ -161,14 +162,13 @@ namespace gui
 
 
     template<typename Elem>
-    struct Widget<Elem> : public WidgetElements<Elem>, WidgetSignals<Elem>
+    struct Widget<Elem> : public WidgetElements<Elem>
     {
         public:
             using Preset = typename Elem::Preset;
 
             Widget(Preset preset)
                 : WidgetElements<Elem>(utils::makeID(preset))   // TODO: generalize
-                , WidgetSignals<Elem>(elements)
             {}
             using WidgetElements<Elem>::elements;
             void move(const glm::vec2 v) const
