@@ -35,8 +35,8 @@ namespace gui
         using SignalType = signals::SignalListener<signals::And, signals::SignalListener<signals::Or, typename Ts::SignalType...>, signals::SignalListener<signals::Nor, typename Ts::SignalType...>>;
         using HoverType = signals::SignalListener<signals::Flip, SignalType, SignalType>;
         using PressType = signals::SignalListener<signals::And, HoverType, signals::ButtonSignals<input::MouseKey>::SignalType>;
-        using ReleaseType = signals::ButtonSignals<input::MouseKey>::SignalType;
-        using HoldType = signals::SignalListener<signals::Flip, PressType, ReleaseType>;
+        using ReleaseType = signals::SignalListener<signals::And, utils::ID<signals::Signal>, signals::ButtonSignals<input::MouseKey>::SignalType>;
+        using HoldType = signals::SignalListener<signals::Flip, PressType, signals::ButtonSignals<input::MouseKey>::SignalType>;
         template<bool S, size_t... Ns>
             constexpr SignalType gen_event(const std::tuple<Ts...> elems, const std::index_sequence<Ns...>) const
             {
@@ -46,32 +46,28 @@ namespace gui
             }
         constexpr const SignalType event(utils::_bool<true>) const
         {
-            return on;
+            return enter;
         }
         constexpr const SignalType event(utils::_bool<false>) const
         {
-            return off;
+            return leave;
         }
         public:
         constexpr WidgetSignals(const std::tuple<Ts...> os)
-            : on(gen_event<true>(os, std::make_index_sequence<sizeof...(Ts)>()))
-            , off(gen_event<false>(os, std::make_index_sequence<sizeof...(Ts)>()))
-            , hover(flip(on, off))
+            : enter(gen_event<true>(os, std::make_index_sequence<sizeof...(Ts)>()))
+            , leave(gen_event<false>(os, std::make_index_sequence<sizeof...(Ts)>()))
+            , hover(flip(enter, leave))
             , press(ifAll(hover, input::Mouse::lmb->on))
-            , release(input::Mouse::lmb->off)
-            , hold(flip(press, release))
+            , hold(flip(press, input::Mouse::lmb->off))
+            , release(ifAll(hold->state(), input::Mouse::lmb->off))
         {}
 
-        const SignalType on;
-        const SignalType off;
+        const SignalType enter;
+        const SignalType leave;
         const HoverType hover;
         const PressType press;
-        const ReleaseType release;
         const HoldType hold;
-
-        //const SignalType& enter;
-        //const SignalType& leave;
-        //const PressType& click;
+        const ReleaseType release;
     };
 
     template<typename... Elems>

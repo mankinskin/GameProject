@@ -403,12 +403,6 @@ namespace signals
         const SignalType on;
         const SignalType off;
         const HoldSignalType hold;
-
-        //const SignalType& down;
-        //const SignalType& up;
-        //const SignalType& press;
-        //const SignalType& release;
-        //const HoldSignalType& hover;
     };
 }
 

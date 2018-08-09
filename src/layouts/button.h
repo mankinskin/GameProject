@@ -42,8 +42,8 @@ namespace gui
         {
             using namespace signals;
 
-            link(wid->on, functor(colorQuad, std::get<0>(wid->elements), gl::getColor("white")));
-            link(wid->off, functor(colorQuad, std::get<0>(wid->elements), std::get<0>(wid->colors)));
+            link(wid->enter, functor(colorQuad, std::get<0>(wid->elements), gl::getColor("white")));
+            link(wid->leave, functor(colorQuad, std::get<0>(wid->elements), std::get<0>(wid->colors)));
 
             link(wid->press, functor(colorQuad, std::get<1>(wid->elements), gl::getColor("white")));
             link(wid->release, functor(colorQuad, std::get<1>(wid->elements), std::get<1>(wid->colors)));
