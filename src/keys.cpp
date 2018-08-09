@@ -3,29 +3,28 @@
 #include "signal.h"
 #include "gates.h"
 
-input::KeySignals input::key_esc;
-input::KeySignals input::key_c;
-input::KeySignals input::key_g;
-input::KeySignals input::key_h;
-input::KeySignals input::key_i;
-input::KeySignals input::key_w;
-input::KeySignals input::key_s;
-input::KeySignals input::key_a;
-input::KeySignals input::key_d;
-input::KeySignals input::key_space;
-input::KeySignals input::key_z;
-input::KeySignals input::key_f;
-input::KeySignals input::key_n;
-input::KeySignals input::key_j;
-input::KeySignals input::key_up;
-input::KeySignals input::key_down;
-input::KeySignals input::key_left;
-input::KeySignals input::key_right;
-input::KeySignals input::key_o;
-input::KeySignals input::key_l;
-input::KeySignals input::key_lshift;
-input::KeySignals input::key_x;
-
+utils::ID<input::KeySignals> input::key_esc;
+utils::ID<input::KeySignals> input::key_c;
+utils::ID<input::KeySignals> input::key_g;
+utils::ID<input::KeySignals> input::key_h;
+utils::ID<input::KeySignals> input::key_i;
+utils::ID<input::KeySignals> input::key_w;
+utils::ID<input::KeySignals> input::key_s;
+utils::ID<input::KeySignals> input::key_a;
+utils::ID<input::KeySignals> input::key_d;
+utils::ID<input::KeySignals> input::key_space;
+utils::ID<input::KeySignals> input::key_z;
+utils::ID<input::KeySignals> input::key_f;
+utils::ID<input::KeySignals> input::key_n;
+utils::ID<input::KeySignals> input::key_j;
+utils::ID<input::KeySignals> input::key_up;
+utils::ID<input::KeySignals> input::key_down;
+utils::ID<input::KeySignals> input::key_left;
+utils::ID<input::KeySignals> input::key_right;
+utils::ID<input::KeySignals> input::key_o;
+utils::ID<input::KeySignals> input::key_l;
+utils::ID<input::KeySignals> input::key_lshift;
+utils::ID<input::KeySignals> input::key_x;
 
 void input::key_Callback(GLFWwindow* window, int pKey, int pScancode, int pAction, int pMods)
 {

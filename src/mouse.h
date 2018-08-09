@@ -10,12 +10,13 @@
 namespace input
 {
     typedef int MouseKey;
+    typedef signals::ButtonSignals<MouseKey> MouseKeySignals;
 
     namespace Mouse
     {
-        extern signals::ButtonSignals<MouseKey> lmb;
-        extern signals::ButtonSignals<MouseKey> rmb;
-        extern signals::ButtonSignals<MouseKey> mmb;
+        extern utils::ID<MouseKeySignals> lmb;
+        extern utils::ID<MouseKeySignals> rmb;
+        extern utils::ID<MouseKeySignals> mmb;
     };
 
     extern glm::vec2 relativeCursorPosition;

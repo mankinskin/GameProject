@@ -4,7 +4,8 @@
 
 namespace utils
 {
-    template<size_t I> struct _index { };
+    template<size_t> struct _index { };
+    template<bool> struct _bool { };
     template<typename T> struct _type { using type = T; };
 
     template<unsigned int N, typename Type, typename ...SubElements>

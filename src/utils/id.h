@@ -14,16 +14,13 @@ namespace utils
     using ID_Type = typename std::remove_reference<T>::type;
 
     template<typename T>
-    ID_Container<T> id_container;
-
-    template<typename T>
         struct ID
         {
             using Preset = T;
             using Type = ID_Type<T>;
             using Container = ID_Container<Type>;
             using size_type = typename Container::size_type;
-            constexpr static Container& container = id_container<Type>;
+            static ID_Container<T> container;
 
             constexpr ID()
                 : index(INVALID_ID)
@@ -35,6 +32,7 @@ namespace utils
             constexpr ID(const T t)
                 : index(container.size())
             {
+                puts("Creating ID from object...");
                 container.push_back(t);
             }
 
@@ -64,6 +62,8 @@ namespace utils
             }
         };
 
+    template<typename T>
+        ID_Container<T> ID<T>::container = ID_Container<T>();
     template<typename T>
         inline bool operator==(const utils::ID<T> l, const utils::ID<T> r)
         {

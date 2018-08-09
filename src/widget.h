@@ -31,57 +31,47 @@ namespace gui
     template<typename... Ts>
     struct WidgetSignals
     {
-        using SignalType = signals::SignalListener<signals::And, signals::SignalListener<signals::Or, typename Ts::SignalType...>,
-              signals::SignalListener<signals::Nor, typename Ts::SignalType...>>;
-        template<size_t... Ns>
-            constexpr SignalType gen_event(const bool state, const std::tuple<Ts...> elems, const std::index_sequence<Ns...>) const
+        private:
+        using SignalType = signals::SignalListener<signals::And, signals::SignalListener<signals::Or, typename Ts::SignalType...>, signals::SignalListener<signals::Nor, typename Ts::SignalType...>>;
+        using HoverType = signals::SignalListener<signals::Flip, SignalType, SignalType>;
+        using PressType = signals::SignalListener<signals::And, HoverType, signals::ButtonSignals<input::MouseKey>::SignalType>;
+        using ReleaseType = signals::ButtonSignals<input::MouseKey>::SignalType;
+        using HoldType = signals::SignalListener<signals::Flip, PressType, ReleaseType>;
+        template<bool S, size_t... Ns>
+            constexpr SignalType gen_event(const std::tuple<Ts...> elems, const std::index_sequence<Ns...>) const
             {
                 return signals::ifAll(
-                        signals::ifAny(std::get<Ns>(elems).event(state)...),
-                        signals::ifNone(std::get<Ns>(elems).event(!state)...));
+                        signals::ifAny(std::get<Ns>(elems).event(utils::_bool<S>())...),
+                        signals::ifNone(std::get<Ns>(elems).event(utils::_bool<!S>())...));
             }
-        constexpr WidgetSignals()
-        {}
+        constexpr const SignalType event(utils::_bool<true>) const
+        {
+            return on;
+        }
+        constexpr const SignalType event(utils::_bool<false>) const
+        {
+            return off;
+        }
+        public:
         constexpr WidgetSignals(const std::tuple<Ts...> os)
-            : onSignal(gen_event(true, os, std::make_index_sequence<sizeof...(Ts)>()))
-            , offSignal(gen_event(false, os, std::make_index_sequence<sizeof...(Ts)>()))
+            : on(gen_event<true>(os, std::make_index_sequence<sizeof...(Ts)>()))
+            , off(gen_event<false>(os, std::make_index_sequence<sizeof...(Ts)>()))
+            , hover(flip(on, off))
+            , press(ifAll(hover, input::Mouse::lmb->on))
+            , release(input::Mouse::lmb->off)
+            , hold(flip(press, release))
         {}
-        constexpr const SignalType event(const bool state) const
-        {
-            return state ? onSignal : offSignal;
-        }
-        constexpr const SignalType on() const
-        {
-            return onSignal;
-        }
-        constexpr const SignalType off() const
-        {
-            return offSignal;
-        }
-        constexpr const auto hover() const
-        {
-            return signals::flip(onSignal, offSignal);
-        }
-        constexpr const auto press() const
-        {
-            return ifAll(hover(), input::Mouse::lmb.down());
-        }
-        constexpr const auto release() const
-        {
-            return ifAny(leave(), ifAll(hover(), input::Mouse::lmb.up()));
-        }
-        constexpr const auto hold() const
-        {
-            return flip(click(), ifAll(hover(), input::Mouse::lmb.up()));
-        }
 
-        constexpr const SignalType enter() const { return onSignal; }
-        constexpr const SignalType leave() const { return offSignal; }
-        constexpr const auto click() const { return press(); }
+        const SignalType on;
+        const SignalType off;
+        const HoverType hover;
+        const PressType press;
+        const ReleaseType release;
+        const HoldType hold;
 
-        protected:
-        SignalType onSignal;
-        SignalType offSignal;
+        //const SignalType& enter;
+        //const SignalType& leave;
+        //const PressType& click;
     };
 
     template<typename... Elems>

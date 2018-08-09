@@ -188,6 +188,10 @@ namespace signals
                     , on(utils::makeID(Signal(startAs)))
                     , off(utils::makeID(Signal(!startAs)))
                 {}
+                constexpr const utils::ID<Signal> state() const
+                {
+                    return on;
+                }
                 constexpr bool stat() const
                 {
                     if (set->stat() && reset->stat())
@@ -381,40 +385,30 @@ namespace signals
         using EventType = Event<ObjectType, StateType>;
         using SignalType = utils::ID<EventListener<EventType>>;
         using HoldSignalType = SignalListener<Flip, SignalType, SignalType>;
-        constexpr ButtonSignals()
-        {}
+
         constexpr ButtonSignals(const ObjectType o)
-            : onSignal(ifEvent(EventType(o, true)))
-            , offSignal(ifEvent(EventType(o, false)))
+            : on(ifEvent(EventType(o, true)))
+            , off(ifEvent(EventType(o, false)))
+            , hold(flip(on, off))
         {}
-        constexpr const SignalType event(const StateType state) const
+        constexpr const SignalType event(utils::_bool<true>) const
         {
-            return state ? onSignal : offSignal;
+            return on;
         }
-        constexpr const SignalType on() const
+        constexpr const SignalType event(utils::_bool<false>) const
         {
-            return onSignal;
-        }
-        constexpr const SignalType off() const
-        {
-            return offSignal;
-        }
-        constexpr const HoldSignalType hold() const
-        {
-            return flip(onSignal, offSignal);
+            return off;
         }
 
-        constexpr const SignalType enter() const { return onSignal; }
-        constexpr const SignalType leave() const { return offSignal; }
-        constexpr const SignalType down() const { return onSignal; }
-        constexpr const SignalType up() const { return offSignal; }
-        constexpr const SignalType press() const { return onSignal; }
-        constexpr const SignalType release() const { return offSignal; }
-        constexpr const HoldSignalType hover() const { return hold(); }
+        const SignalType on;
+        const SignalType off;
+        const HoldSignalType hold;
 
-        protected:
-        SignalType onSignal;
-        SignalType offSignal;
+        //const SignalType& down;
+        //const SignalType& up;
+        //const SignalType& press;
+        //const SignalType& release;
+        //const HoldSignalType& hover;
     };
 }
 

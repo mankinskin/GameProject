@@ -83,7 +83,7 @@ void gui::initWidgets()
     //link(enter_button, func_highlight_on);
     //link(leave_button, func_highlight_off);
 
-    //play_button->move(glm::vec2(0.5f, 0.5f));
+    play_button.wid->move(glm::vec2(0.5f, 0.5f));
     quit_button.wid->move(glm::vec2(-0.5f, -0.5f));
 
     //gate<and_op, decltype(play_button_signals.hold_evt), decltype(lmb.on_evt)> play_press_evt(and_op(),
