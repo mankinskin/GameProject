@@ -19,9 +19,6 @@ namespace utils
             using type = std::tuple<SubElements...>;
         };
 
-    template<typename Type, unsigned int Count>
-        using gen_tuple_t = typename tuple_generator<Count, Type>::type;
-
     template<typename... To>
         struct tuple_converter
         {

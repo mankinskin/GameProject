@@ -26,6 +26,21 @@ namespace gui
 
     struct QuadElement : public utils::ID<Quad>, signals::ButtonSignals<utils::ID<Quad>>
     {
+        using Preset = Quad;
+        struct Data
+        {
+            Data(const Quad q)
+                : quad(utils::makeID(q))
+            {}
+            Data(const utils::ID<Quad> id)
+                : quad(id)
+            {}
+            const utils::ID<Quad> quad;
+        };
+        QuadElement(const Data data)
+            : utils::ID<Quad>(data.quad)
+            , signals::ButtonSignals<utils::ID<Quad>>(data.quad)
+        {}
         QuadElement(const std::tuple<utils::ID<Quad>> id)
             : utils::ID<Quad>(std::get<0>(id))
             , signals::ButtonSignals<utils::ID<Quad>>(std::get<0>(id))

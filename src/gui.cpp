@@ -71,11 +71,25 @@ void gui::initWidgets()
 {
     using namespace signals;
     using namespace input;
-    Button::ElementPreset buttonElementPreset(70, 20, 2, 2);
+    Button::ElementPreset buttonElementPreset(100, 20);
     Button::Colors buttonColors(gl::getColor("black"), gl::getColor("grey"));
     Button::Preset buttonPreset(buttonElementPreset, buttonColors);
-    Button play_button(buttonPreset);
-    Button quit_button(buttonPreset);
+
+    const float width = 1.0f;
+    const size_t xcount = 5;
+    for (size_t w = 0; w < 100; ++w) {
+        Button but(buttonPreset);
+        but.wid->move(glm::vec2(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
+    }
+
+    ButtonList::ElementPreset buttonListElementPreset(100, 20);
+    ButtonList::Colors buttonListColors(buttonColors, buttonColors);
+    ButtonList::Preset buttonListPreset(buttonListElementPreset, buttonListColors);
+
+    for (size_t w = 0; w < 100; ++w) {
+        ButtonList but(buttonListPreset);
+        but.wid->move(glm::vec2(-1.0f + width + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
+    }
 
 
     //auto func_move_on = functor(moveWidget, play_button, input::relativeMouseDelta);
@@ -83,8 +97,6 @@ void gui::initWidgets()
     //link(enter_button, func_highlight_on);
     //link(leave_button, func_highlight_off);
 
-    play_button.wid->move(glm::vec2(0.5f, 0.5f));
-    quit_button.wid->move(glm::vec2(-0.5f, -0.5f));
 
     //gate<and_op, decltype(play_button_signals.hold_evt), decltype(lmb.on_evt)> play_press_evt(and_op(),
     //        play_button_signals.hold_evt, lmb.on_evt);

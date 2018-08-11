@@ -67,7 +67,7 @@ void gui::renderColorQuads()
 
 void gui::colorQuad(const utils::ID<Quad> pID, const utils::ID<gl::Color> pColor)
 {
-    printf("Coloring Quad %u with color %u\n", pID, pColor.index);
+    //printf("Coloring Quad %u with color %u\n", pID, pColor.index);
     quadColors[ pID.index ] = pColor.index;
 }
 

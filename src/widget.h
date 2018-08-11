@@ -27,11 +27,9 @@
 
 namespace gui
 {
-
     template<typename... Ts>
     struct WidgetSignals
     {
-        private:
         using SignalType = signals::SignalListener<signals::And, signals::SignalListener<signals::Or, typename Ts::SignalType...>, signals::SignalListener<signals::Nor, typename Ts::SignalType...>>;
         using HoverType = signals::SignalListener<signals::Flip, SignalType, SignalType>;
         using PressType = signals::SignalListener<signals::And, HoverType, signals::ButtonSignals<input::MouseKey>::SignalType>;
@@ -52,7 +50,6 @@ namespace gui
         {
             return leave;
         }
-        public:
         constexpr WidgetSignals(const std::tuple<Ts...> os)
             : enter(gen_event<true>(os, std::make_index_sequence<sizeof...(Ts)>()))
             , leave(gen_event<false>(os, std::make_index_sequence<sizeof...(Ts)>()))
@@ -70,57 +67,44 @@ namespace gui
         const ReleaseType release;
     };
 
-    template<typename... Elems>
-        struct WidgetElements : public WidgetSignals<Elems...>
+
+    template<typename Layout, typename... Elems>
+        struct WidgetElements : public WidgetSignals<Elems...>, public Layout
         {
-            constexpr static const size_t COUNT = sizeof...(Elems);
-            using SubPresets = std::tuple<typename Elems::Preset...>;
-
-            using MovePolicy = std::array<glm::vec2, COUNT>;
-            using ResizePolicy = std::array<glm::vec4, COUNT>;
-
+            static_assert(sizeof...(Elems) == Layout::COUNT);
+            using Elements = std::tuple<Elems...>;
             struct Preset
             {
-                Preset(const SubPresets qs, const MovePolicy mp, const ResizePolicy rp)
-                    : subpresets(qs)
-                      , movepolicy(mp)
-                      , resizepolicy(rp)
+                Preset(const size_t w, const size_t h)
+                    : subs(utils::convert_tuple<typename Elems::Preset...>(Layout::genQuads(glm::vec4(0.0f, 0.0f, toScreenX(w), toScreenY(h)))))
                 {}
-                const SubPresets subpresets;
-                const MovePolicy movepolicy;
-                const ResizePolicy resizepolicy;
+                Preset(const glm::vec4 q)
+                    : subs(utils::convert_tuple<typename Elems::Preset...>(Layout::genQuads(q)))
+                {}
+                const std::tuple<typename Elems::Preset...> subs;
             };
 
             struct Data
             {
-                Data(const Preset preset)
-                    : elems(utils::convert_tuple<Elems...>(preset.subpresets))
-                      , movepolicy(preset.movepolicy)
-                      , resizepolicy(preset.resizepolicy)
+                Data(const Preset pre)
+                    : elems(utils::convert_tuple<typename Elems::Data...>(pre.subs))
                 {}
-                Data(const std::tuple<Elems...> qs, const MovePolicy mp, const ResizePolicy rp)
-                    : elems(qs)
-                      , movepolicy(mp)
-                      , resizepolicy(rp)
-                {}
-                const std::tuple<Elems...> elems;
-                const MovePolicy movepolicy;
-                const ResizePolicy resizepolicy;
+                const std::tuple<typename Elems::Data...> elems;
             };
-
 
             WidgetElements(const Data data)
                 : WidgetSignals<Elems...>(data.elems)
                 , elements(data.elems)
-                , movepolicy(data.movepolicy)
-                , resizepolicy(data.resizepolicy)
             {}
-            const std::tuple<Elems...> elements;
-            const MovePolicy movepolicy;
-            const ResizePolicy resizepolicy;
 
+            const Elements elements;
+
+            using Layout::COUNT;
+            using Layout::movepolicy;
+            using Layout::resizepolicy;
             void move_n(utils::_index<0> i, const glm::vec2 v) const
             {}
+
             template<size_t N>
                 void move_n(utils::_index<N> i, const glm::vec2 v) const
                 {
@@ -145,71 +129,79 @@ namespace gui
             {
                 resize_n(utils::_index<COUNT>(), v);
             }
-            const WidgetElements<Elems...>* operator->() const
+            const WidgetElements<Layout, Elems...>* operator->() const
             {
                 return this;
             }
         };
 
-    template<typename... Colors>
+    template<typename... Cols>
         struct WidgetColors
         {
-            constexpr WidgetColors(Colors... cs)
+            using Colors = std::tuple<Cols...>;
+            constexpr WidgetColors(Cols... cs)
                 : colors(cs...)
             {}
-            constexpr WidgetColors(const std::tuple<Colors...> cs)
+            constexpr WidgetColors(const Colors cs)
                 : colors(cs)
             {}
-            const std::tuple<Colors...> colors;
+            const Colors colors;
         };
 
         void applyColor(const gl::ColorID col, const QuadElement elem);
 
-    template<typename... Colors, typename... Elems>
-        void applyColor_n(const WidgetColors<Colors...> cols, const WidgetElements<Elems...> elem, utils::_index<0>)
+    template<typename... Colors, typename Layout, typename... Elems>
+        void applyColor_n(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elem, utils::_index<0>)
         {}
-    template<typename... Colors, typename... Elems, size_t N>
-        void applyColor_n(const WidgetColors<Colors...> cols, const WidgetElements<Elems...> elem, utils::_index<N>)
+    template<typename... Colors, typename Layout, typename... Elems, size_t N>
+        void applyColor_n(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elem, utils::_index<N>)
         {
             applyColor_n(cols, elem, utils::_index<N-1>());
             applyColor(std::get<N-1>(cols.colors), std::get<N-1>(elem.elements));
         }
-    template<typename... Colors, typename... Elems>
-        void applyColor(const WidgetColors<Colors...> cols, const WidgetElements<Elems...> elem)
+    template<typename... Colors, typename Layout, typename... Elems>
+        void applyColor(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elem)
         {
             applyColor_n(cols, elem, utils::_index<sizeof...(Colors)>());
         }
+    template<typename Color, typename Elem>
+        void applyColor(const Color cols, const Elem elem)
+        {
+            applyColor(cols, elem);
+        }
 
-    template<typename Elem, typename Color>
-        struct Widget : public Elem, Color
+
+    template<typename Elements, typename Colors>
+        struct Widget : public Elements, Colors
         {
             public:
-                using ElementPreset = typename Elem::Preset;
+                using ElementPreset = typename Elements::Preset;
                 struct Preset
                 {
-                    Preset(const ElementPreset e, const Color c)
+                    Preset(const ElementPreset e, const Colors c)
                         : elem(e)
                         , col(c)
                     {}
 
                     const ElementPreset elem;
-                    const Color col;
+                    const Colors col;
                 };
-                using Data = typename Elem::Data;
-                using Color::colors;
+                using Data = typename Elements::Data;
+                using Colors::colors;
+                using Elements::elements;
 
                 Widget(Preset preset)
-                    : Elem(Data(preset.elem))
-                    , Color(preset.col)
+                    : Elements(Data(preset.elem))
+                    , Colors(preset.col)
                 {
-                    applyColor((Color)*this, (Elem)*this);
+                    applyColor((Colors)*this, (Elements)*this);
                 }
         };
 
     template<typename Wid>
         void moveWidget(const utils::ID<Wid> pWidget, glm::vec2& pV)
         {
-            printf("Move widget\n");
+            //printf("Move widget\n");
             pWidget->move(pV);
         }
 
