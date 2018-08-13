@@ -43,22 +43,22 @@ void func_void_conststrref(const std::string in)
 int main()
 {
     using namespace signals;
-    auto f1 = functor(func_int_void);
+    auto f1 = func(func_int_void);
     f1->invoke();
 
-    auto f2 = functor(func_void_int, 2);
+    auto f2 = func(func_void_int, 2);
     f2->invoke();
 
     const int constint = 3;
-    auto f3 = functor(func_void_constint, constint);
+    auto f3 = func(func_void_constint, constint);
     f3->invoke();
 
     const int& constintref = 4;
-    auto f4 = functor(func_void_constintref, constintref);
+    auto f4 = func(func_void_constintref, constintref);
     f4->invoke();
 
     const std::string& conststrref("constrstrref");
-    auto f5 = functor(func_void_conststrref, conststrref);
+    auto f5 = func(func_void_conststrref, conststrref);
     f5->invoke();
     Tester::pass();
     return 0;

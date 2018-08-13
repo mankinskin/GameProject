@@ -16,8 +16,8 @@ using namespace signals;
 
 void test_flip()
 {
-    utils::ID<Signal> setter = utils::makeID(Signal());
-    utils::ID<Signal> resetter = utils::makeID(Signal());
+    utils::ID<State> setter = utils::makeID(State());
+    utils::ID<State> resetter = utils::makeID(State());
     auto flipflop = flip(setter, resetter);
     assert(flipflop.stat() == false && "flipflop starts false");
     setter->set(true);

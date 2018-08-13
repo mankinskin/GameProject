@@ -33,7 +33,7 @@
    - if different -> generate event
    - check for relevant signals/wheater callbacks should be called
    - iterate through all signals
-   - check buttonID-specific range in functor array
+   - check buttonID-specific range in func array
    - callButtons
    */
 
@@ -87,17 +87,17 @@ void input::setupControls()
     key_x = utils::makeID(KeySignals(GLFW_KEY_X));
 
     {
-        auto exit_func = functor(app::quit);
-        auto toggle_cull_func = functor(mesh::toggleCullFace);
-        auto toggle_cursor_func = functor(input::toggleCursor);
-        auto toggle_look_func = functor<void(camera::Camera&), camera::Camera&>(camera::toggleLook, camera::main_camera);
-        auto toggle_grid_func = functor(glDebug::toggleGrid);
-        auto toggle_coord_func = functor(glDebug::toggleCoord);
-        auto toggle_info_func = functor(debug::togglePrintInfo);
-        auto toggle_normals_func = functor(mesh::toggleNormals);
-        auto cycle_cam_modes_func = functor<void(camera::Camera&), camera::Camera&>(camera::cycleModes, camera::main_camera);
-        auto higher_cam_speed_func = functor<void(camera::Camera&, float), camera::Camera&, float>(camera::setSpeed, camera::main_camera, 1.0f);
-        auto normal_cam_speed_func = functor<void(camera::Camera&, float), camera::Camera&, float>(camera::setSpeed, camera::main_camera, 0.3f);
+        auto exit_func = func(app::quit);
+        auto toggle_cull_func = func(mesh::toggleCullFace);
+        auto toggle_cursor_func = func(input::toggleCursor);
+        auto toggle_look_func = func<void(camera::Camera&), camera::Camera&>(camera::toggleLook, camera::main_camera);
+        auto toggle_grid_func = func(glDebug::toggleGrid);
+        auto toggle_coord_func = func(glDebug::toggleCoord);
+        auto toggle_info_func = func(debug::togglePrintInfo);
+        auto toggle_normals_func = func(mesh::toggleNormals);
+        auto cycle_cam_modes_func = func<void(camera::Camera&), camera::Camera&>(camera::cycleModes, camera::main_camera);
+        auto higher_cam_speed_func = func<void(camera::Camera&, float), camera::Camera&, float>(camera::setSpeed, camera::main_camera, 1.0f);
+        auto normal_cam_speed_func = func<void(camera::Camera&, float), camera::Camera&, float>(camera::setSpeed, camera::main_camera, 0.3f);
 
         link(ifAny(key_c->on, Mouse::rmb->on, Mouse::rmb->off), toggle_look_func);
         link(ifAny(key_c->on, Mouse::rmb->on, Mouse::rmb->off), toggle_cursor_func);
@@ -112,12 +112,12 @@ void input::setupControls()
     }
 
     {//camera
-        auto forward_func = functor<void(camera::Camera&), camera::Camera&>(camera::forward, camera::main_camera);
-        auto backward_func = functor<void(camera::Camera&), camera::Camera&>(camera::back, camera::main_camera);
-        auto left_func = functor<void(camera::Camera&), camera::Camera&>(camera::left, camera::main_camera);
-        auto right_func = functor<void(camera::Camera&), camera::Camera&>(camera::right, camera::main_camera);
-        auto off_func = functor<void(camera::Camera&), camera::Camera&>(camera::up, camera::main_camera);
-        auto on_func = functor<void(camera::Camera&), camera::Camera&>(camera::down, camera::main_camera);
+        auto forward_func = func<void(camera::Camera&), camera::Camera&>(camera::forward, camera::main_camera);
+        auto backward_func = func<void(camera::Camera&), camera::Camera&>(camera::back, camera::main_camera);
+        auto left_func = func<void(camera::Camera&), camera::Camera&>(camera::left, camera::main_camera);
+        auto right_func = func<void(camera::Camera&), camera::Camera&>(camera::right, camera::main_camera);
+        auto off_func = func<void(camera::Camera&), camera::Camera&>(camera::up, camera::main_camera);
+        auto on_func = func<void(camera::Camera&), camera::Camera&>(camera::down, camera::main_camera);
 
         link(key_w->on, forward_func);
         link(key_w->off, backward_func);

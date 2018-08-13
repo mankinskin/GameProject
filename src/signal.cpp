@@ -2,18 +2,19 @@
 
 std::vector<void(*)()> signals::eventCheckFuncs;
 std::vector<void(*)()> signals::signalClearFuncs;
-std::vector<std::pair<signals::Listener, signals::Invoker>> signals::links;
+std::vector<std::pair<const signals::Listener, const signals::Invoker>> signals::links;
 
 void signals::processLinks()
 {
-    for (std::pair<Listener, Invoker>& link : links) {
+    for (const std::pair<const Listener, const Invoker>& link : links) {
         if (link.first.stat()) {
             link.second.invoke();
         }
     }
+    Signal::reset();
 }
 
-void signals::link(Listener pListener, Invoker pInvoker)
+void signals::link(const Listener pListener, const Invoker pInvoker)
 {
     links.push_back(std::make_pair(pListener, pInvoker));
 }

@@ -31,10 +31,10 @@ namespace signals
                 static constexpr typename ID::Container& all = ID::container;
                 constexpr EventListener(const E pSignature)
                     : signature(pSignature)
-                      , occurred(false)
-            {
-                initialize();
-            }
+                    , occurred(false)
+                {
+                    initialize();
+                }
 
                 static void pushEvent(const E& pEvent)
                 {

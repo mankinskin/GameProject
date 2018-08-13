@@ -157,59 +157,6 @@ namespace signals
                     const std::tuple<const Signals...> signals;
             };
 
-        struct Signal
-        {
-            Signal(bool s = false)
-                : status(s)
-            {}
-
-            constexpr void set(bool s)
-            {
-                status = s;
-            }
-            constexpr bool stat() const
-            {
-                return status;
-            }
-            constexpr const Signal* operator->() const
-            {
-                return this;
-            }
-            private:
-            bool status;
-        };
-
-        template<typename Set, typename Reset>
-            struct Flip
-            {
-                Flip(const Set pA, const Reset pB, bool startAs = false)
-                    : set(pA)
-                    , reset(pB)
-                    , on(utils::makeID(Signal(startAs)))
-                    , off(utils::makeID(Signal(!startAs)))
-                {}
-                constexpr const utils::ID<Signal> state() const
-                {
-                    return on;
-                }
-                constexpr bool stat() const
-                {
-                    if (set->stat() && reset->stat())
-                        return on->stat();
-                    off->set(!(on->stat() || set->stat()));
-                    on->set(!(off->stat() || reset->stat()));
-                    return on->stat();
-                }
-                constexpr const Flip* operator->() const
-                {
-                    return this;
-                }
-                private:
-                const utils::ID<Signal> on;
-                const utils::ID<Signal> off;
-                const Set set;
-                const Reset reset;
-            };
 
 
 
@@ -260,7 +207,6 @@ namespace signals
                     };
         };
 
-
     template<typename... Signals>
         constexpr const SignalListener<And, Signals...> ifAll(const Signals... sigs)
         {
@@ -291,10 +237,125 @@ namespace signals
             return SignalListener<Equal, Signals...>(sigs...);
         }
 
+        struct State
+        {
+            State(bool s = false)
+                : status(s)
+            {}
+
+            constexpr void set(bool s)
+            {
+                status = s;
+            }
+            constexpr bool stat() const
+            {
+                return status;
+            }
+            constexpr const State* operator->() const
+            {
+                return this;
+            }
+            private:
+            bool status;
+        };
+
+        struct Signal
+        {
+            Signal(bool s = false)
+                : status(s)
+            {}
+
+            constexpr void set(bool s)
+            {
+                status = s;
+            }
+            constexpr bool stat() const
+            {
+                return status;
+            }
+            constexpr const Signal* operator->() const
+            {
+                return this;
+            }
+            static void reset()
+            {
+                std::fill(all.begin(), all.end(), Signal());
+            }
+            private:
+            static constexpr utils::ID<Signal>::Container& all = utils::ID<Signal>::container;
+            bool status;
+        };
+
+
+        template<typename S, typename R>
+            struct Flip
+            {
+                using Set = S;
+                using Reset = R;
+                Flip(const S pS, const R pR, bool startAs = false)
+                    : state(utils::makeID(State(startAs)))
+                    , set(pS)
+                    , reset(pR)
+                {}
+
+                constexpr void setOnOff() const
+                {
+                    if (set->stat() && reset->stat()) {
+                        return;
+                    } else if (reset->stat()) {
+                        state->set(false);
+                    } else if (set->stat()) {
+                        state->set(true);
+                    }
+                }
+                constexpr bool stat() const
+                {
+                    setOnOff();
+                    return state->stat();
+                }
+                constexpr const Flip* operator->() const
+                {
+                    return this;
+                }
+                protected:
+                const utils::ID<State> state;
+                const S set;
+                const R reset;
+            };
+
+        template<typename S, typename R>
+            struct Clicker : public Flip<S, R>
+            {
+                Clicker(const Flip<S, R> flip, const bool t)
+                    : Flip<S, R>(flip)
+                    , to(t)
+                    , prevState(utils::makeID(State(false)))
+                {}
+                constexpr bool stat() const
+                {
+                    Flip<S, R>::setOnOff();
+                    bool oldState = prevState->stat();
+                    prevState->set(Flip<S, R>::state->stat());
+                    return (oldState != to) && (Flip<S, R>::state->stat() == to);
+                }
+                constexpr const Clicker* operator->() const
+                {
+                    return this;
+                }
+                private:
+                const bool to;
+                const utils::ID<State> prevState;
+            };
+
     template<typename Set, typename Reset>
         constexpr const SignalListener<Flip, Set, Reset> flip(const Set set, const Reset reset, bool startAs = false)
         {
             return SignalListener<Flip, Set, Reset>(Flip<Set, Reset>(set, reset, startAs));
+        }
+    template<typename Set, typename Reset>
+        constexpr const SignalListener<Clicker, Set, Reset> clicker(const Flip<Set, Reset> f, const bool to)
+        {
+            return SignalListener<Clicker, Set, Reset>(Clicker<Set, Reset>(f, to));
         }
 
     struct Listener
@@ -317,11 +378,10 @@ namespace signals
             : stater(SignalListener<Op, Signals...>::stat)
             , index(utils::makeID(pListener).index)
         {}
-            Listener(const utils::ID<Listener> pListener)
+        Listener(const utils::ID<Listener> pListener)
             : stater(pListener->stater)
             , index(pListener->index)
         {}
-
         bool stat() const
         {
             return stater(index);
@@ -329,7 +389,6 @@ namespace signals
 
         bool(&stater)(const size_t);
         const size_t index;
-        private:
     };
 
     template<typename E>
@@ -351,7 +410,7 @@ namespace signals
 
     void processLinks();
 
-        extern std::vector<std::pair<Listener, Invoker>> links;
+        extern std::vector<std::pair<const Listener, const Invoker>> links;
         void link(Listener pListener, Invoker pInvoker);
 
     template<typename Signal, typename R, typename... Args>
@@ -391,10 +450,12 @@ namespace signals
             , off(ifEvent(EventType(o, false)))
             , hold(flip(on, off))
         {}
+
         constexpr const SignalType event(utils::_bool<true>) const
         {
             return on;
         }
+
         constexpr const SignalType event(utils::_bool<false>) const
         {
             return off;

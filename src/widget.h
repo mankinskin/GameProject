@@ -32,9 +32,10 @@ namespace gui
     {
         using SignalType = signals::SignalListener<signals::And, signals::SignalListener<signals::Or, typename Ts::SignalType...>, signals::SignalListener<signals::Nor, typename Ts::SignalType...>>;
         using HoverType = signals::SignalListener<signals::Flip, SignalType, SignalType>;
-        using PressType = signals::SignalListener<signals::And, HoverType, signals::ButtonSignals<input::MouseKey>::SignalType>;
-        using ReleaseType = signals::SignalListener<signals::And, utils::ID<signals::Signal>, signals::ButtonSignals<input::MouseKey>::SignalType>;
-        using HoldType = signals::SignalListener<signals::Flip, PressType, signals::ButtonSignals<input::MouseKey>::SignalType>;
+        using HoldType = signals::SignalListener<signals::Flip, signals::SignalListener<signals::And, HoverType, signals::ButtonSignals<input::MouseKey>::SignalType>, signals::ButtonSignals<input::MouseKey>::SignalType>;
+        using PressType = signals::SignalListener<signals::Clicker, typename HoldType::Set, typename HoldType::Reset>;
+        using ReleaseType = signals::SignalListener<signals::Clicker, typename HoldType::Set, typename HoldType::Reset>;
+
         template<bool S, size_t... Ns>
             constexpr SignalType gen_event(const std::tuple<Ts...> elems, const std::index_sequence<Ns...>) const
             {
@@ -42,6 +43,7 @@ namespace gui
                         signals::ifAny(std::get<Ns>(elems).event(utils::_bool<S>())...),
                         signals::ifNone(std::get<Ns>(elems).event(utils::_bool<!S>())...));
             }
+
         constexpr const SignalType event(utils::_bool<true>) const
         {
             return enter;
@@ -54,16 +56,16 @@ namespace gui
             : enter(gen_event<true>(os, std::make_index_sequence<sizeof...(Ts)>()))
             , leave(gen_event<false>(os, std::make_index_sequence<sizeof...(Ts)>()))
             , hover(flip(enter, leave))
-            , press(ifAll(hover, input::Mouse::lmb->on))
-            , hold(flip(press, input::Mouse::lmb->off))
-            , release(ifAll(hold->state(), input::Mouse::lmb->off))
+            , hold(flip(ifAll(hover, input::Mouse::lmb->on), input::Mouse::lmb->off))
+            , press(clicker(hold, true))
+            , release(clicker(hold, false))
         {}
 
         const SignalType enter;
         const SignalType leave;
         const HoverType hover;
-        const PressType press;
         const HoldType hold;
+        const PressType press;
         const ReleaseType release;
     };
 
@@ -71,7 +73,7 @@ namespace gui
     template<typename Layout, typename... Elems>
         struct WidgetElements : public WidgetSignals<Elems...>, public Layout
         {
-            static_assert(sizeof...(Elems) == Layout::COUNT);
+            static_assert(sizeof...(Elems) == Layout::ELEMENT_COUNT);
             using Elements = std::tuple<Elems...>;
             struct Preset
             {
@@ -99,7 +101,7 @@ namespace gui
 
             const Elements elements;
 
-            using Layout::COUNT;
+            using Layout::ELEMENT_COUNT;
             using Layout::movepolicy;
             using Layout::resizepolicy;
             void move_n(utils::_index<0> i, const glm::vec2 v) const
@@ -123,17 +125,28 @@ namespace gui
                 }
             void move(const glm::vec2 v) const
             {
-                move_n(utils::_index<COUNT>(), v);
+                move_n(utils::_index<ELEMENT_COUNT>(), v);
             }
             void resize(const glm::vec2 v) const
             {
-                resize_n(utils::_index<COUNT>(), v);
+                resize_n(utils::_index<ELEMENT_COUNT>(), v);
             }
             const WidgetElements<Layout, Elems...>* operator->() const
             {
                 return this;
             }
         };
+    template<typename Element>
+        void moveWidget(const utils::ID<Element>& pWidget, const glm::vec2& pV)
+        {
+            pWidget->move(pV);
+        }
+
+    template<typename Element>
+        void resizeWidget(const utils::ID<Element>& pWidget, const glm::vec2& pV)
+        {
+            pWidget->resize(pV);
+        }
 
     template<typename... Cols>
         struct WidgetColors
@@ -172,7 +185,7 @@ namespace gui
 
 
     template<typename Elements, typename Colors>
-        struct Widget : public Elements, Colors
+        struct Widget : public Colors
         {
             public:
                 using ElementPreset = typename Elements::Preset;
@@ -188,26 +201,28 @@ namespace gui
                 };
                 using Data = typename Elements::Data;
                 using Colors::colors;
-                using Elements::elements;
+                const utils::ID<Elements> e;
+
+                const utils::ID<Elements> operator->() const
+                {
+                    return e;
+                }
 
                 Widget(Preset preset)
-                    : Elements(Data(preset.elem))
-                    , Colors(preset.col)
+                    : Colors(preset.col)
+                    , e(utils::makeID<Elements>(Data(preset.elem)))
                 {
-                    applyColor((Colors)*this, (Elements)*this);
+                    applyColor((Colors)*this, *e);
+                    using namespace signals;
+
+                    link(e->enter, func(applyColor<gl::ColorID, QuadElement>, gl::getColor("white"), std::get<0>(e->elements)));
+                    link(e->leave, func(applyColor<gl::ColorID, QuadElement>, std::get<0>(colors), std::get<0>(e->elements)));
+
+                    link(e->press, func(applyColor<gl::ColorID, QuadElement>, gl::getColor("white"), std::get<1>(e->elements)));
+                    link(e->release, func(applyColor<gl::ColorID, QuadElement>, std::get<1>(colors), std::get<1>(e->elements)));
+
+                    link(e->hold, refFunc(moveWidget<Elements>, (utils::ID<Elements>)e, (glm::vec2&)input::cursorFrameDelta));
                 }
         };
 
-    template<typename Wid>
-        void moveWidget(const utils::ID<Wid> pWidget, glm::vec2& pV)
-        {
-            //printf("Move widget\n");
-            pWidget->move(pV);
-        }
-
-    template<typename Wid>
-        void resizeWidget(const utils::ID<Wid> pWidget, glm::vec2& pV)
-        {
-            pWidget->resize(pV);
-        }
 }

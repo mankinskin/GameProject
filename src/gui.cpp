@@ -78,22 +78,22 @@ void gui::initWidgets()
     const float width = 1.0f;
     const size_t xcount = 5;
     for (size_t w = 0; w < 100; ++w) {
-        Button but(buttonPreset);
-        but.wid->move(glm::vec2(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
+        Button::Widget but(buttonPreset);
+        but->move(glm::vec2(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
     }
 
-    ButtonList::ElementPreset buttonListElementPreset(100, 20);
-    ButtonList::Colors buttonListColors(buttonColors, buttonColors);
-    ButtonList::Preset buttonListPreset(buttonListElementPreset, buttonListColors);
+    //ButtonList::ElementPreset buttonListElementPreset(100, 20);
+    //ButtonList::Colors buttonListColors(buttonColors, buttonColors);
+    //ButtonList::Preset buttonListPreset(buttonListElementPreset, buttonListColors);
 
-    for (size_t w = 0; w < 100; ++w) {
-        ButtonList but(buttonListPreset);
-        but.wid->move(glm::vec2(-1.0f + width + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
-    }
+    //for (size_t w = 0; w < 100; ++w) {
+    //    ButtonList but(buttonListPreset);
+    //    but.wid->move(glm::vec2(-1.0f + width + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
+    //}
 
 
-    //auto func_move_on = functor(moveWidget, play_button, input::relativeMouseDelta);
-    //auto func_move_off = functor(colorQuad, std::get<0>(play_button->elements).quad, std::get<0>(play_button->elements).color);
+    //auto func_move_on = func(moveWidget, play_button, input::relativeMouseDelta);
+    //auto func_move_off = func(colorQuad, std::get<0>(play_button->elements).quad, std::get<0>(play_button->elements).color);
     //link(enter_button, func_highlight_on);
     //link(leave_button, func_highlight_off);
 
