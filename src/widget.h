@@ -37,7 +37,7 @@ namespace gui
         using ReleaseType = signals::SignalListener<signals::Clicker, typename HoldType::Set, typename HoldType::Reset>;
 
         template<bool S, size_t... Ns>
-            constexpr SignalType gen_event(const std::tuple<Ts...> elems, const std::index_sequence<Ns...>) const
+            constexpr SignalType gen_event(const std::tuple<Ts...>& elems, const std::index_sequence<Ns...>) const
             {
                 return signals::ifAll(
                         signals::ifAny(std::get<Ns>(elems).event(utils::_bool<S>())...),
@@ -52,7 +52,7 @@ namespace gui
         {
             return leave;
         }
-        constexpr WidgetSignals(const std::tuple<Ts...> os)
+        constexpr WidgetSignals(const std::tuple<Ts...>& os)
             : enter(gen_event<true>(os, std::make_index_sequence<sizeof...(Ts)>()))
             , leave(gen_event<false>(os, std::make_index_sequence<sizeof...(Ts)>()))
             , hover(flip(enter, leave))
@@ -89,9 +89,9 @@ namespace gui
             struct Data
             {
                 Data(const Preset pre)
-                    : elems(utils::convert_tuple<typename Elems::Data...>(pre.subs))
+                    : elems(utils::convert_tuple<Elems...>(utils::convert_tuple<typename Elems::Data...>(pre.subs)))
                 {}
-                const std::tuple<typename Elems::Data...> elems;
+                const Elements elems;
             };
 
             WidgetElements(const Data data)
@@ -136,16 +136,16 @@ namespace gui
                 return this;
             }
         };
-    template<typename Element>
-        void moveWidget(const utils::ID<Element>& pWidget, const glm::vec2& pV)
+    template<typename Elements>
+        void moveWidget(const Elements pElements, const glm::vec2& pV)
         {
-            pWidget->move(pV);
+            pElements->move(pV);
         }
 
-    template<typename Element>
-        void resizeWidget(const utils::ID<Element>& pWidget, const glm::vec2& pV)
+    template<typename Elements>
+        void resizeWidget(const Elements pElements, const glm::vec2& pV)
         {
-            pWidget->resize(pV);
+            pElements->resize(pV);
         }
 
     template<typename... Cols>
@@ -161,31 +161,31 @@ namespace gui
             const Colors colors;
         };
 
-        void applyColor(const gl::ColorID col, const QuadElement elem);
+        void applyColor_imp(const gl::ColorID col, const QuadElement elem);
 
-    template<typename... Colors, typename Layout, typename... Elems>
-        void applyColor_n(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elem, utils::_index<0>)
-        {}
-    template<typename... Colors, typename Layout, typename... Elems, size_t N>
-        void applyColor_n(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elem, utils::_index<N>)
-        {
-            applyColor_n(cols, elem, utils::_index<N-1>());
-            applyColor(std::get<N-1>(cols.colors), std::get<N-1>(elem.elements));
-        }
-    template<typename... Colors, typename Layout, typename... Elems>
-        void applyColor(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elem)
-        {
-            applyColor_n(cols, elem, utils::_index<sizeof...(Colors)>());
-        }
     template<typename Color, typename Elem>
-        void applyColor(const Color cols, const Elem elem)
+        void applyColor(Color col, Elem elem)
         {
-            applyColor(cols, elem);
+            applyColor_imp(col, elem);
+        }
+    template<typename... Colors, typename... Elems>
+        void applyColor_imp_n(const WidgetColors<Colors...> cols, const std::tuple<Elems...> elems, utils::_index<0>)
+        {}
+    template<typename... Colors, typename... Elems, size_t N>
+        void applyColor_imp_n(const WidgetColors<Colors...> cols, const std::tuple<Elems...> elems, utils::_index<N>)
+        {
+            applyColor_imp_n(cols, elems, utils::_index<N-1>());
+            applyColor(std::get<N-1>(cols.colors), std::get<N-1>(elems));
+        }
+    template<typename... Colors, typename... Elems>
+        void applyColor_imp(const WidgetColors<Colors...> cols, const std::tuple<Elems...> elems)
+        {
+            applyColor_imp_n(cols, elems, utils::_index<sizeof...(Colors)>());
         }
 
 
     template<typename Elements, typename Colors>
-        struct Widget : public Colors
+        struct Widget : public Elements, Colors
         {
             public:
                 using ElementPreset = typename Elements::Preset;
@@ -199,29 +199,28 @@ namespace gui
                     const ElementPreset elem;
                     const Colors col;
                 };
-                using Data = typename Elements::Data;
                 using Colors::colors;
-                const utils::ID<Elements> e;
+                using Elements::elements;
+                using Elements::enter;
+                using Elements::leave;
+                using Elements::press;
+                using Elements::release;
+                using Elements::hold;
 
-                const utils::ID<Elements> operator->() const
+                Widget(const Preset preset)
+                    : Elements(typename Elements::Data(preset.elem))
+                    , Colors(preset.col)
                 {
-                    return e;
-                }
-
-                Widget(Preset preset)
-                    : Colors(preset.col)
-                    , e(utils::makeID<Elements>(Data(preset.elem)))
-                {
-                    applyColor((Colors)*this, *e);
+                    applyColor((Colors)*this, elements);
                     using namespace signals;
 
-                    link(e->enter, func(applyColor<gl::ColorID, QuadElement>, gl::getColor("white"), std::get<0>(e->elements)));
-                    link(e->leave, func(applyColor<gl::ColorID, QuadElement>, std::get<0>(colors), std::get<0>(e->elements)));
+                    link(enter, func(applyColor<gl::ColorID, QuadElement>, gl::getColor("white"), std::get<0>(elements)));
+                    link(leave, func(applyColor<gl::ColorID, QuadElement>, std::get<0>(colors), std::get<0>(elements)));
 
-                    link(e->press, func(applyColor<gl::ColorID, QuadElement>, gl::getColor("white"), std::get<1>(e->elements)));
-                    link(e->release, func(applyColor<gl::ColorID, QuadElement>, std::get<1>(colors), std::get<1>(e->elements)));
+                    link(press, func(applyColor<gl::ColorID, QuadElement>, gl::getColor("white"), std::get<1>(elements)));
+                    link(release, func(applyColor<gl::ColorID, QuadElement>, std::get<1>(colors), std::get<1>(elements)));
 
-                    link(e->hold, refFunc(moveWidget<Elements>, (utils::ID<Elements>)e, (glm::vec2&)input::cursorFrameDelta));
+                    link(hold, refFunc(moveWidget<Elements>, (Elements)*this, (glm::vec2&)input::cursorFrameDelta));
                 }
         };
 
