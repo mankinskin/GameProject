@@ -22,14 +22,14 @@ namespace gui
                             q.z - toScreenX(marginx*2),
                             q.w - toScreenY(marginy*2))};
         }
-        template<typename Elements, typename Colors>
-        static void setup(const Widget<Elements, Colors>& w)
+        template<typename... Elems>
+        static void setup(const Widget<ButtonLayout, Elems...>& w)
         {
-            link(w.enter, func(applyColor<std::tuple_element_t<0, typename Colors::Colors>, std::tuple_element_t<0, typename Elements::Elements>>, gl::getColor("white"), std::get<0>(w.elements)));
-            link(w.leave, func(applyColor<std::tuple_element_t<0, typename Colors::Colors>, std::tuple_element_t<0, typename Elements::Elements>>, std::get<0>(w.colors), std::get<0>(w.elements)));
+            //link(w.enter, func(applyColor<std::tuple_element_t<0, typename Colors::Colors>, std::tuple_element_t<0, typename Elements::Elements>>, gl::getColor("white"), std::get<0>(w.elements)));
+            //link(w.leave, func(applyColor<std::tuple_element_t<0, typename Colors::Colors>, std::tuple_element_t<0, typename Elements::Elements>>, std::get<0>(w.colors), std::get<0>(w.elements)));
 
-            link(w.press, func(applyColor<std::tuple_element_t<1, typename Colors::Colors>, std::tuple_element_t<1, typename Elements::Elements>>, gl::getColor("white"), std::get<1>(w.elements)));
-            link(w.leave, func(applyColor<std::tuple_element_t<1, typename Colors::Colors>, std::tuple_element_t<1, typename Elements::Elements>>, std::get<1>(w.colors), std::get<1>(w.elements)));
+            //link(w.press, func(applyColor<std::tuple_element_t<1, typename Colors::Colors>, std::tuple_element_t<1, typename Elements::Elements>>, gl::getColor("white"), std::get<1>(w.elements)));
+            //link(w.leave, func(applyColor<std::tuple_element_t<1, typename Colors::Colors>, std::tuple_element_t<1, typename Elements::Elements>>, std::get<1>(w.colors), std::get<1>(w.elements)));
 
         }
     };
@@ -39,14 +39,7 @@ namespace gui
             ButtonLayout::resizepolicy = {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
                     glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)};
 
-    namespace Button
-    {
-        using Elements = WidgetElements<ButtonLayout, QuadElement, QuadElement>;
-        using Colors = WidgetColors<gl::ColorID, gl::ColorID>;
-        using Widget = Widget<Elements, Colors>;
-        using ElementPreset = typename Widget::ElementPreset;
-        using Preset = typename Widget::Preset;
-    };
+    using Button = Widget<ButtonLayout, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>>;
 
     struct ButtonListLayout
     {
@@ -61,8 +54,8 @@ namespace gui
                 glm::vec4(q.x, q.y, q.z, q.w/2.0f),
                 glm::vec4(q.x, q.y - q.w/2.0f, q.z, q.w/2.0f)};
         }
-        template<typename Elements, typename Colors>
-        static void setup(const Widget<Elements, Colors>& w)
+        template<typename... Elems>
+        static void setup(const Widget<ButtonListLayout, Elems...>& w)
         {
             using namespace signals;
         }
@@ -73,12 +66,5 @@ namespace gui
             ButtonListLayout::resizepolicy = {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
                     glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)};
 
-    namespace ButtonList
-    {
-        using Elements = WidgetElements<ButtonListLayout, Button::Elements, Button::Elements>;
-        using Colors = WidgetColors<Button::Colors, Button::Colors>;
-        using Widget = Widget<Elements, Colors>;
-        using ElementPreset = typename Widget::ElementPreset;
-        using Preset = typename Widget::Preset;
-    }
+    using ButtonList = Widget<ButtonListLayout, Button, Button>;
 }

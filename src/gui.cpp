@@ -71,23 +71,24 @@ void gui::initWidgets()
 {
     using namespace signals;
     using namespace input;
-    Button::ElementPreset buttonElementPreset(100, 20);
     Button::Colors buttonColors(gl::getColor("black"), gl::getColor("grey"));
-    Button::Preset buttonPreset(buttonElementPreset, buttonColors);
+    Button::Preset buttonPreset(glm::vec4(0.0f, 0.0f, toScreenX(100), toScreenY(20)), buttonColors);
 
     const float width = 1.0f;
     const size_t xcount = 5;
     for (size_t w = 0; w < 100; ++w) {
-        Button::Widget but(buttonPreset);
+        Button but(buttonPreset);
+        //applyColor(buttonColors, but);
         but->move(glm::vec2(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
     }
 
-    ButtonList::ElementPreset buttonListElementPreset(100, 20);
+
     ButtonList::Colors buttonListColors(buttonColors, buttonColors);
-    ButtonList::Preset buttonListPreset(buttonListElementPreset, buttonListColors);
+    ButtonList::Preset buttonListPreset(glm::vec4(0.0f, 0.0f, toScreenX(100), toScreenY(20)), buttonListColors);
 
     for (size_t w = 0; w < 100; ++w) {
-        ButtonList::Widget but(buttonListPreset);
+        ButtonList but(buttonListPreset);
+        //applyColor(buttonListColors, but);
         but->move(glm::vec2(-1.0f + width + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
     }
 

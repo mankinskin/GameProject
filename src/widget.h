@@ -70,18 +70,103 @@ namespace gui
     };
 
 
-    template<typename Layout, typename... Elems>
-        struct WidgetElements : public WidgetSignals<Elems...>, public Layout
+    template<typename W>
+        void moveWidget(const W& pW, const glm::vec2& pV)
         {
-            static_assert(sizeof...(Elems) == Layout::ELEMENT_COUNT);
+            pW.move(pV);
+        }
+
+    template<typename W>
+        void resizeWidget(const W& pW, const glm::vec2& pV)
+        {
+            pW.resize(pV);
+        }
+
+    template<typename... Cols>
+        struct WidgetColors
+        {
+            using Colors = std::tuple<Cols...>;
+            constexpr WidgetColors(const Cols... cs)
+                : colors(cs...)
+            {}
+            constexpr WidgetColors(const Colors cs)
+                : colors(cs)
+            {}
+            const Colors colors;
+        };
+
+    template<typename... Colors, typename... Elems>
+        void applyColor_imp_n(const WidgetColors<Colors...> cols, const std::tuple<Elems...> elems, utils::_index<0>)
+        {}
+    template<typename... Colors, typename... Elems>
+        void applyColor_imp(const WidgetColors<Colors...> cols, const std::tuple<Elems...> elems)
+        {
+            applyColor_imp_n(cols, elems, utils::_index<sizeof...(Colors)>());
+        }
+    template<typename Color, typename Wid>
+        void applyColor(const Color col, const Wid wid)
+        {
+            applyColor_imp(col, wid);
+        }
+    template<typename... Colors, typename... Elems, size_t N>
+        void applyColor_imp_n(const WidgetColors<Colors...> cols, const std::tuple<Elems...> elems, utils::_index<N>)
+        {
+            applyColor_imp_n(cols, elems, utils::_index<N-1>());
+            applyColor(std::get<N-1>(cols.colors), std::get<N-1>(elems));
+        }
+    template<typename Color>
+    struct QuadElement : public utils::ID<Quad>, signals::ButtonSignals<utils::ID<Quad>>
+    {
+        using Colors = Color;
+        struct Preset
+        {
+            Preset(const Quad q, const Color col)
+                : quad(q)
+                , color(col)
+            {}
+            const Quad quad;
+            const Color color;
+        };
+        struct Data
+        {
+            Data(const Preset pre)
+                : quad(utils::makeID(pre.quad))
+                , color(pre.color)
+            {
+                colorQuad(quad, color);
+            }
+            const utils::ID<Quad> quad;
+            const Color color;
+        };
+        QuadElement(const Data data)
+            : utils::ID<Quad>(data.quad)
+            , signals::ButtonSignals<utils::ID<Quad>>(data.quad)
+            , color(data.color)
+        {}
+        const Color color;
+    };
+    template<typename Color>
+        void applyColor_imp(const gl::ColorID col, const QuadElement<Color> elem)
+        {
+            colorQuad(elem, col);
+        }
+
+
+
+    template<typename Layout, typename... Elems>
+        struct Widget : public WidgetSignals<Elems...>, Layout
+        {
             using Elements = std::tuple<Elems...>;
+            using Layout::ELEMENT_COUNT;
+            using Layout::movepolicy;
+            using Layout::resizepolicy;
+            using Colors = WidgetColors<typename Elems::Colors...>;
+            static_assert(sizeof...(Elems) == Layout::ELEMENT_COUNT);
+
             struct Preset
             {
-                Preset(const size_t w, const size_t h)
-                    : subs(utils::convert_tuple<typename Elems::Preset...>(Layout::genQuads(glm::vec4(0.0f, 0.0f, toScreenX(w), toScreenY(h)))))
-                {}
-                Preset(const glm::vec4 q)
-                    : subs(utils::convert_tuple<typename Elems::Preset...>(Layout::genQuads(q)))
+                Preset(const glm::vec4 q, const Colors cols)
+                    : subs(utils::convert_tuple<typename Elems::Preset...>(Layout::genQuads(q), cols.colors))
                 {}
                 const std::tuple<typename Elems::Preset...> subs;
             };
@@ -93,17 +178,17 @@ namespace gui
                 {}
                 const Elements elems;
             };
-
-            WidgetElements(const Data data)
+            Widget(const Data data)
                 : WidgetSignals<Elems...>(data.elems)
                 , elements(data.elems)
-            {}
+            {
+                using namespace signals;
+
+                link(WidgetSignals<Elems...>::hold, refFunc(moveWidget<Widget<Layout, Elems...>>, (Widget<Layout, Elems...>)*this, (glm::vec2&)input::cursorFrameDelta));
+            }
 
             const Elements elements;
 
-            using Layout::ELEMENT_COUNT;
-            using Layout::movepolicy;
-            using Layout::resizepolicy;
             void move_n(utils::_index<0> i, const glm::vec2 v) const
             {}
 
@@ -130,95 +215,17 @@ namespace gui
             {
                 resize_n(utils::_index<ELEMENT_COUNT>(), v);
             }
-            const WidgetElements<Layout, Elems...>* operator->() const
+            const Widget<Layout, Elems...>* operator->() const
             {
                 return this;
             }
         };
-    template<typename Elements>
-        void moveWidget(const Elements pElements, const glm::vec2& pV)
-        {
-            pElements->move(pV);
-        }
 
-    template<typename Elements>
-        void resizeWidget(const Elements pElements, const glm::vec2& pV)
-        {
-            pElements->resize(pV);
-        }
-
-    template<typename... Cols>
-        struct WidgetColors
-        {
-            using Colors = std::tuple<Cols...>;
-            constexpr WidgetColors(Cols... cs)
-                : colors(cs...)
-            {}
-            constexpr WidgetColors(const Colors cs)
-                : colors(cs)
-            {}
-            const Colors colors;
-        };
-
-        void applyColor_imp(const gl::ColorID col, const QuadElement elem);
-
-    template<typename Color, typename Elem>
-        void applyColor(Color col, Elem elem)
-        {
-            applyColor_imp(col, elem);
-        }
     template<typename... Colors, typename Layout, typename... Elems>
-        void applyColor_imp_n(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elems, utils::_index<0>)
-        {}
-    template<typename... Colors, typename Layout, typename... Elems, size_t N>
-        void applyColor_imp_n(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elems, utils::_index<N>)
+        void applyColor_imp(const WidgetColors<Colors...> cols, const Widget<Layout, Elems...> wid)
         {
-            applyColor_imp_n(cols, elems, utils::_index<N-1>());
-            applyColor(std::get<N-1>(cols.colors), std::get<N-1>(elems.elements));
-        }
-    template<typename... Colors, typename Layout, typename... Elems>
-        void applyColor_imp(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elems)
-        {
-            applyColor_imp_n(cols, elems, utils::_index<sizeof...(Colors)>());
+            applyColor_imp_n(cols, wid.elements, utils::_index<sizeof...(Colors)>());
         }
 
-
-    template<typename Elems, typename Cols>
-        struct Widget : public Elems, Cols
-        {
-            public:
-                using Elements = Elems;
-                using Colors = Cols;
-                using ElementPreset = typename Elements::Preset;
-                struct Preset
-                {
-                    Preset(const ElementPreset e, const Colors c)
-                        : elem(e)
-                        , col(c)
-                    {}
-
-                    const ElementPreset elem;
-                    const Colors col;
-                };
-
-                using Colors::colors;
-                using Elements::elements;
-                using Elements::enter;
-                using Elements::leave;
-                using Elements::press;
-                using Elements::release;
-                using Elements::hold;
-
-                Widget(const Preset preset)
-                    : Elements(typename Elements::Data(preset.elem))
-                    , Colors(preset.col)
-                {
-                    applyColor((Colors)*this, (Elements)*this);
-                    using namespace signals;
-
-                    Elements::setup(*this),
-                    link(hold, refFunc(moveWidget<Elements>, (Elements)*this, (glm::vec2&)input::cursorFrameDelta));
-                }
-        };
 }
 
