@@ -24,51 +24,45 @@ namespace utils
         {
             template<size_t... Ns, typename Head, typename... Rest>
                 static constexpr const std::tuple<Rest...>
-                drop_head_impl(const std::index_sequence<Ns...> ns,
-                        const std::tuple<Head, Rest...> tup)
+                drop_head_impl(const std::index_sequence<Ns...> ns, const std::tuple<Head, Rest...> tup)
                 {
-                    return std::tuple<Rest...>(
-                            std::get<Ns + 1u>(tup)...);
+                    return std::tuple<Rest...>(std::get<Ns + 1u>(tup)...);
                 }
 
             template<typename Head, typename... Rest>
                 static constexpr const std::tuple<Rest...>
                 drop_head(const std::tuple<Head, Rest...> tup)
                 {
-                    return drop_head_impl(
-                            std::make_index_sequence<sizeof...(Rest)>(),
-                            tup);
+                    return drop_head_impl(std::make_index_sequence<sizeof...(Rest)>(), tup);
                 }
 
-            template<typename Head, typename From>
+            template<typename Head, typename... From>
                 static constexpr const std::tuple<Head>
-                func_impl(const std::tuple<From> from)
+                func_impl(const From... from)
                 {
-                    return  std::tuple<Head>({ Head(std::get<0>(from)) });
+                    return  std::tuple<Head>({ Head(std::get<0>(from)...) });
                 }
 
             template<typename Head, typename Next, typename... Rest, typename... From>
                 static constexpr const std::tuple<Head, Next, Rest...>
-                func_impl(const std::tuple<From...> from)
+                func_impl(const From... from)
                 {
-                    std::tuple<Head> head({ Head(std::get<0>(from)) });
-                    return std::tuple_cat(head,
-                            func_impl<Next, Rest...>(
-                                drop_head(from)));
+                    std::tuple<Head> head({ Head(std::get<0>(from)...) });
+                    return std::tuple_cat(head, func_impl<Next, Rest...>(drop_head(from)...));
                 }
 
             template<typename... From>
                 static constexpr const std::tuple<To...>
-                func(const std::tuple<From...> from)
+                func(const From... from)
                 {
-                    return func_impl<To...>(from);
+                    return func_impl<To...>(from...);
                 }
         };
 
     template<typename... To, typename... From>
         constexpr std::tuple<To...>
-        convert_tuple(const std::tuple<From...> from)
+        convert_tuple(const From... from)
         {
-            return tuple_converter<To...>::func(from);
+            return tuple_converter<To...>::func(from...);
         }
 }
