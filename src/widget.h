@@ -119,9 +119,8 @@ namespace gui
                 void resize_n(utils::_index<N> i, const glm::vec2 v) const
                 {
                     resize_n(utils::_index<N-1>(), v);
-                    const glm::vec4& pol = resizepolicy[N-1];
-                    std::get<N-1>(elements)->move(v * glm::vec2(pol.x, pol.y));
-                    std::get<N-1>(elements)->resize(v * glm::vec2(pol.z, pol.w));
+                    std::get<N-1>(elements)->move(v * glm::vec2(resizepolicy[N-1].x, resizepolicy[N-1].y));
+                    std::get<N-1>(elements)->resize(v * glm::vec2(resizepolicy[N-1].z, resizepolicy[N-1].w));
                 }
             void move(const glm::vec2 v) const
             {
@@ -168,26 +167,28 @@ namespace gui
         {
             applyColor_imp(col, elem);
         }
-    template<typename... Colors, typename... Elems>
-        void applyColor_imp_n(const WidgetColors<Colors...> cols, const std::tuple<Elems...> elems, utils::_index<0>)
+    template<typename... Colors, typename Layout, typename... Elems>
+        void applyColor_imp_n(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elems, utils::_index<0>)
         {}
-    template<typename... Colors, typename... Elems, size_t N>
-        void applyColor_imp_n(const WidgetColors<Colors...> cols, const std::tuple<Elems...> elems, utils::_index<N>)
+    template<typename... Colors, typename Layout, typename... Elems, size_t N>
+        void applyColor_imp_n(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elems, utils::_index<N>)
         {
             applyColor_imp_n(cols, elems, utils::_index<N-1>());
-            applyColor(std::get<N-1>(cols.colors), std::get<N-1>(elems));
+            applyColor(std::get<N-1>(cols.colors), std::get<N-1>(elems.elements));
         }
-    template<typename... Colors, typename... Elems>
-        void applyColor_imp(const WidgetColors<Colors...> cols, const std::tuple<Elems...> elems)
+    template<typename... Colors, typename Layout, typename... Elems>
+        void applyColor_imp(const WidgetColors<Colors...> cols, const WidgetElements<Layout, Elems...> elems)
         {
             applyColor_imp_n(cols, elems, utils::_index<sizeof...(Colors)>());
         }
 
 
-    template<typename Elements, typename Colors>
-        struct Widget : public Elements, Colors
+    template<typename Elems, typename Cols>
+        struct Widget : public Elems, Cols
         {
             public:
+                using Elements = Elems;
+                using Colors = Cols;
                 using ElementPreset = typename Elements::Preset;
                 struct Preset
                 {
@@ -199,6 +200,7 @@ namespace gui
                     const ElementPreset elem;
                     const Colors col;
                 };
+
                 using Colors::colors;
                 using Elements::elements;
                 using Elements::enter;
@@ -211,17 +213,12 @@ namespace gui
                     : Elements(typename Elements::Data(preset.elem))
                     , Colors(preset.col)
                 {
-                    applyColor((Colors)*this, elements);
+                    applyColor((Colors)*this, (Elements)*this);
                     using namespace signals;
 
-                    link(enter, func(applyColor<gl::ColorID, QuadElement>, gl::getColor("white"), std::get<0>(elements)));
-                    link(leave, func(applyColor<gl::ColorID, QuadElement>, std::get<0>(colors), std::get<0>(elements)));
-
-                    link(press, func(applyColor<gl::ColorID, QuadElement>, gl::getColor("white"), std::get<1>(elements)));
-                    link(release, func(applyColor<gl::ColorID, QuadElement>, std::get<1>(colors), std::get<1>(elements)));
-
+                    Elements::setup(*this),
                     link(hold, refFunc(moveWidget<Elements>, (Elements)*this, (glm::vec2&)input::cursorFrameDelta));
                 }
         };
-
 }
+

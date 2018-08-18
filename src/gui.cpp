@@ -82,14 +82,14 @@ void gui::initWidgets()
         but->move(glm::vec2(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
     }
 
-    //ButtonList::ElementPreset buttonListElementPreset(100, 20);
-    //ButtonList::Colors buttonListColors(buttonColors, buttonColors);
-    //ButtonList::Preset buttonListPreset(buttonListElementPreset, buttonListColors);
+    ButtonList::ElementPreset buttonListElementPreset(100, 20);
+    ButtonList::Colors buttonListColors(buttonColors, buttonColors);
+    ButtonList::Preset buttonListPreset(buttonListElementPreset, buttonListColors);
 
-    //for (size_t w = 0; w < 100; ++w) {
-    //    ButtonList but(buttonListPreset);
-    //    but.wid->move(glm::vec2(-1.0f + width + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
-    //}
+    for (size_t w = 0; w < 100; ++w) {
+        ButtonList::Widget but(buttonListPreset);
+        but->move(glm::vec2(-1.0f + width + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
+    }
 
 
     //auto func_move_on = func(moveWidget, play_button, input::relativeMouseDelta);

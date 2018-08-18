@@ -23,8 +23,14 @@ namespace gui
                             q.w - toScreenY(marginy*2))};
         }
         template<typename Elements, typename Colors>
-        static void setup(const utils::ID<Widget<Elements, Colors>> w)
+        static void setup(const Widget<Elements, Colors>& w)
         {
+            link(w.enter, func(applyColor<std::tuple_element_t<0, typename Colors::Colors>, std::tuple_element_t<0, typename Elements::Elements>>, gl::getColor("white"), std::get<0>(w.elements)));
+            link(w.leave, func(applyColor<std::tuple_element_t<0, typename Colors::Colors>, std::tuple_element_t<0, typename Elements::Elements>>, std::get<0>(w.colors), std::get<0>(w.elements)));
+
+            link(w.press, func(applyColor<std::tuple_element_t<1, typename Colors::Colors>, std::tuple_element_t<1, typename Elements::Elements>>, gl::getColor("white"), std::get<1>(w.elements)));
+            link(w.leave, func(applyColor<std::tuple_element_t<1, typename Colors::Colors>, std::tuple_element_t<1, typename Elements::Elements>>, std::get<1>(w.colors), std::get<1>(w.elements)));
+
         }
     };
         const std::array<glm::vec2, ButtonLayout::ELEMENT_COUNT>
@@ -42,51 +48,37 @@ namespace gui
         using Preset = typename Widget::Preset;
     };
 
-    //struct ButtonListLayout
-    //{
-    //    static constexpr const size_t ELEMENT_COUNT = 2;
+    struct ButtonListLayout
+    {
+        static constexpr const size_t ELEMENT_COUNT = 2;
 
-    //    static const std::array<glm::vec2, ELEMENT_COUNT> movepolicy;
-    //    static const std::array<glm::vec4, ELEMENT_COUNT> resizepolicy;
+        static const std::array<glm::vec2, ELEMENT_COUNT> movepolicy;
+        static const std::array<glm::vec4, ELEMENT_COUNT> resizepolicy;
 
-    //    static const typename utils::tuple_generator<ELEMENT_COUNT, glm::vec4>::type genQuads(const glm::vec4 q)
-    //    {
-    //        return typename utils::tuple_generator<ELEMENT_COUNT, glm::vec4>::type{
-    //            glm::vec4(q.x, q.y, q.z, q.w/2.0f),
-    //            glm::vec4(q.x, q.y - q.w/2.0f, q.z, q.w/2.0f)};
-    //    }
-    //    template<typename Elements, typename Colors>
-    //    static void setup(const utils::ID<Widget<Elements, Colors>> w)
-    //    {
-    //        using namespace signals;
-    //    }
-    //};
-    //    const std::array<glm::vec2, ButtonListLayout::ELEMENT_COUNT>
-    //        ButtonListLayout::movepolicy = {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)};
-    //    const std::array<glm::vec4, ButtonListLayout::ELEMENT_COUNT>
-    //        ButtonListLayout::resizepolicy = {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-    //                glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)};
+        static const typename utils::tuple_generator<ELEMENT_COUNT, glm::vec4>::type genQuads(const glm::vec4 q)
+        {
+            return typename utils::tuple_generator<ELEMENT_COUNT, glm::vec4>::type{
+                glm::vec4(q.x, q.y, q.z, q.w/2.0f),
+                glm::vec4(q.x, q.y - q.w/2.0f, q.z, q.w/2.0f)};
+        }
+        template<typename Elements, typename Colors>
+        static void setup(const Widget<Elements, Colors>& w)
+        {
+            using namespace signals;
+        }
+    };
+        const std::array<glm::vec2, ButtonListLayout::ELEMENT_COUNT>
+            ButtonListLayout::movepolicy = {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)};
+        const std::array<glm::vec4, ButtonListLayout::ELEMENT_COUNT>
+            ButtonListLayout::resizepolicy = {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+                    glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)};
 
-    //struct ButtonList
-    //{
-    //    using Elements = WidgetElements<ButtonListLayout, Button::Elements, Button::Elements>;
-    //    using Colors = WidgetColors<Button::Colors, Button::Colors>;
-    //    using Wid = Widget<Elements, Colors>;
-    //    using ElementPreset = typename Wid::ElementPreset;
-
-    //    struct Preset : public Wid::Preset
-    //    {
-    //        Preset(const ElementPreset e, const Colors c)
-    //            : Wid::Preset(e, c)
-    //        {}
-    //    };
-
-    //    const utils::ID<Wid> wid;
-
-    //    ButtonList(Preset preset)
-    //        : wid(utils::makeID(Wid(preset)))
-    //    {
-    //        ButtonListLayout::setup(wid);
-    //    }
-    //};
+    namespace ButtonList
+    {
+        using Elements = WidgetElements<ButtonListLayout, Button::Elements, Button::Elements>;
+        using Colors = WidgetColors<Button::Colors, Button::Colors>;
+        using Widget = Widget<Elements, Colors>;
+        using ElementPreset = typename Widget::ElementPreset;
+        using Preset = typename Widget::Preset;
+    }
 }
