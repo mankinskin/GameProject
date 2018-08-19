@@ -204,9 +204,7 @@ namespace gui
                 : WidgetElements<Layout, Elems...>(utils::convert_tuple<Elems...>(pre.subs))
                 , WidgetSignals<Elems...>(elements)
             {
-                using namespace signals;
-
-                link(hold, refFunc(moveWidget<Widget<Layout, Elems...>>, (Widget<Layout, Elems...>)*this, (glm::vec2&)input::cursorFrameDelta));
+                Layout::setup(*this);
             }
 
             const Widget<Layout, Elems...>* operator->() const

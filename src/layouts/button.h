@@ -25,12 +25,14 @@ namespace gui
         template<typename... Elems>
         static void setup(const Widget<ButtonLayout, Elems...>& w)
         {
-            //link(w.enter, func(applyColor<std::tuple_element_t<0, typename Colors::Colors>, std::tuple_element_t<0, typename Elements::Elements>>, gl::getColor("white"), std::get<0>(w.elements)));
-            //link(w.leave, func(applyColor<std::tuple_element_t<0, typename Colors::Colors>, std::tuple_element_t<0, typename Elements::Elements>>, std::get<0>(w.colors), std::get<0>(w.elements)));
+            using namespace signals;
+            using Colors = typename Widget<ButtonLayout, Elems...>::Colors::Colors;
+            using Elements = typename Widget<ButtonLayout, Elems...>::Elements::Elements;
+            link(w.enter, func(applyColor<std::tuple_element_t<0, Colors>, std::tuple_element_t<0, Elements>>, gl::getColor("white"), std::get<0>(w.elements)));
+            link(w.leave, func(applyColor<std::tuple_element_t<0, Colors>, std::tuple_element_t<0, Elements>>, std::get<0>(w.elements).color, std::get<0>(w.elements)));
 
-            //link(w.press, func(applyColor<std::tuple_element_t<1, typename Colors::Colors>, std::tuple_element_t<1, typename Elements::Elements>>, gl::getColor("white"), std::get<1>(w.elements)));
-            //link(w.leave, func(applyColor<std::tuple_element_t<1, typename Colors::Colors>, std::tuple_element_t<1, typename Elements::Elements>>, std::get<1>(w.colors), std::get<1>(w.elements)));
-
+            link(w.press, func(applyColor<std::tuple_element_t<1, Colors>, std::tuple_element_t<1, Elements>>, gl::getColor("white"), std::get<1>(w.elements)));
+            link(w.release, func(applyColor<std::tuple_element_t<1, Colors>, std::tuple_element_t<1, Elements>>, std::get<1>(w.elements).color, std::get<1>(w.elements)));
         }
     };
         const std::array<glm::vec2, ButtonLayout::ELEMENT_COUNT>
@@ -58,6 +60,7 @@ namespace gui
         static void setup(const Widget<ButtonListLayout, Elems...>& w)
         {
             using namespace signals;
+            link(std::get<0>(w.elements).hold, refFunc(moveWidget<Widget<ButtonListLayout, Elems...>>, (Widget<ButtonListLayout, Elems...>)w, (glm::vec2&)input::cursorFrameDelta));
         }
     };
         const std::array<glm::vec2, ButtonListLayout::ELEMENT_COUNT>
