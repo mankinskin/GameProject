@@ -443,7 +443,7 @@ namespace signals
     {
         using EventType = Event<ObjectType, StateType>;
         using SignalType = utils::ID<EventListener<EventType>>;
-        using HoldSignalType = SignalListener<Flip, SignalType, SignalType>;
+        using HoldType = SignalListener<Flip, SignalType, SignalType>;
 
         constexpr ButtonSignals(const ObjectType o)
             : on(ifEvent(EventType(o, true)))
@@ -463,7 +463,7 @@ namespace signals
 
         const SignalType on;
         const SignalType off;
-        const HoldSignalType hold;
+        const HoldType hold;
     };
 }
 

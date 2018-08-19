@@ -30,7 +30,7 @@ namespace gui
     template<typename... Ts>
     struct WidgetSignals
     {
-        using SignalType = signals::SignalListener<signals::And, signals::SignalListener<signals::Or, typename Ts::SignalType...>, signals::SignalListener<signals::Nor, typename Ts::SignalType...>>;
+        using SignalType = signals::SignalListener<signals::And, signals::SignalListener<signals::Or, typename Ts::Signals::SignalType...>, signals::SignalListener<signals::Nor, typename Ts::Signals::SignalType...>>;
         using HoverType = signals::SignalListener<signals::Flip, SignalType, SignalType>;
         using HoldType = signals::SignalListener<signals::Flip, signals::SignalListener<signals::And, HoverType, signals::ButtonSignals<input::MouseKey>::SignalType>, signals::ButtonSignals<input::MouseKey>::SignalType>;
         using PressType = signals::SignalListener<signals::Clicker, typename HoldType::Set, typename HoldType::Reset>;
@@ -118,6 +118,7 @@ namespace gui
     struct QuadElement : public utils::ID<Quad>, signals::ButtonSignals<utils::ID<Quad>>
     {
         using Colors = Color;
+        using Signals = signals::ButtonSignals<utils::ID<Quad>>;
         struct Preset
         {
             Preset(const Quad q, const Color col)
@@ -127,22 +128,13 @@ namespace gui
             const Quad quad;
             const Color color;
         };
-        struct Data
+        QuadElement(const Preset pre)
+            : utils::ID<Quad>(utils::makeID(pre.quad))
+            , signals::ButtonSignals<utils::ID<Quad>>((utils::ID<Quad>)*this)
+            , color(pre.color)
         {
-            Data(const Preset pre)
-                : quad(utils::makeID(pre.quad))
-                , color(pre.color)
-            {
-                colorQuad(quad, color);
-            }
-            const utils::ID<Quad> quad;
-            const Color color;
-        };
-        QuadElement(const Data data)
-            : utils::ID<Quad>(data.quad)
-            , signals::ButtonSignals<utils::ID<Quad>>(data.quad)
-            , color(data.color)
-        {}
+            colorQuad((utils::ID<Quad>)*this, color);
+        }
         const Color color;
     };
     template<typename Color>
@@ -151,44 +143,19 @@ namespace gui
             colorQuad(elem, col);
         }
 
-
-
     template<typename Layout, typename... Elems>
-        struct Widget : public WidgetSignals<Elems...>, Layout
+        struct WidgetElements : public Layout
         {
-            using Elements = std::tuple<Elems...>;
+            static_assert(sizeof...(Elems) == Layout::ELEMENT_COUNT);
             using Layout::ELEMENT_COUNT;
             using Layout::movepolicy;
             using Layout::resizepolicy;
-            using Colors = WidgetColors<typename Elems::Colors...>;
-            static_assert(sizeof...(Elems) == Layout::ELEMENT_COUNT);
-
-            struct Preset
-            {
-                Preset(const glm::vec4 q, const Colors cols)
-                    : subs(utils::convert_tuple<typename Elems::Preset...>(Layout::genQuads(q), cols.colors))
-                {}
-                const std::tuple<typename Elems::Preset...> subs;
-            };
-
-            struct Data
-            {
-                Data(const Preset pre)
-                    : elems(utils::convert_tuple<Elems...>(utils::convert_tuple<typename Elems::Data...>(pre.subs)))
-                {}
-                const Elements elems;
-            };
-            Widget(const Data data)
-                : WidgetSignals<Elems...>(data.elems)
-                , elements(data.elems)
-            {
-                using namespace signals;
-
-                link(WidgetSignals<Elems...>::hold, refFunc(moveWidget<Widget<Layout, Elems...>>, (Widget<Layout, Elems...>)*this, (glm::vec2&)input::cursorFrameDelta));
-            }
-
+            using Elements = std::tuple<Elems...>;
             const Elements elements;
 
+            WidgetElements(const std::tuple<Elems...> elems)
+                : elements(elems)
+            {}
             void move_n(utils::_index<0> i, const glm::vec2 v) const
             {}
 
@@ -215,6 +182,33 @@ namespace gui
             {
                 resize_n(utils::_index<ELEMENT_COUNT>(), v);
             }
+        };
+    template<typename Layout, typename... Elems>
+        struct Widget : public WidgetElements<Layout, Elems...>, WidgetSignals<Elems...>
+        {
+            using Colors = WidgetColors<typename Elems::Colors...>;
+            using Signals = WidgetSignals<Elems...>;
+            using Elements = WidgetElements<Layout, Elems...>;
+
+            using WidgetElements<Layout, Elems...>::elements;
+            using WidgetSignals<Elems...>::hold;
+            struct Preset
+            {
+                Preset(const glm::vec4 q, const Colors cols)
+                    : subs(utils::convert_tuple<typename Elems::Preset...>(Layout::genQuads(q), cols.colors))
+                {}
+                const std::tuple<typename Elems::Preset...> subs;
+            };
+
+            Widget(const Preset pre)
+                : WidgetElements<Layout, Elems...>(utils::convert_tuple<Elems...>(pre.subs))
+                , WidgetSignals<Elems...>(elements)
+            {
+                using namespace signals;
+
+                link(hold, refFunc(moveWidget<Widget<Layout, Elems...>>, (Widget<Layout, Elems...>)*this, (glm::vec2&)input::cursorFrameDelta));
+            }
+
             const Widget<Layout, Elems...>* operator->() const
             {
                 return this;
