@@ -279,7 +279,7 @@ namespace signals
             }
             static void reset()
             {
-                std::fill(all.begin(), all.end(), Signal());
+                std::fill(all.begin(), all.end(), Signal(false));
             }
             private:
             static constexpr utils::ID<Signal>::Container& all = utils::ID<Signal>::container;
@@ -294,31 +294,38 @@ namespace signals
                 using Reset = R;
                 Flip(const S pS, const R pR, bool startAs = false)
                     : state(utils::makeID(State(startAs)))
+                    , prevState(utils::makeID(State(startAs)))
+                    , processed(utils::makeID(Signal(false)))
                     , set(pS)
                     , reset(pR)
                 {}
 
-                constexpr void setOnOff() const
+                constexpr void process() const
                 {
-                    if (set->stat() && reset->stat()) {
-                        return;
-                    } else if (reset->stat()) {
-                        state->set(false);
-                    } else if (set->stat()) {
-                        state->set(true);
+                    if (!processed->stat()) {
+                        prevState->set(state->stat());
+                        if (set->stat() != reset->stat())
+                            state->set(!reset->stat());
+                        processed->set(true);
                     }
                 }
                 constexpr bool stat() const
                 {
-                    setOnOff();
+                    process();
                     return state->stat();
+                }
+                constexpr bool stat_prev() const
+                {
+                    process();
+                    return prevState->stat();
                 }
                 constexpr const Flip* operator->() const
                 {
                     return this;
                 }
-                protected:
                 const utils::ID<State> state;
+                const utils::ID<State> prevState;
+                const utils::ID<Signal> processed;
                 const S set;
                 const R reset;
             };
@@ -326,17 +333,22 @@ namespace signals
         template<typename S, typename R>
             struct Clicker : public Flip<S, R>
             {
-                Clicker(const Flip<S, R> flip, const bool t)
-                    : Flip<S, R>(flip)
+                using Flip<S, R>::state;
+                using Flip<S, R>::prevState;
+                using Flip<S, R>::processed;
+                using Flip<S, R>::set;
+                using Flip<S, R>::reset;
+                using Flip<S, R>::process;
+                Clicker(const Flip<S, R> f, const bool t)
+                    : Flip<S, R>(f)
                     , to(t)
-                    , prevState(utils::makeID(State(false)))
                 {}
                 constexpr bool stat() const
                 {
-                    Flip<S, R>::setOnOff();
-                    bool oldState = prevState->stat();
-                    prevState->set(Flip<S, R>::state->stat());
-                    return (oldState != to) && (Flip<S, R>::state->stat() == to);
+                    process();
+                    bool p = prevState->stat();
+                    bool n = state->stat();
+                    return (p != n) && (n == to);
                 }
                 constexpr const Clicker* operator->() const
                 {
@@ -344,7 +356,6 @@ namespace signals
                 }
                 private:
                 const bool to;
-                const utils::ID<State> prevState;
             };
 
     template<typename Set, typename Reset>
