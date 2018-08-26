@@ -38,6 +38,7 @@ namespace gui
             using Elements = typename Widget<WindowLayout, Elems...>::Elements::Elements;
 
             link(std::get<6>(w.elements).hold, refFunc(moveWidget<Widget<WindowLayout, Elems...>>, (Widget<WindowLayout, Elems...>)w, input::cursorFrameDelta));
+            link(std::get<5>(w.elements).hold, refFunc(resizeWidget<Widget<WindowLayout, Elems...>>, (Widget<WindowLayout, Elems...>)w, input::cursorFrameDelta));
         }
     };
         const std::array<glm::vec2, WindowLayout::ELEMENT_COUNT>

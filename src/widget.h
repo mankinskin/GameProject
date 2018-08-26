@@ -11,6 +11,7 @@
 #include "utils/array_utils.h"
 #include "utils/tuple_utils.h"
 #include "signal.h"
+#include "quadsignals.h"
 #include "functor.h"
 #include "mouse.h"
 #include "event.h"
@@ -81,6 +82,16 @@ namespace gui
         {
             pW.resize(pV);
         }
+    template<typename W>
+        void resizeWidgetX(const W& pW, const float& pV)
+        {
+            pW.resize(glm::vec2(pV, 0.0f));
+        }
+    template<typename W>
+        void resizeWidgetY(const W& pW, const float& pV)
+        {
+            pW.resize(glm::vec2(0.0f, pV));
+        }
 
     template<typename... Cols>
         struct WidgetColors
@@ -114,11 +125,12 @@ namespace gui
             applyColor_imp_n(cols, elems, utils::_index<N-1>());
             applyColor(std::get<N-1>(cols.colors), std::get<N-1>(elems));
         }
+
     template<typename Color>
-    struct QuadElement : public utils::ID<Quad>, signals::ButtonSignals<utils::ID<Quad>>
+    struct QuadElement : public utils::ID<Quad>, signals::QuadSignals<utils::ID<Quad>>
     {
         using Colors = Color;
-        using Signals = signals::ButtonSignals<utils::ID<Quad>>;
+        using Signals = signals::QuadSignals<utils::ID<Quad>>;
         struct Preset
         {
             Preset(const Quad q, const Color col)
@@ -130,7 +142,7 @@ namespace gui
         };
         QuadElement(const Preset pre)
             : utils::ID<Quad>(utils::makeID(pre.quad))
-            , signals::ButtonSignals<utils::ID<Quad>>((utils::ID<Quad>)*this)
+            , Signals((utils::ID<Quad>)*this)
             , color(pre.color)
         {
             colorQuad((utils::ID<Quad>)*this, color);

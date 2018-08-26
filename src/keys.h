@@ -1,6 +1,6 @@
 #pragma once
 #include "contextwindow.h"
-#include "signal.h"
+#include "buttonsignals.h"
 
 namespace input
 {

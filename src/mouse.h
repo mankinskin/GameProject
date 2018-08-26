@@ -4,6 +4,7 @@
 #include <glfw3.h>
 #include <glm.hpp>
 #include "signal.h"
+#include "buttonsignals.h"
 #include "quad.h"
 #include "event.h"
 
