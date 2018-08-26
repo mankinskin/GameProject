@@ -39,12 +39,14 @@ namespace gui
 
             link(std::get<6>(w.elements).hold, refFunc(moveWidget<Widget<WindowLayout, Elems...>>, (Widget<WindowLayout, Elems...>)w, input::cursorFrameDelta));
             link(std::get<5>(w.elements).hold, refFunc(resizeWidget<Widget<WindowLayout, Elems...>>, (Widget<WindowLayout, Elems...>)w, input::cursorFrameDelta));
+            link(std::get<2>(w.elements).hold, refFunc(resizeWidgetX<Widget<WindowLayout, Elems...>>, (Widget<WindowLayout, Elems...>)w, input::cursorFrameDelta.x));
+            link(std::get<4>(w.elements).hold, refFunc(resizeWidgetY<Widget<WindowLayout, Elems...>>, (Widget<WindowLayout, Elems...>)w, input::cursorFrameDelta.y));
         }
     };
         const std::array<glm::vec2, WindowLayout::ELEMENT_COUNT>
             WindowLayout::movepolicy = {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)};
         const std::array<glm::vec4, WindowLayout::ELEMENT_COUNT>
-            WindowLayout::resizepolicy = {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)};
+            WindowLayout::resizepolicy = {glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)};
 
         using Window = Widget<WindowLayout, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, Button>;
 
