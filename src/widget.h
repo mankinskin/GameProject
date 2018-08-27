@@ -76,11 +76,20 @@ namespace gui
         {
             pW.move(pV);
         }
-
+    template<typename W>
+        void setWidgetPos(const W& pW, const glm::vec2& pV)
+        {
+            pW.setPos(pV);
+        }
     template<typename W>
         void resizeWidget(const W& pW, const glm::vec2& pV)
         {
             pW.resize(pV);
+        }
+    template<typename W>
+        void setWidgetSize(const W& pW, const glm::vec2& pV)
+        {
+            pW.setSize(pV);
         }
     template<typename W>
         void resizeWidgetX(const W& pW, const float& pV)
@@ -94,16 +103,15 @@ namespace gui
         }
 
     template<typename... Cols>
-        struct WidgetColors
+        struct WidgetColors : public std::tuple<Cols...>
         {
             using Colors = std::tuple<Cols...>;
             constexpr WidgetColors(const Cols... cs)
-                : colors(cs...)
+                : Colors(cs...)
             {}
             constexpr WidgetColors(const Colors cs)
-                : colors(cs)
+                : Colors(cs)
             {}
-            const Colors colors;
         };
 
     template<typename... Colors, typename... Elems>
@@ -162,11 +170,14 @@ namespace gui
             using Layout::ELEMENT_COUNT;
             using Layout::movepolicy;
             using Layout::resizepolicy;
+
             using Elements = std::tuple<Elems...>;
             const Elements elements;
+            utils::ID<glm::vec4> box;
 
-            WidgetElements(const std::tuple<Elems...> elems)
+            WidgetElements(const glm::vec4 pB, const std::tuple<Elems...> elems)
                 : elements(elems)
+                , box(utils::makeID(pB))
             {}
             void move_n(utils::_index<0> i, const glm::vec2 v) const
             {}
@@ -188,11 +199,23 @@ namespace gui
                 }
             void move(const glm::vec2 v) const
             {
+                box->x += v.x;
+                box->y += v.y;
                 move_n(utils::_index<ELEMENT_COUNT>(), v);
             }
             void resize(const glm::vec2 v) const
             {
+                box->z += v.x;
+                box->w += v.y;
                 resize_n(utils::_index<ELEMENT_COUNT>(), v);
+            }
+            void setPos(const glm::vec2 p)
+            {
+                move(p - glm::vec2(box->x, box->y));
+            }
+            void setSize(const glm::vec2 s)
+            {
+                resize(s - glm::vec2(box->z, box->w));
             }
         };
     template<typename Layout, typename... Elems>
@@ -204,16 +227,19 @@ namespace gui
 
             using WidgetElements<Layout, Elems...>::elements;
             using WidgetSignals<Elems...>::hold;
+
             struct Preset
             {
                 Preset(const glm::vec4 q, const Colors cols)
-                    : subs(utils::convert_tuple<typename Elems::Preset...>(Layout::genQuads(q), cols.colors))
+                    : box(q)
+                    , subs(utils::convert_tuple<typename Elems::Preset...>(Layout().genQuads(box), cols))
                 {}
+                const glm::vec4 box;
                 const std::tuple<typename Elems::Preset...> subs;
             };
 
             Widget(const Preset pre)
-                : WidgetElements<Layout, Elems...>(utils::convert_tuple<Elems...>(pre.subs))
+                : WidgetElements<Layout, Elems...>(pre.box, utils::convert_tuple<Elems...>(pre.subs))
                 , WidgetSignals<Elems...>(elements)
             {
                 Layout::setup(*this);
