@@ -134,14 +134,34 @@ namespace gui
             applyColor(std::get<N-1>(cols.colors), std::get<N-1>(elems));
         }
 
+    template<typename... Elems>
+        struct WidgetLayout
+        {
+            using Layouts = std::tuple<typename Elems::Layout...>;
+
+            WidgetLayout()
+            {}
+            WidgetLayout(Layouts layouts)
+                :sublayouts(layouts)
+            {}
+            WidgetLayout(typename Elems::Layout... layouts)
+                :sublayouts(layouts...)
+            {}
+            Layouts sublayouts;
+        };
+    struct NullLayout
+    {
+    };
+
     template<typename Color>
     struct QuadElement : public utils::ID<Quad>, signals::QuadSignals<utils::ID<Quad>>
     {
+        using Layout = NullLayout;
         using Colors = Color;
         using Signals = signals::QuadSignals<utils::ID<Quad>>;
         struct Preset
         {
-            Preset(const Quad q, const Color col)
+            Preset(const Quad q, Layout layout, const Color col)
                 : quad(q)
                 , color(col)
             {}
@@ -218,9 +238,10 @@ namespace gui
                 resize(s - glm::vec2(box->z, box->w));
             }
         };
-    template<typename Layout, typename... Elems>
-        struct Widget : public WidgetElements<Layout, Elems...>, WidgetSignals<Elems...>
+    template<template<typename...>typename L, typename... Elems>
+        struct Widget : public WidgetElements<L<Elems...>, Elems...>, WidgetSignals<Elems...>
         {
+            using Layout = L<Elems...>;
             using Colors = WidgetColors<typename Elems::Colors...>;
             using Signals = WidgetSignals<Elems...>;
             using Elements = WidgetElements<Layout, Elems...>;
@@ -230,9 +251,9 @@ namespace gui
 
             struct Preset
             {
-                Preset(const glm::vec4 q, const Colors cols)
+                Preset(const glm::vec4 q, const Layout layout, const Colors cols)
                     : box(q)
-                    , subs(utils::convert_tuple<typename Elems::Preset...>(Layout().genQuads(box), cols))
+                    , subs(utils::convert_tuple<typename Elems::Preset...>(layout.genQuads(box), layout.sublayouts, cols))
                 {}
                 const glm::vec4 box;
                 const std::tuple<typename Elems::Preset...> subs;
@@ -245,14 +266,14 @@ namespace gui
                 Layout::setup(*this);
             }
 
-            const Widget<Layout, Elems...>* operator->() const
+            const Widget<L, Elems...>* operator->() const
             {
                 return this;
             }
         };
 
-    template<typename... Colors, typename Layout, typename... Elems>
-        void applyColor_imp(const WidgetColors<Colors...> cols, const Widget<Layout, Elems...> wid)
+    template<typename... Colors, template<typename...>typename L, typename... Elems>
+        void applyColor_imp(const WidgetColors<Colors...> cols, const Widget<L, Elems...> wid)
         {
             applyColor_imp_n(cols, wid.elements, utils::_index<sizeof...(Colors)>());
         }
