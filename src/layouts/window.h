@@ -11,13 +11,15 @@ namespace gui
     struct WindowLayout : public WidgetLayout<Elems...>
     {
         static constexpr const size_t ELEMENT_COUNT = 7;
-        constexpr WindowLayout(const size_t mx = 5, const size_t my = 5)
-            : WidgetLayout<Elems...>(NullLayout(), NullLayout(), NullLayout(), NullLayout(), NullLayout(), NullLayout(), Button::Layout(mx, my))
+
+        constexpr WindowLayout(const size_t mx = 5, const size_t my = 5, const size_t hy = 25, const size_t hmx = 5, const size_t hmy = 5)
+            : WidgetLayout<Elems...>(NullLayout(), NullLayout(), NullLayout(), NullLayout(), NullLayout(), NullLayout(), Button::Layout(hmx, hmy))
             , marginx(mx)
             , marginy(my)
+            , headerHeight(hy)
         {}
 
-        static constexpr const size_t headerHeight = 15;
+        const size_t headerHeight;
         const size_t marginx;
         const size_t marginy;
         static const std::array<glm::vec2, ELEMENT_COUNT> movepolicy;
@@ -36,6 +38,7 @@ namespace gui
 
                 glm::vec4(q.x, q.y, q.z, toScreenY(headerHeight))};
         }
+
         static void setup(const Widget<WindowLayout, Elems...>& w)
         {
             using namespace signals;
@@ -56,5 +59,4 @@ namespace gui
             WindowLayout<Elems...>::resizepolicy = {glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)};
 
         using Window = Widget<WindowLayout, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, Button>;
-
 }

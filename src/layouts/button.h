@@ -44,6 +44,7 @@ namespace gui
             link(w.release, func(applyColor<std::tuple_element_t<0, Colors>, std::tuple_element_t<0, Elements>>, std::get<0>(w.elements).color, std::get<0>(w.elements)));
         }
     };
+
     template<typename Outline, typename Center>
         const std::array<glm::vec2, ButtonLayout<Outline, Center>::ELEMENT_COUNT>
             ButtonLayout<Outline, Center>::movepolicy = {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)};
