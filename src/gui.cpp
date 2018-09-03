@@ -74,7 +74,7 @@ void gui::initWidgets()
     using namespace input;
     Button::Colors buttonColors(gl::getColor("black"), gl::getColor("grey"));
     Button::Layout buttonLayout;
-    Button::Preset buttonPreset(glm::vec4(0.0f, 0.0f, toScreenX(100), toScreenY(20)), buttonLayout, buttonColors);
+    Button::Preset buttonPreset(buttonLayout, buttonColors);
 
     const float width = 1.0f;
     const size_t xcount = 5;
@@ -85,11 +85,10 @@ void gui::initWidgets()
 
     Window::Colors windowColors(gl::getColor("black"), gl::getColor("white"), gl::getColor("black"), gl::getColor("black"), gl::getColor("black"), gl::getColor("black"), buttonColors);
     Window::Layout windowLayout;
-    Window::Preset windowPreset(glm::vec4(0.0f, 0.0f, toScreenX(500), toScreenY(400)), windowLayout, windowColors);
+    Window::Preset windowPreset(windowLayout, windowColors);
 
-    for (size_t w = 0; w < 1; ++w) {
-        Window but(windowPreset);
-        but->move(glm::vec2(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
+    for (size_t w = 0; w < 10; ++w) {
+        Window win(glm::vec4(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount)), toScreenX(300), toScreenY(200)), windowPreset);
     }
 
     ////Slider

@@ -161,15 +161,13 @@ namespace gui
         using Signals = signals::QuadSignals<utils::ID<Quad>>;
         struct Preset
         {
-            Preset(const Quad q, Layout layout, const Color col)
-                : quad(q)
-                , color(col)
+            Preset(Layout layout, const Color col)
+                : color(col)
             {}
-            const Quad quad;
             const Color color;
         };
-        QuadElement(const Preset pre)
-            : utils::ID<Quad>(utils::makeID(pre.quad))
+        QuadElement(const Quad q, const Preset pre)
+            : utils::ID<Quad>(utils::makeID(q))
             , Signals((utils::ID<Quad>)*this)
             , color(pre.color)
         {
@@ -251,16 +249,16 @@ namespace gui
 
             struct Preset
             {
-                Preset(const glm::vec4 q, const Layout layout, const Colors cols)
-                    : box(q)
-                    , subs(utils::convert_tuple<typename Elems::Preset...>(layout.genQuads(box), layout.sublayouts, cols))
+                Preset(const Layout l, const Colors cols)
+                    : layout(l)
+                    , subs(utils::convert_tuple<typename Elems::Preset...>(l.sublayouts, cols))
                 {}
-                const glm::vec4 box;
+                const Layout layout;
                 const std::tuple<typename Elems::Preset...> subs;
             };
 
-            Widget(const Preset pre)
-                : WidgetElements<Layout, Elems...>(pre.box, utils::convert_tuple<Elems...>(pre.subs))
+            Widget(const glm::vec4 q, const Preset pre)
+                : WidgetElements<Layout, Elems...>(q, utils::convert_tuple<Elems...>(pre.layout.genQuads(q), pre.subs))
                 , WidgetSignals<Elems...>(elements)
             {
                 Layout::setup(*this);
