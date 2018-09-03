@@ -7,51 +7,51 @@
 
 namespace gui
 {
-        using WindowBase = Widget<QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>,  QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, Button>;
-    struct Window : public WindowBase
-    {
-        static constexpr const size_t ELEMENT_COUNT = 7;
-        using Base = WindowBase;
-        using Preset = typename Base::Preset;
-        using Colors = typename Base::Colors;
+  using WindowBase = Widget<QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>,  QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, Button>;
+  struct Window : public WindowBase
+  {
+	static constexpr const size_t ELEMENT_COUNT = 7;
+	using Base = WindowBase;
+	using Preset = typename Base::Preset;
+	using Colors = typename Base::Colors;
 
-        static const size_t headerHeight = 20;
-        static const size_t marginx = 5;
-        static const size_t marginy = 5;
+	static const size_t headerHeight = 20;
+	static const size_t marginx = 5;
+	static const size_t marginy = 5;
 
 
-        Window(const glm::vec4 q, const Preset pre)
-            : Base(q, pre)
-        {
-            setup();
-        }
+	Window(const glm::vec4 q, const Preset pre)
+	  : Base(q, pre)
+	{
+	  setup();
+	}
 
-        static const typename Base::Quads genQuads(const glm::vec4 q)
-        {
-            return typename Base::Quads {
-                glm::vec4(q.x, q.y - toScreenY(headerHeight), toScreenX(marginx), q.w - toScreenY(marginy + headerHeight)),
-                glm::vec4(q.x + toScreenX(marginx), q.y - toScreenY(headerHeight), q.z - toScreenX(marginx*2), q.w - toScreenY(marginy + headerHeight)),
-                glm::vec4(q.x + (q.z - toScreenX(marginx)), q.y - toScreenY(headerHeight), toScreenX(marginx), q.w - toScreenY(marginy + headerHeight)),
+	static const typename Base::Quads genQuads(const glm::vec4 q)
+	{
+	  return typename Base::Quads {
+		glm::vec4(q.x, q.y - toScreenY(headerHeight), toScreenX(marginx), q.w - toScreenY(marginy + headerHeight)),
+		  glm::vec4(q.x + toScreenX(marginx), q.y - toScreenY(headerHeight), q.z - toScreenX(marginx*2), q.w - toScreenY(marginy + headerHeight)),
+		  glm::vec4(q.x + (q.z - toScreenX(marginx)), q.y - toScreenY(headerHeight), toScreenX(marginx), q.w - toScreenY(marginy + headerHeight)),
 
-                glm::vec4(q.x, q.y - (q.w - toScreenY(marginy)), toScreenX(marginx), toScreenY(marginy)),
-                glm::vec4(q.x + toScreenX(marginx), q.y - (q.w - toScreenY(marginy)), q.z - toScreenX(marginx*2), toScreenY(marginy)),
-                glm::vec4(q.x + q.z - toScreenX(marginx), q.y - (q.w - toScreenY(marginy)), toScreenX(marginx), toScreenY(marginy)),
+		  glm::vec4(q.x, q.y - (q.w - toScreenY(marginy)), toScreenX(marginx), toScreenY(marginy)),
+		  glm::vec4(q.x + toScreenX(marginx), q.y - (q.w - toScreenY(marginy)), q.z - toScreenX(marginx*2), toScreenY(marginy)),
+		  glm::vec4(q.x + q.z - toScreenX(marginx), q.y - (q.w - toScreenY(marginy)), toScreenX(marginx), toScreenY(marginy)),
 
-                glm::vec4(q.x, q.y, q.z, toScreenY(headerHeight))};
-        }
+		  glm::vec4(q.x, q.y, q.z, toScreenY(headerHeight))};
+	}
 
-        void setup() const
-        {
-            using namespace signals;
-            using Colors = Base::Colors::Colors;
-            using Elements = Base::Elements::Elements;
-            const Base& w = *this;
+	void setup() const
+	{
+	  using namespace signals;
+	  using Colors = Base::Colors::Colors;
+	  using Elements = Base::Elements::Elements;
+	  const Base& w = *this;
 
-            link(std::get<6>(w.elements).hold, refFunc(moveWidget<Base>, (Base)w, input::cursorFrameDelta));
-            link(std::get<5>(w.elements).hold, refFunc(resizeWidget<Base>, (Base)w, input::cursorFrameDelta));
-            link(std::get<2>(w.elements).hold, refFunc(resizeWidgetX<Base>, (Base)w, input::cursorFrameDelta.x));
-            link(std::get<4>(w.elements).hold, refFunc(resizeWidgetY<Base>, (Base)w, input::cursorFrameDelta.y));
-        }
-    };
-        const typename Window::Preset windowPreset = typename Window::Preset(Window::genQuads, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)}, {gl::ColorID(10), gl::ColorID(9), gl::ColorID(10), gl::ColorID(10), gl::ColorID(10), gl::ColorID(10), buttonPreset<5, 5>});
+	  link(std::get<6>(w.elements).hold, refFunc(moveWidget<Base>, (Base)w, input::cursorFrameDelta));
+	  link(std::get<5>(w.elements).hold, refFunc(resizeWidget<Base>, (Base)w, input::cursorFrameDelta));
+	  link(std::get<2>(w.elements).hold, refFunc(resizeWidgetX<Base>, (Base)w, input::cursorFrameDelta.x));
+	  link(std::get<4>(w.elements).hold, refFunc(resizeWidgetY<Base>, (Base)w, input::cursorFrameDelta.y));
+	}
+  };
+  const typename Window::Preset windowPreset = typename Window::Preset(Window::genQuads, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)}, {gl::ColorID(10), gl::ColorID(9), gl::ColorID(10), gl::ColorID(10), gl::ColorID(10), gl::ColorID(10), buttonPreset<5, 5>});
 }

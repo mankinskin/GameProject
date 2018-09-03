@@ -28,10 +28,10 @@ utils::ID<input::KeySignals> input::key_x;
 
 void input::key_Callback(GLFWwindow* window, int pKey, int pScancode, int pAction, int pMods)
 {
-    signals::pushEvent(signals::Event<Key, int>((Key)pKey, pAction));
+  signals::pushEvent(signals::Event<Key, int>((Key)pKey, pAction));
 }
 
 void input::char_Callback(GLFWwindow* window, unsigned int pCodepoint)
 {
-    //printf("char callBack! Char: %c\n", pCodepoint);
+  //printf("char callBack! Char: %c\n", pCodepoint);
 }

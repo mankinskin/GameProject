@@ -5,8 +5,8 @@
 #include <curses.h>
 #endif
 
-int main() 
+int main()
 {
-    app::init();
-    return 0;
+  app::init();
+  return 0;
 }

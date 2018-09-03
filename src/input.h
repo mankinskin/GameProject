@@ -13,8 +13,8 @@
 
 namespace input
 {
-    void init();
-    void setupControls();
-    void fetchGLFWEvents();
-    void end();
+  void init();
+  void setupControls();
+  void fetchGLFWEvents();
+  void end();
 }

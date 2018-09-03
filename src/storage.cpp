@@ -10,16 +10,16 @@ int gl::MIN_MAP_BUFFER_ALIGNMENT = 0;
 
 unsigned int gl::getNewTargetBinding(const unsigned int pTarget)
 {
-    auto target_it = targetBindingCounts.find(pTarget);
-    if (target_it == targetBindingCounts.end()) {
-        targetBindingCounts.insert({ pTarget, 1 });
-        return 0;
-    }
-    if (pTarget == GL_UNIFORM_BUFFER) { 
-        if (target_it->second == MAX_UNIFORM_BUFFER_BINDINGS) {
-            puts("!!! Exceeding MAX_UNIFORM_BUFFER_BINDINGS!");
-        }
-    }
-    return target_it->second++;
+  auto target_it = targetBindingCounts.find(pTarget);
+  if (target_it == targetBindingCounts.end()) {
+	targetBindingCounts.insert({ pTarget, 1 });
+	return 0;
+  }
+  if (pTarget == GL_UNIFORM_BUFFER) {
+	if (target_it->second == MAX_UNIFORM_BUFFER_BINDINGS) {
+	  puts("!!! Exceeding MAX_UNIFORM_BUFFER_BINDINGS!");
+	}
+  }
+  return target_it->second++;
 }
 

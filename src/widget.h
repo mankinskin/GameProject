@@ -29,267 +29,267 @@
 
 namespace gui
 {
-    template<typename... Ts>
-    struct WidgetSignals
-    {
-        using SignalType = signals::SignalListener<signals::And, signals::SignalListener<signals::Or, typename Ts::Signals::SignalType...>, signals::SignalListener<signals::Nor, typename Ts::Signals::SignalType...>>;
-        using HoverType = signals::SignalListener<signals::Flip, SignalType, SignalType>;
-        using HoldType = signals::SignalListener<signals::Flip, signals::SignalListener<signals::And, HoverType, signals::ButtonSignals<input::MouseKey>::SignalType>, signals::ButtonSignals<input::MouseKey>::SignalType>;
-        using PressType = signals::SignalListener<signals::Clicker, typename HoldType::Set, typename HoldType::Reset>;
-        using ReleaseType = signals::SignalListener<signals::Clicker, typename HoldType::Set, typename HoldType::Reset>;
+  template<typename... Ts>
+	struct WidgetSignals
+	{
+	  using SignalType = signals::SignalListener<signals::And, signals::SignalListener<signals::Or, typename Ts::Signals::SignalType...>, signals::SignalListener<signals::Nor, typename Ts::Signals::SignalType...>>;
+	  using HoverType = signals::SignalListener<signals::Flip, SignalType, SignalType>;
+	  using HoldType = signals::SignalListener<signals::Flip, signals::SignalListener<signals::And, HoverType, signals::ButtonSignals<input::MouseKey>::SignalType>, signals::ButtonSignals<input::MouseKey>::SignalType>;
+	  using PressType = signals::SignalListener<signals::Clicker, typename HoldType::Set, typename HoldType::Reset>;
+	  using ReleaseType = signals::SignalListener<signals::Clicker, typename HoldType::Set, typename HoldType::Reset>;
 
-        template<bool S, size_t... Ns>
-            constexpr SignalType gen_event(const std::tuple<Ts...>& elems, const std::index_sequence<Ns...>) const
-            {
-                return signals::ifAll(
-                        signals::ifAny(std::get<Ns>(elems).event(utils::_bool<S>())...),
-                        signals::ifNone(std::get<Ns>(elems).event(utils::_bool<!S>())...));
-            }
+	  template<bool S, size_t... Ns>
+		constexpr SignalType gen_event(const std::tuple<Ts...>& elems, const std::index_sequence<Ns...>) const
+		{
+		  return signals::ifAll(
+			  signals::ifAny(std::get<Ns>(elems).event(utils::_bool<S>())...),
+			  signals::ifNone(std::get<Ns>(elems).event(utils::_bool<!S>())...));
+		}
 
-        constexpr const SignalType event(utils::_bool<true>) const
-        {
-            return enter;
-        }
-        constexpr const SignalType event(utils::_bool<false>) const
-        {
-            return leave;
-        }
-        constexpr WidgetSignals(const std::tuple<Ts...>& os)
-            : enter(gen_event<true>(os, std::make_index_sequence<sizeof...(Ts)>()))
-            , leave(gen_event<false>(os, std::make_index_sequence<sizeof...(Ts)>()))
-            , hover(flip(enter, leave))
-            , hold(flip(ifAll(hover, input::Mouse::lmb->on), input::Mouse::lmb->off))
-            , press(clicker(hold, true))
-            , release(clicker(hold, false))
-        {}
+	  constexpr const SignalType event(utils::_bool<true>) const
+	  {
+		return enter;
+	  }
+	  constexpr const SignalType event(utils::_bool<false>) const
+	  {
+		return leave;
+	  }
+	  constexpr WidgetSignals(const std::tuple<Ts...>& os)
+		: enter(gen_event<true>(os, std::make_index_sequence<sizeof...(Ts)>()))
+		  , leave(gen_event<false>(os, std::make_index_sequence<sizeof...(Ts)>()))
+		  , hover(flip(enter, leave))
+		  , hold(flip(ifAll(hover, input::Mouse::lmb->on), input::Mouse::lmb->off))
+		  , press(clicker(hold, true))
+		  , release(clicker(hold, false))
+	  {}
 
-        const SignalType enter;
-        const SignalType leave;
-        const HoverType hover;
-        const HoldType hold;
-        const PressType press;
-        const ReleaseType release;
-    };
+	  const SignalType enter;
+	  const SignalType leave;
+	  const HoverType hover;
+	  const HoldType hold;
+	  const PressType press;
+	  const ReleaseType release;
+	};
 
 
-    template<typename W>
-        void moveWidget(const W& pW, const glm::vec2& pV)
-        {
-            pW.move(pV);
-        }
-    template<typename W>
-        void setWidgetPos(const W& pW, const glm::vec2& pV)
-        {
-            pW.setPos(pV);
-        }
-    template<typename W>
-        void resizeWidget(const W& pW, const glm::vec2& pV)
-        {
-            pW.resize(pV);
-        }
-    template<typename W>
-        void setWidgetSize(const W& pW, const glm::vec2& pV)
-        {
-            pW.setSize(pV);
-        }
-    template<typename W>
-        void resizeWidgetX(const W& pW, const float& pV)
-        {
-            pW.resize(glm::vec2(pV, 0.0f));
-        }
-    template<typename W>
-        void resizeWidgetY(const W& pW, const float& pV)
-        {
-            pW.resize(glm::vec2(0.0f, pV));
-        }
+  template<typename W>
+	void moveWidget(const W& pW, const glm::vec2& pV)
+	{
+	  pW.move(pV);
+	}
+  template<typename W>
+	void setWidgetPos(const W& pW, const glm::vec2& pV)
+	{
+	  pW.setPos(pV);
+	}
+  template<typename W>
+	void resizeWidget(const W& pW, const glm::vec2& pV)
+	{
+	  pW.resize(pV);
+	}
+  template<typename W>
+	void setWidgetSize(const W& pW, const glm::vec2& pV)
+	{
+	  pW.setSize(pV);
+	}
+  template<typename W>
+	void resizeWidgetX(const W& pW, const float& pV)
+	{
+	  pW.resize(glm::vec2(pV, 0.0f));
+	}
+  template<typename W>
+	void resizeWidgetY(const W& pW, const float& pV)
+	{
+	  pW.resize(glm::vec2(0.0f, pV));
+	}
 
-    template<typename... Elems>
-        struct WidgetColors : public std::tuple<typename Elems::Colors...>
-        {
-            using Colors = std::tuple<typename Elems::Colors...>;
-            constexpr WidgetColors(const Colors cs)
-                : Colors(cs)
-            {}
-            const std::tuple<typename Elems::Preset...> subs;
-        };
+  template<typename... Elems>
+	struct WidgetColors : public std::tuple<typename Elems::Colors...>
+  {
+	using Colors = std::tuple<typename Elems::Colors...>;
+	constexpr WidgetColors(const Colors cs)
+	  : Colors(cs)
+	{}
+	const std::tuple<typename Elems::Preset...> subs;
+  };
 
-    template<typename... Elems>
-        void applyColor_imp_qs(const std::tuple<Elems...> elems, const WidgetColors<Elems...> cols, utils::_index<0>)
-        {}
-    template<typename... Elems>
-        void applyColor_imp(const std::tuple<Elems...> elems, const WidgetColors<Elems...> cols)
-        {
-            applyColor_imp_n(elems, cols, utils::_index<sizeof...(Elems)>());
-        }
-    template<typename Elem>
-        void applyColor(const Elem e, const typename Elem::Colors col)
-        {
-            applyColor_imp(e, col);
-        }
-    template<typename... Elems, size_t N>
-        void applyColor_imp_n(const std::tuple<Elems...> elems, const WidgetColors<Elems...> cols, utils::_index<N>)
-        {
-            applyColor_imp_n(elems, cols, utils::_index<N-1>());
-            applyColor(std::get<N-1>(elems), std::get<N-1>(cols.colors));
-        }
+  template<typename... Elems>
+	void applyColor_imp_qs(const std::tuple<Elems...> elems, const WidgetColors<Elems...> cols, utils::_index<0>)
+	{}
+  template<typename... Elems>
+	void applyColor_imp(const std::tuple<Elems...> elems, const WidgetColors<Elems...> cols)
+	{
+	  applyColor_imp_n(elems, cols, utils::_index<sizeof...(Elems)>());
+	}
+  template<typename Elem>
+	void applyColor(const Elem e, const typename Elem::Colors col)
+	{
+	  applyColor_imp(e, col);
+	}
+  template<typename... Elems, size_t N>
+	void applyColor_imp_n(const std::tuple<Elems...> elems, const WidgetColors<Elems...> cols, utils::_index<N>)
+	{
+	  applyColor_imp_n(elems, cols, utils::_index<N-1>());
+	  applyColor(std::get<N-1>(elems), std::get<N-1>(cols.colors));
+	}
 
-    //template<typename... Elems>
-    //    struct WidgetLayout
-    //    {
-    //        using Quads = typename utils::tuple_generator<sizeof...(Elems), glm::vec4>::type;
+  //template<typename... Elems>
+  //    struct WidgetLayout
+  //    {
+  //        using Quads = typename utils::tuple_generator<sizeof...(Elems), glm::vec4>::type;
 
-    //        struct Preset
-    //        {
-    //            constexpr Preset(const MovePolicy m, const ResizePolicy r)
-    //                : movepolicy(m)
-    //                , resizepolicy(r)
-    //            {}
-    //            constexpr Preset(const MovePolicy m, const ResizePolicy r)
-    //                : movepolicy(m)
-    //                , resizepolicy(r)
-    //            {}
-    //            MovePolicy movepolicy;
-    //            ResizePolicy resizepolicy;
-    //        };
+  //        struct Preset
+  //        {
+  //            constexpr Preset(const MovePolicy m, const ResizePolicy r)
+  //                : movepolicy(m)
+  //                , resizepolicy(r)
+  //            {}
+  //            constexpr Preset(const MovePolicy m, const ResizePolicy r)
+  //                : movepolicy(m)
+  //                , resizepolicy(r)
+  //            {}
+  //            MovePolicy movepolicy;
+  //            ResizePolicy resizepolicy;
+  //        };
 
-    //        constexpr WidgetLayout(Quads qs, Preset pre)
-    //            : quads(qs)
-    //            , movepolicy(pre.movepolicy)
-    //            , resizepolicy(pre.resizepolicy)
-    //        {}
-    //        const Quads quads;
-    //        const MovePolicy movepolicy;
-    //        const ResizePolicy resizepolicy;
-    //    };
-    //struct NullLayout
-    //{
-    //    struct Preset {};
-    //    constexpr NullLayout(const Preset)
-    //    {}
-    //};
-    //using NullPreset = typename NullLayout::Preset;
+  //        constexpr WidgetLayout(Quads qs, Preset pre)
+  //            : quads(qs)
+  //            , movepolicy(pre.movepolicy)
+  //            , resizepolicy(pre.resizepolicy)
+  //        {}
+  //        const Quads quads;
+  //        const MovePolicy movepolicy;
+  //        const ResizePolicy resizepolicy;
+  //    };
+  //struct NullLayout
+  //{
+  //    struct Preset {};
+  //    constexpr NullLayout(const Preset)
+  //    {}
+  //};
+  //using NullPreset = typename NullLayout::Preset;
 
-    template<typename Col>
-    struct QuadElement : public utils::ID<Quad>, signals::QuadSignals<utils::ID<Quad>>
-    {
-        using Signals = signals::QuadSignals<utils::ID<Quad>>;
-        using Colors = Col;
-        using Preset = Col;
+  template<typename Col>
+	struct QuadElement : public utils::ID<Quad>, signals::QuadSignals<utils::ID<Quad>>
+  {
+	using Signals = signals::QuadSignals<utils::ID<Quad>>;
+	using Colors = Col;
+	using Preset = Col;
 
-        QuadElement(const Quad q, const Col col)
-            : utils::ID<Quad>(utils::makeID(q))
-            , Signals((utils::ID<Quad>)*this)
-            , color(col)
-        {
-            colorQuad((utils::ID<Quad>)*this, color);
-        }
-        const Col color;
-    };
-    template<typename Col>
-        void applyColor_imp(const QuadElement<Col> elem, const Col col)
-        {
-            colorQuad(elem, col);
-        }
+	QuadElement(const Quad q, const Col col)
+	  : utils::ID<Quad>(utils::makeID(q))
+		, Signals((utils::ID<Quad>)*this)
+		   , color(col)
+	{
+	  colorQuad((utils::ID<Quad>)*this, color);
+	}
+	const Col color;
+  };
+  template<typename Col>
+	void applyColor_imp(const QuadElement<Col> elem, const Col col)
+	{
+	  colorQuad(elem, col);
+	}
 
-    // this type only exists so that it can be initialized first in Widget
-    template<typename... Elems>
-        struct WidgetElements
-        {
-            using Elements = std::tuple<Elems...>;
-            WidgetElements(const Elements es)
-                : elements(es)
-            {}
-            const Elements elements;
-        };
+  // this type only exists so that it can be initialized first in Widget
+  template<typename... Elems>
+	struct WidgetElements
+	{
+	  using Elements = std::tuple<Elems...>;
+	  WidgetElements(const Elements es)
+		: elements(es)
+	  {}
+	  const Elements elements;
+	};
 
-    template<typename... Elems>
-        struct Widget : public WidgetElements<Elems...>, WidgetSignals<Elems...>
-        {
-            static constexpr size_t ELEMENT_COUNT = sizeof...(Elems);
-            using Colors = WidgetColors<Elems...>;
-            using Signals = WidgetSignals<Elems...>;
-            using Elements = WidgetElements<Elems...>;
-            using Quads = typename utils::tuple_generator<sizeof...(Elems), glm::vec4>::type;
-            using MovePolicy = std::array<glm::vec2, sizeof...(Elems)>;
-            using ResizePolicy = std::array<glm::vec4, sizeof...(Elems)>;
+  template<typename... Elems>
+	struct Widget : public WidgetElements<Elems...>, WidgetSignals<Elems...>
+  {
+	static constexpr size_t ELEMENT_COUNT = sizeof...(Elems);
+	using Colors = WidgetColors<Elems...>;
+	using Signals = WidgetSignals<Elems...>;
+	using Elements = WidgetElements<Elems...>;
+	using Quads = typename utils::tuple_generator<sizeof...(Elems), glm::vec4>::type;
+	using MovePolicy = std::array<glm::vec2, sizeof...(Elems)>;
+	using ResizePolicy = std::array<glm::vec4, sizeof...(Elems)>;
 
-            using Signals::hold;
-            using Elements::elements;
-            const utils::ID<glm::vec4> box;
-            const MovePolicy movepolicy;
-            const ResizePolicy resizepolicy;
+	using Signals::hold;
+	using Elements::elements;
+	const utils::ID<glm::vec4> box;
+	const MovePolicy movepolicy;
+	const ResizePolicy resizepolicy;
 
-            struct Preset
-            {
-                Preset(const Quads(&genQs)(const glm::vec4), const MovePolicy mp, const ResizePolicy rp, const std::tuple<typename Elems::Preset...> subs)
-                    : genQuads(genQs)
-                    , movepolicy(mp)
-                    , resizepolicy(rp)
-                    , subpresets(subs)
-                {}
-                const Quads(&genQuads)(const glm::vec4);
-                const MovePolicy movepolicy;
-                const ResizePolicy resizepolicy;
-                const std::tuple<typename Elems::Preset...> subpresets;
-            };
+	struct Preset
+	{
+	  Preset(const Quads(&genQs)(const glm::vec4), const MovePolicy mp, const ResizePolicy rp, const std::tuple<typename Elems::Preset...> subs)
+		: genQuads(genQs)
+		  , movepolicy(mp)
+		  , resizepolicy(rp)
+		  , subpresets(subs)
+	  {}
+	  const Quads(&genQuads)(const glm::vec4);
+	  const MovePolicy movepolicy;
+	  const ResizePolicy resizepolicy;
+	  const std::tuple<typename Elems::Preset...> subpresets;
+	};
 
-            Widget(const glm::vec4 q, const Preset preset)
-                : Elements(utils::convert_tuple<Elems...>(preset.genQuads(q), preset.subpresets))
-                , Signals(elements)
-                , box(utils::makeID(q))
-                , movepolicy(preset.movepolicy)
-                , resizepolicy(preset.resizepolicy)
-            {}
+	Widget(const glm::vec4 q, const Preset preset)
+	  : Elements(utils::convert_tuple<Elems...>(preset.genQuads(q), preset.subpresets))
+		, Signals(elements)
+		   , box(utils::makeID(q))
+		   , movepolicy(preset.movepolicy)
+		   , resizepolicy(preset.resizepolicy)
+	{}
 
-            void move_n(utils::_index<0> i, const glm::vec2 v) const
-            {}
+	void move_n(utils::_index<0> i, const glm::vec2 v) const
+	{}
 
-            template<size_t N>
-                void move_n(utils::_index<N> i, const glm::vec2 v) const
-                {
-                    move_n(utils::_index<N-1>(), v);
-                    std::get<N-1>(elements)->move(v * movepolicy[N-1]);
-                }
-            void resize_n(utils::_index<0> i, const glm::vec2 v) const
-            {}
-            template<size_t N>
-                void resize_n(utils::_index<N> i, const glm::vec2 v) const
-                {
-                    resize_n(utils::_index<N-1>(), v);
-                    std::get<N-1>(elements)->move(v * glm::vec2(resizepolicy[N-1].x, resizepolicy[N-1].y));
-                    std::get<N-1>(elements)->resize(v * glm::vec2(resizepolicy[N-1].z, resizepolicy[N-1].w));
-                }
-            void move(const glm::vec2 v) const
-            {
-                box->x += v.x;
-                box->y += v.y;
-                move_n(utils::_index<ELEMENT_COUNT>(), v);
-            }
-            void resize(const glm::vec2 v) const
-            {
-                box->z += v.x;
-                box->w += v.y;
-                resize_n(utils::_index<ELEMENT_COUNT>(), v);
-            }
-            void setPos(const glm::vec2 p)
-            {
-                move(p - glm::vec2(box->x, box->y));
-            }
-            void setSize(const glm::vec2 s)
-            {
-                resize(s - glm::vec2(box->z, box->w));
-            }
-            const Widget<Elems...>* operator->() const
-            {
-                return this;
-            }
-        };
+	template<size_t N>
+	  void move_n(utils::_index<N> i, const glm::vec2 v) const
+	  {
+		move_n(utils::_index<N-1>(), v);
+		std::get<N-1>(elements)->move(v * movepolicy[N-1]);
+	  }
+	void resize_n(utils::_index<0> i, const glm::vec2 v) const
+	{}
+	template<size_t N>
+	  void resize_n(utils::_index<N> i, const glm::vec2 v) const
+	  {
+		resize_n(utils::_index<N-1>(), v);
+		std::get<N-1>(elements)->move(v * glm::vec2(resizepolicy[N-1].x, resizepolicy[N-1].y));
+		std::get<N-1>(elements)->resize(v * glm::vec2(resizepolicy[N-1].z, resizepolicy[N-1].w));
+	  }
+	void move(const glm::vec2 v) const
+	{
+	  box->x += v.x;
+	  box->y += v.y;
+	  move_n(utils::_index<ELEMENT_COUNT>(), v);
+	}
+	void resize(const glm::vec2 v) const
+	{
+	  box->z += v.x;
+	  box->w += v.y;
+	  resize_n(utils::_index<ELEMENT_COUNT>(), v);
+	}
+	void setPos(const glm::vec2 p)
+	{
+	  move(p - glm::vec2(box->x, box->y));
+	}
+	void setSize(const glm::vec2 s)
+	{
+	  resize(s - glm::vec2(box->z, box->w));
+	}
+	const Widget<Elems...>* operator->() const
+	{
+	  return this;
+	}
+  };
 
-    template<typename... Elems>
-        void applyColor_imp(const Widget<Elems...> wid, const WidgetColors<Elems...> cols)
-        {
-            applyColor_imp_n(wid.elements, cols, utils::_index<sizeof...(Elems)>());
-        }
+  template<typename... Elems>
+	void applyColor_imp(const Widget<Elems...> wid, const WidgetColors<Elems...> cols)
+	{
+	  applyColor_imp_n(wid.elements, cols, utils::_index<sizeof...(Elems)>());
+	}
 
 }
 

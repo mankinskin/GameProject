@@ -23,83 +23,83 @@
 // Initialization
 void sequencer::initialize()
 {
-    includeShaders();
-    initializeVAOs();
-    initModules();
-    buildShaders();
+  includeShaders();
+  initializeVAOs();
+  initModules();
+  buildShaders();
 }
 void sequencer::includeShaders()
 {
-    gui::initLineShader();
-    gui::initColorQuadShader();
-    text::initFontShader();
-    //mesh::initMeshShader();
-    //mesh::initBlendMeshShader();
-    //mesh::initMeshNormalShader();
-    //lights::initLightShader();
-    //gui::text::initFontShader();
-    //voxelization::init();
+  gui::initLineShader();
+  gui::initColorQuadShader();
+  text::initFontShader();
+  //mesh::initMeshShader();
+  //mesh::initBlendMeshShader();
+  //mesh::initMeshNormalShader();
+  //lights::initLightShader();
+  //gui::text::initFontShader();
+  //voxelization::init();
 }
 
 void sequencer::buildShaders()
 {
-    puts("Building Shaders...");
-    gui::setupLineShader();
-    gui::setupColorQuadShader();
-    text::setupFontShader();
-    //mesh::setupMeshShader();
-    //lights::setupLightShader();
-    //mesh::setupBlendMeshShader();
-    //mesh::setupMeshNormalShader();
-    //voxelization::setupShader();
+  puts("Building Shaders...");
+  gui::setupLineShader();
+  gui::setupColorQuadShader();
+  text::setupFontShader();
+  //mesh::setupMeshShader();
+  //lights::setupLightShader();
+  //mesh::setupBlendMeshShader();
+  //mesh::setupMeshNormalShader();
+  //voxelization::setupShader();
 }
 
 void sequencer::initializeVAOs()
 {
-    puts("Primitives...");
-    gl::initPrimitives();
+  puts("Primitives...");
+  gl::initPrimitives();
 
-    puts("General Uniform Buffer...");
-    gl::initGeneralUniformBuffer();
+  puts("General Uniform Buffer...");
+  gl::initGeneralUniformBuffer();
 
-    puts("Lines...");
-    gui::initLineVAO();
+  puts("Lines...");
+  gui::initLineVAO();
 
-    puts("Fonts...");
-    text::initFontVAO();
+  puts("Fonts...");
+  text::initFontVAO();
 
-    gui::initQuadBuffer();
+  gui::initQuadBuffer();
 
-    gui::initColorQuadVAO();
+  gui::initColorQuadVAO();
 }
 
 void sequencer::initModules()
 {
-    puts("Framebuffers...");
-    texture::initFramebuffers();
+  puts("Framebuffers...");
+  texture::initFramebuffers();
 
-    puts("Colors...");
-    gl::initColors();
+  puts("Colors...");
+  gl::initColors();
 
-    puts("Input...");
-    input::init();
+  puts("Input...");
+  input::init();
 
-    puts("Camera...");
-    camera::main_camera.init();
+  puts("Camera...");
+  camera::main_camera.init();
 
-    input::setupControls();
+  input::setupControls();
 
-    puts("Debug Geometry...");
-    glDebug::createDebugGeometry();
+  puts("Debug Geometry...");
+  glDebug::createDebugGeometry();
 
-    puts("GUI...");
-    gui::init();
+  puts("GUI...");
+  gui::init();
 
-    puts("Widgets...");
-    gui::initWidgets();
+  puts("Widgets...");
+  gui::initWidgets();
 
-    puts("Text...");
-    text::loadFonts();
+  puts("Text...");
+  text::loadFonts();
 }
 
 void sequencer::fetchInput()
@@ -109,69 +109,69 @@ void sequencer::fetchInput()
 
 void sequencer::clearFramebuffers()
 {
-    static GLubyte gui_clear_index[4] = { 0, 0, 0, 0 };
-    static GLfloat g_clear_color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-    static GLfloat g_clear_depth = 1.0f;
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearNamedFramebufferuiv(texture::guiFBO,
-            GL_COLOR, 0, (GLuint*) gui_clear_index);
-    glClearNamedFramebufferfv(texture::guiFBO,
-            GL_DEPTH, 0, &g_clear_depth);
+  static GLubyte gui_clear_index[4] = { 0, 0, 0, 0 };
+  static GLfloat g_clear_color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+  static GLfloat g_clear_depth = 1.0f;
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClearNamedFramebufferuiv(texture::guiFBO,
+	  GL_COLOR, 0, (GLuint*) gui_clear_index);
+  glClearNamedFramebufferfv(texture::guiFBO,
+	  GL_DEPTH, 0, &g_clear_depth);
 }
 
 void sequencer::frame()
 {
-    clearFramebuffers();
+  clearFramebuffers();
 
-    input::fetchGLFWEvents();
-    input::updateMouse();
+  input::fetchGLFWEvents();
+  input::updateMouse();
 
-    input::getCursorQuadEvents();
-    input::getMouseKeyEvents();
-    signals::checkEvents();
-    signals::processLinks();
+  input::getCursorQuadEvents();
+  input::getMouseKeyEvents();
+  signals::checkEvents();
+  signals::processLinks();
 
-    camera::main_camera.look(input::cursorFrameDelta);
-    camera::main_camera.update();
+  camera::main_camera.look(input::cursorFrameDelta);
+  camera::main_camera.update();
 
-    gl::updateGeneralUniformBuffer();
+  gl::updateGeneralUniformBuffer();
 
-    gl::updateColorBuffer();
-    gui::updateQuadBuffer();
-    gui::updateColorQuads();
+  gl::updateColorBuffer();
+  gui::updateQuadBuffer();
+  gui::updateColorQuads();
 
-    gui::updateLinePositions();
-    gui::updateLineColors();
-    text::updateFonts();
+  gui::updateLinePositions();
+  gui::updateLineColors();
+  text::updateFonts();
 
-    gui::renderLines();
-    gui::renderColorQuads();
-    text::renderFonts();
+  gui::renderLines();
+  gui::renderColorQuads();
+  text::renderFonts();
 
-    glfwSwapBuffers(app::mainWindow.window);
+  glfwSwapBuffers(app::mainWindow.window);
 
-    input::end();
+  input::end();
 
-    app::updateTime();
-    app::limitFPS();
+  app::updateTime();
+  app::limitFPS();
 
-    debug::printErrors();
+  debug::printErrors();
 }
 
 void sequencer::gameloop()
 {
-    puts("Entering gameloop");
+  puts("Entering gameloop");
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    text::TextID term_box = utils::makeID(text::Text(glm::vec2(-0.5f, 0.0f), glm::vec2(0.5f, 1.0f)));
-    term_box->setChars("1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item");
-    text::updateTexts();
-    while (app::state == app::Running)
-    {
-        frame();
-    }
-    signals::clearSignals();
-    signals::clearFunctors();
+  text::TextID term_box = utils::makeID(text::Text(glm::vec2(-0.5f, 0.0f), glm::vec2(0.5f, 1.0f)));
+  term_box->setChars("1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item");
+  text::updateTexts();
+  while (app::state == app::Running)
+  {
+	frame();
+  }
+  signals::clearSignals();
+  signals::clearFunctors();
 }
 

@@ -1,5 +1,5 @@
-#pragma once 
-#include <vector> 
+#pragma once
+#include <vector>
 #include <glm.hpp>
 #include "storage.h"
 #include "vao.h"
@@ -9,50 +9,51 @@
 //  - point light/omnidirectional light
 //  - spot light/cone light (not yet implemented)
 //
-//Using the data rendered into the Geometry Framebuffer, each light can calculate its influence 
+//Using the data rendered into the Geometry Framebuffer, each light can calculate its influence
 //on every pixel on the screen
 
 namespace lights
 {
-    struct LightIndexRange 
-    {
-        LightIndexRange(unsigned int pOffset, unsigned int pCount)
-            :offset(pOffset), count(pCount) 
-        {}
-        unsigned int offset;
-        unsigned int count;
-    };
+  struct LightIndexRange
+  {
+	LightIndexRange(unsigned int pOffset, unsigned int pCount)
+	  : offset(pOffset)
+	  , count(pCount)
+	{}
+	unsigned int offset;
+	unsigned int count;
+  };
 
-    void initLights();
+  void initLights();
 
-    extern std::vector<glm::vec4> allLightData;
-    extern std::vector<LightIndexRange> allLightIndexRanges;
-    extern gl::VAO lightVAO;
-    extern gl::StreamStorage<LightIndexRange> lightIndexVBO;
-    extern gl::StreamStorage<glm::vec4> lightDataUBO;
-    const unsigned int MAX_LIGHT_COUNT = 100;
+  extern std::vector<glm::vec4> allLightData;
+  extern std::vector<LightIndexRange> allLightIndexRanges;
+  extern gl::VAO lightVAO;
+  extern gl::StreamStorage<LightIndexRange> lightIndexVBO;
+  extern gl::StreamStorage<glm::vec4> lightDataUBO;
+  const unsigned int MAX_LIGHT_COUNT = 100;
 
-    void createLightVAO();
-    void createLightVBO();
+  void createLightVAO();
+  void createLightVBO();
 
-    void createLightDataBuffer();
-    void updateLightDataBuffer();
-    void updateLightIndexRangeBuffer();
+  void createLightDataBuffer();
+  void updateLightDataBuffer();
+  void updateLightIndexRangeBuffer();
 
-    void initLightShader();
+  void initLightShader();
 
-    void renderLights();
-    void setupLightShader();
-    unsigned int createLight(glm::vec4 pPos, glm::vec4 pColor);
-    unsigned int createLight(glm::vec4 pPos, glm::vec4 pColor, glm::vec4 pFrustum);
-    void setLightPos(unsigned int pLightIndex, glm::vec3& pPos);
-    void setLightPos(unsigned int pLightIndex, glm::vec4& pPos);
-    void setLightColor(unsigned int pLightIndex, glm::vec3& pColor);
-    void setLightColor(unsigned int pLightIndex, glm::vec4& pColor);
+  void renderLights();
+  void setupLightShader();
+  unsigned int createLight(glm::vec4 pPos, glm::vec4 pColor);
+  unsigned int createLight(glm::vec4 pPos, glm::vec4 pColor, glm::vec4 pFrustum);
+  void setLightPos(unsigned int pLightIndex, glm::vec3& pPos);
+  void setLightPos(unsigned int pLightIndex, glm::vec4& pPos);
+  void setLightColor(unsigned int pLightIndex, glm::vec3& pColor);
+  void setLightColor(unsigned int pLightIndex, glm::vec4& pColor);
 
-    glm::vec4 & getLightColor(unsigned int pLightIndex);
+  glm::vec4& getLightColor(unsigned int pLightIndex);
 
-    void reserveLightSpace(unsigned int pCount);//reserves 3 vec4s and one index range for count
-    void reservePointLightSpace(unsigned int pCount);//reserves only 2 vec4 (and one index range) per light
+  void reserveLightSpace(unsigned int pCount);//reserves 3 vec4s and one index range for count
+  void reservePointLightSpace(unsigned int pCount);//reserves only 2 vec4 (and one index range) per light
 }
 
