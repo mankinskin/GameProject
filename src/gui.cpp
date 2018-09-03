@@ -72,20 +72,16 @@ void gui::initWidgets()
 {
     using namespace signals;
     using namespace input;
-    Button::Colors buttonColors(gl::getColor("black"), gl::getColor("grey"));
-    Button::Layout buttonLayout;
-    Button::Preset buttonPreset(buttonLayout, buttonColors);
 
     const float width = 1.0f;
     const size_t xcount = 5;
     //for (size_t w = 0; w < 100; ++w) {
-    //    Button but(buttonPreset);
-    //    but->move(glm::vec2(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount))));
+    //    Button but(glm::vec4(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount)), width, 0.1f), buttonPreset);
     //}
 
-    Window::Colors windowColors(gl::getColor("black"), gl::getColor("white"), gl::getColor("black"), gl::getColor("black"), gl::getColor("black"), gl::getColor("black"), buttonColors);
-    Window::Layout windowLayout;
-    Window::Preset windowPreset(windowLayout, windowColors);
+    //Window::Colors windowColors(gl::getColor("black"), gl::getColor("white"), gl::getColor("black"), gl::getColor("black"), gl::getColor("black"), gl::getColor("black"), buttonColors);
+    //Window::Layout windowLayout;
+    //Window::Preset windowPreset(windowLayout, windowColors);
 
     for (size_t w = 0; w < 10; ++w) {
         Window win(glm::vec4(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount)), toScreenX(300), toScreenY(200)), windowPreset);

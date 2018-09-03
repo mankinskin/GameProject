@@ -14,7 +14,7 @@ namespace gui
     {
         using ID = utils::ID<Quad>;
         constexpr static typename ID::Container& all = ID::container;
-        Quad(glm::vec4 pData)
+        constexpr Quad(glm::vec4 pData)
             : glm::vec4(pData)
         {}
         void setPos(const glm::vec2 p);
