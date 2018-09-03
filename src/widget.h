@@ -209,6 +209,7 @@ namespace gui
             using Colors = WidgetColors<Elems...>;
             using Signals = WidgetSignals<Elems...>;
             using Elements = WidgetElements<Elems...>;
+            using Quads = typename utils::tuple_generator<sizeof...(Elems), glm::vec4>::type;
             using MovePolicy = std::array<glm::vec2, sizeof...(Elems)>;
             using ResizePolicy = std::array<glm::vec4, sizeof...(Elems)>;
 
@@ -220,20 +221,20 @@ namespace gui
 
             struct Preset
             {
-                Preset(const MovePolicy mp, const ResizePolicy rp, const std::tuple<typename Elems::Preset...> subs)
-                    : movepolicy(mp)
+                Preset(const Quads(&genQs)(const glm::vec4), const MovePolicy mp, const ResizePolicy rp, const std::tuple<typename Elems::Preset...> subs)
+                    : genQuads(genQs)
+                    , movepolicy(mp)
                     , resizepolicy(rp)
                     , subpresets(subs)
                 {}
+                const Quads(&genQuads)(const glm::vec4);
                 const MovePolicy movepolicy;
                 const ResizePolicy resizepolicy;
                 const std::tuple<typename Elems::Preset...> subpresets;
             };
 
-            using Quads = typename utils::tuple_generator<sizeof...(Elems), glm::vec4>::type;
-
-            Widget(const glm::vec4 q, const Quads qs, const Preset preset)
-                : Elements(utils::convert_tuple<Elems...>(qs, preset.subpresets))
+            Widget(const glm::vec4 q, const Preset preset)
+                : Elements(utils::convert_tuple<Elems...>(preset.genQuads(q), preset.subpresets))
                 , Signals(elements)
                 , box(utils::makeID(q))
                 , movepolicy(preset.movepolicy)

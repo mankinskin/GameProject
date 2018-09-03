@@ -15,21 +15,19 @@ namespace gui
         using Preset = typename Base::Preset;
 
         Button(const glm::vec4 q, const Preset pre)
-            : Base(q, genQuads(q), pre)
+            : Base(q, pre)
         {
             setup();
         }
 
-        static constexpr size_t marginx = 2;
-        static constexpr size_t marginy = 2;
-
+        template<size_t MARGINX = 2, size_t MARGINY = 2>
         static const typename Base::Quads genQuads(const glm::vec4 q)
         {
             return typename Base::Quads{
                 glm::vec4(q.x, q.y, q.z, q.w),
-                glm::vec4(q.x + toScreenX(marginx), q.y - toScreenY(marginy),
-                            q.z - toScreenX(marginx*2),
-                            q.w - toScreenY(marginy*2))};
+                glm::vec4(q.x + toScreenX(MARGINX), q.y - toScreenY(MARGINY),
+                            q.z - toScreenX(MARGINX*2),
+                            q.w - toScreenY(MARGINY*2))};
         }
 
         void setup() const
@@ -48,5 +46,7 @@ namespace gui
             link(w.release, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), std::get<0>(w.elements).color));
         }
     };
-    const typename Button::Preset buttonPreset = typename Button::Preset({glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}, {gl::ColorID(1), gl::ColorID(2)});
+
+        template<size_t MARGINX = 2, size_t MARGINY = 2>
+    const typename Button::Preset buttonPreset(Button::genQuads<MARGINX, MARGINY>, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}, {gl::ColorID(1), gl::ColorID(12)});
 }
