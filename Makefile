@@ -1,4 +1,4 @@
-GCC=g++
+GCC=clang++ -stdlib=libstdc++
 include deppaths
 C_INCLUDE_PATH=
 CPLUS_INCLUDE_PATH=/usr/include/c++
@@ -8,7 +8,7 @@ INCLUDE_ASSIMP=-I$(INCLUDE_ASSIMP_DIR)
 INCLUDE_SOIL=-I$(INCLUDE_SOIL_DIR)
 INCLUDE_LIBPNG=-I$(INCLUDE_LIBPNG_DIR)
 INCLUDE_LIB_PATHS=-L$(LIBGL_DIR) -L$(LIBGLFW_DIR) -L$(LIBFREETYPE_DIR) -L$(LIBASSIMP_DIR) -L$(LIBSOIL_DIR) -L$(LIBGLUT_DIR) -L$(LIBPNG_DIR)
-INCLUDE_LIBS=-lncurses -lassimp -lglfw -lGLEW -lGL -lGLU -lSOIL -lfreetype -lX11 -lm -lrt -lpng 
+INCLUDE_LIBS=-lncurses -lassimp -lglfw -lGLEW -lGL -lGLU -lSOIL -lfreetype -lX11 -lm -lrt -lpng -lstdc++
 DEP_PACKAGES=libglfw3 libglfw3-dev 
 INCLUDES=$(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_ASSIMP) $(INCLUDE_SOIL)
 
