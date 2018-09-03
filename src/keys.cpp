@@ -1,7 +1,5 @@
 #include "keys.h"
 #include "signal.h"
-#include "signal.h"
-#include "gates.h"
 
 utils::ID<input::KeySignals> input::key_esc;
 utils::ID<input::KeySignals> input::key_c;

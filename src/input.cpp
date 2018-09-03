@@ -54,7 +54,6 @@ void input::setupControls()
 {
   using namespace gui;
   using namespace signals;
-  using namespace gates;
 
   puts("Initializing Mouse Listeners...");
   Mouse::lmb = utils::makeID(MouseKeySignals(0));

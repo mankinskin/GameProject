@@ -1,6 +1,5 @@
 #pragma once
 #include "keys.h"
-#include "gates.h"
 #include "signal.h"
 #include <glew.h>
 #include <glfw3.h>
