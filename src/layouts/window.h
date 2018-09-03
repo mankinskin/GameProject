@@ -7,14 +7,14 @@
 
 namespace gui
 {
-    template<typename... Elems>
-    struct WindowLayout : public WidgetLayout<Elems...>
+    template<size_t Count>
+    struct WindowGenerator
     {
         static constexpr const size_t ELEMENT_COUNT = 7;
+        static_assert(Count == ELEMENT_COUNT, "Generator only fit for 7 elements!");
 
-        constexpr WindowLayout(const size_t mx = 5, const size_t my = 5, const size_t hy = 25, const size_t hmx = 5, const size_t hmy = 5)
-            : WidgetLayout<Elems...>(NullLayout(), NullLayout(), NullLayout(), NullLayout(), NullLayout(), NullLayout(), Button::Layout(hmx, hmy))
-            , marginx(mx)
+        constexpr WindowGenerator(const size_t mx = 5, const size_t my = 5, const size_t hy = 25, const size_t hmx = 5, const size_t hmy = 5)
+            : marginx(mx)
             , marginy(my)
             , headerHeight(hy)
         {}
@@ -22,8 +22,8 @@ namespace gui
         const size_t headerHeight;
         const size_t marginx;
         const size_t marginy;
-        static const std::array<glm::vec2, ELEMENT_COUNT> movepolicy;
-        static const std::array<glm::vec4, ELEMENT_COUNT> resizepolicy;
+        static const std::array<glm::vec2, Count> movepolicy;
+        static const std::array<glm::vec4, Count> resizepolicy;
 
         const typename utils::tuple_generator<ELEMENT_COUNT, glm::vec4>::type genQuads(const glm::vec4 q) const
         {
@@ -39,24 +39,28 @@ namespace gui
                 glm::vec4(q.x, q.y, q.z, toScreenY(headerHeight))};
         }
 
-        static void setup(const Widget<WindowLayout, Elems...>& w)
+        template<typename... Elems>
+            using Window = Widget<WidgetLayout<WindowGenerator, Elems...>, Elems...>;
+        template<typename... Elems>
+        static void setup(const Window<Elems...>& w)
         {
             using namespace signals;
-            using Colors = typename Widget<WindowLayout, Elems...>::Colors::Colors;
-            using Elements = typename Widget<WindowLayout, Elems...>::Elements::Elements;
+            using Colors = typename Window<Elems...>::Colors::Colors;
+            using Elements = typename Window<Elems...>::Elements::Elements;
 
-            link(std::get<6>(w.elements).hold, refFunc(moveWidget<Widget<WindowLayout, Elems...>>, (Widget<WindowLayout, Elems...>)w, input::cursorFrameDelta));
-            link(std::get<5>(w.elements).hold, refFunc(resizeWidget<Widget<WindowLayout, Elems...>>, (Widget<WindowLayout, Elems...>)w, input::cursorFrameDelta));
-            link(std::get<2>(w.elements).hold, refFunc(resizeWidgetX<Widget<WindowLayout, Elems...>>, (Widget<WindowLayout, Elems...>)w, input::cursorFrameDelta.x));
-            link(std::get<4>(w.elements).hold, refFunc(resizeWidgetY<Widget<WindowLayout, Elems...>>, (Widget<WindowLayout, Elems...>)w, input::cursorFrameDelta.y));
+            link(std::get<6>(w.elements).hold, refFunc(moveWidget<Window<Elems...>>, (Window<Elems...>)w, input::cursorFrameDelta));
+            link(std::get<5>(w.elements).hold, refFunc(resizeWidget<Window<Elems...>>, (Window<Elems...>)w, input::cursorFrameDelta));
+            link(std::get<2>(w.elements).hold, refFunc(resizeWidgetX<Window<Elems...>>, (Window<Elems...>)w, input::cursorFrameDelta.x));
+            link(std::get<4>(w.elements).hold, refFunc(resizeWidgetY<Window<Elems...>>, (Window<Elems...>)w, input::cursorFrameDelta.y));
         }
     };
-    template<typename... Elems>
-        const std::array<glm::vec2, WindowLayout<Elems...>::ELEMENT_COUNT>
-            WindowLayout<Elems...>::movepolicy = {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)};
-    template<typename... Elems>
-        const std::array<glm::vec4, WindowLayout<Elems...>::ELEMENT_COUNT>
-            WindowLayout<Elems...>::resizepolicy = {glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)};
+    template<size_t Count>
+        const std::array<glm::vec2, Count>
+            WindowGenerator<Count>::movepolicy = {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)};
+    template<size_t Count>
+        const std::array<glm::vec4, Count>
+            WindowGenerator<Count>::resizepolicy = {glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)};
 
+        using WindowLayout = WidgetLayout<WindowGenerator, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, Button>;
         using Window = Widget<WindowLayout, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, QuadElement<gl::ColorID>, Button>;
 }

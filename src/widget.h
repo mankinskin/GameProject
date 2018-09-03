@@ -134,8 +134,8 @@ namespace gui
             applyColor(std::get<N-1>(cols.colors), std::get<N-1>(elems));
         }
 
-    template<typename... Elems>
-        struct WidgetLayout
+    template<template<size_t> typename Generator, typename... Elems>
+        struct WidgetLayout : public Generator<sizeof...(Elems)>
         {
             using Layouts = std::tuple<typename Elems::Layout...>;
 
@@ -236,10 +236,10 @@ namespace gui
                 resize(s - glm::vec2(box->z, box->w));
             }
         };
-    template<template<typename...>typename L, typename... Elems>
-        struct Widget : public WidgetElements<L<Elems...>, Elems...>, WidgetSignals<Elems...>
+    template<typename L, typename... Elems>
+        struct Widget : public WidgetElements<L, Elems...>, WidgetSignals<Elems...>
         {
-            using Layout = L<Elems...>;
+            using Layout = L;
             using Colors = WidgetColors<typename Elems::Colors...>;
             using Signals = WidgetSignals<Elems...>;
             using Elements = WidgetElements<Layout, Elems...>;
@@ -264,14 +264,14 @@ namespace gui
                 Layout::setup(*this);
             }
 
-            const Widget<L, Elems...>* operator->() const
+            const Widget<Layout, Elems...>* operator->() const
             {
                 return this;
             }
         };
 
-    template<typename... Colors, template<typename...>typename L, typename... Elems>
-        void applyColor_imp(const WidgetColors<Colors...> cols, const Widget<L, Elems...> wid)
+    template<typename... Colors, typename Layout, typename... Elems>
+        void applyColor_imp(const WidgetColors<Colors...> cols, const Widget<Layout, Elems...> wid)
         {
             applyColor_imp_n(cols, wid.elements, utils::_index<sizeof...(Colors)>());
         }
