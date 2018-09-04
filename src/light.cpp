@@ -69,19 +69,19 @@ void lights::initLightShader()
   lightShaderProgram.addVertexAttribute("index_range", 1);
 }
 
-unsigned int lights::createLight(glm::vec4 pPos, glm::vec4 pColor)
+unsigned int lights::createLight(glm::vec4 pPos, glm::vec4 pColorData)
 {
   allLightIndexRanges.emplace_back(allLightData.size(), 2);
   allLightData.push_back(pPos);
-  allLightData.push_back(pColor);
+  allLightData.push_back(pColorData);
   return allLightIndexRanges.size() - 1;
 }
 
-unsigned int lights::createLight(glm::vec4 pPos, glm::vec4 pColor, glm::vec4 pFrustum)
+unsigned int lights::createLight(glm::vec4 pPos, glm::vec4 pColorData, glm::vec4 pFrustum)
 {
   allLightIndexRanges.emplace_back(allLightData.size(), 3);
   allLightData.push_back(pPos);
-  allLightData.push_back(pColor);
+  allLightData.push_back(pColorData);
   allLightData.push_back(pFrustum);
   return allLightIndexRanges.size() - 1;
 }
@@ -151,14 +151,14 @@ void lights::setLightPos(unsigned int pLightIndex, glm::vec4& pPos)
   std::memcpy(&allLightData[allLightIndexRanges[pLightIndex].offset], &pPos, sizeof(float) * 4);
 }
 
-void lights::setLightColor(unsigned int pLightIndex, glm::vec3& pColor)
+void lights::setLightColor(unsigned int pLightIndex, glm::vec3& pColorData)
 {
-  std::memcpy(&allLightData[allLightIndexRanges[pLightIndex].offset + 1], &pColor, sizeof(float) * 3);
+  std::memcpy(&allLightData[allLightIndexRanges[pLightIndex].offset + 1], &pColorData, sizeof(float) * 3);
 }
 
-void lights::setLightColor(unsigned int pLightIndex, glm::vec4& pColor)
+void lights::setLightColor(unsigned int pLightIndex, glm::vec4& pColorData)
 {
-  std::memcpy(&allLightData[allLightIndexRanges[pLightIndex].offset + 1], &pColor, sizeof(float) * 4);
+  std::memcpy(&allLightData[allLightIndexRanges[pLightIndex].offset + 1], &pColorData, sizeof(float) * 4);
 }
 
 glm::vec4& lights::getLightColor(unsigned int pLightIndex)

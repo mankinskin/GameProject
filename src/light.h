@@ -44,12 +44,12 @@ namespace lights
 
   void renderLights();
   void setupLightShader();
-  unsigned int createLight(glm::vec4 pPos, glm::vec4 pColor);
-  unsigned int createLight(glm::vec4 pPos, glm::vec4 pColor, glm::vec4 pFrustum);
+  unsigned int createLight(glm::vec4 pPos, glm::vec4 pColorData);
+  unsigned int createLight(glm::vec4 pPos, glm::vec4 pColorData, glm::vec4 pFrustum);
   void setLightPos(unsigned int pLightIndex, glm::vec3& pPos);
   void setLightPos(unsigned int pLightIndex, glm::vec4& pPos);
-  void setLightColor(unsigned int pLightIndex, glm::vec3& pColor);
-  void setLightColor(unsigned int pLightIndex, glm::vec4& pColor);
+  void setLightColor(unsigned int pLightIndex, glm::vec3& pColorData);
+  void setLightColor(unsigned int pLightIndex, glm::vec4& pColorData);
 
   glm::vec4& getLightColor(unsigned int pLightIndex);
 

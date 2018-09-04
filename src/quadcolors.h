@@ -23,6 +23,6 @@ namespace gui
   void initColorQuadVAO();
   void updateColorQuads();
   void renderColorQuads();
-  void colorQuad(const utils::ID<Quad> pID, const utils::ID<gl::Color> pColor);
+  void colorQuad(const utils::ID<Quad> pID, const utils::ID<gl::ColorData> pColorData);
 }
 

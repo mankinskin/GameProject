@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include "utils/id.h"
 
 namespace signals
 {

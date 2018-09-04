@@ -157,10 +157,7 @@ namespace signals
 		const std::tuple<const Signals...> signals;
 	};
 
-
-
-
-  template<template<typename...> typename Op, typename... Signals>
+  template<template<typename...> class Op, typename... Signals>
 	class SignalListener : public Op<Signals...>
   {
 	public:
@@ -197,7 +194,7 @@ namespace signals
 	  {
 		static At_Init<Op, Signals...> init;
 	  }
-	  template<template<typename...> typename O, typename... S>
+	  template<template<typename...> class O, typename... S>
 		struct At_Init
 		{
 		  constexpr At_Init()
@@ -371,27 +368,20 @@ namespace signals
 
   struct Listener
   {
-	using ID = utils::ID<Listener>;
-	constexpr static typename ID::Container& all = ID::container;
-
 	template<typename E>
 	  Listener(const utils::ID<EventListener<E>> pListener)
 	  : stater(EventListener<E>::stat)
 		, index(pListener.index)
 	{}
-	template<template<typename...> typename Op, typename... Signals>
+	template<template<typename...> class Op, typename... Signals>
 	  Listener(const utils::ID<SignalListener<Op, Signals...>> pListener)
 	  : stater(SignalListener<Op, Signals...>::stat)
 		, index(pListener.index)
 	{}
-	template<template<typename...> typename Op, typename... Signals>
+	template<template<typename...> class Op, typename... Signals>
 	  Listener(const SignalListener<Op, Signals...> pListener)
 	  : stater(SignalListener<Op, Signals...>::stat)
 		, index(utils::makeID(pListener).index)
-	{}
-	Listener(const utils::ID<Listener> pListener)
-	  : stater(pListener->stater)
-		, index(pListener->index)
 	{}
 	bool stat() const
 	{
@@ -403,20 +393,20 @@ namespace signals
   };
 
   template<typename E>
-	const utils::ID<Listener> listen(const utils::ID<EventListener<E>> pEvent)
+	const Listener listen(const utils::ID<EventListener<E>> pEvent)
 	{
-	  return utils::makeID(Listener(pEvent));
+	  return Listener(pEvent);
 	}
   template<typename E>
-	const utils::ID<Listener> listen(const E pEvent)
+	const Listener listen(const E pEvent)
 	{
 	  return listen(utils::makeID(EventListener<E>(pEvent)));
 	}
 
-  template<template<typename...> typename Op, typename... Signals>
-	const utils::ID<Listener> listen(SignalListener<Op, Signals...> pSignal)
+  template<template<typename...> class Op, typename... Signals>
+	const Listener listen(SignalListener<Op, Signals...> pSignal)
 	{
-	  return utils::makeID(Listener(utils::makeID(pSignal)));
+	  return Listener(utils::makeID(pSignal));
 	}
 
   void processLinks();

@@ -45,9 +45,9 @@ unsigned int gui::createLineVertexPos(glm::vec4 pPos)
   return lineVertexPositionCount++;
 }
 
-unsigned int gui::createLineVertex(unsigned int pPos, unsigned int pColor)
+unsigned int gui::createLineVertex(unsigned int pPos, unsigned int pColorData)
 {
-  allLineVertices[ lineVertexCount ] = glm::uvec2(pPos, pColor);
+  allLineVertices[ lineVertexCount ] = glm::uvec2(pPos, pColorData);
   return lineVertexCount++;
 }
 
@@ -55,9 +55,9 @@ glm::uvec2 gui::createLine(unsigned int pPosA, unsigned int pPosB, unsigned int 
 {
   return glm::uvec2(createLineVertex(pPosA, pColorA), createLineVertex(pPosB, pColorB));
 }
-glm::uvec2 gui::createLine(unsigned int pPosA, unsigned int pPosB, unsigned int pColor)
+glm::uvec2 gui::createLine(unsigned int pPosA, unsigned int pPosB, unsigned int pColorData)
 {
-  return createLine(pPosA, pPosB, pColor, pColor);
+  return createLine(pPosA, pPosB, pColorData, pColorData);
 }
 
 void gui::initLineVAO()

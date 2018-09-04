@@ -178,10 +178,13 @@ namespace gui
 
 	QuadElement(const Quad q, const Col col)
 	  : utils::ID<Quad>(utils::makeID(q))
-		, Signals((utils::ID<Quad>)*this)
-		   , color(col)
+	  , Signals((utils::ID<Quad>)*this)
+	  , color(col)
 	{
 	  colorQuad((utils::ID<Quad>)*this, color);
+	}
+	~QuadElement()
+	{
 	}
 	const Col color;
   };

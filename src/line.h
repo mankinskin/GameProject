@@ -27,15 +27,15 @@ namespace gui
 	  unsigned int pLineCount, int pFlags = DEFAULT_LINE_GROUP_FLAGS);
   //struct LineVertex{
   //    LinePointIt vertex;
-  //    gl::ColorID color;
+  //    gl::Color color;
   //};
 
 
   glm::uvec2 createLine(unsigned int pPosA, unsigned int pPosB, unsigned int pColorA, unsigned int pColorB);
-  glm::uvec2 createLine(unsigned int pPosA, unsigned int pPosB, unsigned int pColor);
+  glm::uvec2 createLine(unsigned int pPosA, unsigned int pPosB, unsigned int pColorData);
   unsigned int createLineVertexPos(glm::vec4 pPos);
-  unsigned int createLineVertex(unsigned int pVertex, unsigned int pColor = 0);
-  void setLineVertexColor(unsigned int pVertex, unsigned int pColor);
+  unsigned int createLineVertex(unsigned int pVertex, unsigned int pColorData = 0);
+  void setLineVertexColor(unsigned int pVertex, unsigned int pColorData);
 
 
   void initLineVAO();

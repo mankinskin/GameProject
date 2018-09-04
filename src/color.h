@@ -8,15 +8,15 @@
 
 namespace gl
 {
-  using Color = glm::vec4;
-  using ColorID = utils::ID<Color>;
+  using ColorData = glm::vec4;
+  using Color = utils::ID<ColorData>;
   const size_t MAX_COLOR_COUNT = 100;
 
-  using ConstColor = glm::vec4;
-  using ConstColorID = utils::ID<ConstColor>;
+  using ConstColorData = glm::vec4;
+  using ConstColor = utils::ID<ConstColorData>;
   const size_t CONST_COLOR_COUNT = 10;
 
-  extern StreamStorage<Color> colorBuffer;
+  extern StreamStorage<ColorData> colorBuffer;
 
   void initColors();
   void createDefaultColors();
@@ -24,6 +24,6 @@ namespace gl
   void initColorBuffer();
   void updateColorBuffer();
 
-  const utils::ID<Color> createColor(const glm::vec4 pColor, const std::string pColorName);
-  const utils::ID<Color> getColor(const std::string pColorName);
+  const utils::ID<ColorData> createColor(const glm::vec4 pColorData, const std::string pColorName);
+  const utils::ID<ColorData> getColor(const std::string pColorName);
 }
