@@ -135,7 +135,7 @@ void text::FontFile::readFace(std::string pFilepath)
 		  for (unsigned int bit = 0; bit < 8; ++bit) {
 			// take each bit from the glyph bitmap and map it onto a byte in the atlas
 			atlas.pixels[(quad.y + row) * atlas.width + quad.x + byte * 8 + bit] =
-			  (unsigned char)((bitmap_byte >> 7 - bit) & 1) * 255;
+			  (unsigned char)((bitmap_byte >> (7 - bit)) & 1) * 255;
 		  }
 		}
 	  }
