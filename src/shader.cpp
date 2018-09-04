@@ -53,9 +53,9 @@ shader::Stage::Stage(std::string pFilename)
 	, type(toStageType(extractStageString(pFilename)))
 {
   if (!type) {
-	debug::pushError(
+	debug::fatal(
 		"\nShader::loadShader(): invalid shader file name " + filename +
-		"!\nHas to include '.vert', '.frag', '.geo' or '.comp'!", debug::Error::Fatal);
+		"!\nHas to include '.vert', '.frag', '.geo' or '.comp'!");
   }
 }
 
@@ -65,7 +65,7 @@ void shader::Stage::compile()
   std::ifstream file;
   file.open(SHADER_DIR + filename + ".txt");
   if (file.fail()) {
-	debug::pushError("Failed to compile shader: Could not open " + SHADER_DIR + filename + ".txt" + "!\n", debug::Error::Fatal);
+	debug::fatal("Failed to compile shader: Could not open " + SHADER_DIR + filename + ".txt" + "!\n");
 	return;
   }
   ID = glCreateShader(type);
@@ -81,9 +81,9 @@ void shader::Stage::compile()
 	glGetShaderiv(ID, GL_INFO_LOG_LENGTH, &maxLength);
 	std::vector<char> errorLog(maxLength);
 	glGetShaderInfoLog(ID, maxLength, &maxLength, &errorLog[0]);
-	debug::pushError(
+	debug::fatal(
 		"\n!!! Failed to compile " + filename +
-		"\nOpenGL Error Log: " + std::string(&(errorLog[0])) + "\n", debug::Error::Fatal);
+		"\nOpenGL Error Log: " + std::string(&(errorLog[0])) + "\n");
   }
 }
 
@@ -128,7 +128,7 @@ void shader::Program::link()
 	std::vector<char> errorLog(maxLength);
 	glGetProgramInfoLog(ID, maxLength, &maxLength, &errorLog[0]);
 	glDeleteProgram(ID);
-	debug::pushError("!!!/nError when linking program: " + name + " /nopenGL Error Log: " + &(errorLog[0]), debug::Error::Fatal);
+	debug::fatal("!!!/nError when linking program: " + name + " /nopenGL Error Log: " + &(errorLog[0]));
 	return;
   }
   for (unsigned int i = 0; i < stageCount; ++i) {

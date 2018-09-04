@@ -97,7 +97,7 @@ namespace shader
 	  {
 		int blockIndex = glGetUniformBlockIndex(ID, pBlockName.c_str());
 		if (blockIndex < 0) {
-		  debug::pushError("invalid uniform block name " + pBlockName + "!");
+		  debug::warning("invalid uniform block name " + pBlockName + "!");
 		  return;
 		}
 		glUniformBlockBinding(ID, blockIndex, pStorage.binding);

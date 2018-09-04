@@ -124,10 +124,10 @@ void model::Loader::loadModelFile(ModelLoadFile pFile)
   const aiScene* scene = imp.ReadFile(MODEL_DIR + pFile.filename, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded	);
   const char* err = imp.GetErrorString();
   if (err[0] != '\0') {
-	debug::pushError(err);
+	debug::warning(err);
   }
   if (scene == nullptr) {
-	debug::pushError("scene was nullptr!");
+	debug::warning("scene was nullptr!");
   }
   Model model;
   model.meshOffset = allMeshes.size();

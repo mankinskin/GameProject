@@ -49,7 +49,7 @@ void app::initMonitors()
 	puts("Could not detect any monitors.\nAttempting to use primary monitor.");
 	GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
 	if (primaryMonitor == nullptr) {
-	  debug::pushError("GLFW could not find any monitor!", debug::Error::Fatal);
+	  debug::fatal("GLFW could not find any monitor!");
 	}
 	else {
 	  utils::makeID(Monitor(0, primaryMonitor));

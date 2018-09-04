@@ -15,11 +15,10 @@ unsigned int grid_2_line_group;
 
 void APIENTRY glerror_callback(GLenum sourcei, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
-  debug::Error::Severity sev = debug::Error::Warning;
-  if (severity == GL_DEBUG_SEVERITY_HIGH) {
-	sev = debug::Error::Fatal;
-  }
-  debug::pushError(message, sev);
+  if (severity == GL_DEBUG_SEVERITY_HIGH)
+	debug::fatal(message);
+  else
+	debug::warning(message);
 }
 
 void glDebug::init()

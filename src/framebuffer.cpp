@@ -55,7 +55,7 @@ void texture::initGUIFBO() {
 
   GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
   if (status != GL_FRAMEBUFFER_COMPLETE) {
-	debug::pushError("Framebuffer incomplete");
+	debug::warning("Framebuffer incomplete");
   }
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -104,7 +104,7 @@ void texture::initGBuffer()
 
   GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
   if (status != GL_FRAMEBUFFER_COMPLETE) {
-	debug::pushError("Framebuffer incomplete");
+	debug::warning("Framebuffer incomplete");
   }
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

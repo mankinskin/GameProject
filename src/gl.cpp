@@ -120,8 +120,8 @@ void gl::initGLEW()
   glewExperimental = true;
   unsigned int glew = glewInit();
   if (glew != GLEW_OK) {
-	debug::pushError("Unable to initialize GLEW (glewInit() return code: " + std::to_string(glew) + ")\nGLEW Error Log:\n"
-		+ (const char*)glewGetErrorString(glew), debug::Error::Severity::Fatal);
+	debug::fatal("Unable to initialize GLEW (glewInit() return code: " + std::to_string(glew) + ")\nGLEW Error Log:\n"
+		+ (const char*)glewGetErrorString(glew));
 	while (!getch()) {
 	}
 	exit(glew);

@@ -60,7 +60,7 @@ namespace gl
 		mappedPtr = glMapNamedBufferRange(Storage<T>::ID, 0,
 			Storage<T>::capacity, Storage<T>::flags);
 		if (!mappedPtr) {
-		  debug::pushError("Failed to map Storage " + Storage<T>::name + " !\n");
+		  debug::warning("Failed to map Storage " + Storage<T>::name + " !\n");
 		}
 	  }
 
@@ -72,7 +72,7 @@ namespace gl
 	{
 	  if (pByteSize) {
 		if (!pStorage.mappedPtr) {
-		  debug::pushError("Attempted to upload to unmapped buffer!", debug::Error::Fatal);
+		  debug::fatal("Attempted to upload to unmapped buffer!");
 		  return;
 		}
 		std::memcpy(pStorage.mappedPtr, pData, pByteSize);

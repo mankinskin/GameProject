@@ -18,7 +18,10 @@ namespace debug {
 	std::string msg = "";
   };
 
-  void pushError(std::string pMessage, Error::Severity errorSeverity = Error::Severity::Warning);
+  void setError(std::string pMessage, Error::Severity errorSeverity = Error::Severity::Warning);
+  void error(std::string pMessage);
+  void fatal(std::string pMessage);
+  void warning(std::string pMessage);
   void printErrors();
   void togglePrintInfo();
   void printInfo();

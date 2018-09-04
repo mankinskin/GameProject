@@ -14,11 +14,22 @@ const std::array<const std::string, 3> debug::Error::severityStrings =
   "Fatal Error"
 };
 
-void debug::pushError(std::string pMessage, Error::Severity errorSeverity)
+void debug::setError(std::string pMessage, Error::Severity errorSeverity)
 {
   errorBuffer.emplace_back(pMessage, errorSeverity);
 }
-
+void debug::error(std::string pMessage)
+{
+  setError(pMessage, Error::Severity::Trivial);
+}
+void debug::warning(std::string pMessage)
+{
+  setError(pMessage, Error::Severity::Warning);
+}
+void debug::fatal(std::string pMessage)
+{
+  setError(pMessage, Error::Severity::Fatal);
+}
 void debug::printErrors()
 {
   if (errorBuffer.size()) {

@@ -48,8 +48,8 @@ void app::initGLFW()
   std::puts("Initializing GLFW...");
   unsigned int glfw = glfwInit();
   if (glfw != GLFW_TRUE) {
-	debug::pushError(("app::init() - Unable to initialize GLFW (glfwInit() return code: %i)\n" + glfw), debug::Error::Severity::Fatal);
-	//while (!getch()) {}
+	debug::fatal("app::init() - Unable to initialize GLFW (glfwInit() return code: %i)\n" + std::to_string(glfw));
+	while (!getch()) {}
 	exit(glfw);
   }
   std::puts("Initialized GLFW successfully.");
