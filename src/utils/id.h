@@ -3,6 +3,7 @@
 #include <functional>
 #include <type_traits>
 #include <assert.h>
+#include <algorithm>
 
 namespace utils
 {
@@ -26,21 +27,23 @@ namespace utils
 		: index(INVALID_ID)
 	  {}
 
+	  static constexpr size_t allocate(const T& t)
+	  {
+		container.push_back(t);
+		return container.size() - 1;
+	  }
 	  constexpr ID(const size_t i)
 		: index(i)
 	  {}
 	  constexpr ID(const T t)
-		: index(container.size())
-	  {
-		puts("Creating ID from object...");
-		container.push_back(t);
-	  }
+		: index(allocate(t))
+	  {}
 
 	  size_type index;
 
 	  Type& get() const
 	  {
-		assert(container.size());
+		assert(index < container.size());
 		return container[index];
 	  }
 
@@ -73,8 +76,6 @@ namespace utils
   template<typename T>
 	ID<T> makeID(const T& t)
 	{
-	  size_t id = ID<T>::container.size();
-	  ID<T>::container.push_back(t);
-	  return ID<T>(id);
+	  return ID<T>::allocate(t);
 	}
 }
