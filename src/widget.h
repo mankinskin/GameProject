@@ -172,6 +172,7 @@ namespace gui
   template<typename Col>
 	struct QuadElement : public utils::ID<Quad>, signals::QuadSignals<utils::ID<Quad>>
   {
+	static constexpr size_t QUAD_COUNT = 1;
 	using Signals = signals::QuadSignals<utils::ID<Quad>>;
 	using Colors = Col;
 	using Preset = Col;
@@ -209,6 +210,7 @@ namespace gui
 	struct Widget : public WidgetElements<Elems...>, WidgetSignals<Elems...>
   {
 	static constexpr size_t ELEMENT_COUNT = sizeof...(Elems);
+	static constexpr size_t QUAD_COUNT = utils::sum(Elems::QUAD_COUNT...);
 	using Colors = WidgetColors<Elems...>;
 	using Signals = WidgetSignals<Elems...>;
 	using Elements = WidgetElements<Elems...>;

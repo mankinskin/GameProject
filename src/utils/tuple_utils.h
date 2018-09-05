@@ -66,4 +66,15 @@ namespace utils
 	{
 	  return tuple_converter<To...>::func(from...);
 	}
+
+  template<typename Arg>
+	constexpr Arg sum(const Arg arg)
+	{
+	  return arg;
+	}
+  template<typename Head, typename... Args>
+	constexpr auto sum(const Head h, const Args... args)
+	{
+	  return h + sum(args...);
+	}
 }
