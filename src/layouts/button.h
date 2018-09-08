@@ -36,14 +36,14 @@ namespace gui
 	  using Colors = typename Base::Colors::Colors;
 	  using Elements = typename Base::Elements::Elements;
 	  const Base& w = *this;
-	  link(w.enter, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), gl::getColor("white")));
-	  link(w.leave, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), std::get<0>(w.elements).color));
+	  //link(w.enter, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), gl::getColor("white")));
+	  //link(w.leave, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), std::get<0>(w.elements).color));
 
-	  link(w.press, func(applyColor<std::tuple_element_t<1, Elements>>, std::get<1>(w.elements), gl::getColor("white")));
-	  link(w.press, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), gl::getColor("white")));
+	  //link(w.press, func(applyColor<std::tuple_element_t<1, Elements>>, std::get<1>(w.elements), gl::getColor("white")));
+	  //link(w.press, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), gl::getColor("white")));
 
-	  link(w.release, func(applyColor<std::tuple_element_t<1, Elements>>, std::get<1>(w.elements), std::get<1>(w.elements).color));
-	  link(w.release, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), std::get<0>(w.elements).color));
+	  //link(w.release, func(applyColor<std::tuple_element_t<1, Elements>>, std::get<1>(w.elements), std::get<1>(w.elements).color));
+	  //link(w.release, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), std::get<0>(w.elements).color));
 	}
   };
 

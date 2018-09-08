@@ -75,18 +75,19 @@ void gui::initWidgets()
 
   const float width = 1.0f;
   const size_t xcount = 5;
-  //for (size_t w = 0; w < 100; ++w) {
-  //    Button but(glm::vec4(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount)), width, 0.1f), buttonPreset);
-  //}
 
-  //Window::Colors windowColors(gl::getColor("black"), gl::getColor("white"), gl::getColor("black"), gl::getColor("black"), gl::getColor("black"), gl::getColor("black"), buttonColors);
-  //Window::Layout windowLayout;
-  //Window::Preset windowPreset(windowLayout, windowColors);
-
-  for (size_t w = 0; w < 10; ++w) {
-	Window win(glm::vec4(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount)), toScreenX(300), toScreenY(200)), windowPreset);
+  puts("Button");
+  for (size_t w = 0; w < 1; ++w) {
+	Button b(glm::vec4(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount)), toScreenX(300), toScreenY(200)), buttonPreset<>);
+	puts("Finished");
   }
 
+  puts("Window");
+  for (size_t w = 0; w < 1; ++w) {
+    Window b(glm::vec4(-1.0f + (width/xcount) * (w%xcount), 0.0f - (0.1f * floor(w/xcount)), toScreenX(300), toScreenY(200)), windowPreset);
+    puts("Finished");
+  }
+  puts("End");
   ////Slider
   //using Slider = QuadGroup<2>;
   //using SliderResizePolicy = WidgetResizePolicy<Slider>;

@@ -47,10 +47,10 @@ namespace gui
 	  using Elements = Base::Elements::Elements;
 	  const Base& w = *this;
 
-	  link(std::get<6>(w.elements).hold, refFunc(moveWidget<Base>, (Base)w, input::cursorFrameDelta));
-	  link(std::get<5>(w.elements).hold, refFunc(resizeWidget<Base>, (Base)w, input::cursorFrameDelta));
-	  link(std::get<2>(w.elements).hold, refFunc(resizeWidgetX<Base>, (Base)w, input::cursorFrameDelta.x));
-	  link(std::get<4>(w.elements).hold, refFunc(resizeWidgetY<Base>, (Base)w, input::cursorFrameDelta.y));
+	  //link(std::get<6>(w.elements).hold, refFunc(moveWidget<Base>, (Base)w, input::cursorFrameDelta));
+	  //link(std::get<5>(w.elements).hold, refFunc(resizeWidget<Base>, (Base)w, input::cursorFrameDelta));
+	  //link(std::get<2>(w.elements).hold, refFunc(resizeWidgetX<Base>, (Base)w, input::cursorFrameDelta.x));
+	  //link(std::get<4>(w.elements).hold, refFunc(resizeWidgetY<Base>, (Base)w, input::cursorFrameDelta.y));
 	}
   };
   const typename Window::Preset windowPreset = typename Window::Preset(Window::genQuads, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)}, {gl::Color(1), gl::Color(10), gl::Color(1), gl::Color(1), gl::Color(1), gl::Color(1), buttonPreset<5, 5>});
