@@ -9,7 +9,7 @@ namespace gui
   using ButtonBase = Widget<QuadElement<gl::Color>, QuadElement<gl::Color>>;
   struct Button : public ButtonBase
   {
-	static constexpr size_t ELEMENT_COUNT = 2;
+	static constexpr size_t ELEMENT_COUNT = ButtonBase::ELEMENT_COUNT;
 	using Base = ButtonBase;
 	using Colors = typename Base::Colors;
 	using Preset = typename Base::Preset;
@@ -17,7 +17,18 @@ namespace gui
 	Button(const glm::vec4 q, const Preset pre)
 	  : Base(q, pre)
 	{
-	  setup();
+	  using namespace signals;
+	  using Colors = typename Base::Colors::Colors;
+	  using Elements = typename Base::Elements::Elements;
+	  const Base& w = *this;
+	  link(w.enter, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), gl::getColor("white")));
+	  link(w.leave, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), std::get<0>(w.elements).color));
+
+	  link(w.press, func(applyColor<std::tuple_element_t<1, Elements>>, std::get<1>(w.elements), gl::getColor("white")));
+	  link(w.press, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), gl::getColor("white")));
+
+	  link(w.release, func(applyColor<std::tuple_element_t<1, Elements>>, std::get<1>(w.elements), std::get<1>(w.elements).color));
+	  link(w.release, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), std::get<0>(w.elements).color));
 	}
 
 	template<size_t MARGINX = 2, size_t MARGINY = 2>
@@ -29,22 +40,6 @@ namespace gui
 				q.z - toScreenX(MARGINX*2),
 				q.w - toScreenY(MARGINY*2))};
 	  }
-
-	void setup() const
-	{
-	  using namespace signals;
-	  using Colors = typename Base::Colors::Colors;
-	  using Elements = typename Base::Elements::Elements;
-	  const Base& w = *this;
-	  //link(w.enter, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), gl::getColor("white")));
-	  //link(w.leave, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), std::get<0>(w.elements).color));
-
-	  //link(w.press, func(applyColor<std::tuple_element_t<1, Elements>>, std::get<1>(w.elements), gl::getColor("white")));
-	  //link(w.press, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), gl::getColor("white")));
-
-	  //link(w.release, func(applyColor<std::tuple_element_t<1, Elements>>, std::get<1>(w.elements), std::get<1>(w.elements).color));
-	  //link(w.release, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w.elements), std::get<0>(w.elements).color));
-	}
   };
 
   template<size_t MARGINX = 2, size_t MARGINY = 2>

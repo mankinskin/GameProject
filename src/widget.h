@@ -170,24 +170,23 @@ namespace gui
   //using NullPreset = typename NullLayout::Preset;
 
   template<typename Col>
-	struct QuadElement //, signals::QuadSignals<utils::ManagedID<Quad>>
+	struct QuadElement : public utils::ID<Quad>, signals::QuadSignals<utils::ID<Quad>>
   {
 	static constexpr size_t QUAD_COUNT = 1;
-	using Signals = signals::QuadSignals<utils::ManagedID<Quad>>;
+	using Signals = signals::QuadSignals<utils::ID<Quad>>;
 	using Colors = Col;
 	using Preset = Col;
 
 	QuadElement(const Quad&& q, const Col&& col)
-	  : quad(std::move(utils::makeID(std::move(q))))
-	  //, Signals(quad)
+	  : utils::ID<Quad>(std::move(utils::makeID(std::move(q))))
+	  , Signals((utils::ID<Quad>)*this)
 	  , color(std::move(col))
 	{
-	  printf("Creating QuadElement\n%lu quads.", utils::ID<Quad>::container.size());
-	  colorQuad(quad, color);
+	  printf("Creating QuadElement\n%lu quads.\n", utils::ID<Quad>::container.size());
+	  colorQuad((utils::ID<Quad>)*this, color);
 	}
 
 	const Col color;
-	utils::ManagedID<Quad> quad;
   };
   template<typename Col>
 	void applyColor_imp(const QuadElement<Col>& elem, const Col col)
@@ -207,10 +206,11 @@ namespace gui
 	};
 
   template<typename... Elems>
-	struct Widget : public WidgetElements<Elems...>//, WidgetSignals<Elems...>
+	struct Widget : public WidgetElements<Elems...>, WidgetSignals<Elems...>
   {
 	static constexpr size_t ELEMENT_COUNT = sizeof...(Elems);
 	static constexpr size_t QUAD_COUNT = utils::sum(Elems::QUAD_COUNT...);
+
 	using Colors = WidgetColors<Elems...>;
 	using Signals = WidgetSignals<Elems...>;
 	using Elements = WidgetElements<Elems...>;
@@ -218,7 +218,7 @@ namespace gui
 	using MovePolicy = std::array<glm::vec2, sizeof...(Elems)>;
 	using ResizePolicy = std::array<glm::vec4, sizeof...(Elems)>;
 
-	//using Signals::hold;
+	using Signals::hold;
 	using Elements::elements;
 	const utils::ID<glm::vec4> box;
 	const MovePolicy movepolicy;
@@ -240,14 +240,13 @@ namespace gui
 
 	Widget(const glm::vec4& q, const Preset& preset)
 	  : Elements(std::move(utils::convert_tuple<Elems...>(preset.genQuads(q), preset.subpresets)))
-	  //, Signals(elements)
+	  , Signals(elements)
 	  , box(utils::makeID(q))
 	  , movepolicy(preset.movepolicy)
 	  , resizepolicy(preset.resizepolicy)
 	{
 	  puts("Creating Widget");
 	}
-	Widget(Widget<Elems...>&& o) = default;
 
 	void move_n(utils::_index<0> i, const glm::vec2 v) const
 	{}
