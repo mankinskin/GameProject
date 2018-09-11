@@ -114,20 +114,20 @@ namespace gui
   };
 
   template<typename... Elems>
-	void applyColor_imp_qs(const std::tuple<Elems...> elems, const WidgetColors<Elems...> cols, utils::_index<0>)
+	void applyColor_imp_qs(const std::tuple<Elems...>& elems, const WidgetColors<Elems...> cols, utils::_index<0>)
 	{}
   template<typename... Elems>
-	void applyColor_imp(const std::tuple<Elems...> elems, const WidgetColors<Elems...> cols)
+	void applyColor_imp(const std::tuple<Elems...>& elems, const WidgetColors<Elems...> cols)
 	{
 	  applyColor_imp_n(elems, cols, utils::_index<sizeof...(Elems)>());
 	}
   template<typename Elem>
-	void applyColor(const Elem e, const typename Elem::Colors col)
+	void applyColor(const Elem& e, const typename Elem::Colors col)
 	{
 	  applyColor_imp(e, col);
 	}
   template<typename... Elems, size_t N>
-	void applyColor_imp_n(const std::tuple<Elems...> elems, const WidgetColors<Elems...> cols, utils::_index<N>)
+	void applyColor_imp_n(const std::tuple<Elems...>& elems, const WidgetColors<Elems...> cols, utils::_index<N>)
 	{
 	  applyColor_imp_n(elems, cols, utils::_index<N-1>());
 	  applyColor(std::get<N-1>(elems), std::get<N-1>(cols.colors));
@@ -190,7 +190,7 @@ namespace gui
 	utils::ManagedID<Quad> quad;
   };
   template<typename Col>
-	void applyColor_imp(const QuadElement<Col> elem, const Col col)
+	void applyColor_imp(const QuadElement<Col>& elem, const Col col)
 	{
 	  colorQuad(elem, col);
 	}
@@ -294,10 +294,9 @@ namespace gui
   };
 
   template<typename... Elems>
-	void applyColor_imp(const Widget<Elems...> wid, const WidgetColors<Elems...> cols)
+	void applyColor_imp(const Widget<Elems...>& wid, const WidgetColors<Elems...> cols)
 	{
 	  applyColor_imp_n(wid.elements, cols, utils::_index<sizeof...(Elems)>());
 	}
-
 }
 

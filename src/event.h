@@ -118,8 +118,13 @@ namespace signals
 	}
 
   template<typename ObjectType, typename StateType>
-	void pushEvent(const ObjectType pObject, const StateType pState)
+	void pushEvent(const ObjectType& pObject, const StateType pState)
 	{
 	  EventListener<Event<ObjectType, StateType>>::pushEvent(Event<ObjectType, StateType>(pObject, pState));
+	}
+  template<typename ObjectType, typename StateType>
+	void pushEvent(const ObjectType&& pObject, const StateType pState)
+	{
+	  EventListener<Event<ObjectType, StateType>>::pushEvent(Event<ObjectType, StateType>(std::move(pObject), pState));
 	}
 }
