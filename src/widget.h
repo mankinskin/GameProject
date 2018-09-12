@@ -194,32 +194,20 @@ namespace gui
 	  colorQuad(elem, col);
 	}
 
-  // this type only exists so that it can be initialized first in Widget
   template<typename... Elems>
-	struct WidgetElements
-	{
-	  using Elements = std::tuple<Elems...>;
-	  WidgetElements(Elements&& es)
-		: elements(std::move(es))
-	  {}
-	  Elements elements;
-	};
-
-  template<typename... Elems>
-	struct Widget : public WidgetElements<Elems...>, WidgetSignals<Elems...>
+	struct Widget : public std::tuple<Elems...>, WidgetSignals<Elems...>
   {
 	static constexpr size_t ELEMENT_COUNT = sizeof...(Elems);
 	static constexpr size_t QUAD_COUNT = utils::sum(Elems::QUAD_COUNT...);
 
 	using Colors = WidgetColors<Elems...>;
 	using Signals = WidgetSignals<Elems...>;
-	using Elements = WidgetElements<Elems...>;
+	using Elements = std::tuple<Elems...>;
 	using Quads = typename utils::tuple_generator<sizeof...(Elems), glm::vec4>::type;
 	using MovePolicy = std::array<glm::vec2, sizeof...(Elems)>;
 	using ResizePolicy = std::array<glm::vec4, sizeof...(Elems)>;
 
 	using Signals::hold;
-	using Elements::elements;
 	const utils::ID<glm::vec4> box;
 	const MovePolicy movepolicy;
 	const ResizePolicy resizepolicy;
@@ -240,8 +228,8 @@ namespace gui
 
 	Widget(const glm::vec4& q, const Preset& preset)
 	  : Elements(std::move(utils::convert_tuple<Elems...>(preset.genQuads(q), preset.subpresets)))
-	  , Signals(elements)
-	  , box(utils::makeID(q))
+	  , Signals((Elements)*this)
+	  , box(utils::ID<glm::vec4>(q))
 	  , movepolicy(preset.movepolicy)
 	  , resizepolicy(preset.resizepolicy)
 	{
@@ -255,7 +243,7 @@ namespace gui
 	  void move_n(utils::_index<N> i, const glm::vec2 v) const
 	  {
 		move_n(utils::_index<N-1>(), v);
-		std::get<N-1>(elements)->move(v * movepolicy[N-1]);
+		std::get<N-1>((Elements)*this)->move(v * movepolicy[N-1]);
 	  }
 	void resize_n(utils::_index<0> i, const glm::vec2 v) const
 	{}
@@ -263,8 +251,8 @@ namespace gui
 	  void resize_n(utils::_index<N> i, const glm::vec2 v) const
 	  {
 		resize_n(utils::_index<N-1>(), v);
-		std::get<N-1>(elements)->move(v * glm::vec2(resizepolicy[N-1].x, resizepolicy[N-1].y));
-		std::get<N-1>(elements)->resize(v * glm::vec2(resizepolicy[N-1].z, resizepolicy[N-1].w));
+		std::get<N-1>((Elements)*this)->move(v * glm::vec2(resizepolicy[N-1].x, resizepolicy[N-1].y));
+		std::get<N-1>((Elements)*this)->resize(v * glm::vec2(resizepolicy[N-1].z, resizepolicy[N-1].w));
 	  }
 	void move(const glm::vec2 v) const
 	{

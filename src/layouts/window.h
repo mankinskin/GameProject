@@ -25,13 +25,13 @@ namespace gui
 	{
 	  using namespace signals;
 	  using Colors = Base::Colors::Colors;
-	  using Elements = Base::Elements::Elements;
+	  using Elements = Base::Elements;
 	  const Base& w = *this;
 
-	  link(std::get<6>(w.elements).hold, refFunc(moveWidget<Base>, (Base)w, input::cursorFrameDelta));
-	  link(std::get<5>(w.elements).hold, refFunc(resizeWidget<Base>, (Base)w, input::cursorFrameDelta));
-	  link(std::get<2>(w.elements).hold, refFunc(resizeWidgetX<Base>, (Base)w, input::cursorFrameDelta.x));
-	  link(std::get<4>(w.elements).hold, refFunc(resizeWidgetY<Base>, (Base)w, input::cursorFrameDelta.y));
+	  link(std::get<6>(w).hold, refFunc(moveWidget<Base>, (Base)w, input::cursorFrameDelta));
+	  link(std::get<5>(w).hold, refFunc(resizeWidget<Base>, (Base)w, input::cursorFrameDelta));
+	  link(std::get<2>(w).hold, refFunc(resizeWidgetX<Base>, (Base)w, input::cursorFrameDelta.x));
+	  link(std::get<4>(w).hold, refFunc(resizeWidgetY<Base>, (Base)w, input::cursorFrameDelta.y));
 	}
 
 	static const typename Base::Quads genQuads(const glm::vec4 q)
