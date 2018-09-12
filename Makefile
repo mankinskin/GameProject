@@ -17,7 +17,7 @@ OBJ_FILES=$(SRC_FILES:cpp=o)
 OBJ_TARGETS=$(patsubst %, build/%, $(OBJ_FILES))
 H_FILES=$(shell ls src | grep -e '\.h')
 
-all: build tags $(OBJ_TARGETS) tests
+all: tests build tags $(OBJ_TARGETS)
 	$(GCC) -o main $(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_GLFW) $(INCLUDE_SOIL) $(OBJ_TARGETS) $(INCLUDE_LIB_PATHS) $(INCLUDE_LIBS)
 
 build/%.o: src/%.cpp 
