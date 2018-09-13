@@ -9,7 +9,7 @@
 
 gl::StreamStorage<glm::vec4> gui::quadBuffer;
 typename gui::Quad::Container gui::Quad::all = typename gui::Quad::Container();
-typename gui::BoundingBoxID::Container gui::BoundingBoxID::all = typename gui::BoundingBoxID::Container();
+typename gui::BoundingBox::Container gui::BoundingBox::all = typename gui::BoundingBox::Container();
 
 void gui::initQuadBuffer()
 {

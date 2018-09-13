@@ -235,7 +235,7 @@ namespace gui
 	Widget(const glm::vec4& q, const Preset& preset)
 	  : Elements(std::move(utils::convert_tuple<Elems...>(preset.genQuads(q), preset.subpresets)))
 	  , Signals((Elements)*this)
-	  , box(BoundingBoxID::all.makeID(q))
+	  , box(BoundingBox::all.makeID(q))
 	  , movepolicy(preset.movepolicy)
 	  , resizepolicy(preset.resizepolicy)
 	{

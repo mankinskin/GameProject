@@ -33,16 +33,20 @@ namespace gui
 	{}
   };
 
-  using BoundingBox = glm::vec4;
-  struct BoundingBoxID : public utils::ID<BoundingBox>
+  struct BoundingBox : public Quad
   {
-	using Container = utils::Container<BoundingBox>;
+	using Container = utils::Container<Quad>;
+	using ID = typename Container::ID;
 	static Container all;
+  };
+
+  struct BoundingBoxID : public BoundingBox::ID
+  {
 	BoundingBoxID()
-	  : utils::ID<BoundingBox>(all)
+	  : BoundingBox::ID(BoundingBox::all)
 	{}
-	BoundingBoxID(size_t i)
-	  : utils::ID<BoundingBox>(i, all)
+	BoundingBoxID(const size_t i)
+	  : BoundingBox::ID(i, BoundingBox::all)
 	{}
   };
 
