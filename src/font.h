@@ -14,13 +14,10 @@ namespace text
 	struct ID : public Container::ID
 	{
 	  ID()
-		: utils::ID<Font>(all)
+		: utils::ID<Font>(&all)
 	  {}
-	  ID(size_t i)
-		: utils::ID<Font>(i, all)
-	  {}
-	  ID(utils::ID<Font> id)
-		: utils::ID<Font>(id)
+	  ID(const size_t i)
+		: utils::ID<Font>(i, &all)
 	  {}
 	};
 

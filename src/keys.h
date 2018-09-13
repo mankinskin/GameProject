@@ -10,14 +10,17 @@ namespace input
   struct Key : public utils::ID<KeySignals>
   {
 	static utils::Container<KeySignals> all;
-	Key(size_t i)
-	  : utils::ID<KeySignals>(i, all)
-	{}
-	Key(utils::ID<KeySignals> id)
-	  : utils::ID<KeySignals>(id)
-	{}
 	Key()
-	  : utils::ID<KeySignals>(all)
+	  : utils::ID<KeySignals>(&all)
+	{}
+	Key(const size_t i)
+	  : utils::ID<KeySignals>(i, &all)
+	{}
+	Key(const utils::ID<KeySignals>& id)
+	  : utils::ID<KeySignals>(std::forward<const utils::ID<KeySignals>&>(id))
+	{}
+	Key(utils::ID<KeySignals>&& id)
+	  : utils::ID<KeySignals>(std::move(id))
 	{}
   };
 

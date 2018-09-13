@@ -87,7 +87,6 @@ app::Window::Window()
   : name("")
   , width(0)
   , height(0)
-  , monitor(Monitor::all)
 {
 }
 

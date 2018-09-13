@@ -33,13 +33,10 @@ namespace app
   struct MonitorID : public Monitor::ID
   {
 	  MonitorID()
-		: Monitor::ID(Monitor::all)
+		: Monitor::ID(&Monitor::all)
 	  {}
-	  MonitorID(size_t i)
-		: Monitor::ID(i, Monitor::all)
-	  {}
-	  MonitorID(const typename Monitor::ID id)
-		: Monitor::ID(id)
+	  MonitorID(const size_t i)
+		: Monitor::ID(i, &Monitor::all)
 	  {}
   };
 

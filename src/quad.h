@@ -26,10 +26,10 @@ namespace gui
   struct QuadID : public Quad::ID
   {
 	QuadID()
-	  : Quad::ID(Quad::all)
+	  : Quad::ID(&Quad::all)
 	{}
 	QuadID(const size_t i)
-	  : Quad::ID(i, Quad::all)
+	  : Quad::ID(i, &Quad::all)
 	{}
   };
 
@@ -43,10 +43,10 @@ namespace gui
   struct BoundingBoxID : public BoundingBox::ID
   {
 	BoundingBoxID()
-	  : BoundingBox::ID(BoundingBox::all)
+	  : BoundingBox::ID(&BoundingBox::all)
 	{}
 	BoundingBoxID(const size_t i)
-	  : BoundingBox::ID(i, BoundingBox::all)
+	  : BoundingBox::ID(i, &BoundingBox::all)
 	{}
   };
 

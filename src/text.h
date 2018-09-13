@@ -13,13 +13,16 @@ namespace text
 	  struct ID : public utils::ID<Text>
 	  {
 		ID()
-		  : utils::ID<Text>(all)
+		  : utils::ID<Text>(&all)
 		{}
-		ID(size_t i)
-		  : utils::ID<Text>(i, all)
+		ID(const size_t i)
+		  : utils::ID<Text>(i, &all)
 		{}
-		ID(utils::ID<Text> id)
-		  : utils::ID<Text>(id)
+		ID(const utils::ID<Text>& id)
+		  : utils::ID<Text>(std::forward<const utils::ID<Text>&>(id))
+		{}
+		ID(utils::ID<Text>&& id)
+		  : utils::ID<Text>(std::move(id))
 		{}
 	  };
 	  glm::vec2 position;

@@ -18,13 +18,16 @@ namespace input
   {
 	static utils::Container<MouseKeySignals> all;
 	MouseButton()
-	  : utils::ID<MouseKeySignals>(all)
+	  : utils::ID<MouseKeySignals>(&all)
 	{}
-	MouseButton(size_t i)
-	  : utils::ID<MouseKeySignals>(i, all)
+	MouseButton(const size_t i)
+	  : utils::ID<MouseKeySignals>(i, &all)
 	{}
-	MouseButton(utils::ID<MouseKeySignals> id)
-	  : utils::ID<MouseKeySignals>(id)
+	MouseButton(const utils::ID<MouseKeySignals>& id)
+	  : utils::ID<MouseKeySignals>(std::forward<const utils::ID<MouseKeySignals>&>(id))
+	{}
+	MouseButton(utils::ID<MouseKeySignals>&& id)
+	  : utils::ID<MouseKeySignals>(std::move(id))
 	{}
   };
   namespace Mouse

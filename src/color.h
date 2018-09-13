@@ -14,13 +14,13 @@ namespace gl
   struct Color : public utils::ID<ColorData>
   {
 	Color()
-	  : utils::ID<ColorData>(colors)
+	  : utils::ID<ColorData>(&colors)
 	{}
 	Color(utils::ID<ColorData> id)
 	  : utils::ID<ColorData>(id)
 	{}
 	Color(size_t i)
-	  : utils::ID<ColorData>(i, colors)
+	  : utils::ID<ColorData>(i, &colors)
 	{}
   };
 
