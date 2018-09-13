@@ -11,6 +11,7 @@
 gl::VAO fontVAO;
 shader::Program fontShader;
 glm::vec2 text::pixel_size = glm::vec2(2.0f / (float)1920, 2.0f / (float)1080);
+typename text::Font::Container text::Font::all = typename text::Font::Container();
 
 void text::setTargetResolution(const unsigned int rx, const unsigned int ry)
 {
@@ -27,20 +28,22 @@ void text::loadFonts()
   initFreeType();
   setTargetResolution(app::mainWindow.width, app::mainWindow.height);
 
+  puts("Font terminus");
   FontFile terminusfont;
   terminusfont.setLoadPadding(1);
   terminusfont.setLoadDpi(app::mainWindow.monitor->dpi);
   terminusfont.setLoadSize(12);
   terminusfont.read("Terminus.ttf");
+  Font::all.makeID(Font(terminusfont));
 
+  puts("Font liberation");
   FontFile liberationfont;
   liberationfont.setLoadPadding(1);
   liberationfont.setLoadDpi(app::mainWindow.monitor->dpi);
   liberationfont.setLoadSize(16);
   liberationfont.read("LiberationMono-Regular.ttf");
 
-  Font::ID::container.push_back(Font(terminusfont));
-  Font::ID::container.push_back(Font(liberationfont));
+  Font::all.makeID(Font(liberationfont));
 }
 
 text::Font::Font(const FontFile& fontfile)
@@ -123,7 +126,7 @@ void text::Font::uploadPositions() const
 
 void text::updateFonts()
 {
-  for (const Font& font : Font::ID::container) {
+  for (const Font& font : Font::all) {
 	font.uploadChars();
 	font.uploadPositions();
   }
@@ -151,7 +154,7 @@ void text::Font::render() const
 
 void text::renderFonts()
 {
-  for (const Font& font : Font::ID::container) {
+  for (const Font& font : Font::all) {
 	font.render();
   }
 }

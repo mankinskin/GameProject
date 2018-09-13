@@ -161,8 +161,9 @@ namespace signals
 	class SignalListener : public Op<Signals...>
   {
 	public:
-	  using ID = utils::ID<SignalListener<Op, Signals...>>;
-	  static constexpr typename ID::Container& all = ID::container;
+	  using Container = utils::Container<SignalListener<Op, Signals...>>;
+	  using ID = typename Container::ID;
+	  static Container all;
 	  constexpr SignalListener(const Signals... sigs)
 		: Op<Signals...>(sigs...)
 	  {
@@ -203,6 +204,8 @@ namespace signals
 		  }
 		};
   };
+  template<template<typename...>class Op, typename... Signals>
+	typename SignalListener<Op, Signals...>::Container SignalListener<Op, Signals...>::all = SignalListener<Op, Signals...>::Container();
 
   template<typename... Signals>
 	constexpr const SignalListener<And, Signals...> ifAll(const Signals... sigs)
@@ -252,6 +255,9 @@ namespace signals
 	{
 	  return this;
 	}
+	using Container = utils::Container<State>;
+	using ID = typename Container::ID;
+	static Container all;
 	private:
 	bool status;
   };
@@ -278,11 +284,12 @@ namespace signals
 	{
 	  std::fill(all.begin(), all.end(), Signal(false));
 	}
+	using Container = utils::Container<Signal>;
+	using ID = typename Container::ID;
+	static Container all;
 	private:
-	static constexpr utils::ID<Signal>::Container& all = utils::ID<Signal>::container;
 	bool status;
   };
-
 
   template<typename S, typename R>
 	struct Flip
@@ -290,9 +297,9 @@ namespace signals
 	  using Set = S;
 	  using Reset = R;
 	  Flip(const S pS, const R pR, bool startAs = false)
-		: state(utils::makeID(State(startAs)))
-		  , prevState(utils::makeID(State(startAs)))
-		  , processed(utils::makeID(Signal(false)))
+		: state(State::all.makeID(State(startAs)))
+		  , prevState(State::all.makeID(State(startAs)))
+		  , processed(Signal::all.makeID(Signal(false)))
 		  , set(pS)
 		  , reset(pR)
 	  {}
@@ -381,7 +388,7 @@ namespace signals
 	template<template<typename...> class Op, typename... Signals>
 	  Listener(const SignalListener<Op, Signals...> pListener)
 	  : stater(SignalListener<Op, Signals...>::stat)
-		, index(utils::makeID(pListener).index)
+		, index(SignalListener<Op, Signals...>::all.makeID(pListener).index)
 	{}
 	bool stat() const
 	{
@@ -400,13 +407,13 @@ namespace signals
   template<typename E>
 	const Listener listen(const E pEvent)
 	{
-	  return listen(utils::makeID(EventListener<E>(pEvent)));
+	  return listen(typename EventListener<E>::ID(EventListener<E>(pEvent)));
 	}
 
   template<template<typename...> class Op, typename... Signals>
 	const Listener listen(SignalListener<Op, Signals...> pSignal)
 	{
-	  return Listener(utils::makeID(pSignal));
+	  return Listener(typename SignalListener<Op, Signals...>::ID(pSignal));
 	}
 
   void processLinks();

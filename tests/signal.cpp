@@ -10,8 +10,8 @@ using namespace signals;
 
 void test_flip()
 {
-    utils::ID<State> setter = utils::makeID(State());
-    utils::ID<State> resetter = utils::makeID(State());
+    utils::ID<State> setter = State::all.makeID(State());
+    utils::ID<State> resetter = State::all.makeID(State());
     auto flipflop = flip(setter, resetter);
     bool running = true;
     size_t test = 0;
@@ -61,8 +61,8 @@ void test_flip()
 }
 void test_clicker()
 {
-    utils::ID<State> setter = utils::makeID(State());
-    utils::ID<State> resetter = utils::makeID(State());
+    utils::ID<State> setter = State::all.makeID(State());
+    utils::ID<State> resetter = State::all.makeID(State());
     auto flipflop = flip(setter, resetter);
     auto click_on = clicker(flipflop, true);
     auto click_off = clicker(flipflop, false);

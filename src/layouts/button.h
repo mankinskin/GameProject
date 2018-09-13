@@ -21,6 +21,7 @@ namespace gui
 	  using Colors = typename Base::Colors::Colors;
 	  using Elements = typename Base::Elements;
 	  const Base& w = *this;
+	  puts("Init Button");
 	  link(w.enter, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w), gl::getColor("white")));
 	  link(w.leave, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w), std::get<0>(w).color));
 
@@ -30,6 +31,12 @@ namespace gui
 	  link(w.release, func(applyColor<std::tuple_element_t<1, Elements>>, std::get<1>(w), std::get<1>(w).color));
 	  link(w.release, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w), std::get<0>(w).color));
 	}
+	Button() = delete;
+	Button(const Button&) = default;
+	Button(Button&&) = default;
+	Button& operator=(const Button&) = default;
+	Button& operator=(Button&&) = default;
+	~Button() = default;
 
 	template<size_t MARGINX = 2, size_t MARGINY = 2>
 	  static const typename Base::Quads genQuads(const glm::vec4 q)

@@ -8,6 +8,8 @@
 #include "quadcolors.h"
 
 gl::StreamStorage<glm::vec4> gui::quadBuffer;
+typename gui::Quad::Container gui::Quad::all = typename gui::Quad::Container();
+typename gui::BoundingBoxID::Container gui::BoundingBoxID::all = typename gui::BoundingBoxID::Container();
 
 void gui::initQuadBuffer()
 {
@@ -39,25 +41,23 @@ void gui::Quad::resize(const glm::vec2 v)
   *this += glm::vec4(0.0f, 0.0f, v.x, v.y);
 }
 
-void gui::setQuadPos(const utils::ID<Quad> q, const glm::vec2 p)
+void gui::setQuadPos(const QuadID q, const glm::vec2 p)
 {
   q->setPos(p);
 }
-void gui::moveQuad(const utils::ID<Quad> q, const glm::vec2 v)
+void gui::moveQuad(const QuadID q, const glm::vec2 v)
 {
   q->move(v);
 }
 
-utils::ID<gui::Quad> gui::topQuadAtPosition(const float x, const float y)
+gui::QuadID gui::topQuadAtPosition(const float x, const float y)
 {
-  constexpr utils::ID<Quad>::Container& quads = utils::ID<Quad>::container;
-  const size_t quadCount = quads.size();
-  for (size_t q = 0; q < quadCount; ++q) {
-	const size_t qi = quadCount - q - 1;
-	const Quad& quad = quads[qi];
+  const size_t quadCount = Quad::all.size();
+  for (size_t q = quadCount; !!q; --q) {
+	const Quad& quad = Quad::all[q];
 	if ((x > quad.x) && (y < quad.y) && x < (quad.x + quad.z) && y > (quad.y - quad.w)) {
-	  return qi;
+	  return QuadID(q);
 	}
   }
-  return utils::INVALID_ID;
+  return QuadID();
 }

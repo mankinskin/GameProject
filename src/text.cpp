@@ -2,6 +2,8 @@
 
 unsigned int text::tabsize = 4;
 
+utils::Container<text::Text> text::Text::all = utils::Container<text::Text>();
+
 void text::Text::setChars(const std::string& pStr)
 {
   str = pStr;
@@ -95,7 +97,7 @@ void text::Text::setFont(Font::ID pFont)
 
 void text::updateTexts()
 {
-  for (Text& text : TextID::container) {
+  for (Text& text : Text::all) {
 	text.writeChars();
   }
 }

@@ -29,8 +29,9 @@ namespace signals
 	class EventListener
 	{
 	  public:
-		using ID = utils::ID<EventListener<E>>;
-		static constexpr typename ID::Container& all = ID::container;
+		using Container = utils::Container<EventListener<E>>;
+		using ID = typename Container::ID;
+		static Container all;
 
 		constexpr EventListener(const E pSignature)
 		  : signature(pSignature)
@@ -99,16 +100,18 @@ namespace signals
 
   template<typename E>
 	std::vector<E> EventListener<E>::eventBuffer = std::vector<E>();
+  template<typename E>
+	typename EventListener<E>::Container EventListener<E>::all = typename EventListener<E>::Container();
 
-  template<typename ObjectType, typename StateType>
-	constexpr const utils::ID<EventListener<Event<ObjectType, StateType>>> ifEvent(const ObjectType pEvent, const StateType pState)
-	{
-	  return utils::makeID(EventListener<Event<ObjectType, StateType>>(Event<ObjectType, StateType>(pEvent, pState)));
-	}
   template<typename E>
 	constexpr const utils::ID<EventListener<E>> ifEvent(const E pEvent)
 	{
-	  return utils::makeID(EventListener<E>(pEvent));
+	  return EventListener<E>::all.makeID(EventListener<E>(pEvent));
+	}
+  template<typename ObjectType, typename StateType>
+	constexpr const utils::ID<EventListener<Event<ObjectType, StateType>>> ifEvent(const ObjectType pEvent, const StateType pState)
+	{
+	  return ifEvent(Event<ObjectType, StateType>(pEvent, pState));
 	}
 
   template<typename E>

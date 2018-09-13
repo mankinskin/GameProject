@@ -8,9 +8,8 @@
 #include "texture.h"
 #include "primitives.h"
 #include "quad.h"
-#include <array>
 
-std::array<unsigned int, gui::MAX_QUAD_COUNT> quadColors;
+std::array<unsigned int, gui::MAX_QUAD_COUNT> gui::quadColors;
 gl::StreamStorage<unsigned int> gui::colorQuadBuffer;
 
 gl::VAO gui::colorQuadVAO;
@@ -47,7 +46,7 @@ void gui::setupColorQuadShader()
 
 void gui::updateColorQuads()
 {
-  gl::uploadStorage(colorQuadBuffer, sizeof(unsigned int) * QuadID::container.size(), &quadColors[0]);
+  gl::uploadStorage(colorQuadBuffer, sizeof(unsigned int) * Quad::all.size(), &quadColors[0]);
 }
 
 void gui::renderColorQuads()
@@ -57,17 +56,11 @@ void gui::renderColorQuads()
   colorQuadVAO.bind();
   colorQuadShader.use();
 
-  glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, QuadID::container.size());
+  glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, Quad::all.size());
 
   shader::Program::unuse();
   colorQuadVAO.unbind();
 
   glDepthFunc(GL_LESS);
-}
-
-void gui::colorQuad(const utils::ID<Quad>& pID, const utils::ID<gl::ColorData>& pColorData)
-{
-  printf("Coloring Quad %lu with color %lu\n", pID.index, pColorData.index);
-  quadColors[ pID.index ] = pColorData.index;
 }
 

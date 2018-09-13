@@ -4,31 +4,45 @@
 
 namespace input
 {
-  typedef int Key;
-  typedef signals::ButtonSignals<Key, int> KeySignals;
+  typedef int KeyData;
+  typedef signals::ButtonSignals<KeyData, int> KeySignals;
 
-  extern utils::ID<KeySignals> key_esc;
-  extern utils::ID<KeySignals> key_c;
-  extern utils::ID<KeySignals> key_g;
-  extern utils::ID<KeySignals> key_h;
-  extern utils::ID<KeySignals> key_i;
-  extern utils::ID<KeySignals> key_w;
-  extern utils::ID<KeySignals> key_s;
-  extern utils::ID<KeySignals> key_a;
-  extern utils::ID<KeySignals> key_d;
-  extern utils::ID<KeySignals> key_space;
-  extern utils::ID<KeySignals> key_z;
-  extern utils::ID<KeySignals> key_f;
-  extern utils::ID<KeySignals> key_n;
-  extern utils::ID<KeySignals> key_j;
-  extern utils::ID<KeySignals> key_up;
-  extern utils::ID<KeySignals> key_down;
-  extern utils::ID<KeySignals> key_left;
-  extern utils::ID<KeySignals> key_right;
-  extern utils::ID<KeySignals> key_o;
-  extern utils::ID<KeySignals> key_l;
-  extern utils::ID<KeySignals> key_lshift;
-  extern utils::ID<KeySignals> key_x;
+  struct Key : public utils::ID<KeySignals>
+  {
+	static utils::Container<KeySignals> all;
+	Key(size_t i)
+	  : utils::ID<KeySignals>(i, all)
+	{}
+	Key(utils::ID<KeySignals> id)
+	  : utils::ID<KeySignals>(id)
+	{}
+	Key()
+	  : utils::ID<KeySignals>(all)
+	{}
+  };
+
+  extern Key key_esc;
+  extern Key key_c;
+  extern Key key_g;
+  extern Key key_h;
+  extern Key key_i;
+  extern Key key_w;
+  extern Key key_s;
+  extern Key key_a;
+  extern Key key_d;
+  extern Key key_space;
+  extern Key key_z;
+  extern Key key_f;
+  extern Key key_n;
+  extern Key key_j;
+  extern Key key_up;
+  extern Key key_down;
+  extern Key key_left;
+  extern Key key_right;
+  extern Key key_o;
+  extern Key key_l;
+  extern Key key_lshift;
+  extern Key key_x;
 
   void key_Callback(GLFWwindow* window, int pKey, int pScancode, int pAction, int pMods);
   void char_Callback(GLFWwindow* window, unsigned int pCodepoint);

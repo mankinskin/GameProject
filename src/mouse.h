@@ -7,17 +7,31 @@
 #include "buttonsignals.h"
 #include "quad.h"
 #include "event.h"
+#include "utils/id.h"
 
 namespace input
 {
   typedef int MouseKey;
   typedef signals::ButtonSignals<MouseKey> MouseKeySignals;
 
+  struct MouseButton : public utils::ID<MouseKeySignals>
+  {
+	static utils::Container<MouseKeySignals> all;
+	MouseButton()
+	  : utils::ID<MouseKeySignals>(all)
+	{}
+	MouseButton(size_t i)
+	  : utils::ID<MouseKeySignals>(i, all)
+	{}
+	MouseButton(utils::ID<MouseKeySignals> id)
+	  : utils::ID<MouseKeySignals>(id)
+	{}
+  };
   namespace Mouse
   {
-	extern utils::ID<MouseKeySignals> lmb;
-	extern utils::ID<MouseKeySignals> rmb;
-	extern utils::ID<MouseKeySignals> mmb;
+	extern MouseButton lmb;
+	extern MouseButton rmb;
+	extern MouseButton mmb;
   };
 
   extern glm::vec2 relativeCursorPosition;

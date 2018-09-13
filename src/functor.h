@@ -13,8 +13,9 @@ namespace signals
 	class Functor
 	{
 	  public:
-		using ID = utils::ID<Functor<F, Args...>>;
-		constexpr static typename ID::Container& all = ID::container;
+		using Container = utils::Container<Functor<F, Args...>>;
+		using ID = typename Container::ID;
+		static Container all;
 
 		constexpr Functor(F&& pF, Args&&... pArgs) noexcept
 		  : func(std::forward<F&>(pF))
@@ -22,6 +23,12 @@ namespace signals
 		  {
 			initialize();
 		  }
+		Functor() = delete;
+		Functor(const Functor&) = default;
+		Functor(Functor&&) = default;
+		Functor& operator=(const Functor&) = default;
+		Functor& operator=(Functor&&) = default;
+		~Functor() = default;
 
 		template<size_t... Ns>
 		  constexpr void invoke_unpacked(std::index_sequence<Ns...>)
@@ -35,6 +42,7 @@ namespace signals
 
 		static void invoke(const size_t i)
 		{
+		  printf("Invoking functor %lu\n", i);
 		  all[i].invoke();
 		}
 
@@ -59,12 +67,16 @@ namespace signals
 		}
 	};
 
+  template<typename F, typename... Args>
+	typename Functor<F, Args...>::Container Functor<F, Args...>::all = typename Functor<F, Args...>::Container();
+
   template<typename... Funcs>
 	class Procedure
 	{
 	  public:
-		using ID = utils::ID<Procedure<Funcs...>>;
-		constexpr static typename ID::Container& all = ID::container;
+		using Container = utils::Container<Procedure<Funcs...>>;
+		using ID = typename Container::ID;
+		static Container all;
 
 		Procedure(utils::ID<Funcs>... fs)
 		  : funcs(fs...)
@@ -112,6 +124,9 @@ namespace signals
 		}
 	};
 
+  template<typename... Funcs>
+	typename Procedure<Funcs...>::Container Procedure<Funcs...>::all = typename Procedure<Funcs...>::Container();
+
   struct Invoker
   {
 	template<typename F, typename... Args>
@@ -139,17 +154,17 @@ namespace signals
   template<typename F, typename... Args>
 	constexpr utils::ID<Functor<F, Args...>> func(F&& pF, Args... pArgs)
 	{
-	  return utils::makeID(Functor<F, Args...>(std::forward<F>(pF), std::forward<Args>(pArgs)...));
+	  return Functor<F, Args...>::all.makeID(Functor<F, Args...>(std::forward<F>(pF), std::forward<Args>(pArgs)...));
 	}
   template<typename F, typename... Args>
 	constexpr utils::ID<Functor<F, Args...>> refFunc(F&& pF, Args&&... pArgs)
 	{
-	  return utils::makeID(Functor<F, Args...>(std::forward<F>(pF), std::forward<Args>(pArgs)...));
+	  return Functor<F, Args...>::all.makeID(Functor<F, Args...>(std::forward<F>(pF), std::forward<Args>(pArgs)...));
 	}
   template<typename... Funcs>
 	constexpr utils::ID<Procedure<Funcs...>> procedure(utils::ID<Funcs>... pFuncs)
 	{
-	  return utils::makeID(Procedure<Funcs...>(pFuncs...));
+	  return Procedure<Funcs...>::all.makeID(Procedure<Funcs...>(pFuncs...));
 	}
 
   void clearFunctors();

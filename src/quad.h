@@ -12,8 +12,9 @@ namespace gui
 {
   struct Quad : public glm::vec4
   {
-	using ID = utils::ID<Quad>;
-	constexpr static typename ID::Container& all = ID::container;
+	using Container = utils::Container<Quad>;
+	using ID = typename Container::ID;
+	static Container all;
 	constexpr Quad(glm::vec4 pData)
 	  : glm::vec4(pData)
 	{}
@@ -22,12 +23,33 @@ namespace gui
 	void resize(const glm::vec2 v);
   };
 
-  typedef utils::ID<Quad> QuadID;
+  struct QuadID : public Quad::ID
+  {
+	QuadID()
+	  : Quad::ID(Quad::all)
+	{}
+	QuadID(const size_t i)
+	  : Quad::ID(i, Quad::all)
+	{}
+  };
+
+  using BoundingBox = glm::vec4;
+  struct BoundingBoxID : public utils::ID<BoundingBox>
+  {
+	using Container = utils::Container<BoundingBox>;
+	static Container all;
+	BoundingBoxID()
+	  : utils::ID<BoundingBox>(all)
+	{}
+	BoundingBoxID(size_t i)
+	  : utils::ID<BoundingBox>(i, all)
+	{}
+  };
 
   const unsigned int MAX_QUAD_COUNT = 10000;
-  void setQuadPos(const utils::ID<Quad> q, const glm::vec2 p);
-  void moveQuad(const utils::ID<Quad> q, const glm::vec2 v);
-  utils::ID<Quad> topQuadAtPosition(const float x, const float y);
+  void setQuadPos(const QuadID q, const glm::vec2 p);
+  void moveQuad(const QuadID q, const glm::vec2 v);
+  QuadID topQuadAtPosition(const float x, const float y);
 
   void initQuadBuffer();
   void updateQuadBuffer();

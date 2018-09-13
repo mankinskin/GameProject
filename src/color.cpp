@@ -7,6 +7,7 @@ std::array<std::string, gl::MAX_COLOR_COUNT> colorNames;
 unsigned int colorCount = 0;
 
 gl::StreamStorage<gl::ColorData> gl::colorBuffer;
+utils::Container<gl::ColorData> gl::colors;
 
 void gl::initColors()
 {
@@ -32,19 +33,19 @@ void gl::createDefaultColors()
   createColor(glm::vec4(0.7f, 0.7f, 0.7f, 1.0f), "lightgrey");
 }
 
-const utils::ID<gl::ColorData> gl::createColor(const ColorData pColorData, const std::string pColorName)
+const gl::Color gl::createColor(const ColorData pColorData, const std::string pColorName)
 {
   colorNames[colorCount++] = pColorName;
-  return utils::makeID(pColorData);
+  return Color(colors.makeID(pColorData));
 }
 
-const utils::ID<gl::ColorData> gl::getColor(const std::string pColorName)
+const gl::Color gl::getColor(const std::string pColorName)
 {
   auto nameIt = std::find(colorNames.begin(),
 	  colorNames.begin() + colorCount, pColorName);
   if (nameIt == colorNames.end()) {
 	printf("ColorData %s not found!\n", pColorName.c_str());
-	return Color(utils::INVALID_ID);
+	return Color();
   }
   unsigned int i = nameIt - colorNames.begin();
   return Color(i);
@@ -59,6 +60,6 @@ void gl::initColorBuffer()
 void gl::updateColorBuffer()
 {
   if (colorCount) {
-	gl::uploadStorage(colorBuffer, sizeof(glm::vec4)*colorCount, &Color::container[0]);
+	gl::uploadStorage(colorBuffer, sizeof(ColorData)*colorCount, &colors[0]);
   }
 }

@@ -5,6 +5,7 @@
 
 app::Window app::mainWindow;
 const std::string app::Window::DEFAULT_NAME = "OpenGL Window";
+typename app::Monitor::Container app::Monitor::all = typename Monitor::Container();
 
 void app::startContextwindow()
 {
@@ -52,14 +53,14 @@ void app::initMonitors()
 	  debug::fatal("GLFW could not find any monitor!");
 	}
 	else {
-	  utils::makeID(Monitor(0, primaryMonitor));
+	  Monitor::all.makeID(Monitor(0, primaryMonitor));
 	}
   }
   else {
 	printf("%u Monitors detected.\n", monitorCount);
-	MonitorID::container.reserve(monitorCount);
+	Monitor::all.reserve(monitorCount);
 	for(unsigned int m = 0; m < monitorCount; ++m) {
-	  utils::makeID(Monitor(m, allMonitorPtrs[m]));
+	  Monitor::all.makeID(Monitor(m, allMonitorPtrs[m]));
 	}
   }
 }
@@ -86,13 +87,13 @@ app::Window::Window()
   : name("")
   , width(0)
   , height(0)
-  , monitor(0)
+  , monitor(Monitor::all)
 {
 }
 
 void app::Window::init()
 {
-  if (!MonitorID::container.size()) {
+  if (!Monitor::all.size()) {
 	puts("Can't initialize Window: Monitors are not initialized yet!");
 	return;
   }
@@ -118,8 +119,8 @@ void app::Window::init()
 	puts("Failed to create GLFW Window!");
 	return;
   }
-  center();
   setMonitor(0);
+  center();
   glfwMakeContextCurrent(window);
   glfwSetWindowUserPointer(window, window);
   printf("GLFW Window Size:\nX: %i Y: %i\n", width, height);

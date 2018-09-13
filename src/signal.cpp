@@ -3,6 +3,8 @@
 std::vector<void(*)()> signals::eventCheckFuncs;
 std::vector<void(*)()> signals::signalClearFuncs;
 std::vector<std::pair<const signals::Listener, const signals::Invoker>> signals::links;
+typename signals::State::Container signals::State::all = typename signals::State::Container();
+typename signals::Signal::Container signals::Signal::all = typename signals::Signal::Container();
 
 void signals::processLinks()
 {

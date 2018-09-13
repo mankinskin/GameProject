@@ -9,8 +9,20 @@
 namespace gl
 {
   using ColorData = glm::vec4;
-  using Color = utils::ID<ColorData>;
   const size_t MAX_COLOR_COUNT = 100;
+  extern utils::Container<ColorData> colors;
+  struct Color : public utils::ID<ColorData>
+  {
+	Color()
+	  : utils::ID<ColorData>(colors)
+	{}
+	Color(utils::ID<ColorData> id)
+	  : utils::ID<ColorData>(id)
+	{}
+	Color(size_t i)
+	  : utils::ID<ColorData>(i, colors)
+	{}
+  };
 
   using ConstColorData = glm::vec4;
   using ConstColor = utils::ID<ConstColorData>;
@@ -24,6 +36,6 @@ namespace gl
   void initColorBuffer();
   void updateColorBuffer();
 
-  const utils::ID<ColorData> createColor(const glm::vec4 pColorData, const std::string pColorName);
-  const utils::ID<ColorData> getColor(const std::string pColorName);
+  const Color createColor(const glm::vec4 pColorData, const std::string pColorName);
+  const Color getColor(const std::string pColorName);
 }

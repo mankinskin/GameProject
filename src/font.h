@@ -8,8 +8,21 @@ namespace text
 {
   struct Font
   {
-	using ID = utils::ID<Font>;
-	static constexpr typename ID::Container& all = ID::container;
+	using Container = utils::Container<Font>;
+	static Container all;
+
+	struct ID : public Container::ID
+	{
+	  ID()
+		: utils::ID<Font>(all)
+	  {}
+	  ID(size_t i)
+		: utils::ID<Font>(i, all)
+	  {}
+	  ID(utils::ID<Font> id)
+		: utils::ID<Font>(id)
+	  {}
+	};
 
 	Font()
 	{}

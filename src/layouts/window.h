@@ -28,11 +28,18 @@ namespace gui
 	  using Elements = Base::Elements;
 	  const Base& w = *this;
 
+	  puts("Init Window");
 	  link(std::get<6>(w).hold, refFunc(moveWidget<Base>, (Base)w, input::cursorFrameDelta));
 	  link(std::get<5>(w).hold, refFunc(resizeWidget<Base>, (Base)w, input::cursorFrameDelta));
 	  link(std::get<2>(w).hold, refFunc(resizeWidgetX<Base>, (Base)w, input::cursorFrameDelta.x));
 	  link(std::get<4>(w).hold, refFunc(resizeWidgetY<Base>, (Base)w, input::cursorFrameDelta.y));
 	}
+	Window() = delete;
+	Window(const Window&) = default;
+	Window(Window&&) = default;
+	Window& operator=(const Window&) = default;
+	Window& operator=(Window&&) = default;
+	~Window() = default;
 
 	static const typename Base::Quads genQuads(const glm::vec4 q)
 	{

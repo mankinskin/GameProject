@@ -9,6 +9,19 @@ namespace text
   struct Text
   {
 	public:
+	  static utils::Container<Text> all;
+	  struct ID : public utils::ID<Text>
+	  {
+		ID()
+		  : utils::ID<Text>(all)
+		{}
+		ID(size_t i)
+		  : utils::ID<Text>(i, all)
+		{}
+		ID(utils::ID<Text> id)
+		  : utils::ID<Text>(id)
+		{}
+	  };
 	  glm::vec2 position;
 	  glm::vec2 size;
 	  Text(glm::vec2 pPos = glm::vec2(0.0f, 0.0f), glm::vec2 pSize = glm::vec2(1.0f, 1.0f))
@@ -34,7 +47,6 @@ namespace text
 	  Font::ID font;
   };
   extern unsigned int tabsize;
-  using TextID = utils::ID<Text>;
 
   void updateTexts();
 }

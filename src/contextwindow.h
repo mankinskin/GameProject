@@ -10,6 +10,9 @@ namespace app
 {
   struct Monitor
   {
+	using Container = utils::Container<Monitor>;
+	using ID = typename Container::ID;
+	static Container all;
 	Monitor();
 	Monitor(unsigned int pIndex, GLFWmonitor* pMonitor);
 	//~Monitor();
@@ -27,7 +30,19 @@ namespace app
 	void print();
   };
 
-  using MonitorID = utils::ID<Monitor>;
+  struct MonitorID : public Monitor::ID
+  {
+	  MonitorID()
+		: Monitor::ID(Monitor::all)
+	  {}
+	  MonitorID(size_t i)
+		: Monitor::ID(i, Monitor::all)
+	  {}
+	  MonitorID(const typename Monitor::ID id)
+		: Monitor::ID(id)
+	  {}
+  };
+
 
   struct Window
   {
@@ -49,20 +64,9 @@ namespace app
 	void updateMonitor();
 	void updatePos();
 
-	GLFWwindow* operator=(const Window& obj) const
+	operator GLFWwindow*() const
 	{
 	  return window;
-	}
-
-	Window& operator=(const Window obj)
-	{
-	  name = obj.name;
-	  xpos = obj.xpos;
-	  ypos = obj.ypos;
-	  width = obj.width;
-	  height = obj.height;
-	  window = obj.window;
-	  return *this;
 	}
 
 	void print()

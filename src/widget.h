@@ -170,21 +170,27 @@ namespace gui
   //using NullPreset = typename NullLayout::Preset;
 
   template<typename Col>
-	struct QuadElement : public utils::ID<Quad>, signals::QuadSignals<utils::ID<Quad>>
+	struct QuadElement : public QuadID, signals::QuadSignals<QuadID>
   {
 	static constexpr size_t QUAD_COUNT = 1;
-	using Signals = signals::QuadSignals<utils::ID<Quad>>;
+	using Signals = signals::QuadSignals<QuadID>;
 	using Colors = Col;
 	using Preset = Col;
 
 	QuadElement(const Quad&& q, const Col&& col)
-	  : utils::ID<Quad>(std::move(utils::makeID(std::move(q))))
-	  , Signals((utils::ID<Quad>)*this)
+	  : QuadID(Quad::all.makeID(std::move(q)))
+	  , Signals((QuadID)*this)
 	  , color(std::move(col))
 	{
-	  printf("Creating QuadElement\n%lu quads.\n", utils::ID<Quad>::container.size());
-	  colorQuad((utils::ID<Quad>)*this, color);
+	  printf("Creating QuadElement\n%lu quads.\n", Quad::all.size());
+	  colorQuad((QuadID)*this, color);
 	}
+	QuadElement() = delete;
+	QuadElement(const QuadElement&) = default;
+	QuadElement(QuadElement&&) = default;
+	QuadElement& operator=(const QuadElement&) = default;
+	QuadElement& operator=(QuadElement&&) = default;
+	~QuadElement() = default;
 
 	const Col color;
   };
@@ -208,7 +214,7 @@ namespace gui
 	using ResizePolicy = std::array<glm::vec4, sizeof...(Elems)>;
 
 	using Signals::hold;
-	const utils::ID<glm::vec4> box;
+	const BoundingBoxID box;
 	const MovePolicy movepolicy;
 	const ResizePolicy resizepolicy;
 
@@ -229,12 +235,18 @@ namespace gui
 	Widget(const glm::vec4& q, const Preset& preset)
 	  : Elements(std::move(utils::convert_tuple<Elems...>(preset.genQuads(q), preset.subpresets)))
 	  , Signals((Elements)*this)
-	  , box(utils::ID<glm::vec4>(q))
+	  , box(BoundingBoxID::all.makeID(q))
 	  , movepolicy(preset.movepolicy)
 	  , resizepolicy(preset.resizepolicy)
 	{
 	  puts("Creating Widget");
 	}
+	Widget() = delete;
+	Widget(const Widget&) = default;
+	Widget(Widget&&) = default;
+	Widget& operator=(const Widget&) = default;
+	Widget& operator=(Widget&&) = default;
+	~Widget() = default;
 
 	void move_n(utils::_index<0> i, const glm::vec2 v) const
 	{}

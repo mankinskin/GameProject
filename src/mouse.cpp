@@ -14,12 +14,13 @@ glm::vec2 input::cursorFrameDelta;
 std::array<bool, 3> mouseKeys;
 int scroll = 0;
 int disableCursor = 0;
-utils::ID<gui::Quad> hovered_quad = utils::INVALID_ID;
-utils::ID<gui::Quad> last_hovered_quad = utils::INVALID_ID;
+gui::QuadID hovered_quad = gui::QuadID();
+gui::QuadID last_hovered_quad = gui::QuadID();
+utils::Container<input::MouseKeySignals> input::MouseButton::all = utils::Container<input::MouseKeySignals>();
 
-utils::ID<input::MouseKeySignals> input::Mouse::lmb;
-utils::ID<input::MouseKeySignals> input::Mouse::rmb;
-utils::ID<input::MouseKeySignals> input::Mouse::mmb;
+input::MouseButton input::Mouse::lmb;
+input::MouseButton input::Mouse::rmb;
+input::MouseButton input::Mouse::mmb;
 
 void input::updateMouse()
 {
@@ -78,7 +79,7 @@ void input::getCursorQuadEvents()
 {
   last_hovered_quad = hovered_quad;
   hovered_quad = gui::topQuadAtPosition(relativeCursorPosition.x, relativeCursorPosition.y);
-  //printf("Hovering quad %u\n", hovered_quad.index);
+  //printf("Hovering quad %lu\n", hovered_quad.index);
   if (hovered_quad != last_hovered_quad) {
 	if (last_hovered_quad != utils::INVALID_ID) {
 	  pushEvent(Event<gui::QuadID, bool>(last_hovered_quad, 0));
