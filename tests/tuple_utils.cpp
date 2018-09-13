@@ -48,8 +48,8 @@ struct C : public T
 {
   C(int pa, char pb, float pc)
 	: a(pa)
-	, b(pb)
-	, c(pc)
+	  , b(pb)
+	  , c(pc)
   {}
   int a;
   char b;
@@ -59,8 +59,8 @@ struct M : public T
 {
   M(int pa, char pb, float pc)
 	: a(pa)
-	, b(pb)
-	, c(pc)
+	  , b(pb)
+	  , c(pc)
   {}
   M(const M&) = delete;
   M(M&&) = default;
