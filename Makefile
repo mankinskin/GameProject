@@ -14,17 +14,19 @@ INCLUDES=$(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_ASSIMP) $(INCLUDE_SOIL)
 
 SRC_FILES=$(shell ls src | grep -e '\.cpp')
 OBJ_FILES=$(SRC_FILES:cpp=o)
-OBJ_TARGETS=$(patsubst %, build/%, $(OBJ_FILES))
+OBJ_TARGETS=$(patsubst %, builddir/%, $(OBJ_FILES))
 H_FILES=$(shell ls src | grep -e '\.h')
 
-all: tests build tags $(OBJ_TARGETS)
+all: tests build tags
 	$(GCC) -o main $(INCLUDE_GL) $(INCLUDE_FREETYPE) $(INCLUDE_GLFW) $(INCLUDE_SOIL) $(OBJ_TARGETS) $(INCLUDE_LIB_PATHS) $(INCLUDE_LIBS)
 
-build/%.o: src/%.cpp 
+builddir/%.o: src/%.cpp 
 	$(GCC) -c -o $@ $< $(INCLUDES)
 
-build:
-	mkdir build
+build: builddir $(OBJ_TARGETS)
+
+builddir:
+	mkdir builddir
 
 run: all
 	./main
@@ -33,7 +35,7 @@ tags:
 	ctags -R .
 
 clean: 
-	rm -rf build
+	rm -rf builddir
 
 fresh: clean all
 
