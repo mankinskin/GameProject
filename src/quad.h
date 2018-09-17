@@ -10,11 +10,15 @@
 
 namespace gui
 {
+  // screen quadrants
+  // can be assigned color, or anything
+  // only provides managed buffer of quads
+  // rendering is responsibility of the component using the quad
   struct Quad : public glm::vec4
   {
-	using Container = utils::Container<Quad>;
+	using Container = utils::Container<Quad, utils::UnmanagedPolicy>;
 	using ID = typename Container::ID;
-	static Container all;
+	static Container all;	// all quads
 	constexpr Quad(glm::vec4 pData)
 	  : glm::vec4(pData)
 	{}

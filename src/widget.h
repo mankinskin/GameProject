@@ -185,12 +185,17 @@ namespace gui
 	  printf("Creating QuadElement\n%lu quads.\n", Quad::all.size());
 	  colorQuad((QuadID)*this, color);
 	}
+
 	QuadElement() = delete;
 	QuadElement(const QuadElement&) = default;
 	QuadElement(QuadElement&&) = default;
 	QuadElement& operator=(const QuadElement&) = default;
 	QuadElement& operator=(QuadElement&&) = default;
 	~QuadElement() = default;
+	//{
+	//  printf("DestroyinDestroying QuadElement\n%lu quads.\n", Quad::all.size());
+	//  //QuadID::free();
+	//};
 
 	const Col color;
   };

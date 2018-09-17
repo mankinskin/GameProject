@@ -15,33 +15,38 @@ namespace utils
 	class ManagedPolicy;
 
   template<typename T, template<class> class Management = UnmanagedPolicy>
-	struct ID : public Management<T>
+	struct ID
   {
 	using Preset = T;
-	using Management<T>::get;
-	using Management<T>::container;
 	size_t index;
+	typename Management<T>::ArrayType* container;
 
-	constexpr ID(const size_t i, typename Management<T>::ContainerType* _c)
-	  : Management<T>(_c)
+	constexpr ID(const size_t i, typename Management<T>::ArrayType* _c)
+	  : container(_c)
 	  , index(i)
 	{}
-	constexpr ID(typename Management<T>::ContainerType* _c)
-	  : Management<T>(_c)
+	constexpr ID(typename Management<T>::ArrayType* _c)
+	  : container(_c)
 	  , index(INVALID_ID)
 	{}
 
 	T* operator->() const
 	{
-	  return &get(index);
+	  if (!container) throw std::runtime_error("ID container uninitialized!");
+	  return &container->get(index);
 	}
 	T& operator*() const
 	{
-	  return get(index);
+	  if (!container) throw std::runtime_error("ID container uninitialized!");
+	  return container->get(index);
 	}
 	operator size_t() const
 	{
 	  return index;
+	}
+	void free()
+	{
+	  container->free(index);
 	}
 	constexpr inline bool operator==(const ID<T, Management>& o) const
 	{
@@ -56,7 +61,7 @@ namespace utils
   template<typename T, template<class> class Management = UnmanagedPolicy>
 	struct Container : public std::vector<T>, Management<T>
   {
-	using ID = ID<T>;
+	using ID = ID<T, Management>;
 	using Management<T>::allocate;
 	Container()
 	  : Management<T>(this)
@@ -66,33 +71,33 @@ namespace utils
 	  Management<T>::clear();
 	  std::vector<T>::clear();
 	};
-	ID makeID(const T&& t)
+	ID makeID(T&& t)
 	{
-	  return allocate(std::move(t));
+	  return ID(allocate(std::move(t)), this);
 	}
 	ID makeID(const T& t)
 	{
-	  return allocate(std::forward<const T&>(t));
+	  return ID(allocate(std::forward<const T&>(t)), this);
 	}
   };
   template<typename T>
 	struct UnmanagedPolicy
 	{
 	  using IDType = ID<T, UnmanagedPolicy>;
-	  using ContainerType = Container<T, UnmanagedPolicy>;
-	  ContainerType* container;
-	  constexpr UnmanagedPolicy(ContainerType* c)
+	  using ArrayType = Container<T, UnmanagedPolicy>;
+	  ArrayType* container;
+	  constexpr UnmanagedPolicy(ArrayType* c)
 		: container(c)
 	  {}
-	  constexpr IDType allocate(const T& t) const
+	  constexpr size_t allocate(const T& t)
 	  {
 		container->push_back(t);
-		return IDType(container->size() - 1, container);
+		return container->size() - 1;
 	  }
-	  constexpr IDType allocate(T&& t) const
+	  constexpr size_t allocate(T&& t)
 	  {
 		container->emplace_back(t);
-		return IDType(container->size() - 1, container);
+		return container->size() - 1;
 	  }
 	  void clear()
 	  {
@@ -109,11 +114,11 @@ namespace utils
 	struct ManagedPolicy
 	{
 	  using IDType = ID<T, ManagedPolicy>;
-	  using ContainerType = Container<T, ManagedPolicy>;
-	  ContainerType* container;
+	  using ArrayType = Container<T, ManagedPolicy>;
+	  ArrayType* container;
 	  std::vector<size_t> access;
-	  constexpr ManagedPolicy(const ContainerType& c)
-		: container(&c)
+	  constexpr ManagedPolicy(ArrayType* c)
+		: container(c)
 	  {}
 	  constexpr size_t allocate(const T& t)
 	  {
@@ -129,7 +134,7 @@ namespace utils
 	  }
 	  constexpr void free(const size_t& i)
 	  {
-		printf("Freeing ID %lu\n", i);
+		printf("Freeing ID %lu\n", access[i]);
 		container->erase(container->begin() + access[i]);
 		access[i] = INVALID_ID;
 		for (size_t it = i + 1; it < access.size(); ++it) {
@@ -140,16 +145,15 @@ namespace utils
 	  {
 		access.clear();
 	  }
-	  IDType& get(const size_t i) const
+	  T& get(const size_t i) const
 	  {
-		printf("Accessing ID %lu\n", i);
 		if (i >= container->access.size())
 		  throw std::runtime_error("ID index (" + std::to_string(i) + ") out of bounds " + std::to_string(container->access.size()));
 		if (container->access[i] >= container->size())
 		  throw std::runtime_error("ID access (" + std::to_string(container->access[i]) + ") out of bounds " + std::to_string(container->size()));
-		return *container[container->access[i]];
+		return (*container)[container->access[i]];
 	  }
-};
+	};
 
   //template<typename T>
   //  struct ReferenceCountedIDPolicy : public ManagedIDPolicy<T>
