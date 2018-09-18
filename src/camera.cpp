@@ -15,10 +15,12 @@ const float yRestrictionAngle = 3.0f;
 const float eulerian = 0.0001f;
 camera::Camera camera::main_camera = camera::Camera(camera::CAMERA_MODES[1]);
 
-void camera::Camera::init()
+camera::Camera::Camera(CameraMode pMode, CameraControls pControls)
+  : mode(pMode)
+  , controls(pControls)
 {
   mode.apply(this);
-  pos = glm::vec3(0.0, 30.0, 0.0);
+  pos = glm::vec3(0.0, 3.0, 0.0);
   //glEnable(GL_DEPTH_CLAMP);
   cross = glm::cross(lookAt, normal);
 

@@ -85,9 +85,6 @@ void sequencer::initModules()
   puts("Input...");
   input::init();
 
-  puts("Camera...");
-  camera::main_camera.init();
-
   input::setupControls();
 
   puts("Debug Geometry...");

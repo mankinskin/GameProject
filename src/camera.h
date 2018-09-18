@@ -113,10 +113,7 @@ namespace camera
   class Camera
   {
 	public:
-	  Camera(CameraMode pMode, CameraControls pControls = DEFAULT_CAMERA_CONTROLS)
-		:mode(pMode), controls(pControls)
-	  {}
-	  void init();
+	  Camera(CameraMode pMode, CameraControls pControls = DEFAULT_CAMERA_CONTROLS);
 	  glm::vec3& getPos();
 	  glm::mat4& getProjection();
 	  glm::mat4& getView();
