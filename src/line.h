@@ -9,8 +9,8 @@
 
 namespace gui
 {
-  const unsigned int MAX_LINE_VERTEX_COUNT = 400;
-  const unsigned int MAX_LINE_VERTEX_POSITION_COUNT = 200;
+  const unsigned int MAX_LINE_VERTEX_COUNT = 100000;
+  const unsigned int MAX_LINE_VERTEX_POSITION_COUNT = 100000;
   const int DEFAULT_LINE_GROUP_FLAGS = 1;
 
   struct LineGroup
