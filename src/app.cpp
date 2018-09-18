@@ -18,7 +18,7 @@ glm::vec3 app::node_mov = glm::vec3();
 
 void app::init()
 {
-  puts("Hello");
+  puts("random message");
   state = Running;
   simtime::setFpsCap(120);
   // Windows and gl Context

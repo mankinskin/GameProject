@@ -2,47 +2,46 @@
 #include <thread>
 
 using namespace std::chrono;
-double simtime::factor = 1.0;
+float simtime::speed = 1.0;
+float simtime::factor = 1.0;
 size_t simtime::total_frames = 0;
-milliseconds simtime::last_frame_ms = milliseconds();
-milliseconds simtime::ms_min = milliseconds();
-milliseconds simtime::ms_since_epoch = getTimeSinceEpoch();
+nanoseconds simtime::last_frame_ns = nanoseconds();
+nanoseconds simtime::ns_min = nanoseconds();
+milliseconds simtime::ms_since_epoch = simtime::getTimeSinceEpoch<milliseconds>();
 milliseconds simtime::total_ms = milliseconds();
 
 
-milliseconds simtime::getTimeSinceEpoch()
-{
-  return duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-}
 void capFPS()
 {
   using namespace simtime;
-  if (ms_min > last_frame_ms) {
-	std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(ms_min - last_frame_ms));
-  	last_frame_ms = ms_min;
+  if (ns_min.count() > last_frame_ns.count()) {
+	std::this_thread::sleep_for(ns_min - last_frame_ns);
+  	last_frame_ns = ns_min;
   }
 }
 void simtime::update()
 {
   ++total_frames;
-  std::chrono::milliseconds ms_now = getTimeSinceEpoch();
-  last_frame_ms = (ms_now - ms_since_epoch) - total_ms;
+  std::chrono::milliseconds ms_now = getTimeSinceEpoch<milliseconds>();
+  last_frame_ns = (ms_now - ms_since_epoch) - total_ms;
   capFPS();
-  total_ms += last_frame_ms;
+  factor = (float)last_frame_ns.count() / 1000000000.0f;
+  total_ms += duration_cast<milliseconds>(last_frame_ns);
+  //print();
 }
-constexpr size_t toFPS(const milliseconds ms)
+constexpr size_t toFPS(const nanoseconds ns)
 {
-  return ms.count() ? (size_t)(1000.0/(double)ms.count()) : 0;
+  return ns.count() ? (size_t)(1000000000.0/(float)ns.count()) : 0;
 }
-constexpr milliseconds toMS(const size_t fps)
+constexpr nanoseconds toMS(const size_t fps)
 {
-  return fps ? milliseconds((size_t)(1000.0/(double)fps)) : milliseconds();
+  return fps ? nanoseconds((size_t)(1000000000.0/(float)fps)) : nanoseconds();
 }
 void simtime::setFpsCap(const size_t fps)
 {
-  ms_min = toMS(fps);
+  ns_min = toMS(fps);
 }
 void simtime::print()
 {
-	printf("%lu\tFPS\n", toFPS(last_frame_ms));
+	printf("%lu\tFPS\n", toFPS(last_frame_ns));
 }

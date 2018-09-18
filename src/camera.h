@@ -9,7 +9,7 @@ namespace camera
   class Camera;
   struct LookPolicy   // stores relative offsets of vectors in a camera object to be used to move the camera frustum
   {
-	LookPolicy(size_t pXRotatorOffset, size_t pXRotationAxisOffset, float pXRotationFactor, size_t pYRotatorOffset, 
+	LookPolicy(size_t pXRotatorOffset, size_t pXRotationAxisOffset, float pXRotationFactor, size_t pYRotatorOffset,
 		size_t pYRotationAxisOffset, float pYRotationFactor, size_t pCrossUpOffset, glm::vec3 pAxisLimits, float pSensitivity = 0.5f)
 	  : x_rotator_off(pXRotatorOffset)
 		, x_rotation_axis_off(pXRotationAxisOffset)
@@ -46,7 +46,7 @@ namespace camera
 	MovementPolicy(
 		size_t pForwardOffset, float pForwardFactor,
 		size_t pRightOffset, float pRightFactor,
-		size_t pUpwardOffset, float pUpwardFactor, float pSpeed = 0.5f)
+		size_t pUpwardOffset, float pUpwardFactor, float pSpeed = 1.0f)
 	  :forward_off(pForwardOffset), forward_factor(pForwardFactor),
 	  right_off(pRightOffset), right_factor(pRightFactor),
 	  upward_off(pUpwardOffset), upward_factor(pUpwardFactor), speed(pSpeed)

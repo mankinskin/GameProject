@@ -9,6 +9,7 @@
 #include <gtc/type_ptr.hpp>
 #include <math.h>
 #include <algorithm>
+#include "simtime.h"
 
 const float yRestrictionAngle = 3.0f;
 const float eulerian = 0.0001f;
@@ -47,7 +48,7 @@ void camera::Camera::translateLocal(glm::vec3 pDir)
 	-*((glm::vec3*)mode.movement.forward_off) * mode.movement.forward_factor * pDir.z +
 	*((glm::vec3*)mode.movement.upward_off) * mode.movement.upward_factor * pDir.y;
 
-  pos += d*mode.movement.speed;
+  pos += d*mode.movement.speed * simtime::factor;
 }
 
 void camera::Camera::translateGlobal(glm::vec3 pDir)
