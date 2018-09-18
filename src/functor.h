@@ -42,7 +42,7 @@ namespace signals
 
 		static void invoke(const size_t i)
 		{
-		  printf("Invoking functor %lu\n", i);
+		  //printf("Invoking functor %lu\n", i);
 		  all[i].invoke();
 		}
 

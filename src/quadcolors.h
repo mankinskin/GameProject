@@ -29,7 +29,7 @@ namespace gui
   template<template<class>class M1, template<class>class M2>
 	void colorQuad(const utils::ID<Quad, M1>& pID, const utils::ID<gl::ColorData, M2>& pColor)
 	{
-	  printf("Coloring Quad %lu with color %lu\n", pID.index, pColor.index);
+	  //printf("Coloring Quad %lu with color %lu\n", pID.index, pColor.index);
 	  quadColors[pID.index] = pColor.index;
 	}
 }
