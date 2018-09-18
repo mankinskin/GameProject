@@ -10,16 +10,9 @@
 #else
 #   include <curses.h>
 #endif
-#include <chrono>
-#include <thread>
+#include "simtime.h"
 
 app::State app::state = app::State::Init;
-double app::timeFactor = 1.0;
-double app::lastFrameMS = 0;
-double app::lastFrameLimitedMS = 0;
-double app::totalMS = 0;
-double app::minFrameMS = 8.0;
-
 
 glm::vec3 app::node_mov = glm::vec3();
 
@@ -27,7 +20,7 @@ void app::init()
 {
   puts("Hello");
   state = Running;
-  setMaxFPS(50);
+  simtime::setFpsCap(120);
   // Windows and gl Context
   initGLFW();
   startContextwindow();
@@ -53,33 +46,6 @@ void app::initGLFW()
 	exit(glfw);
   }
   std::puts("Initialized GLFW successfully.");
-}
-
-//--Global Time--
-void app::updateTime()
-{
-  double thisFrameMS = (glfwGetTime() * 1000.0);
-  lastFrameMS = thisFrameMS - totalMS;
-  totalMS = thisFrameMS;
-}
-
-void app::limitFPS()
-{
-  lastFrameLimitedMS = lastFrameMS;
-  if (lastFrameMS < minFrameMS) {
-	lastFrameLimitedMS = minFrameMS;
-	std::this_thread::sleep_for(std::chrono::milliseconds((int)(minFrameMS - lastFrameMS)));
-  }
-}
-
-void app::updateTimeFactor()
-{
-  timeFactor = 1.0f;
-}
-
-void app::setMaxFPS(unsigned int pMaxFPS)
-{
-  minFrameMS = (unsigned int)(1000.0f / (float)pMaxFPS);
 }
 
 void app::run()

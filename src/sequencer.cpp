@@ -19,6 +19,7 @@
 #include "text.h"
 #include "functor.h"
 #include "signal.h"
+#include "simtime.h"
 
 // Initialization
 void sequencer::initialize()
@@ -152,8 +153,7 @@ void sequencer::frame()
 
   input::end();
 
-  app::updateTime();
-  app::limitFPS();
+  simtime::update();
 
   debug::printErrors();
 }

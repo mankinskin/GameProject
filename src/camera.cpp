@@ -47,7 +47,7 @@ void camera::Camera::translateLocal(glm::vec3 pDir)
 	-*((glm::vec3*)mode.movement.forward_off) * mode.movement.forward_factor * pDir.z +
 	*((glm::vec3*)mode.movement.upward_off) * mode.movement.upward_factor * pDir.y;
 
-  pos += d*mode.movement.speed * (float)app::timeFactor;
+  pos += d*mode.movement.speed;
 }
 
 void camera::Camera::translateGlobal(glm::vec3 pDir)

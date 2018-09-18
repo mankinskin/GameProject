@@ -5,7 +5,6 @@
 #include <cstdio>
 #include <algorithm>
 
-bool debug::shouldPrintInfo = true;
 std::vector<debug::Error> debug::errorBuffer;
 const std::array<const std::string, 3> debug::Error::severityStrings =
 {
@@ -46,22 +45,5 @@ void debug::printErrors()
 	  puts("Fatal Errors occured.\nPress any key to quit...");
 	  while (!getch()) {};
 	}
-  }
-}
-
-void debug::togglePrintInfo()
-{
-  shouldPrintInfo = !shouldPrintInfo;
-}
-
-void debug::printInfo()
-{
-  if (shouldPrintInfo) {
-	app::lastFrameMS = std::max(1.0, app::lastFrameMS);
-	printf("\nlastFrameMS %i\n", (int)app::lastFrameMS);
-	printf("FPS\nActual %i\nPotential %i\n",
-		(int)(1000 / (std::max(app::minFrameMS, app::lastFrameMS))),
-		(int)(1000 / (app::lastFrameMS)));
-
   }
 }

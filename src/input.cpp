@@ -92,7 +92,6 @@ void input::setupControls()
 	auto toggle_look_func = func<void(camera::Camera&), camera::Camera&>(camera::toggleLook, camera::main_camera);
 	auto toggle_grid_func = func(glDebug::toggleGrid);
 	auto toggle_coord_func = func(glDebug::toggleCoord);
-	auto toggle_info_func = func(debug::togglePrintInfo);
 	auto toggle_normals_func = func(mesh::toggleNormals);
 	auto cycle_cam_modes_func = func<void(camera::Camera&), camera::Camera&>(camera::cycleModes, camera::main_camera);
 	auto higher_cam_speed_func = func<void(camera::Camera&, float), camera::Camera&, float>(camera::setSpeed, camera::main_camera, 1.0f);
