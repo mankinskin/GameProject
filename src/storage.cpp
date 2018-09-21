@@ -16,7 +16,7 @@ unsigned int gl::getNewTargetBinding(const unsigned int pTarget)
 	return 0;
   }
   if (pTarget == GL_UNIFORM_BUFFER) {
-	if (target_it->second == MAX_UNIFORM_BUFFER_BINDINGS) {
+	if (target_it->second >= MAX_UNIFORM_BUFFER_BINDINGS) {
 	  puts("!!! Exceeding MAX_UNIFORM_BUFFER_BINDINGS!");
 	}
   }

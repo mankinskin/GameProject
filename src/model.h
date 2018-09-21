@@ -2,11 +2,15 @@
 #include "gl.h"
 #include <vector>
 #include <string>
+#include "utils/id.h"
 
 namespace model
 {
   struct Model
   {
+	using Container = utils::Container<Model>;
+	using ID = typename Container::ID;
+	static Container all;
 	Model()
 	  : meshOffset(0)
 	  , meshCount(0)
@@ -28,5 +32,5 @@ namespace model
   const unsigned int MAX_MESHES_PER_MODEL = 10;
 
   unsigned int createModel(unsigned int pMeshOffset, unsigned int pMeshCount);
-  extern std::vector<std::string> allModelNames;
+  extern utils::Container<std::string> allModelNames;
 }

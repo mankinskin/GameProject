@@ -1,7 +1,5 @@
 #include "model.h"
 #include "modelfile.h"
-#include "model.h"
-#include "shader.h"
 #include "mesh.h"
 #include "entity.h"
 #include "collision.h"
@@ -9,8 +7,8 @@
 #include <vector>
 #include <chrono>
 #include <time.h>
-std::vector<model::Model> model::allModels;
-std::vector<std::string> model::allModelNames;
+utils::Container<model::Model> model::Model::all;
+utils::Container<std::string> model::allModelNames;
 
 void model::initModels()
 {
@@ -55,7 +53,7 @@ void model::setupModels()
 
 model::Model& model::getModel(unsigned int pID)
 {
-  return allModels[pID];
+  return Model::all[pID];
 }
 
 model::Model& model::getModel(std::string pName)
@@ -70,15 +68,15 @@ model::Model& model::getModel(std::string pName)
 
 unsigned int model::createModel(unsigned int pMeshOffset, unsigned int pMeshCount)
 {
-  allModels.emplace_back(pMeshOffset, pMeshCount);
-  return allModels.size() - 1;
+  Model::all.emplace_back(pMeshOffset, pMeshCount);
+  return Model::all.size() - 1;
 }
 
 void model::revalidateModelMeshOffsets()
 {
   unsigned int offs = 0;
-  for (unsigned int mod = 0; mod < allModels.size(); ++mod) {
-	allModels[mod].meshOffset = offs;
-	offs += allModels[mod].meshCount;
+  for (unsigned int mod = 0; mod < Model::all.size(); ++mod) {
+	Model::all[mod].meshOffset = offs;
+	offs += Model::all[mod].meshCount;
   }
 }

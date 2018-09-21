@@ -6,7 +6,6 @@
 #include "vao.h"
 #include "shader.h"
 
-
 namespace mesh
 {
   struct Vertex

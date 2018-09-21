@@ -51,8 +51,7 @@ namespace gl
 	struct StreamStorage : public Storage<T>
 	{
 	  StreamStorage()
-	  {
-	  }
+	  {}
 	  StreamStorage(std::string pName, typename Storage<T>::size_type pSize,
 		  int pFlags, const void* pData = nullptr)
 		: Storage<T>(pName, pSize, pFlags | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT, pData)

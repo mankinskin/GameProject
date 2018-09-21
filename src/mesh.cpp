@@ -94,11 +94,11 @@ void mesh::renderMeshes()
   for (unsigned int m = 0; m < allMeshes.size(); ++m) {
 	mesh::Mesh& mesh = mesh::allMeshes[m];
 	glActiveTexture(GL_TEXTURE0);//amb
-	glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].amb_tex);
+	glBindTexture(GL_TEXTURE_2D, mesh::MaterialTextures::all[mesh.materialIndex].amb_tex);
 	glActiveTexture(GL_TEXTURE1);//diff
-	glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].diff_tex);
+	glBindTexture(GL_TEXTURE_2D, mesh::MaterialTextures::all[mesh.materialIndex].diff_tex);
 	glActiveTexture(GL_TEXTURE2);//spec
-	glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].spec_tex);
+	glBindTexture(GL_TEXTURE_2D, mesh::MaterialTextures::all[mesh.materialIndex].spec_tex);
 	meshShader.setUniform("materialIndex", mesh.materialIndex);
 
 	glDrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT,
@@ -112,7 +112,7 @@ void mesh::renderMeshes()
 void mesh::renderMeshNormals()
 {
   if (draw_normals) {
-	mesh::updateMeshBuffers();//TODO: make work without this
+	mesh::updateMeshBuffers();	//TODO: make work without this
 	glBindVertexArray(meshVAO);
 	meshNormalShader.use();
 	for (unsigned int m = 0; m < allMeshes.size(); ++m) {
@@ -135,11 +135,11 @@ void mesh::renderBlendMeshes()
   for (unsigned int m = 0; m < allMeshes.size(); ++m) {
 	mesh::Mesh mesh = mesh::allMeshes[m];
 	glActiveTexture(GL_TEXTURE0);//amb
-	glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].amb_tex);
+	glBindTexture(GL_TEXTURE_2D, mesh::MaterialTextures::all[mesh.materialIndex].amb_tex);
 	glActiveTexture(GL_TEXTURE1);//diff
-	glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].diff_tex);
+	glBindTexture(GL_TEXTURE_2D, mesh::MaterialTextures::all[mesh.materialIndex].diff_tex);
 	glActiveTexture(GL_TEXTURE2);//spec
-	glBindTexture(GL_TEXTURE_2D, mesh::allMaterialTextures[mesh.materialIndex].spec_tex);
+	glBindTexture(GL_TEXTURE_2D, mesh::MaterialTextures::all[mesh.materialIndex].spec_tex);
 	meshShader.setUniform("materialIndex", mesh.materialIndex);
 
 	glDrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT,
@@ -174,7 +174,6 @@ void mesh::setupMeshNormalShader()
   meshNormalShader.bindUniformBuffer(gl::generalUniformBuffer, "GeneralUniformBuffer");
   meshNormalShader.bindUniformBuffer(entities::entityMatrixBuffer, "NodeMatrixBuffer");
 }
-
 
 void mesh::addInstancesToMesh(unsigned int pMeshIndex, std::vector<unsigned int> pNodeIDs)
 {

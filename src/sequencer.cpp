@@ -20,6 +20,9 @@
 #include "functor.h"
 #include "signal.h"
 #include "simtime.h"
+#include "mesh.h"
+#include "model.h"
+#include "modelfile.h"
 
 // Initialization
 void sequencer::initialize()
@@ -72,6 +75,9 @@ void sequencer::initializeVAOs()
   gui::initQuadBuffer();
 
   gui::initColorQuadVAO();
+
+  //mesh::initMeshVAO();
+  //model::initModels();
 }
 
 void sequencer::initModules()
@@ -98,11 +104,14 @@ void sequencer::initModules()
 
   puts("Text...");
   text::loadFonts();
+
+  //puts("Models...");
+  //model::Loader::includeModel("", "");
+  //model::Loader::loadModels();
 }
 
 void sequencer::fetchInput()
 {
-
 }
 
 void sequencer::clearFramebuffers()
@@ -158,14 +167,12 @@ void sequencer::frame()
 void sequencer::gameloop()
 {
   puts("Entering gameloop");
-
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   text::Text::ID term_box = text::Text::all.makeID(text::Text(glm::vec2(0.0f, 0.90f), glm::vec2(0.5f, 1.0f)));
   term_box->setChars("1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item");
   text::updateTexts();
-  while (app::state == app::Running)
-  {
+  while (app::state == app::Running) {
 	frame();
   }
   signals::clearSignals();

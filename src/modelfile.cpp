@@ -20,11 +20,11 @@ void model::Loader::includeModel(std::string pFilename, std::string pName)
 
 void model::Loader::loadModels()
 {
-  allModels.reserve(allModels.size() + modelLoadBuffer.size());
+  Model::all.reserve(Model::all.size() + modelLoadBuffer.size());
   for (ModelLoadFile& file : modelLoadBuffer) {
 	loadModelFile(file);
   }
-  allModels.shrink_to_fit();
+  Model::all.shrink_to_fit();
   mesh::storeMaterials();
 }
 
@@ -71,16 +71,16 @@ void model::Loader::loadMesh(const aiScene* pScene, size_t pMeshIndex, size_t& p
 	}
   }
 
-  mesh::allMeshes.emplace_back(pVertexOffset, mesh->mNumVertices, pIndexOffset, mesh->mNumFaces * 3, size_t(mesh::allMaterials.size() + mesh->mMaterialIndex));
+  mesh::allMeshes.emplace_back(pVertexOffset, mesh->mNumVertices, pIndexOffset, mesh->mNumFaces * 3, size_t(mesh::Material::all.size() + mesh->mMaterialIndex));
   pVertexOffset += mesh->mNumVertices;
   pIndexOffset += mesh->mNumFaces * 3;
 }
 
 void model::Loader::loadMaterials(const aiScene* pScene) {
   using namespace mesh;
-  size_t off = allMaterials.size();
-  allMaterials.resize(off + pScene->mNumMaterials);
-  allMaterialTextures.resize(off + pScene->mNumMaterials);
+  size_t off = Material::all.size();
+  Material::all.resize(off + pScene->mNumMaterials);
+  MaterialTextures::all.resize(off + pScene->mNumMaterials);
   for (size_t m = 0; m < pScene->mNumMaterials; ++m) {
 	loadMaterial(off + m, pScene->mMaterials[m]);
   }
@@ -90,10 +90,10 @@ void model::Loader::loadMaterials(const aiScene* pScene) {
 }
 
 void model::Loader::loadMaterial(size_t pTargetIndex, aiMaterial* pMat) {
-  using mesh::allMaterials;
-  allMaterials[pTargetIndex].amb_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-  allMaterials[pTargetIndex].diff_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-  allMaterials[pTargetIndex].spec_color = glm::vec4(1.0f, 1.0f, 1.0f, 100.0f);
+  using mesh::Material;
+  Material::all[pTargetIndex].amb_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+  Material::all[pTargetIndex].diff_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+  Material::all[pTargetIndex].spec_color = glm::vec4(1.0f, 1.0f, 1.0f, 100.0f);
   //pMat->Get(AI_MATKEY_COLOR_AMBIENT, allMaterials[pTargetIndex].amb_color);
   //pMat->Get(AI_MATKEY_COLOR_DIFFUSE, allMaterials[pTargetIndex].diff_color);
   //pMat->Get(AI_MATKEY_COLOR_SPECULAR, allMaterials[pTargetIndex].spec_color);
@@ -106,15 +106,15 @@ void model::Loader::loadMaterialTextures(size_t pTargetIndex, aiMaterial* pMat)
 
   if (pMat->GetTextureCount(aiTextureType_AMBIENT)) {
 	pMat->GetTexture(aiTextureType_AMBIENT, 0, &path_buf);
-	mesh::allMaterialTextures[pTargetIndex].amb_tex = texture::Texture2D(path_buf.C_Str());
+	mesh::MaterialTextures::all[pTargetIndex].amb_tex = texture::Texture2D(path_buf.C_Str());
   }
   if (pMat->GetTextureCount(aiTextureType_DIFFUSE)) {
 	pMat->GetTexture(aiTextureType_DIFFUSE, 0, &path_buf);
-	mesh::allMaterialTextures[pTargetIndex].diff_tex = texture::Texture2D(path_buf.C_Str());
+	mesh::MaterialTextures::all[pTargetIndex].diff_tex = texture::Texture2D(path_buf.C_Str());
   }
   if (pMat->GetTextureCount(aiTextureType_SPECULAR)) {
 	pMat->GetTexture(aiTextureType_SPECULAR, 0, &path_buf);
-	mesh::allMaterialTextures[pTargetIndex].spec_tex = texture::Texture2D(path_buf.C_Str());
+	mesh::MaterialTextures::all[pTargetIndex].spec_tex = texture::Texture2D(path_buf.C_Str());
   }
 }
 
@@ -138,7 +138,7 @@ void model::Loader::loadModelFile(ModelLoadFile pFile)
   if (pFile.modelname == "") {
 	name = &pFile.filename;
   }
-  allModels.push_back(model);
+  Model::all.push_back(model);
   allModelNames.push_back(*name);
 }
 
