@@ -94,7 +94,7 @@ void sequencer::initModules()
   input::setupControls();
 
   puts("Debug Geometry...");
-  glDebug::createDebugGeometry();
+  gl::debug::createDebugGeometry();
 
   puts("GUI...");
   gui::init();

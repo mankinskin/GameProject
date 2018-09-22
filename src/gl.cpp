@@ -38,7 +38,7 @@ void gl::init()
 {
   puts("Initializing OpenGL...");
   initGLEW();
-  glDebug::init();
+  gl::debug::init();
   getOpenGLInitValues();
   screenViewport = Viewport(app::mainWindow);
   screenViewport.bind();
@@ -63,7 +63,7 @@ void gl::init()
   //model::revalidateModelMeshOffsets();
   //model::mesh::revalidateMeshEntityOffsets();
 
-  debug::printErrors();
+  ::debug::printErrors();
 }
 
 void gl::getOpenGLInitValues()
@@ -120,7 +120,7 @@ void gl::initGLEW()
   glewExperimental = true;
   unsigned int glew = glewInit();
   if (glew != GLEW_OK) {
-	debug::fatal("Unable to initialize GLEW (glewInit() return code: " + std::to_string(glew) + ")\nGLEW Error Log:\n"
+	::debug::fatal("Unable to initialize GLEW (glewInit() return code: " + std::to_string(glew) + ")\nGLEW Error Log:\n"
 		+ (const char*)glewGetErrorString(glew));
 	while (!getch()) {
 	}

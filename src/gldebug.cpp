@@ -21,37 +21,37 @@ void APIENTRY glerror_callback(GLenum sourcei, GLenum type, GLuint id, GLenum se
 	debug::warning(message);
 }
 
-void glDebug::init()
+void gl::debug::init()
 {
   glDebugMessageCallback(glerror_callback, nullptr);
 }
 
-void glDebug::createDebugGeometry()
+void gl::debug::createDebugGeometry()
 {
   coord_line_group = initCoordinateSystem("coord");
   grid_1_line_group = generateDebugGrid("grid1.0", 1.0f, 100, 1.0f, 1.0f, 1.0f, 0.2f);
   //grid_2_line_group = generateDebugGrid("grid10.0", 1.0f, 100, 1.0f, 1.0f, 1.0f, 0.2f);
 }
 
-void glDebug::toggleGrid()
+void gl::debug::toggleGrid()
 {
   gui::toggleLineGroup(grid_1_line_group);
   gui::toggleLineGroup(grid_2_line_group);
 }
 
-void glDebug::toggleCoord()
+void gl::debug::toggleCoord()
 {
   gui::toggleLineGroup(coord_line_group);
 }
 
-unsigned int glDebug::generateDebugGrid(std::string pName,
+unsigned int gl::debug::generateDebugGrid(std::string pName,
 	float pTileSize, unsigned int pTileCount,
 	float pColorR, float pColorG, float pColorB, float pAlpha)
 {
   return generateDebugGrid(pName, pTileSize, pTileSize, pTileCount, pTileCount, pColorR, pColorG, pColorB, pAlpha);
 }
 
-unsigned int glDebug::generateDebugGrid(std::string pName,
+unsigned int gl::debug::generateDebugGrid(std::string pName,
 	float pTileSizeX, float pTileSizeY, unsigned int pTileCountX, unsigned int pTileCountY,
 	float pColorR, float pColorG, float pColorB, float pAlpha)
 {
@@ -89,7 +89,7 @@ unsigned int glDebug::generateDebugGrid(std::string pName,
   return gui::createLineGroup(lineOffset, lineCount);
 }
 
-unsigned int glDebug::initCoordinateSystem(std::string pName)
+unsigned int gl::debug::initCoordinateSystem(std::string pName)
 {
   unsigned int lineOffset = gui::getLineCount();
   unsigned int verts[7];

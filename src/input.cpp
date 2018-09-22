@@ -90,8 +90,8 @@ void input::setupControls()
 	auto toggle_cull_func = func(model::mesh::toggleCullFace);
 	auto toggle_cursor_func = func(input::toggleCursor);
 	auto toggle_look_func = func<void(camera::Camera&), camera::Camera&>(camera::toggleLook, camera::main_camera);
-	auto toggle_grid_func = func(glDebug::toggleGrid);
-	auto toggle_coord_func = func(glDebug::toggleCoord);
+	auto toggle_grid_func = func(gl::debug::toggleGrid);
+	auto toggle_coord_func = func(gl::debug::toggleCoord);
 	auto toggle_normals_func = func(model::mesh::toggleNormals);
 	auto cycle_cam_modes_func = func<void(camera::Camera&), camera::Camera&>(camera::cycleModes, camera::main_camera);
 	auto higher_cam_speed_func = func<void(camera::Camera&, float), camera::Camera&, float>(camera::setSpeed, camera::main_camera, 1.0f);
