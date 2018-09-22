@@ -5,6 +5,7 @@
 
 std::vector<physics::BoundingSphere> physics::allBoundingSpheres;
 std::vector<std::pair<unsigned int, unsigned int>> physics::allBoundingSpherenode;
+
 unsigned int physics::createBoundingSphere(BoundingSphere pBoundingSphere)
 {
   allBoundingSpheres.push_back(pBoundingSphere);
@@ -26,7 +27,7 @@ unsigned int physics::linkNodeToBoundingSphere(unsigned int pNodeIndex, unsigned
 }
 float physics::checkTriangleIntersect(unsigned int pIndexOffset_A, unsigned int pEntity_A, unsigned int pIndexOffset_B, unsigned int pEntity_B)
 {
-  using namespace mesh;
+  using namespace model::mesh;
   glm::uvec3 face_A;
   glm::uvec3 face_B;
   glm::vec3 A_verts[3];

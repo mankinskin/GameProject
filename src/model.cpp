@@ -22,10 +22,10 @@ void model::initModels()
 
   //normalize sphere mesh
   //unsigned int sphere_mesh = model::getModel("sphere").meshOffset;
-  //unsigned int vertexOffset = mesh::allMeshes[sphere_mesh].vertexOffset;
-  //unsigned int vertexCount = mesh::allMeshes[sphere_mesh].vertexCount;
+  //unsigned int vertexOffset = model::mesh::allMeshes[sphere_mesh].vertexOffset;
+  //unsigned int vertexCount = model::mesh::allMeshes[sphere_mesh].vertexCount;
   //for (unsigned int v = 0; v < vertexCount; ++v) {
-  //	glm::vec3& vert = mesh::allStaticVertices[vertexOffset + v].pos;
+  //	glm::vec3& vert = model::mesh::allStaticVertices[vertexOffset + v].pos;
   //	vert = glm::normalize(vert);
   //}
 }

@@ -37,9 +37,9 @@ void sequencer::includeShaders()
   gui::initLineShader();
   gui::initColorQuadShader();
   text::initFontShader();
-  //mesh::initMeshShader();
-  //mesh::initBlendMeshShader();
-  //mesh::initMeshNormalShader();
+  //model::mesh::initMeshShader();
+  //model::mesh::initBlendMeshShader();
+  //model::mesh::initMeshNormalShader();
   //lights::initLightShader();
   //gui::text::initFontShader();
   //voxelization::init();
@@ -51,10 +51,10 @@ void sequencer::buildShaders()
   gui::setupLineShader();
   gui::setupColorQuadShader();
   text::setupFontShader();
-  //mesh::setupMeshShader();
+  //model::mesh::setupMeshShader();
   //lights::setupLightShader();
-  //mesh::setupBlendMeshShader();
-  //mesh::setupMeshNormalShader();
+  //model::mesh::setupBlendMeshShader();
+  //model::mesh::setupMeshNormalShader();
   //voxelization::setupShader();
 }
 
@@ -76,7 +76,7 @@ void sequencer::initializeVAOs()
 
   gui::initColorQuadVAO();
 
-  //mesh::initMeshVAO();
+  //model::mesh::initMeshVAO();
   //model::initModels();
 }
 

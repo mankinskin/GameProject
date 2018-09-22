@@ -56,13 +56,13 @@ void voxelization::voxelizeMeshes()
   glViewport(0, 0, frustum_size.x*fitx, frustum_size.y*fity);
   //glViewport(0, 0, gl::Viewport::current->width, gl::Viewport::current->height);
   voxelizationShader.use();
-  glBindVertexArray(mesh::meshVAO);
+  glBindVertexArray(model::mesh::meshVAO);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_3D, volumeImage);
   glBindImageTexture(0, volumeImage, 0, GL_TRUE, 0, GL_WRITE_ONLY, GL_RGBA16F);
-  for (unsigned int m = 0; m < mesh::allMeshes.size(); ++m) {
-	mesh::Mesh& mesh = mesh::allMeshes[m];
+  for (unsigned int m = 0; m < model::mesh::allMeshes.size(); ++m) {
+	model::mesh::Mesh& mesh = model::mesh::allMeshes[m];
 	glDrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, (void*)(mesh.indexOffset * sizeof(unsigned int)), mesh.instanceCount, mesh.instanceOffset);
   }
 

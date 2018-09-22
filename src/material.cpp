@@ -4,11 +4,11 @@
 #include "gldebug.h"
 #include "mesh.h"
 
-utils::Container<mesh::Material> mesh::Material::all;
-utils::Container<mesh::MaterialTextures> mesh::MaterialTextures::all;
-gl::Storage<mesh::Material> mesh::materialUBO;
+utils::Container<model::mesh::Material> model::mesh::Material::all;
+utils::Container<model::mesh::MaterialTextures> model::mesh::MaterialTextures::all;
+gl::Storage<model::mesh::Material> model::mesh::materialUBO;
 
-void mesh::storeMaterials()
+void model::mesh::storeMaterials()
 {
   materialUBO = gl::Storage<Material>("MaterialBuffer", Material::all.size(), 0, &Material::all[0]);
   materialUBO.setTarget(GL_UNIFORM_BUFFER);

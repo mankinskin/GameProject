@@ -25,7 +25,7 @@ void model::Loader::loadModels()
 	loadModelFile(file);
   }
   Model::all.shrink_to_fit();
-  mesh::storeMaterials();
+  model::mesh::storeMaterials();
 }
 
 void model::Loader::loadMeshes(const aiScene* pScene)
@@ -62,16 +62,16 @@ void model::Loader::loadMesh(const aiScene* pScene, size_t pMeshIndex, size_t& p
 	if (mesh->HasTextureCoords(pMeshIndex)) {
 	  uv = mesh->mTextureCoords[0][v];
 	}
-	mesh::allStaticVertices.push_back(mesh::Vertex(pos.x, pos.y, pos.z, normal.x, normal.y, normal.z, uv.x, uv.y));
+	model::mesh::allStaticVertices.push_back(model::mesh::Vertex(pos.x, pos.y, pos.z, normal.x, normal.y, normal.z, uv.x, uv.y));
   }
   for (size_t f = 0; f < mesh->mNumFaces; ++f) {
 	aiFace face = mesh->mFaces[f];
 	for (size_t fi = 0; fi < 3; ++fi) {
-	  mesh::allIndices.push_back(face.mIndices[fi] + pVertexOffset);
+	  model::mesh::allIndices.push_back(face.mIndices[fi] + pVertexOffset);
 	}
   }
 
-  mesh::allMeshes.emplace_back(pVertexOffset, mesh->mNumVertices, pIndexOffset, mesh->mNumFaces * 3, size_t(mesh::Material::all.size() + mesh->mMaterialIndex));
+  model::mesh::allMeshes.emplace_back(pVertexOffset, mesh->mNumVertices, pIndexOffset, mesh->mNumFaces * 3, size_t(model::mesh::Material::all.size() + mesh->mMaterialIndex));
   pVertexOffset += mesh->mNumVertices;
   pIndexOffset += mesh->mNumFaces * 3;
 }
@@ -90,7 +90,7 @@ void model::Loader::loadMaterials(const aiScene* pScene) {
 }
 
 void model::Loader::loadMaterial(size_t pTargetIndex, aiMaterial* pMat) {
-  using mesh::Material;
+  using model::mesh::Material;
   Material::all[pTargetIndex].amb_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
   Material::all[pTargetIndex].diff_color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
   Material::all[pTargetIndex].spec_color = glm::vec4(1.0f, 1.0f, 1.0f, 100.0f);
@@ -106,15 +106,15 @@ void model::Loader::loadMaterialTextures(size_t pTargetIndex, aiMaterial* pMat)
 
   if (pMat->GetTextureCount(aiTextureType_AMBIENT)) {
 	pMat->GetTexture(aiTextureType_AMBIENT, 0, &path_buf);
-	mesh::MaterialTextures::all[pTargetIndex].amb_tex = texture::Texture2D(path_buf.C_Str());
+	model::mesh::MaterialTextures::all[pTargetIndex].amb_tex = texture::Texture2D(path_buf.C_Str());
   }
   if (pMat->GetTextureCount(aiTextureType_DIFFUSE)) {
 	pMat->GetTexture(aiTextureType_DIFFUSE, 0, &path_buf);
-	mesh::MaterialTextures::all[pTargetIndex].diff_tex = texture::Texture2D(path_buf.C_Str());
+	model::mesh::MaterialTextures::all[pTargetIndex].diff_tex = texture::Texture2D(path_buf.C_Str());
   }
   if (pMat->GetTextureCount(aiTextureType_SPECULAR)) {
 	pMat->GetTexture(aiTextureType_SPECULAR, 0, &path_buf);
-	mesh::MaterialTextures::all[pTargetIndex].spec_tex = texture::Texture2D(path_buf.C_Str());
+	model::mesh::MaterialTextures::all[pTargetIndex].spec_tex = texture::Texture2D(path_buf.C_Str());
   }
 }
 

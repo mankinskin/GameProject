@@ -56,12 +56,12 @@ void gl::init()
 
   //puts("Models...");
   //model::initModels();
-  //mesh::initMeshVAO();
+  //model::mesh::initMeshVAO();
   //model::setupModels();
 
   //entities::updateEntityMatrices();
   //model::revalidateModelMeshOffsets();
-  //mesh::revalidateMeshEntityOffsets();
+  //model::mesh::revalidateMeshEntityOffsets();
 
   debug::printErrors();
 }
