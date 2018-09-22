@@ -24,8 +24,7 @@ gui::LineGroup::LineGroup(unsigned int pLineOffset,
   : lineOffset(pLineOffset)
   , lineCount(pLineCount)
 	, flags(1)
-{
-}
+{}
 
 unsigned int gui::createLineGroup(unsigned int pLineOffset,
 	unsigned int pLineCount, int pFlags)
@@ -70,7 +69,7 @@ void gui::initLineVAO()
 	  MAX_LINE_VERTEX_COUNT, GL_MAP_WRITE_BIT);
 
   lineVAO = gl::VAO("lineVAO");
-  lineVAO.vertexBuffer(0, lineVertexBuffer, sizeof(unsigned int) * 2);
+  lineVAO.vertexBuffer(0, lineVertexBuffer, 0, sizeof(unsigned int) * 2);
   lineVAO.vertexAttrib(0, 0, 2, GL_UNSIGNED_INT, 0);
 }
 

@@ -96,7 +96,7 @@ void text::initFontVAO()
 {
   fontVAO = gl::VAO("FontVAO");
 
-  fontVAO.vertexBuffer(0, gl::quadVBO, sizeof(glm::vec2));
+  fontVAO.vertexBuffer(0, gl::quadVBO, 0, sizeof(glm::vec2));
   fontVAO.vertexAttrib(0, 0, 2, GL_FLOAT, 0);
   fontVAO.elementBuffer(gl::quadEBO);
 }
