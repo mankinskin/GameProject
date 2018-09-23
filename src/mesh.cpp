@@ -12,41 +12,44 @@
 
 bool model::mesh::draw_normals = false;
 bool model::mesh::cull_face = true;
+
 std::vector<model::mesh::Mesh> model::mesh::allMeshes;
 std::vector<unsigned int> model::mesh::allIndices;
 std::vector<model::mesh::Vertex> model::mesh::allStaticVertices;
 std::vector<unsigned int> model::mesh::allMeshInstancenode;
+
 std::vector<unsigned int> model::mesh::opaqueMeshList;
 std::vector<unsigned int> model::mesh::blendMeshList;
+
 shader::Program model::mesh::meshShader;
 shader::Program model::mesh::blendMeshShader;
 shader::Program model::mesh::meshNormalShader;
+
 gl::VAO model::mesh::meshVAO;
 gl::Storage<model::mesh::Vertex> model::mesh::meshVBO;
 gl::Storage<unsigned int> model::mesh::meshIBO;
+
 gl::StreamStorage<unsigned int> model::mesh::nodeIndexBuffer;
 
 void model::mesh::initMeshVAO()
 {
-  meshVBO = gl::Storage<Vertex>("MeshVertexBuffer",
-	  allStaticVertices.size(), 0, &allStaticVertices[0]);
-  meshIBO = gl::Storage<unsigned int>("MeshIndexBuffer",
-	  allIndices.size(), 0, &allIndices[0]);
-  nodeIndexBuffer = gl::StreamStorage<unsigned int>("MeshNodeIndexBuffer",
-	  model::MAX_MODELS*model::MAX_MESHES_PER_MODEL, GL_MAP_WRITE_BIT);
-  glBindVertexArray(meshVAO);
-  glVertexArrayElementBuffer(meshVAO, meshIBO.ID);
-  glVertexArrayVertexBuffer(meshVAO, 0, meshVBO.ID, 0, sizeof(Vertex));
-  glVertexArrayVertexBuffer(meshVAO, 1, nodeIndexBuffer.ID, 0, sizeof(Vertex));
-  //gl::setVertexArrayVertexStorage(meshVAO, 1, nodeIndexBuffer, sizeof(unsigned int));
+  meshVAO = gl::VAO("MeshVAO");
+  meshVBO = gl::Storage<Vertex>("MeshVertexBuffer", allStaticVertices, 0);
+  meshIBO = gl::Storage<unsigned int>("MeshIndexBuffer", allIndices, 0);
+  nodeIndexBuffer = gl::StreamStorage<unsigned int>("MeshNodeIndexBuffer", MAX_MODELS*MAX_MESHES_PER_MODEL, GL_MAP_WRITE_BIT);
 
-  //gl::setVertexAttrib(meshVAO, 0, 0, 3, GL_FLOAT, offsetof(Vertex, pos));
-  //gl::setVertexAttrib(meshVAO, 0, 1, 3, GL_FLOAT, offsetof(Vertex, normal));
-  //gl::setVertexAttrib(meshVAO, 0, 2, 2, GL_FLOAT, offsetof(Vertex, uv));
+  meshVAO.bind();
+  meshVAO.elementBuffer(meshIBO);
+  meshVAO.vertexBuffer(0, meshVBO);
+  meshVAO.vertexBuffer(1, nodeIndexBuffer);
 
-  //gl::setVertexAttrib(meshVAO, 1, 3, 1, GL_UNSIGNED_INT, 0);
-  glVertexArrayBindingDivisor(meshVAO, 1, 1);
-  glBindVertexArray(0);
+  meshVAO.vertexAttrib(0, 0, 3, GL_FLOAT, offsetof(Vertex, pos));
+  meshVAO.vertexAttrib(0, 1, 3, GL_FLOAT, offsetof(Vertex, normal));
+  meshVAO.vertexAttrib(0, 2, 2, GL_FLOAT, offsetof(Vertex, uv));
+
+  meshVAO.vertexAttrib(1, 3, 1, GL_UNSIGNED_INT, 0);
+  meshVAO.attribDivisor(1, 1);
+  meshVAO.unbind();
 }
 
 void model::mesh::initMeshShader()
@@ -170,8 +173,8 @@ void model::mesh::renderBlendMeshes()
 void model::mesh::updateMeshBuffers()
 {
   if (allMeshInstancenode.size()) {
-	//gl::uploadStorage(nodeIndexBuffer, sizeof(unsigned int)*allMeshInstancenode.size(),
-	//&allMeshInstancenode[0]);
+	gl::uploadStorage(nodeIndexBuffer, sizeof(unsigned int)*allMeshInstancenode.size(),
+	&allMeshInstancenode[0]);
   }
 }
 

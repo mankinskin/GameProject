@@ -32,7 +32,7 @@ void entities::updateEntityBuffers()
   //  	mat[3][0], mat[3][1], mat[3][2], mat[3][3]);
   //}
   if (allMatrices.size()) {
-	//gl::uploadStorage(entityMatrixBuffer, sizeof(glm::mat4)*allMatrices.size(), &allMatrices[0]);
+	gl::uploadStorage(entityMatrixBuffer, sizeof(glm::mat4)*allMatrices.size(), &allMatrices[0]);
   }
 }
 

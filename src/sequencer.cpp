@@ -23,13 +23,14 @@
 #include "mesh.h"
 #include "model.h"
 #include "modelfile.h"
+#include "entity.h"
 
 // Initialization
 void sequencer::initialize()
 {
   includeShaders();
-  initializeVAOs();
   initModules();
+  initializeVAOs();
   buildShaders();
 }
 void sequencer::includeShaders()
@@ -37,7 +38,7 @@ void sequencer::includeShaders()
   gui::initLineShader();
   gui::initColorQuadShader();
   text::initFontShader();
-  //model::mesh::initMeshShader();
+  model::mesh::initMeshShader();
   //model::mesh::initBlendMeshShader();
   //model::mesh::initMeshNormalShader();
   //lights::initLightShader();
@@ -51,7 +52,7 @@ void sequencer::buildShaders()
   gui::setupLineShader();
   gui::setupColorQuadShader();
   text::setupFontShader();
-  //model::mesh::setupMeshShader();
+  model::mesh::setupMeshShader();
   //lights::setupLightShader();
   //model::mesh::setupBlendMeshShader();
   //model::mesh::setupMeshNormalShader();
@@ -85,6 +86,7 @@ void sequencer::initModules()
 
   puts("Models...");
   model::initModels();
+  model::setupModels();
 }
 
 void sequencer::initializeVAOs()
@@ -101,11 +103,13 @@ void sequencer::initializeVAOs()
   puts("Fonts...");
   text::initFontVAO();
 
+  entities::initEntityBuffers();
+
   gui::initQuadBuffer();
 
   gui::initColorQuadVAO();
 
-  //model::mesh::initMeshVAO();
+  model::mesh::initMeshVAO();
 }
 
 void sequencer::clearFramebuffers()
@@ -133,21 +137,22 @@ void sequencer::frame()
   gl::updateColorBuffer();
   gui::updateQuadBuffer();
   gui::updateColorQuads();
-
   gui::updateLinePositions();
   gui::updateLineColors();
   text::updateFonts();
 
+  entities::updateEntityMatrices();
+  entities::updateEntityBuffers();
+  model::mesh::updateMeshBuffers();
+
   gui::renderLines();
   gui::renderColorQuads();
   text::renderFonts();
+  model::mesh::renderMeshes();
 
   glfwSwapBuffers(app::mainWindow.window);
-
   input::end();
-
   simtime::update();
-
   debug::printErrors();
 }
 
