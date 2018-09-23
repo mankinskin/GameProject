@@ -15,5 +15,6 @@ namespace input
   void init();
   void setupControls();
   void fetchGLFWEvents();
+  void fetch();
   void end();
 }

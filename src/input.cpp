@@ -138,6 +138,16 @@ void input::fetchGLFWEvents()
   glfwPollEvents();
 }
 
+void input::fetch()
+{
+  fetchGLFWEvents();
+  updateMouse();
+
+  getCursorQuadEvents();
+  getMouseKeyEvents();
+  signals::checkEvents();
+  signals::processLinks();
+}
 
 void input::end()
 {

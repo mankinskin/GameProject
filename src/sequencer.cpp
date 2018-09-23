@@ -105,19 +105,14 @@ void sequencer::initModules()
   puts("Text...");
   text::loadFonts();
 
-  //puts("Models...");
-  //model::Loader::includeModel("", "");
-  //model::Loader::loadModels();
-}
-
-void sequencer::fetchInput()
-{
+  puts("Models...");
+  model::initModels();
 }
 
 void sequencer::clearFramebuffers()
 {
-  static GLubyte gui_clear_index[4] = { 0, 0, 0, 0 };
-  static GLfloat g_clear_color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+  static const GLubyte gui_clear_index[4] = { 0, 0, 0, 0 };
+  static const GLfloat g_clear_color[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
   static GLfloat g_clear_depth = 1.0f;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glClearNamedFramebufferuiv(texture::guiFBO,
@@ -130,14 +125,7 @@ void sequencer::frame()
 {
   clearFramebuffers();
 
-  input::fetchGLFWEvents();
-  input::updateMouse();
-
-  input::getCursorQuadEvents();
-  input::getMouseKeyEvents();
-  signals::checkEvents();
-  signals::processLinks();
-
+  input::fetch();
   camera::main_camera.look(input::cursorFrameDelta);
   camera::main_camera.update();
 
