@@ -14,7 +14,7 @@
 
 app::State app::state = app::State::Init;
 
-glm::vec3 app::node_mov = glm::vec3();
+glm::vec3 app::nodes_mov = glm::vec3();
 
 void app::init()
 {

@@ -56,7 +56,7 @@ namespace neural
   class Agent
   {
 	public:
-	  unsigned int entity;//use this ID to get and set entity data
+	  unsigned int nodes;//use this ID to get and set nodes data
 	  Circuit circuit;
   };
 }

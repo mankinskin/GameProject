@@ -1,7 +1,7 @@
 #include "model.h"
 #include "modelfile.h"
 #include "mesh.h"
-#include "entity.h"
+#include "nodes.h"
 #include "collision.h"
 #include <cstdlib>
 #include <vector>
@@ -37,19 +37,19 @@ void model::setupModels()
   srand(time(NULL));
   unsigned int nodes_to_generate = 100;
   std::vector<unsigned int> generated_nodes(nodes_to_generate);
-  entities::reserveEntities(nodes_to_generate);
+  nodes::reserveEntities(nodes_to_generate);
 
   unsigned int grid_width = 100;
 
   for (unsigned int ni = 0; ni < nodes_to_generate; ++ni) {
-    entities::createEntity(&generated_nodes[ni]);
-    entities::setPos(generated_nodes[ni], glm::vec3((float)(rand()%grid_width)- (float)(grid_width/2), (float)(rand() % 10) - (float)(10 / 2), (float)(rand() % grid_width) - (float)(grid_width / 2)));
-    entities::setScale(generated_nodes[ni], glm::vec3(0.5f, 0.5f, 0.5f));
-    entities::setRotation(generated_nodes[ni], glm::vec4(0.0f, 1.0f, 0.0f, 1.5f));
+    nodes::createEntity(&generated_nodes[ni]);
+    nodes::setPos(generated_nodes[ni], glm::vec3((float)(rand()%grid_width)- (float)(grid_width/2), (float)(rand() % 10) - (float)(10 / 2), (float)(rand() % grid_width) - (float)(grid_width / 2)));
+    nodes::setScale(generated_nodes[ni], glm::vec3(0.5f, 0.5f, 0.5f));
+    nodes::setRotation(generated_nodes[ni], glm::vec4(0.0f, 1.0f, 0.0f, 1.5f));
   }
 
   addInstancesToMesh(getModel(0).meshOffset, generated_nodes);
-  //addInstancesToMesh(getModel(1).meshOffset, { sphere_B_node });
+  //addInstancesToMesh(getModel(1).meshOffset, { sphere_B_nodes });
   revalidateMeshNodeOffsets();
   revalidateModelMeshOffsets();
 }

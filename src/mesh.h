@@ -81,7 +81,7 @@ namespace model
 	extern std::vector<unsigned int> allIndices;
 	extern std::vector<Vertex> allStaticVertices;
 	extern std::vector<Mesh> allMeshes;
-	extern std::vector<unsigned int> allMeshInstancenode;
+	extern std::vector<unsigned int> allMeshInstancenodes;
 	extern bool draw_normals;
 	extern bool cull_face;
 	extern shader::Program meshShader;
@@ -90,6 +90,6 @@ namespace model
 	extern gl::VAO meshVAO;
 	extern gl::Storage<Vertex> meshVBO;
 	extern gl::Storage<unsigned int> meshIBO;
-	extern gl::StreamStorage<unsigned int> nodeIndexBuffer;
+	extern gl::StreamStorage<unsigned int> nodesIndexBuffer;
   }
 }

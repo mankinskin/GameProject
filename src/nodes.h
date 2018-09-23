@@ -3,9 +3,9 @@
 #include <vector>
 #include <glm.hpp>
 
-//node
-//node hold the information about the transformation of an object. They store a position, an orientation and a scale.
-namespace entities
+//nodes
+//nodes hold the information about the transformation of an object. They store a position, an orientation and a scale.
+namespace nodes
 {
   void initEntityBuffers();
   void updateEntityBuffers();
@@ -23,10 +23,10 @@ namespace entities
 
   void translate(unsigned int pNodeID, glm::vec3 pPos);
 
-  extern gl::StreamStorage<glm::mat4> entityMatrixBuffer;
+  extern gl::StreamStorage<glm::mat4> nodeMatrixBuffer;
 
   const unsigned int MAX_ENTITIES = 1000;
-  extern unsigned int num_entities;
+  extern unsigned int num_nodes;
 
   extern std::vector<glm::vec3> allPositions;
   extern std::vector<glm::vec3> allNormals;

@@ -1,10 +1,10 @@
 #include "collision.h"
-#include "entity.h"
+#include "nodes.h"
 #include "mesh.h"
 #include "physics.h"
 
 std::vector<physics::BoundingSphere> physics::allBoundingSpheres;
-std::vector<std::pair<unsigned int, unsigned int>> physics::allBoundingSpherenode;
+std::vector<std::pair<unsigned int, unsigned int>> physics::allBoundingSpherenodes;
 
 unsigned int physics::createBoundingSphere(BoundingSphere pBoundingSphere)
 {
@@ -22,8 +22,8 @@ unsigned int physics::linkNodeToBoundingSphere(unsigned int pNodeIndex, Bounding
 
 unsigned int physics::linkNodeToBoundingSphere(unsigned int pNodeIndex, unsigned int pBoundingSphereIndex)
 {
-  allBoundingSpherenode.emplace_back(pNodeIndex, pBoundingSphereIndex);
-  return allBoundingSpherenode.size() - 1;
+  allBoundingSpherenodes.emplace_back(pNodeIndex, pBoundingSphereIndex);
+  return allBoundingSpherenodes.size() - 1;
 }
 float physics::checkTriangleIntersect(unsigned int pIndexOffset_A, unsigned int pEntity_A, unsigned int pIndexOffset_B, unsigned int pEntity_B)
 {
@@ -36,8 +36,8 @@ float physics::checkTriangleIntersect(unsigned int pIndexOffset_A, unsigned int 
   glm::vec3 B_verts[3];
   glm::vec3 B_edge_vectors[3];
 
-  glm::mat4 A_transform = entities::allMatrices[pEntity_A];
-  glm::mat4 B_transform = entities::allMatrices[pEntity_B];
+  glm::mat4 A_transform = nodes::allMatrices[pEntity_A];
+  glm::mat4 B_transform = nodes::allMatrices[pEntity_B];
 
   for (unsigned int i = 0; i < 3; ++i) {
 	face_A[i] = allIndices[pIndexOffset_A + i];
@@ -69,12 +69,12 @@ float physics::checkTriangleIntersect(unsigned int pIndexOffset_A, unsigned int 
 
 float physics::checkSphereIntersect(unsigned int pSphereA, unsigned int pSphereB)
 {
-  std::pair<unsigned int, unsigned int> node_link_A = allBoundingSpherenode[pSphereA];
-  std::pair<unsigned int, unsigned int> node_link_B = allBoundingSpherenode[pSphereB];
-  BoundingSphere& A = allBoundingSpheres[node_link_A.second];
-  BoundingSphere& B = allBoundingSpheres[node_link_B.second];
+  std::pair<unsigned int, unsigned int> nodes_link_A = allBoundingSpherenodes[pSphereA];
+  std::pair<unsigned int, unsigned int> nodes_link_B = allBoundingSpherenodes[pSphereB];
+  BoundingSphere& A = allBoundingSpheres[nodes_link_A.second];
+  BoundingSphere& B = allBoundingSpheres[nodes_link_B.second];
 
-  glm::vec3 pos_A = A.local_pos + entities::allPositions[node_link_A.first];
-  glm::vec3 pos_B = B.local_pos + entities::allPositions[node_link_B.first];
+  glm::vec3 pos_A = A.local_pos + nodes::allPositions[nodes_link_A.first];
+  glm::vec3 pos_B = B.local_pos + nodes::allPositions[nodes_link_B.first];
   return glm::length(pos_A - pos_B) - (A.radius + B.radius);//returns the distance between both bounding spheres (if negative, the spheres intersect by that distance)
 }

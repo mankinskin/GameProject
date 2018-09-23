@@ -3,7 +3,7 @@
 #include "texture.h"
 #include "mesh.h"
 #include "material.h"
-#include "entity.h"
+#include "nodes.h"
 #include <gtc/matrix_transform.hpp>
 #include "viewport.h"
 
@@ -77,7 +77,7 @@ void voxelization::voxelizeMeshes()
 void voxelization::setupShader()
 {
   voxelizationShader.bindUniformBuffer(gl::generalUniformBuffer, "GeneralUniformBuffer");
-  voxelizationShader.bindUniformBuffer(entities::entityMatrixBuffer, "NodeMatrixBuffer");
+  voxelizationShader.bindUniformBuffer(nodes::nodeMatrixBuffer, "NodeMatrixBuffer");
 }
 
 void voxelization::clearVolumeTexture()

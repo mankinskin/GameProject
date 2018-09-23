@@ -14,7 +14,7 @@
 #include "modelfile.h"
 #include "framebuffer.h"
 #include "light.h"
-#include "entity.h"
+#include "nodes.h"
 #include "mesh.h"
 #include "physics.h"
 #include "collision.h"

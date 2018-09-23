@@ -10,7 +10,7 @@ namespace app
   void quit();
   void mainmenu();
 
-  extern glm::vec3 node_mov;
+  extern glm::vec3 nodes_mov;
 
   enum State
   {

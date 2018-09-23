@@ -23,7 +23,7 @@
 #include "mesh.h"
 #include "model.h"
 #include "modelfile.h"
-#include "entity.h"
+#include "nodes.h"
 
 // Initialization
 void sequencer::initialize()
@@ -103,7 +103,7 @@ void sequencer::initializeVAOs()
   puts("Fonts...");
   text::initFontVAO();
 
-  entities::initEntityBuffers();
+  nodes::initEntityBuffers();
 
   gui::initQuadBuffer();
 
@@ -141,8 +141,8 @@ void sequencer::frame()
   gui::updateLineColors();
   text::updateFonts();
 
-  entities::updateEntityMatrices();
-  entities::updateEntityBuffers();
+  nodes::updateEntityMatrices();
+  nodes::updateEntityBuffers();
   model::mesh::updateMeshBuffers();
 
   gui::renderLines();

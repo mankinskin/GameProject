@@ -12,7 +12,7 @@ namespace physics
 	glm::vec3 local_pos;
 	float radius;
   };
-  extern std::vector<std::pair<unsigned int, unsigned int>> allBoundingSpherenode;//access this with a Bounding link index, first element of pair is an index to the node of a boundingsphere second is the bounding sphere index
+  extern std::vector<std::pair<unsigned int, unsigned int>> allBoundingSpherenodes;//access this with a Bounding link index, first element of pair is an index to the nodes of a boundingsphere second is the bounding sphere index
   extern std::vector<BoundingSphere> allBoundingSpheres;
   unsigned int createBoundingSphere(BoundingSphere pBoundingSphere);
 
