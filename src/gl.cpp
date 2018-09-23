@@ -39,34 +39,13 @@ void gl::init()
   puts("Initializing OpenGL...");
   initGLEW();
   gl::debug::init();
-  getOpenGLInitValues();
+  setupOpenGL();
   screenViewport = Viewport(app::mainWindow);
   screenViewport.bind();
-  //lights::createLight(glm::vec4(3.0f, 5.0f, -5.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 100.0f));
-  //lights::createLight(glm::vec4(-1.0f, 4.0f, 3.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 100.0f));
-  //lights::createLight(glm::vec4(1.0f, 14.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 100.0f));
-  //lights::createLight(glm::vec4(4.0f, -4.0f, 3.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 100.0f));
-  //lights::createLight(glm::vec4(3.0f, 15.0f, -5.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 100.0f));
-
-  //puts("Lighting...");
-  //lights::initLighting();
-
-  //puts("Entities...");
-  //entities::initEntityBuffers();
-
-  //puts("Models...");
-  //model::initModels();
-  //model::mesh::initMeshVAO();
-  //model::setupModels();
-
-  //entities::updateEntityMatrices();
-  //model::revalidateModelMeshOffsets();
-  //model::mesh::revalidateMeshEntityOffsets();
-
   ::debug::printErrors();
 }
 
-void gl::getOpenGLInitValues()
+void gl::setupOpenGL()
 {
   glGetIntegerv(GL_MAJOR_VERSION, &OPENGL_VERSION[0]);
   glGetIntegerv(GL_MINOR_VERSION, &OPENGL_VERSION[1]);
@@ -98,7 +77,6 @@ void gl::getOpenGLInitValues()
 
   printf("Max Uniform Block Size:\t%d\n", MAX_UNIFORM_BLOCK_SIZE);
   printf("Max Uniform Buffer Bindings:\t%d\n", MAX_UNIFORM_BUFFER_BINDINGS);
-
 
   glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
   glClearDepth(1.0f);

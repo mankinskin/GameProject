@@ -58,28 +58,6 @@ void sequencer::buildShaders()
   //voxelization::setupShader();
 }
 
-void sequencer::initializeVAOs()
-{
-  puts("Primitives...");
-  gl::initPrimitives();
-
-  puts("General Uniform Buffer...");
-  gl::initGeneralUniformBuffer();
-
-  puts("Lines...");
-  gui::initLineVAO();
-
-  puts("Fonts...");
-  text::initFontVAO();
-
-  gui::initQuadBuffer();
-
-  gui::initColorQuadVAO();
-
-  //model::mesh::initMeshVAO();
-  //model::initModels();
-}
-
 void sequencer::initModules()
 {
   puts("Framebuffers...");
@@ -107,6 +85,27 @@ void sequencer::initModules()
 
   puts("Models...");
   model::initModels();
+}
+
+void sequencer::initializeVAOs()
+{
+  puts("Primitives...");
+  gl::initPrimitives();
+
+  puts("General Uniform Buffer...");
+  gl::initGeneralUniformBuffer();
+
+  puts("Lines...");
+  gui::initLineVAO();
+
+  puts("Fonts...");
+  text::initFontVAO();
+
+  gui::initQuadBuffer();
+
+  gui::initColorQuadVAO();
+
+  //model::mesh::initMeshVAO();
 }
 
 void sequencer::clearFramebuffers()

@@ -7,13 +7,13 @@
 #include "storage.h"
 #include "vao.h"
 
-namespace gl {
-
+namespace gl
+{
   void init();
   void loadShaders();
   void bindUniformBufferLocations();
   void setViewport(app::Window& pViewport);
-  void getOpenGLInitValues();
+  void setupOpenGL();
   void initGLEW();
 
   void updateGeneralUniformBuffer();

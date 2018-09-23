@@ -5,27 +5,55 @@
 #include "mesh.h"
 #include "material.h"
 #include "texture.h"
-#define DEFAULT_MODEL_DIR "assets//models//"
+#define DEFAULT_MODEL_DIR "assets/models/"
 
 std::string model::Loader::MODEL_DIR = DEFAULT_MODEL_DIR;
 Assimp::Importer imp = Assimp::Importer();
-std::vector<model::Loader::ModelLoadFile> modelLoadBuffer;
-
+std::vector<model::Loader::ModelFile> loadBuffer;
 
 void model::Loader::includeModel(std::string pFilename, std::string pName)
 {
-  //define model file to load
-  modelLoadBuffer.emplace_back(pFilename, pName);
+  loadBuffer.emplace_back(pFilename, pName);
 }
 
 void model::Loader::loadModels()
 {
-  Model::all.reserve(Model::all.size() + modelLoadBuffer.size());
-  for (ModelLoadFile& file : modelLoadBuffer) {
+  if (!loadBuffer.size())
+	//nothing to do
+	return;
+  Model::all.reserve(Model::all.size() + loadBuffer.size());
+  for (const ModelFile& file : loadBuffer) {
 	loadModelFile(file);
   }
   Model::all.shrink_to_fit();
   model::mesh::storeMaterials();
+}
+
+void model::Loader::loadModelFile(const ModelFile pFile)
+{
+  using namespace mesh;
+  constexpr int ASSIMP_LOAD_OPTIONS = aiProcess_Triangulate;
+  const aiScene* scene = imp.ReadFile(MODEL_DIR + pFile.filename, ASSIMP_LOAD_OPTIONS);
+  const char* err = imp.GetErrorString();
+  if (err[0] != '\0') {
+	debug::warning(err);
+	return;
+  }
+  if (scene == nullptr) {
+	debug::error("scene was nullptr!");
+	return;
+  }
+  Model model;
+  model.meshOffset = allMeshes.size();
+  model.meshCount = scene->mNumMeshes;
+  loadMeshes(scene);
+  loadMaterials(scene);
+  if (pFile.modelname != "") {
+	allModelNames.push_back(pFile.modelname);
+  } else {
+	allModelNames.push_back(pFile.filename);
+  }
+  Model::all.push_back(model);
 }
 
 void model::Loader::loadMeshes(const aiScene* pScene)
@@ -45,7 +73,6 @@ void model::Loader::loadMeshes(const aiScene* pScene)
   allStaticVertices.reserve(vertexOffset + vertexCount);
   allIndices.reserve(indexOffset + faceCount * 3);
   allMeshes.reserve(allMeshes.size() + pScene->mNumMeshes);
-
 
   for (size_t m = 0; m < pScene->mNumMeshes; ++m) {
 	loadMesh(pScene, m, vertexOffset, indexOffset);
@@ -116,30 +143,6 @@ void model::Loader::loadMaterialTextures(size_t pTargetIndex, aiMaterial* pMat)
 	pMat->GetTexture(aiTextureType_SPECULAR, 0, &path_buf);
 	model::mesh::MaterialTextures::all[pTargetIndex].spec_tex = texture::Texture2D(path_buf.C_Str());
   }
-}
-
-void model::Loader::loadModelFile(ModelLoadFile pFile)
-{
-  using namespace mesh;
-  const aiScene* scene = imp.ReadFile(MODEL_DIR + pFile.filename, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded	);
-  const char* err = imp.GetErrorString();
-  if (err[0] != '\0') {
-	debug::warning(err);
-  }
-  if (scene == nullptr) {
-	debug::warning("scene was nullptr!");
-  }
-  Model model;
-  model.meshOffset = allMeshes.size();
-  model.meshCount = scene->mNumMeshes;
-  loadMeshes(scene);
-  loadMaterials(scene);
-  std::string* name = &pFile.modelname;
-  if (pFile.modelname == "") {
-	name = &pFile.filename;
-  }
-  Model::all.push_back(model);
-  allModelNames.push_back(*name);
 }
 
 void model::Loader::setModelDirectory(std::string&& pDirectory)

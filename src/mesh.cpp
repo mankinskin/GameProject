@@ -78,6 +78,21 @@ void model::mesh::initBlendMeshShader()
   blendMeshShader.addVertexAttribute("transform", 3);
 }
 
+void model::mesh::setupMeshShader()
+{
+  meshShader.build();
+  meshShader.bindUniformBuffer(gl::generalUniformBuffer, "GeneralUniformBuffer");
+  meshShader.bindUniformBuffer(entities::entityMatrixBuffer, "NodeMatrixBuffer");
+  meshShader.bindUniformBuffer(materialUBO, "MaterialBuffer");
+}
+
+void model::mesh::setupMeshNormalShader()
+{
+  meshNormalShader.build();
+  meshNormalShader.bindUniformBuffer(gl::generalUniformBuffer, "GeneralUniformBuffer");
+  meshNormalShader.bindUniformBuffer(entities::entityMatrixBuffer, "NodeMatrixBuffer");
+}
+
 void model::mesh::setupBlendMeshShader()
 {
   blendMeshShader.bindUniformBuffer(materialUBO, "MaterialBuffer");
@@ -118,7 +133,7 @@ void model::mesh::renderMeshNormals()
 	for (unsigned int m = 0; m < allMeshes.size(); ++m) {
 	  Mesh& mesh = allMeshes[m];
 	  glDrawElementsInstancedBaseInstance(GL_POINTS, mesh.indexCount, GL_UNSIGNED_INT,
-		  (void*)(mesh.indexOffset *sizeof(unsigned int)),
+		  (void*)(mesh.indexOffset * sizeof(unsigned int)),
 		  mesh.instanceCount, mesh.instanceOffset);
 	}
 	shader::Program::unuse();
@@ -158,21 +173,6 @@ void model::mesh::updateMeshBuffers()
 	//gl::uploadStorage(nodeIndexBuffer, sizeof(unsigned int)*allMeshInstancenode.size(),
 	//&allMeshInstancenode[0]);
   }
-}
-
-void model::mesh::setupMeshShader()
-{
-  meshShader.build();
-  meshShader.bindUniformBuffer(gl::generalUniformBuffer, "GeneralUniformBuffer");
-  meshShader.bindUniformBuffer(entities::entityMatrixBuffer, "NodeMatrixBuffer");
-  meshShader.bindUniformBuffer(materialUBO, "MaterialBuffer");
-}
-
-void model::mesh::setupMeshNormalShader()
-{
-  meshNormalShader.build();
-  meshNormalShader.bindUniformBuffer(gl::generalUniformBuffer, "GeneralUniformBuffer");
-  meshNormalShader.bindUniformBuffer(entities::entityMatrixBuffer, "NodeMatrixBuffer");
 }
 
 void model::mesh::addInstancesToMesh(unsigned int pMeshIndex, std::vector<unsigned int> pNodeIDs)
