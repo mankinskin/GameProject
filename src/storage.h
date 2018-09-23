@@ -19,14 +19,30 @@ namespace gl
 	  using size_type = size_t;
 	  Storage()
 	  {}
-	  Storage(std::string pName, size_type pSize,
-		  int pFlags, const void* pData = nullptr)
-		:name(pName), capacity(pSize * sizeof(T)), flags(pFlags)
+	  Storage(std::string pName, const std::vector<T>& c, int pFlags)
+		: name(pName)
+		, capacity(c.size() * sizeof(T))
+		, flags(pFlags)
+	  {
+		create(&c[0]);
+	  }
+	  Storage(std::string pName, size_type pSize, int pFlags, const void* pData = nullptr)
+		: name(pName)
+		, capacity(pSize * sizeof(T))
+		, flags(pFlags)
+	  {
+		create(pData);
+	  }
+	  private:
+	  void create(const void* pData)
 	  {
 		glCreateBuffers(1, &ID);
-		glNamedBufferStorage(ID, capacity, pData, flags);
+		if (capacity)
+		  glNamedBufferStorage(ID, capacity, pData, flags);
+		else
+		  debug::warning("Can't create Storage " + name + ": would be empty!");
 	  }
-
+	  public:
 	  void setTarget(unsigned int pTarget)
 	  {
 		target = pTarget;
@@ -50,17 +66,28 @@ namespace gl
   template<typename T>
 	struct StreamStorage : public Storage<T>
 	{
-	  StreamStorage()
-	  {}
-	  StreamStorage(std::string pName, typename Storage<T>::size_type pSize,
-		  int pFlags, const void* pData = nullptr)
-		: Storage<T>(pName, pSize, pFlags | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT, pData)
+	  private:
+	  void map()
 	  {
 		mappedPtr = glMapNamedBufferRange(Storage<T>::ID, 0,
 			Storage<T>::capacity, Storage<T>::flags);
 		if (!mappedPtr) {
 		  debug::warning("Failed to map Storage " + Storage<T>::name + " !\n");
 		}
+	  }
+	  public:
+	  StreamStorage()
+	  {}
+	  StreamStorage(std::string pName, const std::vector<T>& c, int pFlags)
+		: Storage<T>(pName, c, pFlags | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT)
+	  {
+		map();
+	  }
+	  StreamStorage(std::string pName, typename Storage<T>::size_type pSize,
+		  int pFlags, const void* pData = nullptr)
+		: Storage<T>(pName, pSize, pFlags | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT, pData)
+	  {
+		map();
 	  }
 
 	  void* mappedPtr;
