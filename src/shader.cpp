@@ -25,8 +25,7 @@ void shader::resetShaderDirectory()
 std::string extractStageString(std::string filename)
 {
   unsigned int begin = filename.find_first_of('.') + 1;
-  unsigned int end = filename.find_last_of('.');
-  return filename.substr(begin, end);
+  return filename.substr(begin);
 }
 
 GLenum toStageType(std::string stagestring)
@@ -55,7 +54,7 @@ shader::Stage::Stage(std::string pFilename)
   if (!type) {
 	debug::fatal(
 		"\nShader::loadShader(): invalid shader file name " + filename +
-		"!\nHas to include '.vert', '.frag', '.geo' or '.comp'!");
+		"!\nHas to end with '.vert', '.frag', '.geo' or '.comp'!");
   }
 }
 
@@ -63,9 +62,9 @@ void shader::Stage::compile()
 {
   printf("Shader: Compiling %s\n", filename.c_str());
   std::ifstream file;
-  file.open(SHADER_DIR + filename + ".txt");
+  file.open(SHADER_DIR + filename );
   if (file.fail()) {
-	debug::fatal("Failed to compile shader: Could not open " + SHADER_DIR + filename + ".txt" + "!\n");
+	debug::fatal("Failed to compile shader: Could not open " + SHADER_DIR + filename + "!\n");
 	return;
   }
   ID = glCreateShader(type);
