@@ -62,7 +62,7 @@ namespace text
 	private:
 	void readFontfile(std::string pFilepath);
 	void readFace(std::string pFilepath);
-	const std::string FONT_DIR = "fonts/";
+	const std::string FONT_DIR = "assets/fonts/";
 	glm::uvec2 size = glm::uvec2(4, 4);
 	glm::uvec2 dpi = glm::uvec2(100, 100);
 	unsigned int padding = 0;
