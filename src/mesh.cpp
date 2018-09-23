@@ -2,7 +2,6 @@
 #include "gldebug.h"
 #include "model.h"
 #include "shader.h"
-#include "nodes.h"
 #include "vao.h"
 #include "light.h"
 #include "material.h"
@@ -16,7 +15,7 @@ bool model::mesh::cull_face = true;
 std::vector<model::mesh::Mesh> model::mesh::allMeshes;
 std::vector<unsigned int> model::mesh::allIndices;
 std::vector<model::mesh::Vertex> model::mesh::allStaticVertices;
-std::vector<unsigned int> model::mesh::allMeshInstancenodes;
+std::vector<nodes::NodeID> model::mesh::allMeshInstanceNodes;
 
 std::vector<unsigned int> model::mesh::opaqueMeshList;
 std::vector<unsigned int> model::mesh::blendMeshList;
@@ -85,7 +84,7 @@ void model::mesh::setupMeshShader()
 {
   meshShader.build();
   meshShader.bindUniformBuffer(gl::generalUniformBuffer, "GeneralUniformBuffer");
-  meshShader.bindUniformBuffer(nodes::nodeMatrixBuffer, "NodeMatrixBuffer");
+  meshShader.bindUniformBuffer(nodes::nodeBuffer, "NodeMatrixBuffer");
   meshShader.bindUniformBuffer(materialUBO, "MaterialBuffer");
 }
 
@@ -93,7 +92,7 @@ void model::mesh::setupMeshNormalShader()
 {
   meshNormalShader.build();
   meshNormalShader.bindUniformBuffer(gl::generalUniformBuffer, "GeneralUniformBuffer");
-  meshNormalShader.bindUniformBuffer(nodes::nodeMatrixBuffer, "NodeMatrixBuffer");
+  meshNormalShader.bindUniformBuffer(nodes::nodeBuffer, "NodeMatrixBuffer");
 }
 
 void model::mesh::setupBlendMeshShader()
@@ -101,7 +100,7 @@ void model::mesh::setupBlendMeshShader()
   blendMeshShader.bindUniformBuffer(materialUBO, "MaterialBuffer");
   blendMeshShader.bindUniformBuffer(lights::lightDataUBO, "LightDataBuffer");
   blendMeshShader.bindUniformBuffer(gl::generalUniformBuffer, "GeneralUniformBuffer");
-  blendMeshShader.bindUniformBuffer(nodes::nodeMatrixBuffer, "NodeMatrixBuffer");
+  blendMeshShader.bindUniformBuffer(nodes::nodeBuffer, "NodeMatrixBuffer");
 }
 
 void model::mesh::renderMeshes()
@@ -172,20 +171,20 @@ void model::mesh::renderBlendMeshes()
 
 void model::mesh::updateMeshBuffers()
 {
-  if (allMeshInstancenodes.size()) {
-	gl::uploadStorage(nodesIndexBuffer, sizeof(unsigned int)*allMeshInstancenodes.size(),
-	&allMeshInstancenodes[0]);
+  if (allMeshInstanceNodes.size()) {
+	gl::uploadStorage(nodesIndexBuffer, sizeof(unsigned int)*allMeshInstanceNodes.size(),
+	&allMeshInstanceNodes[0]);
   }
 }
 
-void model::mesh::addInstancesToMesh(unsigned int pMeshIndex, std::vector<unsigned int> pNodeIDs)
+void model::mesh::addInstancesToMesh(unsigned int pMeshIndex, std::vector<nodes::NodeID> pNodeIDs)
 {
   Mesh& msh = allMeshes[pMeshIndex];
   if (msh.instanceCount == 0) {
-	msh.instanceOffset = allMeshInstancenodes.size();
+	msh.instanceOffset = allMeshInstanceNodes.size();
   }
   msh.instanceCount += pNodeIDs.size();
-  allMeshInstancenodes.insert(allMeshInstancenodes.begin() + msh.instanceOffset,
+  allMeshInstanceNodes.insert(allMeshInstanceNodes.begin() + msh.instanceOffset,
 	  pNodeIDs.begin(), pNodeIDs.end());
 }
 

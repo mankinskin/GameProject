@@ -36,16 +36,15 @@ void model::setupModels()
   using namespace mesh;
   srand(time(NULL));
   unsigned int nodes_to_generate = 100;
-  std::vector<unsigned int> generated_nodes(nodes_to_generate);
-  nodes::reserveEntities(nodes_to_generate);
+  std::vector<nodes::NodeID> generated_nodes(nodes_to_generate);
+  nodes::Node::reserve(nodes_to_generate);
 
   unsigned int grid_width = 100;
 
-  for (unsigned int ni = 0; ni < nodes_to_generate; ++ni) {
-    nodes::createEntity(&generated_nodes[ni]);
-    nodes::setPos(generated_nodes[ni], glm::vec3((float)(rand()%grid_width)- (float)(grid_width/2), (float)(rand() % 10) - (float)(10 / 2), (float)(rand() % grid_width) - (float)(grid_width / 2)));
-    nodes::setScale(generated_nodes[ni], glm::vec3(0.5f, 0.5f, 0.5f));
-    nodes::setRotation(generated_nodes[ni], glm::vec4(0.0f, 1.0f, 0.0f, 1.5f));
+  for (nodes::NodeID& node : generated_nodes) {
+    node = nodes::Node::create();
+    node->setPos(glm::vec3((float)(rand()%grid_width)- (float)(grid_width/2), (float)(rand() % 10) - (float)(10 / 2), (float)(rand() % grid_width) - (float)(grid_width / 2)));
+    node->setScale(glm::vec3(0.5f, 0.5f, 0.5f));
   }
 
   addInstancesToMesh(getModel(0).meshOffset, generated_nodes);

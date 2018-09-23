@@ -5,6 +5,7 @@
 #include "storage.h"
 #include "vao.h"
 #include "shader.h"
+#include "nodes.h"
 
 namespace model
 {
@@ -63,7 +64,7 @@ namespace model
 		unsigned int pVertexCount, unsigned int pMaterialIndex);
 	unsigned int createMesh(std::vector<Vertex> pVertices, std::vector<unsigned int> pIndices,
 		unsigned int pMaterialIndex);
-	void addInstancesToMesh(unsigned int pMeshIndex, std::vector<unsigned int> pNodeIDs);
+	void addInstancesToMesh(unsigned int pMeshIndex, std::vector<nodes::NodeID> pNodeIDs);
 
 	void revalidateMeshNodeOffsets();
 	void updateMeshBuffers();
@@ -81,7 +82,7 @@ namespace model
 	extern std::vector<unsigned int> allIndices;
 	extern std::vector<Vertex> allStaticVertices;
 	extern std::vector<Mesh> allMeshes;
-	extern std::vector<unsigned int> allMeshInstancenodes;
+	extern std::vector<nodes::NodeID> allMeshInstanceNodes;
 	extern bool draw_normals;
 	extern bool cull_face;
 	extern shader::Program meshShader;

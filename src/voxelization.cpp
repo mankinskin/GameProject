@@ -77,7 +77,7 @@ void voxelization::voxelizeMeshes()
 void voxelization::setupShader()
 {
   voxelizationShader.bindUniformBuffer(gl::generalUniformBuffer, "GeneralUniformBuffer");
-  voxelizationShader.bindUniformBuffer(nodes::nodeMatrixBuffer, "NodeMatrixBuffer");
+  voxelizationShader.bindUniformBuffer(nodes::nodeBuffer, "NodeMatrixBuffer");
 }
 
 void voxelization::clearVolumeTexture()

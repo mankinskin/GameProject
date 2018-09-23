@@ -103,7 +103,7 @@ void sequencer::initializeVAOs()
   puts("Fonts...");
   text::initFontVAO();
 
-  nodes::initEntityBuffers();
+  nodes::initNodeBuffers();
 
   gui::initQuadBuffer();
 
@@ -141,8 +141,7 @@ void sequencer::frame()
   gui::updateLineColors();
   text::updateFonts();
 
-  nodes::updateEntityMatrices();
-  nodes::updateEntityBuffers();
+  nodes::updateNodeBuffers();
   model::mesh::updateMeshBuffers();
 
   gui::renderLines();

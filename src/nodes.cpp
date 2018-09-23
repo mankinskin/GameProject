@@ -4,107 +4,79 @@
 
 #include <gtc/matrix_transform.hpp>
 
-std::vector<glm::mat4> nodes::allMatrices;
-std::vector<glm::vec3> nodes::allPositions;
-
-std::vector<glm::vec3> nodes::allNormals;
-std::vector<glm::vec3> nodes::allScales;
-std::vector<glm::vec4> nodes::allRotations;
-
+utils::Container<nodes::Node> nodes::Node::all;
 unsigned int nodes::num_nodes;
-gl::StreamStorage<glm::mat4> nodes::nodeMatrixBuffer;
+gl::StreamStorage<glm::mat4> nodes::nodeBuffer;
 
-
-glm::vec4 getTranslation(const glm::mat4& m)
+void nodes::initNodeBuffers()
 {
-  return m[3];
-}
-void nodes::initEntityBuffers()
-{
-  nodeMatrixBuffer = gl::StreamStorage<glm::mat4>("EntityMatrixBuffer", MAX_ENTITIES, GL_MAP_WRITE_BIT);
-  nodeMatrixBuffer.setTarget(GL_UNIFORM_BUFFER);
+  nodeBuffer = gl::StreamStorage<glm::mat4>("NodeBuffer", MAX_NODES, GL_MAP_WRITE_BIT);
+  nodeBuffer.setTarget(GL_UNIFORM_BUFFER);
 }
 
-void nodes::updateEntityBuffers()
+void nodes::updateNodeBuffers()
 {
-  //printf("Entities: %lu\n", allMatrices.size());
-  //for (size_t m = 0; m < allMatrices.size(); ++m) {
-  //  const glm::mat4& mat = allMatrices[m];
+  //printf("Nodes: %lu\n", Node::all.size());
+  //for (size_t m = 0; m < Node::all.size(); ++m) {
+  //  const Node& node = Node::all[m];
   //  printf("Mat %lu\n\t%f %f %f %f\n\t%f %f %f %f\n\t%f %f %f %f\n\t%f %f %f %f\n\n", m,
-  //  	mat[0][0], mat[0][1], mat[0][2], mat[0][3],
-  //  	mat[1][0], mat[1][1], mat[1][2], mat[1][3],
-  //  	mat[2][0], mat[2][1], mat[2][2], mat[2][3],
-  //  	mat[3][0], mat[3][1], mat[3][2], mat[3][3]);
+  //  	node.mat[0][0], node.mat[0][1], node.mat[0][2], node.mat[0][3],
+  //  	node.mat[1][0], node.mat[1][1], node.mat[1][2], node.mat[1][3],
+  //  	node.mat[2][0], node.mat[2][1], node.mat[2][2], node.mat[2][3],
+  //  	node.mat[3][0], node.mat[3][1], node.mat[3][2], node.mat[3][3]);
   //}
-  if (allMatrices.size()) {
-	gl::uploadStorage(nodeMatrixBuffer, sizeof(glm::mat4)*allMatrices.size(), &allMatrices[0]);
+  if (Node::all.size()) {
+	gl::uploadStorage(nodeBuffer, sizeof(glm::mat4)*Node::all.size(), &Node::all[0]);
   }
 }
 
-void nodes::updateEntityMatrices()
+nodes::NodeID nodes::Node::create()
 {
-  for (unsigned int e = 0; e < num_nodes; ++e) {
-	allMatrices[e] = glm::translate(glm::mat4(1.0f), allPositions[e]);
-	allMatrices[e] = glm::scale(allMatrices[e], allScales[e]);
-	//glm::vec4& rot = allRotations[e];
-	//allMatrices[e] = glm::rotate(allMatrices[e], rot.w*glm::pi<float>(), allNormals[e] + glm::vec3(rot));
-  }
+  return all.makeID(Node(glm::mat4(1.0f)));
 }
 
-void nodes::resizeEntities(const size_t n)
+void nodes::Node::reserve(const size_t n)
 {
-  allRotations.resize(num_nodes);
-  allNormals.resize(num_nodes, glm::vec3(0.0f, 1.0f, 0.0f));
-  allMatrices.resize(num_nodes, glm::mat4(1.0f));
-  allPositions.resize(num_nodes);
-  allScales.resize(num_nodes, glm::vec3(1.0f));
-}
-void nodes::createEntities(unsigned int pCount, unsigned int * pEntityIDs)
-{
-  for (unsigned int p = 0; p < pCount; ++p) {
-	*(pEntityIDs + p) = num_nodes + p;
-  }
-  num_nodes += pCount;
-  resizeEntities(num_nodes);
+  all.reserve(num_nodes + n);
 }
 
-void nodes::createEntity(unsigned int* pNode)
+glm::vec4 nodes::Node::getTranslation() const
 {
-  newEntityID(*pNode);
-  resizeEntities(num_nodes);
+  return mat[3];
 }
-
-void nodes::newEntityID(unsigned int& pNode)
+glm::vec3 nodes::Node::getPos() const
 {
-  pNode = num_nodes++;;
+  return mat[3];
 }
-
-void nodes::reserveEntities(unsigned int pCount)
+glm::vec3 nodes::Node::getScale() const
 {
-  allNormals.reserve(num_nodes + pCount);
-  allRotations.resize(num_nodes + pCount);
-  allMatrices.resize(num_nodes + pCount);
-  allPositions.resize(num_nodes + pCount);
-  allScales.resize(num_nodes + pCount);
+  return glm::vec3(mat[0][0], mat[1][1], mat[2][2]);
 }
-
-void nodes::setScale(unsigned int pNodeID, glm::vec3 pScale)
+glm::vec4 nodes::Node::getRotation() const
 {
-  allScales[pNodeID] = pScale;
+  return glm::vec4();	// use quaternions
 }
-
-void nodes::setPos(unsigned int pNodeID, glm::vec3 pPos)
+void nodes::Node::setRotation(const glm::vec3 v)
 {
-  allPositions[pNodeID] = pPos;
+
 }
-
-void nodes::setRotation(unsigned int pNodeID, glm::vec4 pRotation)
+void nodes::Node::setScale(const glm::vec3 v)
 {
-  allRotations[pNodeID] += pRotation;
 }
-
-void nodes::translate(unsigned int pNodeID, glm::vec3 pPos)
+void nodes::Node::setPos(glm::vec3 v)
 {
-  allPositions[pNodeID] += pPos;
+  mat[3] = glm::vec4(v, 1.0f);
+}
+void nodes::Node::rotate(const float angle, const glm::vec3 v)
+{
+  mat = glm::rotate(mat, angle, v);
+}
+void nodes::Node::scale(const glm::vec3 v)
+{
+  mat = glm::scale(mat, v);
+}
+void nodes::Node::move(glm::vec3 v)
+{
+  mat[3] += glm::vec4(v, 1.0f);
 }
 

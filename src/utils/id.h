@@ -21,6 +21,8 @@ namespace utils
 	size_t index;
 	typename Management<T>::ArrayType* container;
 
+	constexpr ID()
+	{}
 	constexpr ID(const size_t i, typename Management<T>::ArrayType* _c)
 	  : container(_c)
 	  , index(i)

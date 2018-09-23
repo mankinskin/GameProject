@@ -1,23 +1,25 @@
 #pragma once
 #include <glm.hpp>
 #include <vector>
+#include "nodes.h"
 
 namespace physics
 {
   struct BoundingSphere
   {
 	BoundingSphere(glm::vec3 pLocalPos, float pRadius)
-	  :local_pos(pLocalPos), radius(pRadius)
+	  : local_pos(pLocalPos)
+	  , radius(pRadius)
 	{}
 	glm::vec3 local_pos;
 	float radius;
   };
-  extern std::vector<std::pair<unsigned int, unsigned int>> allBoundingSpherenodes;//access this with a Bounding link index, first element of pair is an index to the nodes of a boundingsphere second is the bounding sphere index
+  extern std::vector<std::pair<nodes::NodeID, size_t>> allBoundingSphereNodes;//access this with a Bounding link index, first element of pair is an index to the nodes of a boundingsphere second is the bounding sphere index
   extern std::vector<BoundingSphere> allBoundingSpheres;
   unsigned int createBoundingSphere(BoundingSphere pBoundingSphere);
 
-  unsigned int linkNodeToBoundingSphere(unsigned int pNodeIndex, BoundingSphere pBoundingSphere);
-  unsigned int linkNodeToBoundingSphere(unsigned int pNodeIndex, unsigned int pBoundingSphereIndex);
+  unsigned int linkNodeToBoundingSphere(const nodes::NodeID pNodeIndex, BoundingSphere pBoundingSphere);
+  unsigned int linkNodeToBoundingSphere(const nodes::NodeID pNodeIndex, unsigned int pBoundingSphereIndex);
 
   float checkTriangleIntersect(unsigned int pIndexOffset_A, unsigned int pEntity_A, unsigned int pIndexOffset_B, unsigned int pEntity_B);
   float checkSphereIntersect(unsigned int pSphereA, unsigned int pSphereB);

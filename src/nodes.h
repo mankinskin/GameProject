@@ -2,38 +2,42 @@
 #include "storage.h"
 #include <vector>
 #include <glm.hpp>
+#include "utils/id.h"
 
 //nodes
 //nodes hold the information about the transformation of an object. They store a position, an orientation and a scale.
 namespace nodes
 {
-  void initEntityBuffers();
-  void updateEntityBuffers();
-  void updateEntityMatrices();
+  struct Node
+  {
+	Node(const glm::mat4& pMat)
+	  : mat(pMat)
+	{}
+	using Container = utils::Container<Node>;
+	using ID = typename Container::ID;
+	static Container all;
+	static ID create();
+	static void reserve(const size_t n);
+	glm::mat4 mat;
 
-  void createEntities(unsigned int pCount, unsigned int* pEntityIDs);
-  void createEntity(unsigned int* pEntityID);
-  void newEntityID(unsigned int & pNode);
-  void resizeEntities(const size_t n);
-  void reserveEntities(unsigned int pCount);
+	void setPos(const glm::vec3 v);
+	void move(const glm::vec3 v);
+	void setRotation(const glm::vec3 v);
+	void setScale(const glm::vec3 v);
+	void rotate(const float angle, const glm::vec3 v);
+	void scale(const glm::vec3 v);
+	glm::vec4 getTranslation() const;
+	glm::vec3 getPos() const;
+	glm::vec3 getScale() const;
+	glm::vec4 getRotation() const;
+  };
+  using NodeID = typename Node::ID;
+  void initNodeBuffers();
+  void updateNodeBuffers();
 
-  void setPos(unsigned int pNodeID, glm::vec3 pPos);
-  void setRotation(unsigned int pNodeID, glm::vec4 pRotation);
-  void setScale(unsigned int pNodeID, glm::vec3 pScale);
+  extern gl::StreamStorage<glm::mat4> nodeBuffer;
 
-  void translate(unsigned int pNodeID, glm::vec3 pPos);
-
-  extern gl::StreamStorage<glm::mat4> nodeMatrixBuffer;
-
-  const unsigned int MAX_ENTITIES = 1000;
+  const unsigned int MAX_NODES = 1000;
   extern unsigned int num_nodes;
-
-  extern std::vector<glm::vec3> allPositions;
-  extern std::vector<glm::vec3> allNormals;
-  extern std::vector<glm::vec4> allRotations;
-
-  extern std::vector<glm::vec3> allScales;
-  extern std::vector<glm::mat4> allMatrices;
-
 
 }
