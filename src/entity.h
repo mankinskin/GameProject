@@ -9,11 +9,12 @@ namespace entities
 {
   void initEntityBuffers();
   void updateEntityBuffers();
-
   void updateEntityMatrices();
+
   void createEntities(unsigned int pCount, unsigned int* pEntityIDs);
   void createEntity(unsigned int* pEntityID);
   void newEntityID(unsigned int & pNode);
+  void resizeEntities(const size_t n);
   void reserveEntities(unsigned int pCount);
 
   void setPos(unsigned int pNodeID, glm::vec3 pPos);
@@ -21,7 +22,6 @@ namespace entities
   void setScale(unsigned int pNodeID, glm::vec3 pScale);
 
   void translate(unsigned int pNodeID, glm::vec3 pPos);
-
 
   extern gl::StreamStorage<glm::mat4> entityMatrixBuffer;
 

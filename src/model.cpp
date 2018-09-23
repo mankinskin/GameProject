@@ -42,10 +42,10 @@ void model::setupModels()
   unsigned int grid_width = 100;
 
   for (unsigned int ni = 0; ni < nodes_to_generate; ++ni) {
-	entities::createEntity(&generated_nodes[ni]);
-	entities::setPos(generated_nodes[ni], glm::vec3((float)(rand()%grid_width)- (float)(grid_width/2), (float)(rand() % 10) - (float)(10 / 2), (float)(rand() % grid_width) - (float)(grid_width / 2)));
-	entities::setScale(generated_nodes[ni], glm::vec3(0.5f, 0.5f, 0.5f));
-	entities::setRotation(generated_nodes[ni], glm::vec4(0.0f, 1.0f, 0.0f, 1.5f));
+    entities::createEntity(&generated_nodes[ni]);
+    entities::setPos(generated_nodes[ni], glm::vec3((float)(rand()%grid_width)- (float)(grid_width/2), (float)(rand() % 10) - (float)(10 / 2), (float)(rand() % grid_width) - (float)(grid_width / 2)));
+    entities::setScale(generated_nodes[ni], glm::vec3(0.5f, 0.5f, 0.5f));
+    entities::setRotation(generated_nodes[ni], glm::vec4(0.0f, 1.0f, 0.0f, 1.5f));
   }
 
   addInstancesToMesh(getModel(0).meshOffset, generated_nodes);
