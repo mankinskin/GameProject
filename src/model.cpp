@@ -39,12 +39,13 @@ void model::setupModels()
   std::vector<nodes::NodeID> generated_nodes(nodes_to_generate);
   nodes::Node::reserve(nodes_to_generate);
 
-  unsigned int grid_width = 100;
+  unsigned int grid_width = 10;
 
-  for (nodes::NodeID& node : generated_nodes) {
+  for (size_t n = 0; n < generated_nodes.size(); ++n) {
+	nodes::NodeID& node = generated_nodes[n];
     node = nodes::Node::create();
-    node->setPos(glm::vec3((float)(rand()%grid_width)- (float)(grid_width/2), (float)(rand() % 10) - (float)(10 / 2), (float)(rand() % grid_width) - (float)(grid_width / 2)));
-    node->setScale(glm::vec3(0.5f, 0.5f, 0.5f));
+    node->setPos(glm::vec3((float)((rand() + n)%grid_width)- (float)(grid_width/2), (float)((rand()+n) % 10) - (float)(10 / 2), (float)((rand() + n) % grid_width) - (float)(grid_width / 2)));
+    node->setScale(glm::vec3(0.001f, 0.001f, 0.001f));
   }
 
   addInstancesToMesh(getModel(0).meshOffset, generated_nodes);

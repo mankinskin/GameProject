@@ -18,6 +18,7 @@
 #include "font.h"
 #include "layouts/button.h"
 #include "layouts/window.h"
+#include "layouts/slider.h"
 
 static glm::vec2 pixel_size;
 
@@ -83,7 +84,7 @@ void gui::initWidgets()
   using namespace input;
 
   const float width = 1.0f;
-  const size_t xcount = 5;
+  const size_t xcount = 2;
 
   puts("Button");
   for (size_t w = 0; w < 1; ++w) {
@@ -94,6 +95,11 @@ void gui::initWidgets()
   puts("Window");
   for (size_t w = 0; w < 1; ++w) {
     Window b(glm::vec4(-1.0f + (width/xcount) * (w%xcount), 0.0f - (0.1f * floor(w/xcount)), toScreenX(300), toScreenY(200)), windowPreset);
+    puts("Finished");
+  }
+  puts("Slider");
+  for (size_t s = 0; s < 3; ++s) {
+    Slider b(glm::vec4(-0.8f + (width/xcount) * (s%xcount), -0.5f - (0.1f * floor(s/xcount)), toScreenX(300), toScreenY(10)), sliderPreset<>, 0.0f, 1.0f, gl::getColor("grey")->x);
     puts("Finished");
   }
   puts("End");

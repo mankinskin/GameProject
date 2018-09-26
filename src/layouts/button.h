@@ -11,15 +11,14 @@ namespace gui
   {
 	static constexpr size_t ELEMENT_COUNT = ButtonBase::ELEMENT_COUNT;
 	using Base = ButtonBase;
-	using Colors = typename Base::Colors;
 	using Preset = typename Base::Preset;
+	using Colors = typename Base::Colors::Colors;
+	using Elements = typename Base::Elements;
 
 	Button(const glm::vec4 q, const Preset pre)
 	  : Base(q, pre)
 	{
 	  using namespace signals;
-	  using Colors = typename Base::Colors::Colors;
-	  using Elements = typename Base::Elements;
 	  const Base& w = *this;
 	  puts("Init Button");
 	  link(w.enter, func(applyColor<std::tuple_element_t<0, Elements>>, std::get<0>(w), gl::getColor("white")));

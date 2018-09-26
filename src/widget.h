@@ -78,9 +78,29 @@ namespace gui
 	  pW.move(pV);
 	}
   template<typename W>
+	void moveWidgetX(const W& pW, const float& pV)
+	{
+	  pW.move(glm::vec2(pV, 0.0f));
+	}
+  template<typename W>
+	void moveWidgetY(const W& pW, const float& pV)
+	{
+	  pW.move(glm::vec2(0.0f, pV));
+	}
+  template<typename W>
 	void setWidgetPos(const W& pW, const glm::vec2& pV)
 	{
 	  pW.setPos(pV);
+	}
+  template<typename W>
+	void setWidgetPosX(const W& pW, const float& pV)
+	{
+	  pW->x = pV;
+	}
+  template<typename W>
+	void setWidgetPosY(const W& pW, const float& pV)
+	{
+	  pW->y = pV;
 	}
   template<typename W>
 	void resizeWidget(const W& pW, const glm::vec2& pV)
@@ -198,6 +218,18 @@ namespace gui
 	//};
 
 	const Col color;
+	void move(const glm::vec2 v) const
+	{
+	  (*this)->move(v);
+	}
+	void resize(const glm::vec2 v) const
+	{
+	  (*this)->resize(v);
+	}
+	void setPos(const glm::vec2 p) const
+	{
+	  (*this)->setPos(p);
+	}
   };
   template<typename Col>
 	void applyColor_imp(const QuadElement<Col>& elem, const Col col)
