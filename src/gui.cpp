@@ -15,6 +15,7 @@
 #include "app.h"
 #include "light.h"
 #include "viewport.h"
+#include "font.h"
 #include "layouts/button.h"
 #include "layouts/window.h"
 
@@ -66,6 +67,14 @@ float gui::toScreenY(const size_t pixelsY)
 glm::vec2 gui::toScreen(const glm::uvec2 pixels)
 {
   return glm::vec2(toScreenX(pixels.x), toScreenY(pixels.y));
+}
+
+void gui::draw()
+{
+  glDepthFunc(GL_ALWAYS);
+  renderColorQuads();
+  text::renderFonts();
+  glDepthFunc(GL_LESS);
 }
 
 void gui::initWidgets()

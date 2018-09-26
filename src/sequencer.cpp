@@ -145,9 +145,9 @@ void sequencer::frame()
   model::mesh::updateMeshBuffers();
 
   gui::renderLines();
-  gui::renderColorQuads();
-  text::renderFonts();
   model::mesh::renderMeshes();
+  // GUI
+  gui::draw();
 
   glfwSwapBuffers(app::mainWindow.window);
   input::end();

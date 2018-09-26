@@ -51,7 +51,6 @@ void gui::updateColorQuads()
 
 void gui::renderColorQuads()
 {
-  glDepthFunc(GL_LEQUAL);
 
   colorQuadVAO.bind();
   colorQuadShader.use();
@@ -60,7 +59,5 @@ void gui::renderColorQuads()
 
   shader::Program::unuse();
   colorQuadVAO.unbind();
-
-  glDepthFunc(GL_LESS);
 }
 
