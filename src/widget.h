@@ -206,7 +206,7 @@ namespace gui
 	}
 
   template<typename... Elems>
-	struct Widget : public std::tuple<Elems...>, WidgetSignals<Elems...>
+	struct Widget : public BoundingBoxID, std::tuple<Elems...>, WidgetSignals<Elems...>
   {
 	static constexpr size_t ELEMENT_COUNT = sizeof...(Elems);
 	static constexpr size_t QUAD_COUNT = utils::sum(Elems::QUAD_COUNT...);
@@ -219,7 +219,7 @@ namespace gui
 	using ResizePolicy = std::array<glm::vec4, sizeof...(Elems)>;
 
 	using Signals::hold;
-	const BoundingBoxID box;
+
 	const MovePolicy movepolicy;
 	const ResizePolicy resizepolicy;
 
@@ -238,9 +238,9 @@ namespace gui
 	};
 
 	Widget(const glm::vec4& q, const Preset& preset)
-	  : Elements(std::move(utils::convert_tuple<Elems...>(preset.genQuads(q), preset.subpresets)))
+	  : BoundingBoxID(BoundingBoxID::all.makeID(q))
+	  , Elements(std::move(utils::convert_tuple<Elems...>(preset.genQuads(q), preset.subpresets)))
 	  , Signals((Elements)*this)
-	  , box(BoundingBoxID::all.makeID(q))
 	  , movepolicy(preset.movepolicy)
 	  , resizepolicy(preset.resizepolicy)
 	{
@@ -260,7 +260,7 @@ namespace gui
 	  void move_n(utils::_index<N> i, const glm::vec2 v) const
 	  {
 		move_n(utils::_index<N-1>(), v);
-		std::get<N-1>((Elements)*this)->move(v * movepolicy[N-1]);
+		std::get<N-1>((Elements)*this).move(v * movepolicy[N-1]);
 	  }
 	void resize_n(utils::_index<0> i, const glm::vec2 v) const
 	{}
@@ -268,32 +268,26 @@ namespace gui
 	  void resize_n(utils::_index<N> i, const glm::vec2 v) const
 	  {
 		resize_n(utils::_index<N-1>(), v);
-		std::get<N-1>((Elements)*this)->move(v * glm::vec2(resizepolicy[N-1].x, resizepolicy[N-1].y));
-		std::get<N-1>((Elements)*this)->resize(v * glm::vec2(resizepolicy[N-1].z, resizepolicy[N-1].w));
+		std::get<N-1>((Elements)*this).move(v * glm::vec2(resizepolicy[N-1].x, resizepolicy[N-1].y));
+		std::get<N-1>((Elements)*this).resize(v * glm::vec2(resizepolicy[N-1].z, resizepolicy[N-1].w));
 	  }
 	void move(const glm::vec2 v) const
 	{
-	  box->x += v.x;
-	  box->y += v.y;
+	  (*this)->move(v);
 	  move_n(utils::_index<ELEMENT_COUNT>(), v);
 	}
 	void resize(const glm::vec2 v) const
 	{
-	  box->z += v.x;
-	  box->w += v.y;
+	  (*this)->resize(v);
 	  resize_n(utils::_index<ELEMENT_COUNT>(), v);
 	}
 	void setPos(const glm::vec2 p)
 	{
-	  move(p - glm::vec2(box->x, box->y));
+	  move(p - glm::vec2((*this)->x, (*this)->y));
 	}
 	void setSize(const glm::vec2 s)
 	{
-	  resize(s - glm::vec2(box->z, box->w));
-	}
-	const Widget<Elems...>* operator->() const
-	{
-	  return this;
+	  resize(s - glm::vec2((*this)->z, (*this)->w));
 	}
   };
 
