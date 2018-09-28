@@ -178,11 +178,11 @@ namespace gui
 	using Preset = Col;
 
 	QuadElement(const Quad&& q, const Col&& col)
-	  : QuadID(Quad::all.makeID(std::move(q)))
+	  : QuadID(QuadID::all.makeID(std::move(q)))
 	  , Signals((QuadID)*this)
 	  , color(std::move(col))
 	{
-	  printf("Creating QuadElement\n%lu quads.\n", Quad::all.size());
+	  printf("Creating QuadElement\n%lu quads.\n", QuadID::all.size());
 	  colorQuad((QuadID)*this, color);
 	}
 
@@ -240,7 +240,7 @@ namespace gui
 	Widget(const glm::vec4& q, const Preset& preset)
 	  : Elements(std::move(utils::convert_tuple<Elems...>(preset.genQuads(q), preset.subpresets)))
 	  , Signals((Elements)*this)
-	  , box(BoundingBox::all.makeID(q))
+	  , box(BoundingBoxID::all.makeID(q))
 	  , movepolicy(preset.movepolicy)
 	  , resizepolicy(preset.resizepolicy)
 	{

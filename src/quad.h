@@ -16,9 +16,6 @@ namespace gui
   // rendering is responsibility of the component using the quad
   struct Quad : public glm::vec4
   {
-	using Container = utils::Container<Quad, utils::UnmanagedPolicy>;
-	using ID = typename Container::ID;
-	static Container all;	// all quads
 	constexpr Quad(glm::vec4 pData)
 	  : glm::vec4(pData)
 	{}
@@ -27,30 +24,27 @@ namespace gui
 	void resize(const glm::vec2 v);
   };
 
-  struct QuadID : public Quad::ID
+  using QuadContainer = utils::Container<Quad, utils::UnmanagedPolicy>;
+  struct QuadID : public QuadContainer::ID
   {
+	static QuadContainer all;
+	using ID = typename QuadContainer::ID;
 	QuadID()
-	  : Quad::ID(&Quad::all)
+	  : QuadContainer::ID(&all)
 	{}
 	QuadID(const size_t i)
-	  : Quad::ID(i, &Quad::all)
+	  : QuadContainer::ID(i, &all)
 	{}
   };
 
-  struct BoundingBox : public Quad
+  struct BoundingBoxID : public QuadContainer::ID
   {
-	using Container = utils::Container<Quad>;
-	using ID = typename Container::ID;
-	static Container all;
-  };
-
-  struct BoundingBoxID : public BoundingBox::ID
-  {
+	static QuadContainer all;
 	BoundingBoxID()
-	  : BoundingBox::ID(&BoundingBox::all)
+	  : QuadContainer::ID(&all)
 	{}
 	BoundingBoxID(const size_t i)
-	  : BoundingBox::ID(i, &BoundingBox::all)
+	  : QuadContainer::ID(i, &all)
 	{}
   };
 

@@ -8,21 +8,21 @@
 #include "quadcolors.h"
 
 gl::StreamStorage<glm::vec4> gui::quadBuffer;
-typename gui::Quad::Container gui::Quad::all = typename gui::Quad::Container();
-typename gui::BoundingBox::Container gui::BoundingBox::all = typename gui::BoundingBox::Container();
+typename gui::QuadContainer gui::QuadID::all = typename gui::QuadContainer();
+typename gui::QuadContainer gui::BoundingBoxID::all = typename gui::QuadContainer();
 
 void gui::initQuadBuffer()
 {
   quadBuffer = gl::StreamStorage<glm::vec4>("QuadBuffer",
-	  MAX_QUAD_COUNT, GL_MAP_WRITE_BIT, &Quad::all[0]);
+	  MAX_QUAD_COUNT, GL_MAP_WRITE_BIT, &QuadID::all[0]);
   quadBuffer.setTarget(GL_UNIFORM_BUFFER);
 }
 
 void gui::updateQuadBuffer()
 {
-  if (Quad::all.size()) {
+  if (QuadID::all.size()) {
 	gl::uploadStorage(quadBuffer,
-		sizeof(glm::vec4)*Quad::all.size(), &Quad::all[0]);
+		sizeof(glm::vec4)*QuadID::all.size(), &QuadID::all[0]);
   }
 }
 
@@ -52,9 +52,9 @@ void gui::moveQuad(const QuadID q, const glm::vec2 v)
 
 gui::QuadID gui::topQuadAtPosition(const float x, const float y)
 {
-  const size_t quadCount = Quad::all.size();
+  const size_t quadCount = QuadID::all.size();
   for (size_t q = quadCount; !!q; --q) {
-	const Quad& quad = Quad::all[q];
+	const Quad& quad = QuadID::all[q];
 	if ((x > quad.x) && (y < quad.y) && x < (quad.x + quad.z) && y > (quad.y - quad.w)) {
 	  return QuadID(q);
 	}

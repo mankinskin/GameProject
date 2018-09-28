@@ -46,7 +46,7 @@ void gui::setupColorQuadShader()
 
 void gui::updateColorQuads()
 {
-  gl::uploadStorage(colorQuadBuffer, sizeof(unsigned int) * Quad::all.size(), &quadColors[0]);
+  gl::uploadStorage(colorQuadBuffer, sizeof(unsigned int) * QuadID::all.size(), &quadColors[0]);
 }
 
 void gui::renderColorQuads()
@@ -55,7 +55,7 @@ void gui::renderColorQuads()
   colorQuadVAO.bind();
   colorQuadShader.use();
 
-  glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, Quad::all.size());
+  glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, QuadID::all.size());
 
   shader::Program::unuse();
   colorQuadVAO.unbind();
