@@ -60,12 +60,6 @@ namespace gui
 	  link(this->hold, refFunc(setSlidePos, (Slider)*this, input::relativeCursorPosition.x));
 	  link(this->hold, func(setTargetValue, *this));
 	}
-	Slider() = delete;
-	Slider(const Slider&) = default;
-	Slider(Slider&&) = default;
-	Slider& operator=(const Slider&) = default;
-	Slider& operator=(Slider&&) = default;
-	~Slider() = default;
 
 	template<size_t SLIDE_WIDTH = 10>
 	  static const typename Base::Quads genQuads(const glm::vec4 q)

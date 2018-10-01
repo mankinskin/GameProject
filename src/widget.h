@@ -170,17 +170,6 @@ namespace gui
 	  colorQuad((QuadID)*this, color);
 	}
 
-	QuadElement() = delete;
-	QuadElement(const QuadElement&) = default;
-	QuadElement(QuadElement&&) = default;
-	QuadElement& operator=(const QuadElement&) = default;
-	QuadElement& operator=(QuadElement&&) = default;
-	~QuadElement() = default;
-	//{
-	//  printf("DestroyinDestroying QuadElement\n%lu quads.\n", Quad::all.size());
-	//  //QuadID::free();
-	//};
-
 	const Col color;
 	void move(const glm::vec2 v) const
 	{
@@ -251,13 +240,6 @@ namespace gui
 	{
 	  puts("Creating Widget");
 	}
-
-	Widget() = delete;
-	Widget(const Widget&) = default;
-	Widget(Widget&&) = default;
-	Widget& operator=(const Widget&) = default;
-	Widget& operator=(Widget&&) = default;
-	~Widget() = default;
 
 	void move_n(utils::_index<0> i, const glm::vec2 v) const
 	{}

@@ -35,12 +35,6 @@ namespace gui
 	  link(std::get<2>(w).hold, refFunc(resizeWidgetX<Base>, (Base)w, input::cursorFrameDelta.x));
 	  link(std::get<4>(w).hold, refFunc(resizeWidgetY<Base>, (Base)w, input::cursorFrameDelta.y));
 	}
-	Window() = delete;
-	Window(const Window&) = default;
-	Window(Window&&) = default;
-	Window& operator=(const Window&) = default;
-	Window& operator=(Window&&) = default;
-	~Window() = default;
 
 	static const typename Base::Quads genQuads(const glm::vec4 q)
 	{
