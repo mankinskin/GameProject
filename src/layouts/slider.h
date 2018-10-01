@@ -34,17 +34,17 @@ namespace gui
 
 	static void setTargetValue(const Slider& s)
 	{
-	  const float swidth = s.slide()->z;
-	  const float bwidth = s.box()->z;
+	  const float swidth = s.slide().width();
+	  const float bwidth = s.box().width();
 	  const float width = bwidth - swidth;
-	  const float pos = s.slide()->x - s.box()->x;
+	  const float pos = s.slide().x() - s.box().x();
 	  s.targ = s.min + (s.max - s.min) * (pos / width);
 	}
 	static void setSlidePos(const Slider& s, const float& xv)
 	{
-	  const float swidth = s.slide()->z;
-	  const float bpos = s.box()->x;
-	  const float bwidth = s.box()->z;
+	  const float swidth = s.slide().width();
+	  const float bpos = s.box().x();
+	  const float bwidth = s.box().width();
 	  setWidgetPosX<SlideElement>(s.slide(), std::min(bpos + (bwidth - swidth), std::max(bpos, xv - swidth/2.0f)));
 	}
 	Slider(const glm::vec4 q, const Preset pre, float pMin, float pMax, float& t)

@@ -37,17 +37,6 @@ namespace gui
 	{}
   };
 
-  struct BoundingBoxID : public QuadContainer::ID
-  {
-	static QuadContainer all;
-	BoundingBoxID()
-	  : QuadContainer::ID(&all)
-	{}
-	BoundingBoxID(const size_t i)
-	  : QuadContainer::ID(i, &all)
-	{}
-  };
-
   const unsigned int MAX_QUAD_COUNT = 10000;
   void setQuadPos(const QuadID q, const glm::vec2 p);
   void moveQuad(const QuadID q, const glm::vec2 v);

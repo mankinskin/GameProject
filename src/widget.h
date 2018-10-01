@@ -170,6 +170,31 @@ namespace gui
 	  colorQuad((QuadID)*this, color);
 	}
 
+	float x() const
+	{
+	  return (*this)->x;
+	}
+	float y() const
+	{
+	  return (*this)->y;
+	}
+	float width() const
+	{
+	  return (*this)->z;
+	}
+	float height() const
+	{
+	  return (*this)->w;
+	}
+	glm::vec2 pos() const
+	{
+	  return glm::vec2(x(), y());
+	}
+	glm::vec2 size() const
+	{
+	  return glm::vec2(width(), height());
+	}
+
 	const Col color;
 	void move(const glm::vec2 v) const
 	{
@@ -208,7 +233,7 @@ namespace gui
 	};
 
   template<typename... Elems>
-	struct Widget : public BoundingBoxID, std::tuple<Elems...>, WidgetSignals<Elems...>
+	struct Widget : public std::tuple<Elems...>, WidgetSignals<Elems...>
   {
 	static constexpr size_t ELEMENT_COUNT = sizeof...(Elems);
 	static constexpr size_t QUAD_COUNT = utils::sum(Elems::QUAD_COUNT...);
@@ -233,12 +258,56 @@ namespace gui
 	};
 
 	Widget(const glm::vec4& q, const Preset& preset)
-	  : BoundingBoxID(BoundingBoxID::all.makeID(q))
-	  , Elements(std::move(utils::convert_tuple<Elems...>(preset.layout.genQuads(q), preset.subpresets)))
+	  : Elements(std::move(utils::convert_tuple<Elems...>(preset.layout.genQuads(q), preset.subpresets)))
 	  , Signals((Elements)*this)
 	  , layout(preset.layout)
 	{
 	  puts("Creating Widget");
+	}
+
+	template<size_t... Ns>
+	float x_ns(std::index_sequence<Ns...>) const
+	{
+	  return utils::min(std::get<Ns>(*this).x()...);
+	}
+	float x() const
+	{
+	  return x_ns(std::make_index_sequence<sizeof...(Elems)>());
+	}
+	template<size_t... Ns>
+	float y_ns(std::index_sequence<Ns...>) const
+	{
+	  return utils::min(std::get<Ns>(*this).y()...);
+	}
+	float y() const
+	{
+	  return y_ns(std::make_index_sequence<sizeof...(Elems)>());
+	}
+	template<size_t... Ns>
+	float width_ns(std::index_sequence<Ns...>) const
+	{
+	  return utils::max(std::get<Ns>(*this).x() + std::get<Ns>(*this).width()...) - x();
+	}
+	float width() const
+	{
+	  return width_ns(std::make_index_sequence<sizeof...(Elems)>());
+	}
+	template<size_t... Ns>
+	float height_ns(std::index_sequence<Ns...>) const
+	{
+	  return utils::max(std::get<Ns>(*this).y() - std::get<Ns>(*this).height()...) - y();
+	}
+	float height() const
+	{
+	  return height_ns(std::make_index_sequence<sizeof...(Elems)>());
+	}
+	glm::vec2 pos() const
+	{
+	  return glm::vec2(x(), y());
+	}
+	glm::vec2 size() const
+	{
+	  return glm::vec2(width(), height());
 	}
 
 	void move_n(utils::_index<0> i, const glm::vec2 v) const
@@ -248,7 +317,7 @@ namespace gui
 	  void move_n(utils::_index<N> i, const glm::vec2 v) const
 	  {
 		move_n(utils::_index<N-1>(), v);
-		std::get<N-1>((Elements)*this).move(v * layout.move[N-1]);
+		std::get<N-1>(*this).move(v * layout.move[N-1]);
 	  }
 	void resize_n(utils::_index<0> i, const glm::vec2 v) const
 	{}
@@ -256,26 +325,24 @@ namespace gui
 	  void resize_n(utils::_index<N> i, const glm::vec2 v) const
 	  {
 		resize_n(utils::_index<N-1>(), v);
-		std::get<N-1>((Elements)*this).move(v * glm::vec2(layout.resize[N-1].x, layout.resize[N-1].y));
-		std::get<N-1>((Elements)*this).resize(v * glm::vec2(layout.resize[N-1].z, layout.resize[N-1].w));
+		std::get<N-1>(*this).move(v * glm::vec2(layout.resize[N-1].x, layout.resize[N-1].y));
+		std::get<N-1>(*this).resize(v * glm::vec2(layout.resize[N-1].z, layout.resize[N-1].w));
 	  }
 	void move(const glm::vec2 v) const
 	{
-	  (*this)->move(v);
 	  move_n(utils::_index<ELEMENT_COUNT>(), v);
 	}
 	void resize(const glm::vec2 v) const
 	{
-	  (*this)->resize(v);
 	  resize_n(utils::_index<ELEMENT_COUNT>(), v);
 	}
 	void setPos(const glm::vec2 p)
 	{
-	  move(p - glm::vec2((*this)->x, (*this)->y));
+	  move(p - size());
 	}
 	void setSize(const glm::vec2 s)
 	{
-	  resize(s - glm::vec2((*this)->z, (*this)->w));
+	  resize(s - size());
 	}
   };
 
