@@ -2,6 +2,7 @@
 #include <tuple>
 #include <utility>
 #include <type_traits>
+#include <algorithm>
 
 namespace utils
 {
@@ -76,5 +77,25 @@ namespace utils
 	constexpr auto sum(const Head h, const Args... args)
 	{
 	  return h + sum(args...);
+	}
+  template<typename Arg>
+	constexpr Arg min(const Arg arg)
+	{
+	  return arg;
+	}
+  template<typename Head, typename... Args>
+	constexpr auto min(const Head h, const Args... args)
+	{
+	  return std::min(h, min(args...));
+	}
+  template<typename Arg>
+	constexpr Arg max(const Arg arg)
+	{
+	  return arg;
+	}
+  template<typename Head, typename... Args>
+	constexpr auto max(const Head h, const Args... args)
+	{
+	  return std::max(h, max(args...));
 	}
 }
