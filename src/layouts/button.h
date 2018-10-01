@@ -14,6 +14,7 @@ namespace gui
 	using Preset = typename Base::Preset;
 	using Colors = typename Base::Colors::Colors;
 	using Elements = typename Base::Elements;
+	using Layout = typename Base::Layout;
 
 	Button(const glm::vec4 q, const Preset pre)
 	  : Base(q, pre)
@@ -49,5 +50,7 @@ namespace gui
   };
 
   template<size_t MARGINX = 2, size_t MARGINY = 2>
-	const typename Button::Preset buttonPreset(Button::genQuads<MARGINX, MARGINY>, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}, {gl::Color(1), gl::Color(12)});
+  const typename Button::Layout buttonLayout(Button::genQuads<MARGINX, MARGINY>, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)});
+  template<size_t MARGINX = 2, size_t MARGINY = 2>
+	const typename Button::Preset buttonPreset(buttonLayout<MARGINX, MARGINY>, {gl::Color(1), gl::Color(12)});
 }

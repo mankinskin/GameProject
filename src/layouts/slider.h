@@ -17,6 +17,7 @@ namespace gui
 	using Colors = typename Base::Colors::Colors;
 	using BoxElement = std::tuple_element_t<0, Elements>;
 	using SlideElement = std::tuple_element_t<1, Elements>;
+	using Layout = typename Base::Layout;
 
 	const BoxElement& box() const
 	{
@@ -78,5 +79,9 @@ namespace gui
   };
 
   template<size_t SLIDE_WIDTH = 10>
-	const typename Slider::Preset sliderPreset(Slider::genQuads<SLIDE_WIDTH>, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}, {buttonPreset<>, gl::Color(12)});
+	const typename Slider::Layout sliderLayout(Slider::genQuads<SLIDE_WIDTH>,
+		{glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+		{glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)});
+  template<size_t SLIDE_WIDTH = 10>
+	const typename Slider::Preset sliderPreset(sliderLayout<>, {buttonPreset<>, gl::Color(12)});
 }
