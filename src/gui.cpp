@@ -88,7 +88,7 @@ void gui::initWidgets()
 
   puts("Button");
   for (size_t w = 0; w < 1; ++w) {
-	Button b(glm::vec4(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount)), toScreenX(300), toScreenY(200)), buttonPreset<>);
+	Button b(glm::vec4(-1.0f + (width/xcount) * (w%xcount), 1.0f - (0.1f * floor(w/xcount)), toScreenX(300), toScreenY(200)), buttonPreset);
 	puts("Finished");
   }
 
@@ -99,7 +99,7 @@ void gui::initWidgets()
   }
   puts("Slider");
   for (size_t s = 0; s < 3; ++s) {
-    Slider b(glm::vec4(-0.8f + (width/xcount) * (s%xcount), -0.5f - (0.1f * floor(s/xcount)), toScreenX(300), toScreenY(10)), sliderPreset<>, 0.0f, 1.0f, gl::getColor("grey")->x);
+    Slider b(glm::vec4(-0.8f + (width/xcount) * (s%xcount), -0.5f - (0.1f * floor(s/xcount)), toScreenX(300), toScreenY(10)), sliderPreset, 0.0f, 1.0f, gl::getColor("grey")->x);
     puts("Finished");
   }
   puts("End");

@@ -222,18 +222,16 @@ namespace gui
 	  using MovePolicy = std::array<glm::vec2, sizeof...(Elems)>;
 	  using ResizePolicy = std::array<glm::vec4, sizeof...(Elems)>;
 
-	  WidgetLayout(const Quads(&layout)(const glm::vec4), const MovePolicy mp, const ResizePolicy rp)
-		: genQuads(layout)
-		, move(mp)
+	  WidgetLayout(const MovePolicy mp, const ResizePolicy rp)
+		: move(mp)
 		, resize(rp)
 	  {}
-	  const Quads(&genQuads)(const glm::vec4);
 	  const MovePolicy move;
 	  const ResizePolicy resize;
 	};
 
-  template<typename... Elems>
-	struct Widget : public std::tuple<Elems...>, WidgetSignals<Elems...>
+  template<typename LayoutType, typename... Elems>
+	struct Widget : public LayoutType, std::tuple<Elems...>, WidgetSignals<Elems...>
   {
 	static constexpr size_t ELEMENT_COUNT = sizeof...(Elems);
 	static constexpr size_t QUAD_COUNT = utils::sum(Elems::QUAD_COUNT...);
@@ -242,25 +240,21 @@ namespace gui
 	using Signals = WidgetSignals<Elems...>;
 	using Elements = std::tuple<Elems...>;
 	using Quads = typename utils::tuple_generator<sizeof...(Elems), glm::vec4>::type;
-	using Layout = WidgetLayout<Elems...>;
+	using Layout = LayoutType;
 
 	using Signals::hold;
-	const Layout layout;
 
 	struct Preset
 	{
-	  Preset(const Layout l, const std::tuple<typename Elems::Preset...> subs)
-		: layout(l)
-		, subpresets(subs)
+	  Preset(const std::tuple<typename Elems::Preset...> subs)
+		: subpresets(subs)
 	  {}
-	  const Layout layout;
 	  const std::tuple<typename Elems::Preset...> subpresets;
 	};
 
 	Widget(const glm::vec4& q, const Preset& preset)
-	  : Elements(std::move(utils::convert_tuple<Elems...>(preset.layout.genQuads(q), preset.subpresets)))
+	  : Elements(std::move(utils::convert_tuple<Elems...>(LayoutType::genQuads(q), preset.subpresets)))
 	  , Signals((Elements)*this)
-	  , layout(preset.layout)
 	{
 	  puts("Creating Widget");
 	}
@@ -317,7 +311,7 @@ namespace gui
 	  void move_n(utils::_index<N> i, const glm::vec2 v) const
 	  {
 		move_n(utils::_index<N-1>(), v);
-		std::get<N-1>(*this).move(v * layout.move[N-1]);
+		std::get<N-1>(*this).move(v * Layout::move[N-1]);
 	  }
 	void resize_n(utils::_index<0> i, const glm::vec2 v) const
 	{}
@@ -325,8 +319,8 @@ namespace gui
 	  void resize_n(utils::_index<N> i, const glm::vec2 v) const
 	  {
 		resize_n(utils::_index<N-1>(), v);
-		std::get<N-1>(*this).move(v * glm::vec2(layout.resize[N-1].x, layout.resize[N-1].y));
-		std::get<N-1>(*this).resize(v * glm::vec2(layout.resize[N-1].z, layout.resize[N-1].w));
+		std::get<N-1>(*this).move(v * glm::vec2(Layout::resize[N-1].x, Layout::resize[N-1].y));
+		std::get<N-1>(*this).resize(v * glm::vec2(Layout::resize[N-1].z, Layout::resize[N-1].w));
 	  }
 	void move(const glm::vec2 v) const
 	{
