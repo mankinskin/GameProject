@@ -7,34 +7,31 @@
 
 namespace gui
 {
-  using SliderBaseLayout = WidgetLayout<Button, QuadElement<gl::Color>>;
-  struct SliderLayout : public SliderBaseLayout
-  {
-      static const size_t slideWidth = 10;
-      static const typename SliderBaseLayout::Quads genQuads(const glm::vec4 q)
-      {
-    	return typename SliderBaseLayout::Quads{
-    	  glm::vec4(q.x, q.y, q.z, q.w),
-    		glm::vec4(q.x, q.y,
-    			toScreenX(slideWidth),
-    			q.w)};
-      }
-	SliderLayout()
-	  : SliderBaseLayout(
-    		{glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
-    		{glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)})
-	{}
-  };
-  using SliderBase = Widget<SliderLayout, Button, QuadElement<gl::Color>>;
+  using SliderBase = Widget<Button, QuadElement<gl::Color>>;
   struct Slider : public SliderBase
   {
     using Base = SliderBase;
     static constexpr size_t ELEMENT_COUNT = Base::ELEMENT_COUNT;
-    using Preset = typename Base::Preset;
     using Elements = typename Base::Elements;
     using Colors = typename Base::Colors::Colors;
     using BoxElement = std::tuple_element_t<0, Elements>;
     using SlideElement = std::tuple_element_t<1, Elements>;
+
+	struct Preset : public Base::Preset
+	{
+	  static const size_t slideWidth = 10;
+	  const typename Base::Quads genQuads(const glm::vec4 q) const
+	  {
+		return typename Base::Quads{
+		  glm::vec4(q.x, q.y, q.z, q.w),
+			glm::vec4(q.x, q.y,
+				toScreenX(slideWidth),
+				q.w)};
+	  }
+	  Preset(const Base::SubPresets subs)
+		: Base::Preset({glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}, subs)
+		  {}
+	};
 
     const BoxElement& box() const
     {

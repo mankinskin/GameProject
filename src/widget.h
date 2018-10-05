@@ -216,22 +216,7 @@ namespace gui
 	}
 
   template<typename... Elems>
-	struct WidgetLayout
-	{
-	  using Quads = typename utils::tuple_generator<sizeof...(Elems), glm::vec4>::type;
-	  using MovePolicy = std::array<glm::vec2, sizeof...(Elems)>;
-	  using ResizePolicy = std::array<glm::vec4, sizeof...(Elems)>;
-
-	  WidgetLayout(const MovePolicy mp, const ResizePolicy rp)
-		: move(mp)
-		, resize(rp)
-	  {}
-	  const MovePolicy move;
-	  const ResizePolicy resize;
-	};
-
-  template<typename LayoutType, typename... Elems>
-	struct Widget : public LayoutType, std::tuple<Elems...>, WidgetSignals<Elems...>
+	struct Widget : public std::tuple<Elems...>, WidgetSignals<Elems...>
   {
 	static constexpr size_t ELEMENT_COUNT = sizeof...(Elems);
 	static constexpr size_t QUAD_COUNT = utils::sum(Elems::QUAD_COUNT...);
@@ -240,21 +225,32 @@ namespace gui
 	using Signals = WidgetSignals<Elems...>;
 	using Elements = std::tuple<Elems...>;
 	using Quads = typename utils::tuple_generator<sizeof...(Elems), glm::vec4>::type;
-	using Layout = LayoutType;
+	using MovePolicy = std::array<glm::vec2, sizeof...(Elems)>;
+	using ResizePolicy = std::array<glm::vec4, sizeof...(Elems)>;
+	using SubPresets = std::tuple<typename Elems::Preset...>;
 
-	using Signals::hold;
 
-	struct Preset
+	struct Preset : public SubPresets
 	{
-	  Preset(const std::tuple<typename Elems::Preset...> subs)
-		: subpresets(subs)
+	  Preset(MovePolicy mp, ResizePolicy rp, SubPresets subs)
+		: SubPresets(subs)
+		, movep(mp)
+		, resizep(rp)
 	  {}
-	  const std::tuple<typename Elems::Preset...> subpresets;
+	  const MovePolicy movep;
+	  const ResizePolicy resizep;
 	};
 
-	Widget(const glm::vec4& q, const Preset& preset)
-	  : Elements(std::move(utils::convert_tuple<Elems...>(LayoutType::genQuads(q), preset.subpresets)))
-	  , Signals((Elements)*this)
+	using Signals::hold;
+	  const MovePolicy movepolicy;
+	  const ResizePolicy resizepolicy;
+
+	template<typename Preset>
+	  Widget(const glm::vec4& q, const Preset& preset)
+	  : Elements(std::move(utils::convert_tuple<Elems...>(preset.genQuads(q), preset)))
+		, Signals((Elements)*this)
+		, movepolicy(preset.movep)
+		, resizepolicy(preset.resizep)
 	{
 	  puts("Creating Widget");
 	}
@@ -311,7 +307,7 @@ namespace gui
 	  void move_n(utils::_index<N> i, const glm::vec2 v) const
 	  {
 		move_n(utils::_index<N-1>(), v);
-		std::get<N-1>(*this).move(v * Layout::move[N-1]);
+		std::get<N-1>(*this).move(v * movepolicy[N-1]);
 	  }
 	void resize_n(utils::_index<0> i, const glm::vec2 v) const
 	{}
@@ -319,8 +315,8 @@ namespace gui
 	  void resize_n(utils::_index<N> i, const glm::vec2 v) const
 	  {
 		resize_n(utils::_index<N-1>(), v);
-		std::get<N-1>(*this).move(v * glm::vec2(Layout::resize[N-1].x, Layout::resize[N-1].y));
-		std::get<N-1>(*this).resize(v * glm::vec2(Layout::resize[N-1].z, Layout::resize[N-1].w));
+		std::get<N-1>(*this).move(v * glm::vec2(resizepolicy[N-1].x, resizepolicy[N-1].y));
+		std::get<N-1>(*this).resize(v * glm::vec2(resizepolicy[N-1].z, resizepolicy[N-1].w));
 	  }
 	void move(const glm::vec2 v) const
 	{

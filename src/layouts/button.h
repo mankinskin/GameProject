@@ -6,35 +6,33 @@
 
 namespace gui
 {
-  using ButtonBaseLayout = WidgetLayout<QuadElement<gl::Color>, QuadElement<gl::Color>>;
-  struct ButtonLayout : public ButtonBaseLayout
-  {
-	const size_t marginx = 2;
-	const size_t marginy = 2;
-	const typename ButtonBaseLayout::Quads genQuads(const glm::vec4 q)
-	{
-	  return typename ButtonBaseLayout::Quads{
-		glm::vec4(q.x, q.y, q.z, q.w),
-		  glm::vec4(q.x + toScreenX(marginx), q.y - toScreenY(marginy),
-			  q.z - toScreenX(marginx*2),
-			  q.w - toScreenY(marginy*2))};
-	}
-	ButtonLayout()
-	  : ButtonBaseLayout(
-		  {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
-		  {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)})
-	{}
-  };
-
-  using ButtonBase = Widget<ButtonLayout, QuadElement<gl::Color>, QuadElement<gl::Color>>;
+  using ButtonBase = Widget<QuadElement<gl::Color>, QuadElement<gl::Color>>;
 
   struct Button : public ButtonBase
   {
 	static constexpr size_t ELEMENT_COUNT = ButtonBase::ELEMENT_COUNT;
 	using Base = ButtonBase;
-	using Preset = typename Base::Preset;
 	using Colors = typename Base::Colors::Colors;
 	using Elements = typename Base::Elements;
+
+	struct Preset : public Base::Preset
+	{
+	  const size_t marginx = 2;
+	  const size_t marginy = 2;
+	  const typename Base::Quads genQuads(const glm::vec4 q) const
+	  {
+		return typename Base::Quads{
+		  glm::vec4(q.x, q.y, q.z, q.w),
+			glm::vec4(q.x + toScreenX(marginx), q.y - toScreenY(marginy),
+				q.z - toScreenX(marginx*2),
+				q.w - toScreenY(marginy*2))};
+	  }
+
+	  Preset(const typename Base::SubPresets subs)
+		: Base::Preset({glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+			{glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}, subs)
+	  {}
+	};
 
 	Button(const glm::vec4 q, const Preset pre)
 	  : Base(q, pre)

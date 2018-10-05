@@ -7,17 +7,22 @@
 
 namespace gui
 {
-  using WindowBaseLayout = WidgetLayout<QuadElement<gl::Color>, QuadElement<gl::Color>, QuadElement<gl::Color>,  QuadElement<gl::Color>, QuadElement<gl::Color>, QuadElement<gl::Color>, Button>;
+  using WindowBase = Widget<QuadElement<gl::Color>, QuadElement<gl::Color>, QuadElement<gl::Color>,  QuadElement<gl::Color>, QuadElement<gl::Color>, QuadElement<gl::Color>, Button>;
+  struct Window : public WindowBase
+  {
+    static constexpr const size_t ELEMENT_COUNT = 7;
+    using Base = WindowBase;
+    using Colors = typename Base::Colors;
 
-    struct WindowLayout : public WindowBaseLayout
-    {
+	struct Preset : public Base::Preset
+	{
       const size_t headerHeight = 20;
       const size_t marginx = 5;
       const size_t marginy = 5;
 
-      const typename WindowBaseLayout::Quads genQuads(const glm::vec4 q)
+      const typename Base::Quads genQuads(const glm::vec4 q) const
       {
-    	return typename WindowBaseLayout::Quads {
+    	return typename Base::Quads {
     	  glm::vec4(q.x, q.y - toScreenY(headerHeight), toScreenX(marginx), q.w - toScreenY(marginy + headerHeight)),
     		glm::vec4(q.x + toScreenX(marginx), q.y - toScreenY(headerHeight), q.z - toScreenX(marginx*2), q.w - toScreenY(marginy + headerHeight)),
     		glm::vec4(q.x + (q.z - toScreenX(marginx)), q.y - toScreenY(headerHeight), toScreenX(marginx), q.w - toScreenY(marginy + headerHeight)),
@@ -28,22 +33,12 @@ namespace gui
 
     		glm::vec4(q.x, q.y, q.z, toScreenY(headerHeight))};
       }
-      WindowLayout()
-    	: WindowBaseLayout(
-    		{glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-    		glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
-    		{glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f),
-    		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f),
-    		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)})
+      Preset(const typename Base::SubPresets subs)
+    	: Base::Preset({glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
+    		glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f),
+    		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)}, subs)
     	{}
-    };
-  using WindowBase = Widget<WindowLayout, QuadElement<gl::Color>, QuadElement<gl::Color>, QuadElement<gl::Color>,  QuadElement<gl::Color>, QuadElement<gl::Color>, QuadElement<gl::Color>, Button>;
-  struct Window : public WindowBase
-  {
-    static constexpr const size_t ELEMENT_COUNT = 7;
-    using Base = WindowBase;
-    using Preset = typename Base::Preset;
-    using Colors = typename Base::Colors;
+	};
 
 
     Window(const glm::vec4 q, const Preset pre)

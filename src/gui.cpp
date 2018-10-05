@@ -103,7 +103,8 @@ void gui::initWidgets()
     puts("Finished");
   }
   puts("End");
-  ////Slider
+
+  //Slider
   //using Slider = QuadGroup<2>;
   //using SliderResizePolicy = WidgetResizePolicy<Slider>;
   //using SliderColors = ColorGroup<2, gl::Color>;
