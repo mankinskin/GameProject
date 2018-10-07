@@ -13,12 +13,14 @@ namespace gui
     using Base = SliderBase;
     static constexpr size_t ELEMENT_COUNT = Base::ELEMENT_COUNT;
     using Elements = typename Base::Elements;
-    using Colors = typename Base::Colors::Colors;
+    using Colors = typename Base::Colors;
     using BoxElement = std::tuple_element_t<0, Elements>;
     using SlideElement = std::tuple_element_t<1, Elements>;
 
-	struct Preset : public Base::Preset
+
+	struct Layout : public Base::Layout
 	{
+
 	  static const size_t slideWidth = 10;
 	  const typename Base::Quads genQuads(const glm::vec4 q) const
 	  {
@@ -28,9 +30,16 @@ namespace gui
 				toScreenX(slideWidth),
 				q.w)};
 	  }
-	  Preset(const Base::SubPresets subs)
-		: Base::Preset({glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}, subs)
-		  {}
+	  Layout()
+		: Base::Layout({buttonLayout, gui::QuadLayout()}, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)})
+		{}
+	};
+	struct Preset : public Layout, Base::Colors
+	{
+	  Preset(const Layout layout, const Base::Colors colors)
+		: Layout(layout)
+		  , Base::Colors(colors)
+	  {}
 	};
 
     const BoxElement& box() const
@@ -76,5 +85,7 @@ namespace gui
     }
   };
 
-  const typename Slider::Preset sliderPreset({buttonPreset, gl::Color(12)});
+  const typename Slider::Layout sliderLayout;
+  const typename Slider::Colors sliderColors({buttonColors, gl::Color(12)});
+  const typename Slider::Preset sliderPreset(sliderLayout, sliderColors);
 }

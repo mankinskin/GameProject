@@ -12,10 +12,10 @@ namespace gui
   {
 	static constexpr size_t ELEMENT_COUNT = ButtonBase::ELEMENT_COUNT;
 	using Base = ButtonBase;
-	using Colors = typename Base::Colors::Colors;
+	using Colors = typename Base::Colors;
 	using Elements = typename Base::Elements;
 
-	struct Preset : public Base::Preset
+	struct Layout : public Base::Layout
 	{
 	  const size_t marginx = 2;
 	  const size_t marginy = 2;
@@ -28,9 +28,19 @@ namespace gui
 				q.w - toScreenY(marginy*2))};
 	  }
 
-	  Preset(const typename Base::SubPresets subs)
-		: Base::Preset({glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
-			{glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)}, subs)
+	  Layout(size_t mx = 2, size_t my = 2)
+		: Base::Layout({gui::QuadLayout(), gui::QuadLayout()}, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+			{glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)})
+	  , marginx(mx)
+	  , marginy(my)
+	  {}
+	};
+
+	struct Preset : public Layout, Base::Colors
+	{
+	  Preset(const Layout layout, typename Base::Colors colors)
+		: Layout(layout)
+		, Base::Colors(colors)
 	  {}
 	};
 
@@ -51,5 +61,7 @@ namespace gui
 	}
   };
 
-  const typename Button::Preset buttonPreset({gl::Color(1), gl::Color(12)});
+  const typename Button::Layout buttonLayout;
+  const typename Button::Colors buttonColors({gl::Color(1), gl::Color(12)});
+  const typename Button::Preset buttonPreset(buttonLayout, buttonColors);
 }

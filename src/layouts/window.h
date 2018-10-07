@@ -14,7 +14,7 @@ namespace gui
     using Base = WindowBase;
     using Colors = typename Base::Colors;
 
-	struct Preset : public Base::Preset
+	struct Layout : public Base::Layout
 	{
       const size_t headerHeight = 20;
       const size_t marginx = 5;
@@ -33,10 +33,19 @@ namespace gui
 
     		glm::vec4(q.x, q.y, q.z, toScreenY(headerHeight))};
       }
-      Preset(const typename Base::SubPresets subs)
-    	: Base::Preset({glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-    		glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f),
-    		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)}, subs)
+	  Layout(const size_t mx = 5, const size_t my = 5)
+		: Base::Layout({gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), Button::Layout(mx, my)}, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
+			glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f),
+			glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)})
+		, marginx(mx)
+		, marginy(my)
+		{}
+	};
+	struct Preset : public Layout, Base::Colors
+	{
+      Preset(const Layout layout, const typename Base::Colors colors)
+		: Layout(layout)
+		, Base::Colors(colors)
     	{}
 	};
 
@@ -57,5 +66,7 @@ namespace gui
     }
   };
 
-  const typename Window::Preset windowPreset = typename Window::Preset({gl::Color(1), gl::Color(10), gl::Color(1), gl::Color(1), gl::Color(1), gl::Color(1), buttonPreset});
+  const typename Window::Layout windowLayout;
+  const typename Window::Colors windowColors({gl::Color(1), gl::Color(10), gl::Color(1), gl::Color(1), gl::Color(1), gl::Color(1), buttonColors});
+  const typename Window::Preset windowPreset(windowLayout, windowColors);
 }

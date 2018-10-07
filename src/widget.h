@@ -130,7 +130,6 @@ namespace gui
 	constexpr WidgetColors(const Colors cs)
 	  : Colors(cs)
 	{}
-	const std::tuple<typename Elems::Preset...> subs;
   };
 
   template<typename... Elems>
@@ -153,18 +152,28 @@ namespace gui
 	  applyColor(std::get<N-1>(elems), std::get<N-1>(cols.colors));
 	}
 
+  struct QuadLayout
+  {};
   template<typename Col>
 	struct QuadElement : public QuadID, signals::QuadSignals<QuadID>
   {
 	static constexpr size_t QUAD_COUNT = 1;
 	using Signals = signals::QuadSignals<QuadID>;
 	using Colors = Col;
-	using Preset = Col;
+	using Layout = QuadLayout;
 
-	QuadElement(const Quad&& q, const Col&& col)
+
+	struct Preset : public Colors
+	{
+	  Preset(Layout layout, Colors color)
+		: Colors(color)
+	  {}
+	};
+	template<typename Pre>
+	QuadElement(const Quad&& q, const Pre&& pre)
 	  : QuadID(QuadID::all.makeID(std::move(q)))
 	  , Signals((QuadID)*this)
-	  , color(std::move(col))
+	  , color(std::move((Colors&&)pre))
 	{
 	  printf("Creating QuadElement\n%lu quads.\n", QuadID::all.size());
 	  colorQuad((QuadID)*this, color);
@@ -227,13 +236,12 @@ namespace gui
 	using Quads = typename utils::tuple_generator<sizeof...(Elems), glm::vec4>::type;
 	using MovePolicy = std::array<glm::vec2, sizeof...(Elems)>;
 	using ResizePolicy = std::array<glm::vec4, sizeof...(Elems)>;
-	using SubPresets = std::tuple<typename Elems::Preset...>;
+	using SubLayouts = std::tuple<typename Elems::Layout...>;
 
-
-	struct Preset : public SubPresets
+	struct Layout : public SubLayouts
 	{
-	  Preset(MovePolicy mp, ResizePolicy rp, SubPresets subs)
-		: SubPresets(subs)
+	  Layout(SubLayouts subs, MovePolicy mp, ResizePolicy rp)
+		: SubLayouts(subs)
 		, movep(mp)
 		, resizep(rp)
 	  {}
@@ -242,15 +250,15 @@ namespace gui
 	};
 
 	using Signals::hold;
-	  const MovePolicy movepolicy;
-	  const ResizePolicy resizepolicy;
+	const MovePolicy movepolicy;
+	const ResizePolicy resizepolicy;
 
-	template<typename Preset>
-	  Widget(const glm::vec4& q, const Preset& preset)
-	  : Elements(std::move(utils::convert_tuple<Elems...>(preset.genQuads(q), preset)))
+	template<typename Pre>
+	  Widget(const glm::vec4& q, const Pre& preset)
+	  : Elements(std::move(utils::convert_tuple<Elems...>(preset.genQuads(q), utils::convert_tuple<typename Elems::Preset...>((Layout)preset, (Colors)preset))))
 		, Signals((Elements)*this)
-		, movepolicy(preset.movep)
-		, resizepolicy(preset.resizep)
+		   , movepolicy(preset.movep)
+		   , resizepolicy(preset.resizep)
 	{
 	  puts("Creating Widget");
 	}
