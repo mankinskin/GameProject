@@ -129,7 +129,7 @@ void sequencer::frame()
   clearFramebuffers();
 
   input::fetch();
-  camera::main_camera.look(input::cursorFrameDelta);
+  camera::main_camera.look(input::Cursor::frameDelta);
   camera::main_camera.update();
 
   gl::updateGeneralUniformBuffer();

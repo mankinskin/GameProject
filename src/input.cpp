@@ -88,7 +88,7 @@ void input::setupControls()
   {
 	auto exit_func = func(app::quit);
 	auto toggle_cull_func = func(model::mesh::toggleCullFace);
-	auto toggle_cursor_func = func(input::toggleCursor);
+	auto toggle_cursor_func = func(input::Cursor::toggle);
 	auto toggle_look_func = func<void(camera::Camera&), camera::Camera&>(camera::toggleLook, camera::main_camera);
 	auto toggle_grid_func = func(gl::debug::toggleGrid);
 	auto toggle_coord_func = func(gl::debug::toggleCoord);

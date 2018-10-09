@@ -35,14 +35,25 @@ namespace input
 	extern MouseButton lmb;
 	extern MouseButton rmb;
 	extern MouseButton mmb;
-  };
+  }
 
-  extern glm::vec2 relativeCursorPosition;
-  extern glm::uvec2 absoluteCursorPosition;
-  extern glm::vec2 cursorFrameDelta;
+  namespace Cursor
+  {
+	void toggle();
+	void disable();
+	void enable();
+	void toggleHide();
+	void hide();
+	void show();
+	extern glm::vec2 relPos;
+	extern glm::uvec2 absPos;
+	extern glm::vec2 frameDelta;
+	extern bool disabled;
+	extern bool hidden;
+  }
+
   void updateMouse();
   void resetMouse();
-  void toggleCursor();
   void getCursorQuadEvents();
   void getMouseKeyEvents();
 

@@ -59,10 +59,10 @@ namespace gui
       const Base& w = *this;
 
       puts("Init Window");
-      link(std::get<6>(w).hold, refFunc(moveWidget<Base>, (Base)w, input::cursorFrameDelta));
-      link(std::get<5>(w).hold, refFunc(resizeWidget<Base>, (Base)w, input::cursorFrameDelta));
-      link(std::get<2>(w).hold, refFunc(resizeWidgetX<Base>, (Base)w, input::cursorFrameDelta.x));
-      link(std::get<4>(w).hold, refFunc(resizeWidgetY<Base>, (Base)w, input::cursorFrameDelta.y));
+      link(std::get<6>(w).hold, refFunc(moveWidget<Base>, (Base)w, input::Cursor::frameDelta));
+      link(std::get<5>(w).hold, refFunc(resizeWidget<Base>, (Base)w, input::Cursor::frameDelta));
+      link(std::get<2>(w).hold, refFunc(resizeWidgetX<Base>, (Base)w, input::Cursor::frameDelta.x));
+      link(std::get<4>(w).hold, refFunc(resizeWidgetY<Base>, (Base)w, input::Cursor::frameDelta.y));
     }
   };
 

@@ -78,9 +78,9 @@ namespace gui
     {
       using namespace signals;
       puts("Init Slider");
-      link(this->press, func(applyColor<SlideElement>, slide(), gl::getColor("white")));
-      link(this->release, func(applyColor<SlideElement>, slide(), slide().color));
-      link(this->hold, refFunc(setSlidePos, (Slider)*this, input::relativeCursorPosition.x));
+      link(this->press, proc(func(input::Cursor::toggleHide), func(applyColor<SlideElement>, slide(), gl::getColor("white"))));
+      link(this->release, proc(func(input::Cursor::toggleHide), func(applyColor<SlideElement>, slide(), slide().color)));
+      link(this->hold, refFunc(setSlidePos, (Slider)*this, input::Cursor::relPos.x));
       link(this->hold, func(setTargetValue, *this));
     }
   };

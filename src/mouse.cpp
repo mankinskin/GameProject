@@ -7,13 +7,14 @@
 #include <array>
 
 using namespace signals;
-glm::vec2 input::relativeCursorPosition;
-glm::uvec2 input::absoluteCursorPosition;
-glm::vec2 input::cursorFrameDelta;
+glm::vec2 input::Cursor::relPos;
+glm::uvec2 input::Cursor::absPos;
+glm::vec2 input::Cursor::frameDelta;
 
 std::array<bool, 3> mouseKeys;
 int scroll = 0;
-int disableCursor = 0;
+bool input::Cursor::disabled = false;
+bool input::Cursor::hidden = false;
 gui::QuadID hovered_quad = gui::QuadID();
 gui::QuadID last_hovered_quad = gui::QuadID();
 utils::Container<input::MouseKeySignals> input::MouseButton::all = utils::Container<input::MouseKeySignals>();
@@ -21,6 +22,43 @@ utils::Container<input::MouseKeySignals> input::MouseButton::all = utils::Contai
 input::MouseButton input::Mouse::lmb;
 input::MouseButton input::Mouse::rmb;
 input::MouseButton input::Mouse::mmb;
+
+void input::Cursor::toggleHide()
+{
+  if (hidden) {
+	show();
+  } else {
+	hide();
+  }
+}
+void input::Cursor::hide()
+{
+  hidden = true;
+  glfwSetInputMode(app::mainWindow.window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+void input::Cursor::show()
+{
+  hidden = false;
+  glfwSetInputMode(app::mainWindow.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+void input::Cursor::toggle()
+{
+  if (disabled) {
+	enable();
+  } else {
+	disable();
+  }
+}
+void input::Cursor::disable()
+{
+  disabled = true;
+  glfwSetInputMode(app::mainWindow.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+void input::Cursor::enable()
+{
+  disabled = false;
+  glfwSetInputMode(app::mainWindow.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
 
 void input::updateMouse()
 {
@@ -34,34 +72,24 @@ void input::updateMouse()
   float ry = (float)ay;
   ax = glm::clamp(ax*gl::Viewport::current->resolution, 0.0, (double)(app::mainWindow.width*gl::Viewport::current->resolution) - 1.0);
   ay = glm::clamp(ay*gl::Viewport::current->resolution, 0.0, (double)(app::mainWindow.height*gl::Viewport::current->resolution) - 1.0);
-  if (!disableCursor) {
-	rx = (float)ax;// clamp relative positions too if cursor is not disabled
+  if (!Cursor::disabled) {
+	rx = (float)ax;// update relative positions too if cursor is not disabled
 	ry = (float)ay;
   }
-  absoluteCursorPosition = glm::uvec2((unsigned int)ax, (app::mainWindow.height*gl::Viewport::current->resolution) - (unsigned int)ay - 1);
+  Cursor::absPos = glm::uvec2((unsigned int)ax, (app::mainWindow.height*gl::Viewport::current->resolution) - (unsigned int)ay - 1);
 
   rx = ((rx / (float)app::mainWindow.width)*2.0f) - 1.0f;
   ry = 1.0f - (ry / (float)app::mainWindow.height)*2.0f;
   glm::vec2 newRelativeCursorPosition = glm::vec2(rx, ry);
-  cursorFrameDelta = glm::vec2(newRelativeCursorPosition.x - relativeCursorPosition.x,
-	  newRelativeCursorPosition.y - relativeCursorPosition.y);
-  relativeCursorPosition = newRelativeCursorPosition;
-  //printf("%f\t%f\n", relativeCursorPosition.x, relativeCursorPosition.y);
+  Cursor::frameDelta = glm::vec2(newRelativeCursorPosition.x - Cursor::relPos.x,
+	  newRelativeCursorPosition.y - Cursor::relPos.y);
+  Cursor::relPos = newRelativeCursorPosition;
+  //printf("%f\t%f\n", Cursor::relPos.x, Cursor::relPos.y);
 }
 
 void input::resetMouse()
 {
   scroll = 0;
-}
-
-void input::toggleCursor()
-{
-  disableCursor = !disableCursor;
-  if (disableCursor) {
-	glfwSetInputMode(app::mainWindow.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-  } else {
-	glfwSetInputMode(app::mainWindow.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-  }
 }
 
 void input::getMouseKeyEvents()
@@ -78,7 +106,7 @@ void input::getMouseKeyEvents()
 void input::getCursorQuadEvents()
 {
   last_hovered_quad = hovered_quad;
-  hovered_quad = gui::topQuadAtPosition(relativeCursorPosition.x, relativeCursorPosition.y);
+  hovered_quad = gui::topQuadAtPosition(Cursor::relPos.x, Cursor::relPos.y);
   //printf("Hovering quad %lu\n", hovered_quad.index);
   if (hovered_quad != last_hovered_quad) {
 	if (last_hovered_quad != utils::INVALID_ID) {

@@ -146,7 +146,7 @@ void gui::initWidgets()
   //    pTar.move(glm::vec2(dist, 0.0f));
   //};
 
-  //FunctorRef<void, Quad, float&> move_slide_func = createFunctor<void, Quad, float&>(move_quad_to, slider.element<1>().index, relativeCursorPosition.x);
+  //FunctorRef<void, Quad, float&> move_slide_func = createFunctor<void, Quad, float&>(move_quad_to, slider.element<1>().index, Cursor::relPos.x);
   //move_slide_func.add_triggers({ slider_lmb.hold });
 
   //void(*lim_quad)(Quad, Quad) = [](Quad pTar, Quad pLim)->void {
