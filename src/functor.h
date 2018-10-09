@@ -162,7 +162,7 @@ namespace signals
 	  return Functor<F, Args...>::all.makeID(Functor<F, Args...>(std::forward<F>(pF), std::forward<Args>(pArgs)...));
 	}
   template<typename... Funcs>
-	constexpr utils::ID<Procedure<Funcs...>> procedure(utils::ID<Funcs>... pFuncs)
+	constexpr utils::ID<Procedure<Funcs...>> proc(utils::ID<Funcs>... pFuncs)
 	{
 	  return Procedure<Funcs...>::all.makeID(Procedure<Funcs...>(pFuncs...));
 	}
