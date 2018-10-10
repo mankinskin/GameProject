@@ -32,21 +32,21 @@ namespace utils
 	  , index(INVALID_ID)
 	{}
 
-	T* operator->() const
+	constexpr T* operator->() const
 	{
 	  if (!container) throw std::runtime_error("ID container uninitialized!");
 	  return &container->get(index);
 	}
-	T& operator*() const
+	constexpr T& operator*() const
 	{
 	  if (!container) throw std::runtime_error("ID container uninitialized!");
 	  return container->get(index);
 	}
-	operator size_t() const
+	constexpr operator size_t() const
 	{
 	  return index;
 	}
-	void free()
+	constexpr void free()
 	{
 	  container->free(index);
 	}
@@ -65,19 +65,19 @@ namespace utils
   {
 	using ID = ID<T, Management>;
 	using Management<T>::allocate;
-	Container()
+	constexpr Container()
 	  : Management<T>(this)
 	{}
-	void clear()
+	constexpr void clear()
 	{
 	  Management<T>::clear();
 	  std::vector<T>::clear();
 	};
-	ID makeID(T&& t)
+	constexpr ID makeID(T&& t)
 	{
 	  return ID(allocate(std::move(t)), this);
 	}
-	ID makeID(const T& t)
+	constexpr ID makeID(const T& t)
 	{
 	  return ID(allocate(std::forward<const T&>(t)), this);
 	}
@@ -101,10 +101,10 @@ namespace utils
 		container->emplace_back(t);
 		return container->size() - 1;
 	  }
-	  void clear()
+	  constexpr void clear()
 	  {
 	  }
-	  T& get(const size_t i) const
+	  constexpr T& get(const size_t i) const
 	  {
 		if (i >= container->size())
 		  throw std::runtime_error("ID index (" + std::to_string(i) + ") out of bounds " + std::to_string(container->size()));
@@ -143,11 +143,11 @@ namespace utils
 		  --access[it];
 		}
 	  }
-	  void clear()
+	  constexpr void clear()
 	  {
 		access.clear();
 	  }
-	  T& get(const size_t i) const
+	  constexpr T& get(const size_t i) const
 	  {
 		if (i >= container->access.size())
 		  throw std::runtime_error("ID index (" + std::to_string(i) + ") out of bounds " + std::to_string(container->access.size()));
