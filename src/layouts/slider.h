@@ -7,7 +7,8 @@
 
 namespace gui
 {
-  using SliderBase = Widget<Button, QuadElement<gl::Color>>;
+  using SliderBase = Widget<QuadElement<gl::Color>, QuadElement<gl::Color>>;
+
   struct Slider : public SliderBase
   {
     using Base = SliderBase;
@@ -31,7 +32,7 @@ namespace gui
 				q.w)};
 	  }
 	  Layout()
-		: Base::Layout({buttonLayout, gui::QuadLayout()}, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)})
+		: Base::Layout({gui::QuadLayout(), gui::QuadLayout()}, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)})
 		{}
 	};
 	struct Preset : public Layout, Base::Colors
@@ -86,6 +87,6 @@ namespace gui
   };
 
   const typename Slider::Layout sliderLayout;
-  const typename Slider::Colors sliderColors({buttonColors, gl::Color(12)});
+  const typename Slider::Colors sliderColors({gl::Color(1), gl::Color(12)});
   const typename Slider::Preset sliderPreset(sliderLayout, sliderColors);
 }

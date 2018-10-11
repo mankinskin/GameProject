@@ -17,8 +17,8 @@ namespace gui
 	struct Layout : public Base::Layout
 	{
       const size_t headerHeight = 20;
-      const size_t marginx = 5;
-      const size_t marginy = 5;
+      const size_t marginx;
+      const size_t marginy;
 
       const typename Base::Quads genQuads(const glm::vec4 q) const
       {
@@ -33,7 +33,7 @@ namespace gui
 
     		glm::vec4(q.x, q.y, q.z, toScreenY(headerHeight))};
       }
-	  Layout(const size_t mx = 5, const size_t my = 5)
+	  Layout(const size_t mx = 3, const size_t my = 3)
 		: Base::Layout({gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), Button::Layout(mx, my)}, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
 			glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 0.0f, -1.0f), glm::vec4(0.0f, 0.0f, 1.0f, -1.0f), glm::vec4(1.0f, 0.0f, 0.0f, -1.0f),
 			glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f)})
