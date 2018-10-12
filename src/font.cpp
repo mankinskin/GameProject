@@ -48,11 +48,17 @@ void text::loadFonts()
 
 text::Font::Font(const FontFile& fontfile)
 {
+  loadFontFile(fontfile);
+}
+
+void text::Font::loadFontFile(const FontFile& fontfile)
+{
   name = fontfile.name;
   atlasTexture = texture::Texture2D(fontfile.atlas);
   texture::setTextureWrapping(atlasTexture, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
   texture::setTextureFilter(atlasTexture, GL_NEAREST, GL_NEAREST);
 
+  // load glyph UVs
   std::vector<glm::vec4> glyphuvs(fontfile.glyphs.quads.size());
   for (unsigned int g = 0; g < fontfile.glyphs.quads.size(); ++g) {
 	glm::uvec4 quad = fontfile.glyphs.quads[ g ];
@@ -62,12 +68,14 @@ text::Font::Font(const FontFile& fontfile)
 		(float)quad.w / (float)fontfile.atlas.height);
   }
 
+  //load glyph sizes
   std::vector<glm::vec2> sizes(fontfile.glyphs.quads.size());
   for (unsigned int g = 0; g < sizes.size(); ++g) {
 	glm::uvec4 quad = fontfile.glyphs.quads[ g ];
 	sizes[g] = glm::vec2((float)(quad.z) * pixel_size.x,
 		(float)(quad.w) * pixel_size.y);
   }
+  // load glyph metrics
   metrics.resize(fontfile.glyphs.metrics.size());
   for (unsigned int g = 0; g < metrics.size(); ++g) {
 	const FontFile::Glyphs::Metric& met = fontfile.glyphs.metrics[ g ];

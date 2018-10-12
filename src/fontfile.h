@@ -39,7 +39,7 @@ namespace text
 		metrics.resize(count);
 	  }
 	  Glyphs()
-		:count(0)
+		: count(0)
 	  {}
 	};
 

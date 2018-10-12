@@ -38,6 +38,7 @@ namespace text
 	  glm::vec2 bearing;
 	};
 
+	void loadFontFile(const FontFile& fontfile);
 	void render() const;
 	void uploadChars() const;
 	void uploadPositions() const;

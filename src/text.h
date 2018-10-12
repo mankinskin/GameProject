@@ -43,11 +43,12 @@ namespace text
 	private:
 	  void writeChar(const unsigned char& c, glm::vec2 pos);
 	  void lineBreak();
+
+	  Font::ID font;
 	  float cursor; // relative to pos
 	  size_t line;
 	  std::string str;
 	  unsigned int bufferBegin = 0; // begin of the data in the font buffers
-	  Font::ID font;
   };
   extern unsigned int tabsize;
 
