@@ -53,19 +53,20 @@ namespace text
 	std::string write();
 	void read(std::string pFilename);
 
-	void setLoadSize(unsigned int ptx, unsigned int pty = 0);
-	void setLoadDpi(glm::uvec2 pDpi);
-	void setLoadDpi(unsigned int ptx, unsigned int pty = 0);
-	void setLoadPadding(unsigned int padPixels);
+	void setLoadSize(const size_t ptx, const size_t pty = 0);
+	void setLoadSize(const glm::uvec2 pt);
+	void setLoadDpi(const glm::uvec2 pDpi);
+	void setLoadDpi(const size_t ptx, const size_t pty = 0);
 	std::string name = "";
 
+	static void setLoadPadding(size_t padPixels);
 	private:
 	void readFontfile(std::string pFilepath);
 	void readFace(std::string pFilepath);
 	const std::string FONT_DIR = "assets/fonts/";
 	glm::uvec2 size = glm::uvec2(4, 4);
 	glm::uvec2 dpi = glm::uvec2(100, 100);
-	unsigned int padding = 0;
+	static unsigned int padding;
 	int ft_error = 0;
 	unsigned int writeGlyphs(FILE* file);
 	unsigned int readGlyphs(FILE* file);

@@ -2,39 +2,43 @@
 #include "utils/path.h"
 
 FT_Library ftLib;
+unsigned int text::FontFile::padding = 0;
 
-void text::FontFile::setLoadPadding(unsigned int padPixels)
+void text::FontFile::setLoadPadding(size_t padPixels)
 {
   padding = padPixels;
 }
 
-void text::FontFile::setLoadSize(unsigned int ptx, unsigned int pty)
+void text::FontFile::setLoadSize(const size_t ptx, const size_t pty)
 {
-  if (!ptx) {
-	ptx = pty;
+  setLoadSize(glm::uvec2(ptx, pty));
+}
+void text::FontFile::setLoadSize(const glm::uvec2 pt)
+{
+  if (!pt.x) {
+	size.x = pt.y;
+	size.y = pt.y;
   }
-  else if (!pty) {
-	pty = ptx;
+  else if (!pt.y) {
+	size.x = pt.x;
+	size.y = pt.x;
   }
-  size.x = ptx;
-  size.y = pty;
 }
 
-void text::FontFile::setLoadDpi(glm::uvec2 pDpi)
+void text::FontFile::setLoadDpi(const size_t ptx, const size_t pty)
 {
-  setLoadDpi(pDpi.x, pDpi.y);
+  setLoadDpi(glm::uvec2(ptx, pty));
 }
-
-void text::FontFile::setLoadDpi(unsigned int ptx, unsigned int pty)
+void text::FontFile::setLoadDpi(const glm::uvec2 pDpi)
 {
-  if (!ptx) {
-	ptx = pty;
+  if (!pDpi.x) {
+	dpi.x = pDpi.y;
+	dpi.y = pDpi.y;
   }
-  else if (!pty) {
-	pty = ptx;
+  else if (!pDpi.y) {
+	dpi.x = pDpi.x;
+	dpi.y = pDpi.x;
   }
-  dpi.x = ptx;
-  dpi.y = pty;
 }
 
 void text::FontFile::read(std::string pFilename)

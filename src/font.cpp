@@ -28,6 +28,7 @@ void text::loadFonts()
   initFreeType();
   setTargetResolution(app::mainWindow.width, app::mainWindow.height);
 
+  FontFile::setLoadPadding(1);
   puts("Font terminus");
   FontFile terminusfont;
   terminusfont.setLoadPadding(1);
