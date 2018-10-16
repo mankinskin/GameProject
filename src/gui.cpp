@@ -99,7 +99,7 @@ void gui::initWidgets()
   }
   puts("Slider");
   for (size_t s = 0; s < 3; ++s) {
-    Slider b(glm::vec4(-0.8f + (width/xcount) * (s%xcount), -0.5f - (0.1f * floor(s/xcount)), toScreenX(300), toScreenY(10)), sliderPreset, 0.0f, 1.0f, gl::getColor("grey")->x);
+    Slider b(glm::vec4(-0.8f + (width/xcount) * (s%xcount), -0.5f - (0.1f * floor(s/xcount)), toScreenX(300), toScreenY(10)), Slider::Preset(Slider::Layout(0.0f, 1.0f, gl::Color(1)->x), sliderColors));
     puts("Finished");
   }
   puts("End");

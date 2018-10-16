@@ -4,6 +4,7 @@
 #include "../color.h"
 #include "../mouse.h"
 #include "button.h"
+#include "../camera.h"
 
 namespace gui
 {
@@ -23,6 +24,10 @@ namespace gui
 	{
 
 	  static const size_t slideWidth = 10;
+	  // slider values
+	  float& targ;  // the value to set by the slider
+	  float min;	  // the value when the slide is left
+	  float max;	  // the value when the slide is right
 	  const typename Base::Quads genQuads(const glm::vec4 q) const
 	  {
 		return typename Base::Quads{
@@ -31,8 +36,14 @@ namespace gui
 				toScreenX(slideWidth),
 				q.w)};
 	  }
-	  Layout()
-		: Base::Layout({gui::QuadLayout(), gui::QuadLayout()}, {glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, {glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)})
+	  Layout(float pMin, float pMax, float& t)
+		: Base::Layout(
+			{gui::QuadLayout(), gui::QuadLayout()},
+			{glm::vec2(1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+			{glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)})
+	  , targ(std::forward<float&>(t))
+		, min(pMin)
+		, max(pMax)
 		{}
 	};
 	struct Preset : public Layout, Base::Colors
@@ -71,11 +82,11 @@ namespace gui
       const float bwidth = s.box().width();
       setWidgetPosX<SlideElement>(s.slide(), std::min(bpos + (bwidth - swidth), std::max(bpos, xv - swidth/2.0f)));
     }
-    Slider(const glm::vec4 q, const Preset pre, float pMin, float pMax, float& t)
+    Slider(const glm::vec4 q, const Preset pre)
       : Base(q, pre)
-      , targ(std::forward<float&>(t))
-      , min(pMin)
-      , max(pMax)
+      , targ(std::forward<float&>(pre.targ))
+      , min(pre.min)
+      , max(pre.max)
     {
       using namespace signals;
       puts("Init Slider");
@@ -86,7 +97,7 @@ namespace gui
     }
   };
 
-  const typename Slider::Layout sliderLayout;
+  const typename Slider::Layout sliderLayout(0.0f, 1.0f, camera::main_camera.pos.x);
   const typename Slider::Colors sliderColors({gl::Color(1), gl::Color(12)});
   const typename Slider::Preset sliderPreset(sliderLayout, sliderColors);
 }
