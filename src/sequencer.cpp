@@ -160,9 +160,9 @@ void sequencer::gameloop()
   puts("Entering gameloop");
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-  text::Text::ID term_box = text::Text::all.makeID(text::Text(glm::vec2(0.0f, 0.90f), glm::vec2(0.5f, 1.0f)));
+  text::Textbox::ID term_box = text::Textbox::all.makeID(text::Textbox(glm::vec2(0.0f, 0.90f), glm::vec2(0.5f, 1.0f)));
   term_box->setChars("1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item");
-  text::updateTexts();
+  text::updateTextboxes();
   while (app::state == app::Running) {
 	frame();
   }

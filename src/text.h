@@ -6,28 +6,28 @@
 
 namespace text
 {
-  struct Text
+  struct Textbox
   {
 	public:
-	  static utils::Container<Text> all;
-	  struct ID : public utils::ID<Text>
+	  static utils::Container<Textbox> all;
+	  struct ID : public utils::ID<Textbox>
 	  {
 		ID()
-		  : utils::ID<Text>(&all)
+		  : utils::ID<Textbox>(&all)
 		{}
 		ID(const size_t i)
-		  : utils::ID<Text>(i, &all)
+		  : utils::ID<Textbox>(i, &all)
 		{}
-		ID(const utils::ID<Text>& id)
-		  : utils::ID<Text>(std::forward<const utils::ID<Text>&>(id))
+		ID(const utils::ID<Textbox>& id)
+		  : utils::ID<Textbox>(std::forward<const utils::ID<Textbox>&>(id))
 		{}
-		ID(utils::ID<Text>&& id)
-		  : utils::ID<Text>(std::move(id))
+		ID(utils::ID<Textbox>&& id)
+		  : utils::ID<Textbox>(std::move(id))
 		{}
 	  };
 	  glm::vec2 position;
 	  glm::vec2 size;
-	  Text(glm::vec2 pPos = glm::vec2(0.0f, 0.0f), glm::vec2 pSize = glm::vec2(1.0f, 1.0f))
+	  Textbox(glm::vec2 pPos = glm::vec2(0.0f, 0.0f), glm::vec2 pSize = glm::vec2(1.0f, 1.0f))
 		: font(Font::ID(0))
 		, position(pixel_quantize(pPos))
 		, size(pixel_quantize(pSize))
@@ -52,5 +52,5 @@ namespace text
   };
   extern unsigned int tabsize;
 
-  void updateTexts();
+  void updateTextboxes();
 }

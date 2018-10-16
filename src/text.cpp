@@ -2,20 +2,20 @@
 
 unsigned int text::tabsize = 4;
 
-utils::Container<text::Text> text::Text::all = utils::Container<text::Text>();
+utils::Container<text::Textbox> text::Textbox::all = utils::Container<text::Textbox>();
 
-void text::Text::setChars(const std::string& pStr)
+void text::Textbox::setChars(const std::string& pStr)
 {
   str = pStr;
 }
 
-void text::Text::lineBreak()
+void text::Textbox::lineBreak()
 {
   cursor = 0.0f;
   ++line;
 }
 
-void text::Text::writeWord(unsigned int start, unsigned int length)
+void text::Textbox::writeWord(unsigned int start, unsigned int length)
 {
   for (unsigned int ci = 0; ci < length; ++ci) {
 	const unsigned char& c = str[start + ci];
@@ -26,7 +26,7 @@ void text::Text::writeWord(unsigned int start, unsigned int length)
   }
 }
 
-void text::Text::writeChars()
+void text::Textbox::writeChars()
 {
   // TODO: consider a printer class for values like this
   line = 0;
@@ -90,14 +90,14 @@ void text::Text::writeChars()
   cursor = 0.0f;
 }
 
-void text::Text::setFont(Font::ID pFont)
+void text::Textbox::setFont(Font::ID pFont)
 {
   font = pFont;
 }
 
-void text::updateTexts()
+void text::updateTextboxes()
 {
-  for (Text& text : Text::all) {
+  for (Textbox& text : Textbox::all) {
 	text.writeChars();
   }
 }
