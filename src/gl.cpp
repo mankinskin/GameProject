@@ -28,7 +28,7 @@ int gl::EXTENSIONS_SUPPORTED_NUM = 0;
 int gl::OPENGL_VERSION[2] = {};
 std::string gl::GLSL_VERSION = "";
 std::string gl::SYSTEM_RENDERER = "";
-gl::Viewport screenViewport;
+gl::Viewport screen;
 int gl::MAX_TEXTURE_UNIT_COUNT;
 gl::StreamStorage<glm::vec4> gl::generalUniformBuffer;
 gl::VAO gl::screenQuadVAO;
@@ -40,8 +40,8 @@ void gl::init()
   initGLEW();
   gl::debug::init();
   setupOpenGL();
-  screenViewport = Viewport(app::mainWindow);
-  screenViewport.bind();
+  screen = Viewport(app::mainWindow);
+  screen.bind();
   ::debug::printErrors();
 }
 

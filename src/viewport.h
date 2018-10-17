@@ -28,7 +28,7 @@ namespace gl
 	static Viewport* current;
   };
 
-  extern Viewport screenViewport;
+  extern Viewport screen;
 
   unsigned int getWidth();
   unsigned int getHeight();

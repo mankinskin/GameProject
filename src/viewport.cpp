@@ -1,6 +1,6 @@
 #include "viewport.h"
 
-gl::Viewport gl::screenViewport = gl::Viewport();
+gl::Viewport gl::screen = gl::Viewport();
 gl::Viewport* gl::Viewport::current = nullptr;
 
 gl::Viewport::Viewport()
