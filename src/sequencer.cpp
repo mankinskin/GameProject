@@ -75,9 +75,6 @@ void sequencer::initModules()
   puts("Debug Geometry...");
   gl::debug::createDebugGeometry();
 
-  puts("GUI...");
-  gui::init();
-
   puts("Widgets...");
   gui::initWidgets();
 

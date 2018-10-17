@@ -6,10 +6,11 @@ gl::Viewport* gl::Viewport::current = nullptr;
 gl::Viewport::Viewport()
 {}
 
-gl::Viewport::Viewport(app::Window window, float res)
+gl::Viewport::Viewport(const app::Window& window, const float& res)
   : width(window.width)
   , height(window.height)
   , resolution(res)
+  , pixel_size(2.0f / width, 2.0f / height)
 {}
 
 void gl::Viewport::bind()
@@ -28,4 +29,78 @@ unsigned int gl::getHeight()
 float gl::getAspectRatio()
 {
   return getWidth()/getHeight();
+}
+
+glm::vec2 gl::pixel_round(const glm::vec2& pIn)
+{
+  return Viewport::current->pixel_round(pIn);
+}
+float gl::pixel_round_x(const float& pIn)
+{
+  return Viewport::current->pixel_round_x(pIn);
+}
+float gl::pixel_round_y(const float& pIn)
+{
+  return Viewport::current->pixel_round_y(pIn);
+}
+size_t gl::toPixelsX(const float& screenX)
+{
+  return Viewport::current->toPixelsX(screenX);
+}
+size_t gl::toPixelsY(const float& screenY)
+{
+  return Viewport::current->toPixelsY(screenY);
+}
+glm::uvec2 gl::toPixels(const glm::vec2& screen)
+{
+  return Viewport::current->toPixels(screen);
+}
+float gl::toScreenX(const size_t& pixelsX)
+{
+  return Viewport::current->toScreenX(pixelsX);
+}
+float gl::toScreenY(const size_t& pixelsY)
+{
+  return Viewport::current->toScreenY(pixelsY);
+}
+glm::vec2 gl::toScreen(const glm::uvec2& pixels)
+{
+  return Viewport::current->toScreen(pixels);
+}
+
+float gl::Viewport::pixel_round_x(const float& pIn)
+{
+  return pixel_size.x * round(pIn / pixel_size.x);
+}
+float gl::Viewport::pixel_round_y(const float& pIn)
+{
+  return pixel_size.y * round(pIn / pixel_size.y);
+}
+glm::vec2 gl::Viewport::pixel_round(const glm::vec2& pIn)
+{
+  return pixel_size * round(pIn / pixel_size);
+}
+size_t gl::Viewport::toPixelsX(const float& screenX)
+{
+  return (size_t)round(screenX / pixel_size.x);
+}
+size_t gl::Viewport::toPixelsY(const float& screenY)
+{
+  return (size_t)round(screenY / pixel_size.y);
+}
+glm::uvec2 gl::Viewport::toPixels(const glm::vec2& screen)
+{
+  return glm::uvec2(toPixelsX(screen.x), toPixelsY(screen.y));
+}
+float gl::Viewport::toScreenX(const size_t& pixelsX)
+{
+  return pixelsX * pixel_size.x;
+}
+float gl::Viewport::toScreenY(const size_t& pixelsY)
+{
+  return pixelsY * pixel_size.y;
+}
+glm::vec2 gl::Viewport::toScreen(const glm::uvec2& pixels)
+{
+  return glm::vec2(toScreenX(pixels.x), toScreenY(pixels.y));
 }

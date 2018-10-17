@@ -23,9 +23,9 @@ namespace gui
 	  {
 		return typename Base::Quads{
 		  glm::vec4(q.x, q.y, q.z, q.w),
-			glm::vec4(q.x + toScreenX(marginx), q.y - toScreenY(marginy),
-				q.z - toScreenX(marginx*2),
-				q.w - toScreenY(marginy*2))};
+			glm::vec4(q.x + gl::toScreenX(marginx), q.y - gl::toScreenY(marginy),
+				q.z - gl::toScreenX(marginx*2),
+				q.w - gl::toScreenY(marginy*2))};
 	  }
 
 	  Layout(size_t mx = 2, size_t my = 2)

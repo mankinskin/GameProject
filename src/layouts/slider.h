@@ -23,7 +23,7 @@ namespace gui
 	struct Layout : public Base::Layout
 	{
 
-	  static const size_t slideWidth = 10;
+	  const size_t slideWidth = 10;
 	  // slider values
 	  float& targ;  // the value to set by the slider
 	  float min;	  // the value when the slide is left
@@ -32,9 +32,7 @@ namespace gui
 	  {
 		return typename Base::Quads{
 		  glm::vec4(q.x, q.y, q.z, q.w),
-			glm::vec4(q.x, q.y,
-				toScreenX(slideWidth),
-				q.w)};
+			glm::vec4(q.x, q.y, gl::toScreenX(slideWidth), q.w)};
 	  }
 	  Layout(float pMin, float pMax, float& t)
 		: Base::Layout(

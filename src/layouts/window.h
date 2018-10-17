@@ -24,15 +24,15 @@ namespace gui
       const typename Base::Quads genQuads(const glm::vec4 q) const
       {
     	return typename Base::Quads {
-    	  glm::vec4(q.x, q.y - toScreenY(headerHeight), toScreenX(marginx), q.w - toScreenY(marginy + headerHeight)),
-			glm::vec4(q.x + toScreenX(marginx), q.y - toScreenY(headerHeight), q.z - toScreenX(marginx*2), q.w - toScreenY(marginy + headerHeight)),
-			glm::vec4(q.x + (q.z - toScreenX(marginx)), q.y - toScreenY(headerHeight), toScreenX(marginx), q.w - toScreenY(marginy + headerHeight)),
+		  glm::vec4(q.x, q.y - gl::toScreenY(headerHeight), gl::toScreenX(marginx), q.w - gl::toScreenY(marginy + headerHeight)),
+			glm::vec4(q.x + gl::toScreenX(marginx), q.y - gl::toScreenY(headerHeight), q.z - gl::toScreenX(marginx*2), q.w - gl::toScreenY(marginy + headerHeight)),
+			glm::vec4(q.x + (q.z - gl::toScreenX(marginx)), q.y - gl::toScreenY(headerHeight), gl::toScreenX(marginx), q.w - gl::toScreenY(marginy + headerHeight)),
 
-			glm::vec4(q.x, q.y - (q.w - toScreenY(marginy)), toScreenX(marginx), toScreenY(marginy)),
-			glm::vec4(q.x + toScreenX(marginx), q.y - (q.w - toScreenY(marginy)), q.z - toScreenX(marginx*2), toScreenY(marginy)),
-			glm::vec4(q.x + q.z - toScreenX(marginx), q.y - (q.w - toScreenY(marginy)), toScreenX(marginx), toScreenY(marginy)),
+			glm::vec4(q.x, q.y - (q.w - gl::toScreenY(marginy)), gl::toScreenX(marginx), gl::toScreenY(marginy)),
+			glm::vec4(q.x + gl::toScreenX(marginx), q.y - (q.w - gl::toScreenY(marginy)), q.z - gl::toScreenX(marginx*2), gl::toScreenY(marginy)),
+			glm::vec4(q.x + q.z - gl::toScreenX(marginx), q.y - (q.w - gl::toScreenY(marginy)), gl::toScreenX(marginx), gl::toScreenY(marginy)),
 
-			glm::vec4(q.x, q.y, q.z, toScreenY(headerHeight)), glm::vec4(q.x + toScreenX(marginx), q.y - toScreenY(headerHeight), q.z - toScreenX(marginx*2), toScreenY(headerHeight))};
+			glm::vec4(q.x, q.y, q.z, gl::toScreenY(headerHeight)), glm::vec4(q.x + gl::toScreenX(marginx), q.y - gl::toScreenY(headerHeight), q.z - gl::toScreenX(marginx*2), gl::toScreenY(headerHeight))};
       }
 	  Layout(const size_t mx = 3, const size_t my = 3)
 		: Base::Layout({gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), gui::QuadLayout(), Button::Layout(mx, my), Slider::Layout(0.0f, 100.0f, camera::main_camera.pos.x)},
