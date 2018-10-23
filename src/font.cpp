@@ -29,21 +29,9 @@ void text::loadFonts()
 
   FontFile::setLoadPadding(1);
   puts("Font terminus");
-  FontFile terminusfont;
-  terminusfont.setLoadPadding(1);
-  terminusfont.setLoadDpi(app::mainWindow.monitor->dpi);
-  terminusfont.setLoadSize(12);
-  terminusfont.read("Terminus.ttf");
-  Font::all.makeID(Font(terminusfont));
-
+  Font::all.makeID(Font(FontFile("Terminus.ttf", 12)));
   puts("Font liberation");
-  FontFile liberationfont;
-  liberationfont.setLoadPadding(1);
-  liberationfont.setLoadDpi(app::mainWindow.monitor->dpi);
-  liberationfont.setLoadSize(16);
-  liberationfont.read("LiberationMono-Regular.ttf");
-
-  Font::all.makeID(Font(liberationfont));
+  Font::all.makeID(Font(FontFile("LiberationMono-Regular.ttf", 16)));
 }
 
 text::Font::Font(const FontFile& fontfile)

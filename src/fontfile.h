@@ -49,6 +49,12 @@ namespace text
 
 	FontFile()
 	{}
+	FontFile(const std::string pFilePath, const size_t pointSize = 11)
+	{
+	  setLoadDpi(app::mainWindow.monitor->dpi);
+	  setLoadSize(pointSize);
+	  read(pFilePath);
+	}
 
 	std::string write();
 	void read(std::string pFilename);
