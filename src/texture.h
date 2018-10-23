@@ -12,13 +12,13 @@ namespace texture
 	{}
 	Texture2D(const Image& image);
 	Texture2D(std::string pFilename);
-	Texture2D(unsigned int pWidth, unsigned int pHeight,
+	Texture2D(size_t pWidth, size_t pHeight,
 		GLenum pInternalFormat, GLenum pFormat, unsigned char* pData = nullptr);
 	void loadImage(const Image& image);
 	void setup(unsigned char* pData);
 	unsigned int ID = 0;
-	unsigned int width = 0;
-	unsigned int height = 0;
+	size_t width = 0;
+	size_t height = 0;
 	GLenum internalFormat;
 	GLenum format;
 	operator unsigned int()
@@ -32,8 +32,8 @@ namespace texture
   void generateMipMap(Texture2D& texture,
 	  int glMinFilter = GL_NEAREST_MIPMAP_LINEAR,
 	  int glMagFilter = GL_NEAREST);
-  void setTextureWrapping(Texture2D& pTexture, unsigned int pWrapS, unsigned int pWrapT);
-  void setTextureFilter(Texture2D& pTexture, unsigned int pMagFilter, unsigned int pMinFilter);
+  void setTextureWrapping(Texture2D& pTexture, size_t pWrapS, size_t pWrapT);
+  void setTextureFilter(Texture2D& pTexture, size_t pMagFilter, size_t pMinFilter);
 
   void setTextureDirectory(std::string& pDirectory);
   void resetTextureDirectory();

@@ -1,19 +1,18 @@
 #include "font.h"
 #include <unistd.h>
 #include <fcntl.h>
-#include "shader.h"
 #include "vao.h"
 #include "primitives.h"
 #include "app.h"
 #include "contextwindow.h"
 
 
-gl::VAO fontVAO;
-shader::Program fontShader;
 glm::vec2 text::pixel_size = glm::vec2(2.0f / (float)1920, 2.0f / (float)1080);
 typename text::Font::Container text::Font::all = typename text::Font::Container();
+gl::VAO text::Font::fontVAO;
+shader::Program text::Font::fontShader;
 
-void text::setTargetResolution(const unsigned int rx, const unsigned int ry)
+void text::setTargetResolution(const size_t rx, const size_t ry)
 {
   setTargetResolution(glm::uvec2(rx, ry));
 }
@@ -61,7 +60,7 @@ void text::Font::loadFontFile(const FontFile& fontfile)
 
   // load glyph UVs
   std::vector<glm::vec4> glyphuvs(fontfile.glyphs.quads.size());
-  for (unsigned int g = 0; g < fontfile.glyphs.quads.size(); ++g) {
+  for (size_t g = 0; g < fontfile.glyphs.quads.size(); ++g) {
 	glm::uvec4 quad = fontfile.glyphs.quads[ g ];
 	glyphuvs[g] = glm::vec4((float)quad.x / (float)fontfile.atlas.width,
 		(float)quad.y / (float)fontfile.atlas.height,
@@ -71,14 +70,14 @@ void text::Font::loadFontFile(const FontFile& fontfile)
 
   //load glyph sizes
   std::vector<glm::vec2> sizes(fontfile.glyphs.quads.size());
-  for (unsigned int g = 0; g < sizes.size(); ++g) {
+  for (size_t g = 0; g < sizes.size(); ++g) {
 	glm::uvec4 quad = fontfile.glyphs.quads[ g ];
 	sizes[g] = glm::vec2((float)(quad.z) * pixel_size.x,
 		(float)(quad.w) * pixel_size.y);
   }
   // load glyph metrics
   metrics.resize(fontfile.glyphs.metrics.size());
-  for (unsigned int g = 0; g < metrics.size(); ++g) {
+  for (size_t g = 0; g < metrics.size(); ++g) {
 	const FontFile::Glyphs::Metric& met = fontfile.glyphs.metrics[ g ];
 	metrics[g] = Metric(
 		(float)met.advance * pixel_size.x,
@@ -103,24 +102,24 @@ void text::Font::loadFontFile(const FontFile& fontfile)
 
 void text::initFontVAO()
 {
-  fontVAO = gl::VAO("FontVAO");
+  Font::fontVAO = gl::VAO("FontVAO");
 
-  fontVAO.vertexBuffer(0, gl::quadVBO, 0, sizeof(glm::vec2));
-  fontVAO.vertexAttrib(0, 0, 2, GL_FLOAT, 0);
-  fontVAO.elementBuffer(gl::quadEBO);
+  Font::fontVAO.vertexBuffer(0, gl::quadVBO, 0, sizeof(glm::vec2));
+  Font::fontVAO.vertexAttrib(0, 0, 2, GL_FLOAT, 0);
+  Font::fontVAO.elementBuffer(gl::quadEBO);
 }
 
 void text::initFontShader()
 {
-  fontShader = shader::Program("FontShader",
+  Font::fontShader = shader::Program("FontShader",
 	  shader::Stage("fontShader.vert"),
 	  shader::Stage("fontShader.frag"));
-  fontShader.addVertexAttribute("corner", 0);
+  Font::fontShader.addVertexAttribute("corner", 0);
 }
 
 void text::setupFontShader()
 {
-  fontShader.build();
+  Font::fontShader.build();
 }
 
 void text::Font::uploadChars() const
@@ -133,21 +132,29 @@ void text::Font::uploadPositions() const
   gl::uploadStorage(posBuffer, sizeof(glm::vec2) * positions.size(), &positions[0]);
 }
 
+void text::Font::update() const
+{
+	uploadChars();
+	uploadPositions();
+}
 void text::updateFonts()
 {
   for (const Font& font : Font::all) {
-	font.uploadChars();
-	font.uploadPositions();
+	font.update();
   }
 }
 
-void text::Font::render() const
+void text::Font::use() const
 {
-  if (chars.size()) {
 	fontShader.bindUniformBuffer(posBuffer, "PosBuffer");
 	fontShader.bindUniformBuffer(charBuffer, "CharBuffer");
 	fontShader.bindUniformBuffer(uvBuffer, "UVBuffer");
 	fontShader.bindUniformBuffer(sizeBuffer, "SizeBuffer");
+}
+void text::Font::render() const
+{
+  if (chars.size()) {
+	use();
 	fontShader.use();
 	fontVAO.bind();
 

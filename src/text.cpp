@@ -1,12 +1,16 @@
 #include "text.h"
 
-unsigned int text::tabsize = 4;
+size_t text::tabsize = 4;
 
 utils::Container<text::Textbox> text::Textbox::all = utils::Container<text::Textbox>();
 
-void text::Textbox::setChars(const std::string& pStr)
+void text::Textbox::setString(const std::string& pStr)
 {
   str = pStr;
+}
+std::string text::Textbox::getString() const
+{
+  return str;
 }
 
 void text::Textbox::lineBreak()
@@ -15,9 +19,9 @@ void text::Textbox::lineBreak()
   ++line;
 }
 
-void text::Textbox::writeWord(unsigned int start, unsigned int length)
+void text::Textbox::writeWord(size_t start, size_t length)
 {
-  for (unsigned int ci = 0; ci < length; ++ci) {
+  for (size_t ci = 0; ci < length; ++ci) {
 	const unsigned char& c = str[start + ci];
 	const Font::Metric& met = font->metrics[ c ];
 	font->chars.push_back(c);
@@ -26,7 +30,7 @@ void text::Textbox::writeWord(unsigned int start, unsigned int length)
   }
 }
 
-void text::Textbox::writeChars()
+void text::Textbox::writeString()
 {
   // TODO: consider a printer class for values like this
   line = 0;
@@ -39,7 +43,7 @@ void text::Textbox::writeChars()
   size_t wordChars = 0;
   float wordLength = 0.0f;
 
-  for (unsigned int ci = 0; ci < str.size(); ++ci) {
+  for (size_t ci = 0; ci < str.size(); ++ci) {
 	const unsigned char& c = str[ci];
 	const Font::Metric& met = font->metrics[ c ];
 
@@ -98,6 +102,6 @@ void text::Textbox::setFont(Font::ID pFont)
 void text::updateTextboxes()
 {
   for (Textbox& text : Textbox::all) {
-	text.writeChars();
+	text.writeString();
   }
 }

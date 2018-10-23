@@ -4,7 +4,7 @@
 #include <SOIL.h>
 #include <cstring>
 
-unsigned int getChannels(png_byte type)
+size_t getChannels(png_byte type)
 {
   if (type == PNG_COLOR_TYPE_GRAY || type == PNG_COLOR_TYPE_PALETTE) {
 	return 1;
@@ -21,7 +21,7 @@ unsigned int getChannels(png_byte type)
   return -1;
 }
 
-png_byte getColorType(unsigned int channels)
+png_byte getColorType(size_t channels)
 {
   if (channels == 1) {
 	return PNG_COLOR_TYPE_GRAY;
@@ -43,11 +43,11 @@ Image::Image(std::string pFilename)
   read(pFilename);
 }
 
-Image::Image(unsigned int pWidth, unsigned int pHeight,
-	unsigned int pChannels, unsigned int pBitDepth, unsigned char* pData)
+Image::Image(size_t pWidth, size_t pHeight,
+	size_t pChannels, size_t pBitDepth, unsigned char* pData)
   :width(pWidth), height(pHeight), channels(pChannels), bit_depth(pBitDepth)
 {
-  unsigned int size = channels * width * height;
+  size_t size = channels * width * height;
   pixels = (unsigned char*)malloc(size);
   std::memcpy(pixels, pData, size);
 }
@@ -84,13 +84,13 @@ void Image::read(FILE* file)
 
   png_read_update_info(png, info);
 
-  unsigned int row_size = png_get_rowbytes(png, info);
+  size_t row_size = png_get_rowbytes(png, info);
 
   png_bytep* rows = (png_bytep*)malloc(sizeof(png_bytep) * height);
 
   pixels = (unsigned char*)malloc(sizeof(png_byte) * height * row_size);
 
-  for (unsigned int r = 0; r < height; ++r) {
+  for (size_t r = 0; r < height; ++r) {
 	rows[r] = pixels + row_size * r;
   }
 
@@ -133,11 +133,11 @@ void Image::write(FILE* file)
   png_set_compression_level(png, 0);
   png_write_info(png, info);
 
-  unsigned int row_size = png_get_rowbytes(png, info);
+  size_t row_size = png_get_rowbytes(png, info);
 
   png_bytep* rows = (png_bytep*)malloc(sizeof(png_bytep) * height);
 
-  for (unsigned int r = 0; r < height; ++r) {
+  for (size_t r = 0; r < height; ++r) {
 	rows[ r ] = (png_bytep)&pixels[ row_size * r ];
   }
 

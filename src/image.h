@@ -5,17 +5,17 @@
 struct Image
 {
   public:
-	unsigned int width = 0;
-	unsigned int height = 0;
-	unsigned int channels = 1;
-	unsigned int bit_depth = 8;
+	size_t width = 0;
+	size_t height = 0;
+	size_t channels = 1;
+	size_t bit_depth = 8;
 	unsigned char* pixels;
 
 	Image()
 	{}
 	Image(std::string pFilename);
-	Image(unsigned int pWidth, unsigned int pHeight,
-		unsigned int pChannels, unsigned int pBitDepth, unsigned char* pData);
+	Image(size_t pWidth, size_t pHeight,
+		size_t pChannels, size_t pBitDepth, unsigned char* pData);
 
 	~Image();
 	void write(FILE* file);

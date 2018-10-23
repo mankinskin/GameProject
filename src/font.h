@@ -3,6 +3,7 @@
 #include <string>
 #include "utils/id.h"
 #include "fontfile.h"
+#include "shader.h"
 
 namespace text
 {
@@ -33,7 +34,6 @@ namespace text
 		: advance(adv)
 		, bearing(glm::vec2(bx, by))
 	  {}
-
 	  float advance;
 	  glm::vec2 bearing;
 	};
@@ -42,22 +42,27 @@ namespace text
 	void render() const;
 	void uploadChars() const;
 	void uploadPositions() const;
+	void update() const;
 
 	std::string name;
 	std::vector<glm::vec2> positions;
 	std::vector<unsigned int> chars;
-	size_t charCount = 0;
 	std::vector<Metric> metrics;
+	size_t charCount = 0;
 	float linegap;
 
-	gl::Storage<glm::vec4> uvBuffer;
-	gl::Storage<glm::vec2> sizeBuffer;
-	gl::StreamStorage<glm::vec2> posBuffer;
-	gl::StreamStorage<unsigned int> charBuffer;
-	texture::Texture2D atlasTexture;
+	static gl::VAO fontVAO;
+	static shader::Program fontShader;
+	private:
+	void use() const;
+	gl::Storage<glm::vec4> uvBuffer;  // uv coordinates of glyphs in the atlas
+	gl::Storage<glm::vec2> sizeBuffer; //
+	gl::StreamStorage<unsigned int> charBuffer;	// codes of all characters to be drawn
+	gl::StreamStorage<glm::vec2> posBuffer;	// char position buffer
+	texture::Texture2D atlasTexture;  // contains all glyph textures
   };
 
-  void setTargetResolution(const unsigned int, const unsigned int);
+  void setTargetResolution(const size_t, const size_t);
   void setTargetResolution(const glm::uvec2);
   extern glm::vec2 pixel_size;
 

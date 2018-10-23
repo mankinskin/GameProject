@@ -16,19 +16,19 @@ namespace text
 	{
 	  struct Metric
 	  {
-		unsigned int advance;
-		unsigned int bearingx;
-		unsigned int bearingy;
+		size_t advance;
+		size_t bearingx;
+		size_t bearingy;
 
 		Metric()
 		{}
-		Metric(unsigned int adv, unsigned int bx, unsigned int by)
+		Metric(size_t adv, size_t bx, size_t by)
 		  : advance (adv)
 		  , bearingx(bx)
 		  , bearingy(by)
 		{}
 	  };
-	  unsigned int count;
+	  size_t count;
 	  std::vector<glm::uvec4> quads;
 	  std::vector<Metric> metrics;
 
@@ -45,7 +45,7 @@ namespace text
 
 	Image atlas;
 	Glyphs glyphs;
-	unsigned int linegap;
+	size_t linegap;
 
 	FontFile()
 	{}
@@ -66,10 +66,10 @@ namespace text
 	const std::string FONT_DIR = "assets/fonts/";
 	glm::uvec2 size = glm::uvec2(4, 4);
 	glm::uvec2 dpi = glm::uvec2(100, 100);
-	static unsigned int padding;
 	int ft_error = 0;
-	unsigned int writeGlyphs(FILE* file);
-	unsigned int readGlyphs(FILE* file);
+	size_t writeGlyphs(FILE* file);
+	size_t readGlyphs(FILE* file);
+	static size_t padding;
   };
 
   int initFreeType();

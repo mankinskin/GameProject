@@ -30,25 +30,25 @@ namespace text
 		: Quad(pixel_quantize(pPos), pixel_quantize(pSize))
 		, font(Font::ID(0))
 	  {}
-	  void setChars(const std::string& str);
-	  void writeChars();
-	  void writeWord(unsigned int start, unsigned int length);
+	  void setString(const std::string& str);
+	  std::string getString() const;
+	  void writeString();
 	  void setFont(Font::ID);
+
 	  size_t lineCount()
 	  {
 		return floor(w / font->linegap);
 	  }
 	private:
-	  void writeChar(const unsigned char& c, glm::vec2 pos);
+	  std::string str;
+	  void writeWord(size_t start, size_t length);
 	  void lineBreak();
-
-	  Font::ID font;
 	  float cursor; // relative to pos
 	  size_t line;
-	  std::string str;
-	  unsigned int bufferBegin = 0; // begin of the data in the font buffers
+	  Font::ID font;
+	  size_t bufferBegin = 0; // begin of the data in the font buffers
   };
-  extern unsigned int tabsize;
+  extern size_t tabsize;
 
   void updateTextboxes();
 }

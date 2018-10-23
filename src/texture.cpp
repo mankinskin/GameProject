@@ -22,7 +22,7 @@ void Texture2D::setup(unsigned char* pData)
 void Texture2D::loadImage(const Image& image)
 {
   if (image.width == 0 || image.height == 0) {
-	puts ("Texture2D: invalid Image!");
+	puts ("Texture2D: Image has no size!");
 	return;
   }
   width = image.width;
@@ -71,7 +71,7 @@ void Texture2D::loadImage(const Image& image)
   }
 }
 
-Texture2D::Texture2D(unsigned int pWidth, unsigned int pHeight,
+Texture2D::Texture2D(size_t pWidth, size_t pHeight,
 	GLenum pInternalFormat, GLenum pFormat, unsigned char* pData)
   : width(pWidth)
   , height(pHeight)
@@ -103,13 +103,13 @@ void texture::generateMipMap(Texture2D& texture,
   glGenerateTextureMipmap(texture.ID);
 }
 
-void texture::setTextureWrapping(Texture2D& pTexture, unsigned int pWrapS, unsigned int pWrapT)
+void texture::setTextureWrapping(Texture2D& pTexture, size_t pWrapS, size_t pWrapT)
 {
   glTextureParameteri(pTexture.ID, GL_TEXTURE_WRAP_S, pWrapS);
   glTextureParameteri(pTexture.ID, GL_TEXTURE_WRAP_T, pWrapT);
 }
 
-void texture::setTextureFilter(Texture2D& pTexture, unsigned int pMagFilter, unsigned int pMinFilter)
+void texture::setTextureFilter(Texture2D& pTexture, size_t pMagFilter, size_t pMinFilter)
 {
   glTextureParameteri(pTexture.ID, GL_TEXTURE_MIN_FILTER, pMinFilter);
   glTextureParameteri(pTexture.ID, GL_TEXTURE_MAG_FILTER, pMagFilter);
