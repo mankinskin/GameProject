@@ -21,7 +21,7 @@ void text::Textbox::writeWord(unsigned int start, unsigned int length)
 	const unsigned char& c = str[start + ci];
 	const Font::Metric& met = font->metrics[ c ];
 	font->chars.push_back(c);
-	font->positions.push_back(position + glm::vec2(cursor, -1.0f * font->linegap * line) + met.bearing);
+	font->positions.push_back(Quad::getPos() + glm::vec2(cursor, -1.0f * font->linegap * line) + met.bearing);
 	cursor += met.advance;
   }
 }
@@ -70,8 +70,8 @@ void text::Textbox::writeChars()
 	  lineBreak();
 	  continue;
 	}
-	if (cursor + wordLength > size.x) {
-	  if (wordLength > size.x) {
+	if (cursor + wordLength > getSize().x) {
+	  if (wordLength > getSize().x) {
 		writeWord(ci - (wordChars - 1), wordChars - 1);
 		wordChars = 1;
 		wordLength = met.advance;

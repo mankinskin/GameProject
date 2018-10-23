@@ -25,24 +25,6 @@ void gui::updateQuadBuffer()
   }
 }
 
-void gui::Quad::setPos(const glm::vec2 p)
-{
-  x = p.x;
-  y = p.y;
-}
-
-void gui::Quad::move(const glm::vec2 v)
-{
-  x += v.x;
-  y += v.y;
-}
-
-void gui::Quad::resize(const glm::vec2 v)
-{
-  z += v.x;
-  w += v.y;
-}
-
 void gui::setQuadPos(const QuadID q, const glm::vec2 p)
 {
   q->setPos(p);

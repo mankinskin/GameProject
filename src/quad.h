@@ -16,12 +16,34 @@ namespace gui
   // rendering is responsibility of the component using the quad
   struct Quad : public glm::vec4
   {
-	constexpr Quad(glm::vec4 pData)
+	constexpr Quad(const glm::vec4 pData)
 	  : glm::vec4(pData)
 	{}
-	void setPos(const glm::vec2 p);
-	void move(const glm::vec2 v);
-	void resize(const glm::vec2 v);
+	Quad(const glm::vec2 pPos, const glm::vec2 pSize)
+	  : glm::vec4(pPos.x, pPos.y, pSize.x, pSize.y)
+	{}
+	glm::vec2 getSize() const { return glm::vec2(z, w); }
+	glm::vec2 getPos() const { return glm::vec2(x, y); }
+	void setSize(const glm::vec2 s)
+	{
+	  z = s.x;
+	  w = s.y;
+	}
+	void setPos(const glm::vec2 p)
+	{
+	  x = p.x;
+	  y = p.y;
+	}
+	void move(const glm::vec2 v)
+	{
+	  x += v.x;
+	  y += v.y;
+	}
+	void resize(const glm::vec2 v)
+	{
+	  z += v.x;
+	  w += v.y;
+	}
   };
 
   using QuadContainer = utils::Container<Quad, utils::UnmanagedPolicy>;
