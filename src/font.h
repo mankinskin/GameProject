@@ -43,17 +43,25 @@ namespace text
 	void uploadChars() const;
 	void uploadPositions() const;
 	void update() const;
+	void reset();
+	void reserveChars(const size_t);
+	void setCharCode(const size_t, const size_t);
+	void setCharPos(const size_t, glm::vec2);
+	void pushCharCode(const size_t);
+	void pushCharPos(const glm::vec2);
+	const Metric& getMetric(const size_t i) const;
+	size_t getCharCount() const;
 
 	std::string name;
-	std::vector<glm::vec2> positions;
-	std::vector<unsigned int> chars;
-	std::vector<Metric> metrics;
-	size_t charCount = 0;
 	float linegap;
 
 	static gl::VAO fontVAO;
 	static shader::Program fontShader;
 	private:
+	std::vector<glm::vec2> positions;
+	std::vector<unsigned int> chars;
+	std::vector<Metric> metrics;
+	size_t charCount = 0;
 	void use() const;
 	gl::Storage<glm::vec4> uvBuffer;  // uv coordinates of glyphs in the atlas
 	gl::Storage<glm::vec2> sizeBuffer; //
@@ -72,6 +80,7 @@ namespace text
   }
 
   void loadFonts();
+  void resetFonts();
 
   void initFontVAO();
 

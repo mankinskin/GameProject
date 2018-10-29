@@ -12,6 +12,35 @@ typename text::Font::Container text::Font::all = typename text::Font::Container(
 gl::VAO text::Font::fontVAO;
 shader::Program text::Font::fontShader;
 
+void text::Font::reserveChars(const size_t n)
+{
+  chars.reserve(n);
+  positions.reserve(n);
+}
+void text::Font::setCharCode(const size_t i, const size_t c)
+{
+  chars[i] = c;
+}
+void text::Font::setCharPos(const size_t i, const glm::vec2 p)
+{
+  positions[i] = p;
+}
+void text::Font::pushCharCode(const size_t c)
+{
+  chars.push_back(c);
+}
+void text::Font::pushCharPos(const glm::vec2 p)
+{
+  positions.push_back(p);
+}
+size_t text::Font::getCharCount() const
+{
+  return charCount;
+}
+const text::Font::Metric& text::Font::getMetric(const size_t i) const
+{
+  return metrics[i];
+}
 void text::setTargetResolution(const size_t rx, const size_t ry)
 {
   setTargetResolution(glm::uvec2(rx, ry));
@@ -124,6 +153,17 @@ void text::Font::update() const
 {
 	uploadChars();
 	uploadPositions();
+}
+void text::Font::reset()
+{
+	chars.clear();
+	positions.clear();
+}
+void text::resetFonts()
+{
+  for (Font& font : Font::all) {
+	font.reset();
+  }
 }
 void text::updateFonts()
 {

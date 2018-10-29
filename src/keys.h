@@ -1,6 +1,7 @@
 #pragma once
 #include "contextwindow.h"
 #include "buttonsignals.h"
+#include <string>
 
 namespace input
 {
@@ -23,6 +24,8 @@ namespace input
 	  : utils::ID<KeySignals>(std::move(id))
 	{}
   };
+  extern std::string frameTextBuffer;
+  void resetKeys();
 
   extern Key key_esc;
   extern Key key_c;

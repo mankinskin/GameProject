@@ -128,6 +128,7 @@ void sequencer::frame()
   input::fetch();
   camera::main_camera.look(input::Cursor::frameDelta);
   camera::main_camera.update();
+  text::Textbox::all[0] << input::frameTextBuffer;
 
   gl::updateGeneralUniformBuffer();
 
@@ -136,7 +137,7 @@ void sequencer::frame()
   gui::updateColorQuads();
   gui::updateLinePositions();
   gui::updateLineColors();
-  text::updateFonts();
+  text::updateText();
 
   nodes::updateNodeBuffers();
   model::mesh::updateMeshBuffers();
@@ -159,7 +160,6 @@ void sequencer::gameloop()
 
   text::Textbox::ID term_box = text::Textbox::all.makeID(text::Textbox(glm::vec2(0.0f, 0.90f), glm::vec2(0.5f, 1.0f)));
   term_box->setString("1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item");
-  text::updateTextboxes();
   while (app::state == app::Running) {
 	frame();
   }

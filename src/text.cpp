@@ -19,76 +19,90 @@ void text::Textbox::lineBreak()
   ++line;
 }
 
+
+bool space(const unsigned char c)
+{
+  return c == ' ';
+}
+bool tab(const unsigned char c)
+{
+  return c == '\t';
+}
+bool newline(const unsigned char c)
+{
+  return c == '\n';
+}
+
+bool whitespace(const unsigned char c)
+{
+  return space(c) || tab(c) || newline(c);
+}
+
 void text::Textbox::writeWord(size_t start, size_t length)
 {
   for (size_t ci = 0; ci < length; ++ci) {
 	const unsigned char& c = str[start + ci];
-	const Font::Metric& met = font->metrics[ c ];
-	font->chars.push_back(c);
-	font->positions.push_back(Quad::getPos() + glm::vec2(cursor, -1.0f * font->linegap * line) + met.bearing);
+	const Font::Metric& met = font->getMetric(c);
+	font->pushCharCode(c);
+	font->pushCharPos(Quad::getPos() + glm::vec2(cursor, -1.0f * font->linegap * line) + met.bearing);
 	cursor += met.advance;
   }
 }
 
 void text::Textbox::writeString()
 {
-  // TODO: consider a printer class for values like this
   line = 0;
   cursor = 0.0f;
 
-  bufferBegin = font->charCount;
-  font->chars.reserve(bufferBegin + str.size());
-  font->positions.reserve(bufferBegin + str.size());
+  bufferBegin = font->getCharCount();
+  font->reserveChars(bufferBegin + str.size());
 
-  size_t wordChars = 0;
-  float wordLength = 0.0f;
+  size_t wordLength = 0;
+  float wordWidth = 0.0f;
 
   for (size_t ci = 0; ci < str.size(); ++ci) {
 	const unsigned char& c = str[ci];
-	const Font::Metric& met = font->metrics[ c ];
+	const Font::Metric& met = font->getMetric(c);
 
 	// Word wrapping
-	// for every printable char, increase the word size
+	// for every printable char, increase the word size.
 	// when encountering a whitespace, push the word to
 	// the buffer and start a new word
-	if (c != ' ' && c != '\t' && c != '\n') {
-	  ++wordChars;
-	  wordLength += met.advance;
+	if (!whitespace(c)) {
+	  ++wordLength;
+	  wordWidth += met.advance;
 	}
-	else if (c == ' ') {
-	  writeWord(ci - wordChars, wordChars);
-	  wordChars = 0;
-	  wordLength = 0.0f;
+	else if (space(c)) {
+	  writeWord(ci - wordLength, wordLength);
+	  wordLength = 0;
+	  wordWidth = 0.0f;
 	  cursor += met.advance;
 	}
-	else if (c == '\t') {
-	  writeWord(ci - wordChars, wordChars);
-	  wordChars = 0;
-	  wordLength = 0.0f;
-	  cursor += font->metrics[' '].advance * tabsize;
+	else if (tab(c)) {
+	  writeWord(ci - wordLength, wordLength);
+	  wordLength = 0;
+	  wordWidth = 0.0f;
+	  cursor += font->getMetric(' ').advance * tabsize;
 	}
-	else if (c == '\n') {
-	  writeWord(ci - wordChars, wordChars);
-	  wordChars = 0;
-	  wordLength = 0.0f;
+	else if (newline(c)) {
+	  writeWord(ci - wordLength, wordLength);
+	  wordLength = 0;
+	  wordWidth = 0.0f;
 	  lineBreak();
 	  continue;
 	}
-	if (cursor + wordLength > getSize().x) {
-	  if (wordLength > getSize().x) {
-		writeWord(ci - (wordChars - 1), wordChars - 1);
-		wordChars = 1;
-		wordLength = met.advance;
+	if (cursor + wordWidth > this->getSize().x) {
+	  if (wordWidth > this->getSize().x) {
+		writeWord(ci - (wordLength - 1), wordLength - 1);
+		wordLength = 1;
+		wordWidth = met.advance;
 	  }
 	  lineBreak();
 	}
   }
-  if (wordChars) {
-	writeWord(str.size() - wordChars, wordChars);
+  if (wordLength) {
+	writeWord(str.size() - wordLength, wordLength);
   }
-
-  font->chars.shrink_to_fit();
-  font->positions.shrink_to_fit();
 
   line = 0;
   cursor = 0.0f;
@@ -104,4 +118,11 @@ void text::updateTextboxes()
   for (Textbox& text : Textbox::all) {
 	text.writeString();
   }
+}
+
+void text::updateText()
+{
+  resetFonts();
+  updateTextboxes();
+  updateFonts();
 }

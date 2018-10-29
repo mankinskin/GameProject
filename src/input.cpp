@@ -152,6 +152,7 @@ void input::fetch()
 void input::end()
 {
   resetMouse();
+  resetKeys();
   if (glfwWindowShouldClose(app::mainWindow.window)) {
 	app::state = app::State::Exit;
   }

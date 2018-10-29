@@ -7,9 +7,40 @@
 
 namespace text
 {
-  struct Textbox : public gui::Quad
+  struct Text
+  {
+	  Text()
+	  {}
+	  Text(std::string s)
+		: str(s)
+	  {}
+
+	  size_t length() const { return str.length();	}
+	  void append(const std::string s)
+	  {
+		str.insert(str.end(), s.begin(), s.end());
+	  }
+	  void append(const unsigned char c)
+	  {
+		str.push_back(c);
+	  }
+	  template<typename T>
+		void operator<<(const T c)
+		{
+		  append(c);
+		}
+	  template<typename T>
+		void operator+=(const T s)
+		{
+		  append(s);
+		}
+	protected:
+	  std::string str;
+  };
+  struct Textbox : public gui::Quad, Text
   {
 	public:
+	  using Text::str;
 	  static utils::Container<Textbox> all;
 	  struct ID : public utils::ID<Textbox>
 	  {
@@ -40,15 +71,16 @@ namespace text
 		return floor(w / font->linegap);
 	  }
 	private:
-	  std::string str;
 	  void writeWord(size_t start, size_t length);
 	  void lineBreak();
 	  float cursor; // relative to pos
 	  size_t line;
 	  Font::ID font;
 	  size_t bufferBegin = 0; // begin of the data in the font buffers
+	  size_t bufferLength = 0;
   };
   extern size_t tabsize;
 
   void updateTextboxes();
+  void updateText();
 }
