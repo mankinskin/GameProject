@@ -1,8 +1,8 @@
 #include "printer.h"
+#include "text.h"
 
 
 size_t text::tabsize = 4;
-
 typename text::Printer::Container text::Printer::all;
 
 void text::loadFonts()
@@ -16,29 +16,6 @@ void text::loadFonts()
   Printer::all.makeID(Font(FontFile("LiberationMono-Regular.ttf", 16)));
 }
 
-bool isSpace(const unsigned char c)
-{
-  return c == ' ';
-}
-bool isTab(const unsigned char c)
-{
-  return c == '\t';
-}
-bool isNewline(const unsigned char c)
-{
-  return c == '\n';
-}
-
-bool isWhitespace(const unsigned char c)
-{
-  return isSpace(c) || isTab(c) || isNewline(c);
-}
-
-bool isBackspace(const unsigned char c)
-{
-  return c == '\r';
-}
-
 text::Printer::Printer(const Font& font)
   : Font(font)
 {
@@ -47,82 +24,6 @@ text::Printer::Printer(const Font& font)
 
   charBuffer = gl::StreamStorage<unsigned int>("CharBuffer", 1000, GL_MAP_WRITE_BIT);
   charBuffer.setTarget(GL_UNIFORM_BUFFER);
-}
-void text::Printer::writeWord(const Textbox& tb, size_t start, size_t length)
-{
-  for (size_t ci = 0; ci < length; ++ci) {
-	const unsigned char& c = tb.buf[start + ci];
-	const Font::Metric& met = getMetric(c);
-	pushCharCode(c);
-	pushCharPos(tb.getSize() + glm::vec2(cursor, -1.0f * linegap * line) + met.bearing);
-	cursor += met.advance;
-  }
-}
-
-void text::Printer::printTextbox(const Textbox& tb)
-{
-  line = 0;
-  cursor = 0.0f;
-
-  bufferBegin = charCount;
-  reserveChars(bufferBegin + tb.buf.size());
-
-  size_t wordLength = 0;
-  float wordWidth = 0.0f;
-
-  for (size_t ci = 0; ci < tb.buf.size(); ++ci) {
-	const unsigned char& c = tb.buf[ci];
-	const Font::Metric& met = getMetric(c);
-
-	// Word wrapping
-	// for every printable char, increase the word size.
-	// when encountering a whitespace, push the word to
-	// the buffer and start a new word
-	if (isSpace(c)) {
-	  writeWord(tb, ci - wordLength, wordLength);
-	  wordLength = 0;
-	  wordWidth = 0.0f;
-	  cursor += met.advance;
-	}
-	else if (isTab(c)) {
-	  writeWord(tb, ci - wordLength, wordLength);
-	  wordLength = 0;
-	  wordWidth = 0.0f;
-	  cursor += getMetric(' ').advance * tabsize;
-	}
-	else if (isNewline(c)) {
-	  writeWord(tb, ci - wordLength, wordLength);
-	  wordLength = 0;
-	  wordWidth = 0.0f;
-	  lineBreak();
-	  continue;
-	}
-	else {
-	  ++wordLength;
-	  wordWidth += met.advance;
-	}
-
-	if (cursor + wordWidth > tb.getSize().x) {
-	  if (wordWidth > tb.getSize().x) {
-		writeWord(tb, ci - (wordLength - 1), wordLength - 1);
-		wordLength = 1;
-		wordWidth = met.advance;
-	  }
-	  lineBreak();
-	}
-  }
-  if (wordLength) {
-	writeWord(tb, tb.buf.size() - wordLength, wordLength);
-  }
-
-  line = 0;
-  cursor = 0.0f;
-}
-
-void text::Printer::lineBreak()
-{
-  cursor = 0.0f;
-  ++line;
 }
 
 void text::Printer::reserveChars(const size_t n)
@@ -202,8 +103,7 @@ void text::updateTexts()
   for (Printer& printer : Printer::all) {
 	printer.clear();
   }
-  for (const Printer& printer : Printer::all) {
-  }
+  updateTextboxes();
   for (const Printer& printer : Printer::all) {
 	printer.update();
   }

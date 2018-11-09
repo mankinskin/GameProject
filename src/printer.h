@@ -1,6 +1,6 @@
 #pragma once
 #include "font.h"
-#include "text.h"
+#include "utils/id.h"
 
 namespace text
 {
@@ -40,12 +40,6 @@ namespace text
 	gl::StreamStorage<unsigned int> charBuffer;	// codes of all characters to be drawn
 	gl::StreamStorage<glm::vec2> posBuffer;	// char position buffer
 	size_t charCount = 0;
-	size_t bufferBegin = 0; // begin of the data in the font buffers
-	void writeWord(const Textbox&, size_t start, size_t length);
-	void printTextbox(const Textbox&);
-	void lineBreak();
-	float cursor;
-	size_t line;
   };
 
   struct PrintedText

@@ -1,10 +1,8 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "utils/id.h"
 #include "fontfile.h"
 #include "shader.h"
-#include "text.h"
 
 namespace text
 {
