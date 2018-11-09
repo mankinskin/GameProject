@@ -24,6 +24,7 @@
 #include "model.h"
 #include "modelfile.h"
 #include "nodes.h"
+#include "printer.h"
 
 // Initialization
 void sequencer::initialize()
@@ -137,7 +138,7 @@ void sequencer::frame()
   gui::updateColorQuads();
   gui::updateLinePositions();
   gui::updateLineColors();
-  text::updateText();
+  text::updateTexts();
 
   nodes::updateNodeBuffers();
   model::mesh::updateMeshBuffers();

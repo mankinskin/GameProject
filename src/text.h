@@ -1,10 +1,11 @@
 #pragma once
-#include "font.h"
+#include "gui.h"
 #include <glm.hpp>
 #include <vector>
 #include "utils/id.h"
 #include "quad.h"
 #include "viewport.h"
+#include "font.h"
 
 namespace text
 {
@@ -12,18 +13,26 @@ namespace text
   {
 	  Text()
 	  {}
-	  Text(std::string s)
-		: str(s)
+	  Text(const std::string& b)
+		: buf(b)
 	  {}
 
-	  size_t length() const { return str.length();	}
-	  void append(const std::string s)
+	  size_t length() const { return buf.length();	}
+	  void insert(const std::string& b, const size_t at)
 	  {
-		str.insert(str.end(), s.begin(), s.end());
+		buf.insert(buf.begin() + at, b.begin(), b.end());
+	  }
+	  void insert(const unsigned char& c, const size_t at)
+	  {
+		buf.insert(buf.begin() + at, c);
+	  }
+	  void append(const std::string& b)
+	  {
+		insert(b, buf.size());
 	  }
 	  void append(const unsigned char c)
 	  {
-		str.push_back(c);
+		insert(c, buf.size());
 	  }
 	  template<typename T>
 		void operator<<(const T c)
@@ -36,12 +45,14 @@ namespace text
 		  append(s);
 		}
 	protected:
-	  std::string str;
+	  std::string buf;
   };
+
   struct Textbox : public gui::Quad, Text
   {
 	public:
-	  using Text::str;
+	  using Text::buf;
+	  using gui::Quad::getPos;
 	  static utils::Container<Textbox> all;
 	  struct ID : public utils::ID<Textbox>
 	  {
@@ -58,30 +69,19 @@ namespace text
 		  : utils::ID<Textbox>(std::move(id))
 		{}
 	  };
+
 	  Textbox(glm::vec2 pPos = glm::vec2(0.0f, 0.0f), glm::vec2 pSize = glm::vec2(1.0f, 1.0f))
 		: Quad(gl::pixel_round(pPos), gl::pixel_round(pSize))
-		, font(Font::ID(0))
 	  {}
+
 	  void setString(const std::string& str);
 	  std::string getString() const;
-	  void writeString();
-	  void setFont(Font::ID);
 
-	  size_t lineCount()
-	  {
-		return floor(w / font->linegap);
-	  }
-	private:
-	  void writeWord(size_t start, size_t length);
-	  void lineBreak();
-	  float cursor; // relative to pos
-	  size_t line;
-	  Font::ID font;
-	  size_t bufferBegin = 0; // begin of the data in the font buffers
-	  size_t bufferLength = 0;
+	  template<typename T>
+		void operator<<(const T str)
+		{
+		  Text::operator<<(str);
+		}
   };
-  extern size_t tabsize;
 
-  void updateTextboxes();
-  void updateText();
 }

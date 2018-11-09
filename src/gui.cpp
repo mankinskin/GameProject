@@ -19,7 +19,7 @@
 #include "layouts/button.h"
 #include "layouts/window.h"
 #include "layouts/slider.h"
-
+#include "printer.h"
 
 using gl::ColorData;
 using gl::Color;
@@ -28,7 +28,7 @@ void gui::draw()
 {
   glDepthFunc(GL_ALWAYS);
   renderColorQuads();
-  text::renderFonts();
+  text::renderTexts();
   glDepthFunc(GL_LESS);
 }
 

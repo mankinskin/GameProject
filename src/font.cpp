@@ -7,55 +7,13 @@
 #include "contextwindow.h"
 #include "viewport.h"
 
-
-typename text::Font::Container text::Font::all = typename text::Font::Container();
 gl::VAO text::Font::fontVAO;
 shader::Program text::Font::fontShader;
 
-void text::Font::reserveChars(const size_t n)
-{
-  chars.reserve(n);
-  positions.reserve(n);
-}
-void text::Font::setCharCode(const size_t i, const size_t c)
-{
-  chars[i] = c;
-}
-void text::Font::setCharPos(const size_t i, const glm::vec2 p)
-{
-  positions[i] = p;
-}
-void text::Font::pushCharCode(const size_t c)
-{
-  chars.push_back(c);
-}
-void text::Font::pushCharPos(const glm::vec2 p)
-{
-  positions.push_back(p);
-}
-size_t text::Font::getCharCount() const
-{
-  return charCount;
-}
+
 const text::Font::Metric& text::Font::getMetric(const size_t i) const
 {
   return metrics[i];
-}
-
-void text::loadFonts()
-{
-  initFreeType();
-
-  FontFile::setLoadPadding(1);
-  puts("Font terminus");
-  Font::all.makeID(Font(FontFile("Terminus.ttf", 12)));
-  puts("Font liberation");
-  Font::all.makeID(Font(FontFile("LiberationMono-Regular.ttf", 16)));
-}
-
-text::Font::Font(const FontFile& fontfile)
-{
-  loadFontFile(fontfile);
 }
 
 void text::Font::loadFontFile(const FontFile& fontfile)
@@ -99,12 +57,6 @@ void text::Font::loadFontFile(const FontFile& fontfile)
 
   sizeBuffer = gl::Storage<glm::vec2>("SizeBuffer", sizes.size(), 0, &sizes[0]);
   sizeBuffer.setTarget(GL_UNIFORM_BUFFER);
-
-  posBuffer = gl::StreamStorage<glm::vec2>("PosBuffer", 1000, GL_MAP_WRITE_BIT);
-  posBuffer.setTarget(GL_UNIFORM_BUFFER);
-
-  charBuffer = gl::StreamStorage<unsigned int>("CharBuffer", 1000, GL_MAP_WRITE_BIT);
-  charBuffer.setTarget(GL_UNIFORM_BUFFER);
 }
 
 void text::initFontVAO()
@@ -127,69 +79,5 @@ void text::initFontShader()
 void text::setupFontShader()
 {
   Font::fontShader.build();
-}
-
-void text::Font::uploadChars() const
-{
-  gl::uploadStorage(charBuffer, sizeof(unsigned int) * chars.size(), &chars[0]);
-}
-
-void text::Font::uploadPositions() const
-{
-  gl::uploadStorage(posBuffer, sizeof(glm::vec2) * positions.size(), &positions[0]);
-}
-
-void text::Font::update() const
-{
-	uploadChars();
-	uploadPositions();
-}
-void text::Font::reset()
-{
-	chars.clear();
-	positions.clear();
-}
-void text::resetFonts()
-{
-  for (Font& font : Font::all) {
-	font.reset();
-  }
-}
-void text::updateFonts()
-{
-  for (const Font& font : Font::all) {
-	font.update();
-  }
-}
-
-void text::Font::use() const
-{
-	fontShader.bindUniformBuffer(posBuffer, "PosBuffer");
-	fontShader.bindUniformBuffer(charBuffer, "CharBuffer");
-	fontShader.bindUniformBuffer(uvBuffer, "UVBuffer");
-	fontShader.bindUniformBuffer(sizeBuffer, "SizeBuffer");
-}
-void text::Font::render() const
-{
-  if (chars.size()) {
-	use();
-	fontShader.use();
-	fontVAO.bind();
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, atlasTexture.ID);
-
-	glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, chars.size());
-
-	fontVAO.unbind();
-	shader::Program::unuse();
-  }
-}
-
-void text::renderFonts()
-{
-  for (const Font& font : Font::all) {
-	font.render();
-  }
 }
 
