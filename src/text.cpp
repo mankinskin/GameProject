@@ -19,23 +19,27 @@ void text::Textbox::lineBreak()
   ++line;
 }
 
-
-bool space(const unsigned char c)
+bool isSpace(const unsigned char c)
 {
   return c == ' ';
 }
-bool tab(const unsigned char c)
+bool isTab(const unsigned char c)
 {
   return c == '\t';
 }
-bool newline(const unsigned char c)
+bool isNewline(const unsigned char c)
 {
   return c == '\n';
 }
 
-bool whitespace(const unsigned char c)
+bool isWhitespace(const unsigned char c)
 {
-  return space(c) || tab(c) || newline(c);
+  return isSpace(c) || isTab(c) || isNewline(c);
+}
+
+bool isBackspace(const unsigned char c)
+{
+  return c == '\r';
 }
 
 void text::Textbox::writeWord(size_t start, size_t length)
@@ -68,29 +72,30 @@ void text::Textbox::writeString()
 	// for every printable char, increase the word size.
 	// when encountering a whitespace, push the word to
 	// the buffer and start a new word
-	if (!whitespace(c)) {
-	  ++wordLength;
-	  wordWidth += met.advance;
-	}
-	else if (space(c)) {
+	if (isSpace(c)) {
 	  writeWord(ci - wordLength, wordLength);
 	  wordLength = 0;
 	  wordWidth = 0.0f;
 	  cursor += met.advance;
 	}
-	else if (tab(c)) {
+	else if (isTab(c)) {
 	  writeWord(ci - wordLength, wordLength);
 	  wordLength = 0;
 	  wordWidth = 0.0f;
 	  cursor += font->getMetric(' ').advance * tabsize;
 	}
-	else if (newline(c)) {
+	else if (isNewline(c)) {
 	  writeWord(ci - wordLength, wordLength);
 	  wordLength = 0;
 	  wordWidth = 0.0f;
 	  lineBreak();
 	  continue;
 	}
+	else {
+	  ++wordLength;
+	  wordWidth += met.advance;
+	}
+
 	if (cursor + wordWidth > this->getSize().x) {
 	  if (wordWidth > this->getSize().x) {
 		writeWord(ci - (wordLength - 1), wordLength - 1);
