@@ -5,9 +5,9 @@
 #include "primitives.h"
 #include "app.h"
 #include "contextwindow.h"
+#include "viewport.h"
 
 
-glm::vec2 text::pixel_size = glm::vec2(2.0f / (float)1920, 2.0f / (float)1080);
 typename text::Font::Container text::Font::all = typename text::Font::Container();
 gl::VAO text::Font::fontVAO;
 shader::Program text::Font::fontShader;
@@ -41,20 +41,10 @@ const text::Font::Metric& text::Font::getMetric(const size_t i) const
 {
   return metrics[i];
 }
-void text::setTargetResolution(const size_t rx, const size_t ry)
-{
-  setTargetResolution(glm::uvec2(rx, ry));
-}
-
-void text::setTargetResolution(const glm::uvec2 pRes)
-{
-  pixel_size = glm::vec2(2.0f, 2.0f) / (glm::vec2)pRes;
-}
 
 void text::loadFonts()
 {
   initFreeType();
-  setTargetResolution(app::mainWindow.width, app::mainWindow.height);
 
   FontFile::setLoadPadding(1);
   puts("Font terminus");
@@ -89,20 +79,20 @@ void text::Font::loadFontFile(const FontFile& fontfile)
   std::vector<glm::vec2> sizes(fontfile.glyphs.quads.size());
   for (size_t g = 0; g < sizes.size(); ++g) {
 	glm::uvec4 quad = fontfile.glyphs.quads[ g ];
-	sizes[g] = glm::vec2((float)(quad.z) * pixel_size.x,
-		(float)(quad.w) * pixel_size.y);
+	sizes[g] = glm::vec2((float)(quad.z) * gl::pixel_size().x,
+		(float)(quad.w) * gl::pixel_size().y);
   }
   // load glyph metrics
   metrics.resize(fontfile.glyphs.metrics.size());
   for (size_t g = 0; g < metrics.size(); ++g) {
 	const FontFile::Glyphs::Metric& met = fontfile.glyphs.metrics[ g ];
 	metrics[g] = Metric(
-		(float)met.advance * pixel_size.x,
-		(float)met.bearingx * pixel_size.x,
-		(float)met.bearingy * pixel_size.y);
+		(float)met.advance * gl::pixel_size().x,
+		(float)met.bearingx * gl::pixel_size().x,
+		(float)met.bearingy * gl::pixel_size().y);
   }
 
-  linegap = (float)fontfile.linegap * pixel_size.y;
+  linegap = (float)fontfile.linegap * gl::pixel_size().y;
 
   uvBuffer = gl::Storage<glm::vec4>("UVBuffer", glyphuvs.size(), 0, &glyphuvs[0]);
   uvBuffer.setTarget(GL_UNIFORM_BUFFER);

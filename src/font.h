@@ -70,15 +70,6 @@ namespace text
 	texture::Texture2D atlasTexture;  // contains all glyph textures
   };
 
-  void setTargetResolution(const size_t, const size_t);
-  void setTargetResolution(const glm::uvec2);
-  extern glm::vec2 pixel_size;
-
-  inline glm::vec2 pixel_quantize(glm::vec2 v)
-  {
-	return glm::round(v / pixel_size) * pixel_size;
-  }
-
   void loadFonts();
   void resetFonts();
 

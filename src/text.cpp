@@ -1,4 +1,5 @@
 #include "text.h"
+#include "font.h"
 
 size_t text::tabsize = 4;
 

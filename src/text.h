@@ -4,6 +4,7 @@
 #include <vector>
 #include "utils/id.h"
 #include "quad.h"
+#include "viewport.h"
 
 namespace text
 {
@@ -58,7 +59,7 @@ namespace text
 		{}
 	  };
 	  Textbox(glm::vec2 pPos = glm::vec2(0.0f, 0.0f), glm::vec2 pSize = glm::vec2(1.0f, 1.0f))
-		: Quad(pixel_quantize(pPos), pixel_quantize(pSize))
+		: Quad(gl::pixel_round(pPos), gl::pixel_round(pSize))
 		, font(Font::ID(0))
 	  {}
 	  void setString(const std::string& str);

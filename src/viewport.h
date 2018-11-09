@@ -33,6 +33,7 @@ namespace gl
   unsigned int getWidth();
   unsigned int getHeight();
   float getAspectRatio();
+  const glm::vec2& pixel_size();
   glm::vec2 pixel_round(const glm::vec2& pIn);
   float pixel_round_x(const float& pIn);
   float pixel_round_y(const float& pIn);
