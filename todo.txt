@@ -3,13 +3,9 @@
 TO-DO:
 ##############################################################
 
-> Write shader file parser to insert values of variables at runtime (before shader compilation)
-    > parser stores a mapping of strings to variables to search for 
+o Write shader file parser to insert values of variables at runtime (before shader compilation)
+    o parser stores a mapping of strings to variables to search for 
       while parsing the shader files word for word.
       It inserts the values of the variables in place of the strings.
 
-> Split the project into modules
-	> the source tree would be easier to test and think about 
-	> This forces me to write robust interfaces for each module
-
-> Write testing suite
+o Write testing suite
