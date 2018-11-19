@@ -1,0 +1,1 @@
+An engine for physics simulations, training of artificial intelligence and games.
