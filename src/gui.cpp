@@ -19,7 +19,6 @@
 #include "layouts/button.h"
 #include "layouts/window.h"
 #include "layouts/slider.h"
-#include "printer.h"
 
 using gl::ColorData;
 using gl::Color;
