@@ -24,7 +24,6 @@
 #include "model.h"
 #include "modelfile.h"
 #include "nodes.h"
-#include "printer.h"
 
 // Initialization
 void sequencer::initialize()
@@ -129,7 +128,7 @@ void sequencer::frame()
   input::fetch();
   camera::main_camera.look(input::Cursor::frameDelta);
   camera::main_camera.update();
-  text::Textbox::all[0] << input::frameTextBuffer;
+  text::Textbox::all[0].getText() << input::frameTextBuffer;
 
   gl::updateGeneralUniformBuffer();
 
@@ -160,10 +159,10 @@ void sequencer::gameloop()
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   text::Textbox::ID term_box1 = text::Textbox::all.makeID(text::Textbox(glm::vec2(-1.0f, 0.0f), glm::vec2(0.5f, 1.0f)));
-  term_box1->setString("1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item");
+  term_box1->getText() = "1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item";
   text::Textbox::ID term_box2 = text::Textbox::all.makeID(text::Textbox(glm::vec2(0.0f, 0.0f), glm::vec2(0.2f, 0.5f)));
-  term_box2->setString("A textbox\n\nYo sup");
-  term_box2->setFont(1);
+  term_box2->getText() = "A textbox\n\nYo sup";
+  //term_box2->setFont(1);
   while (app::state == app::Running) {
 	frame();
   }
