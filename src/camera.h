@@ -151,11 +151,11 @@ namespace camera
 	  CameraControls controls;
   };
 
-  const MovementPolicy TOP_DOWN_MOVEMENT = MovementPolicy(offsetof(Camera, normal), 1.0f, offsetof(Camera, cross), 1.0f, offsetof(Camera, lookAt), -1.0f);
+  const MovementPolicy TOP_DOWN_MOVEMENT = MovementPolicy(offsetof(Camera, normal), 1.0f, offsetof(Camera, cross), 1.0f, offsetof(Camera, lookAt), -1.0f, 10.0f);
   const Frustum TOP_DOWN_FRUSTUM = Frustum(glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0), 70.0f, 1600.0f, 850.0f, 1.0f, 1000.0f);
   const LookPolicy TOP_DOWN_LOOK = LookPolicy(offsetof(Camera, normal), offsetof(Camera, lookAt), -1.0f, offsetof(Camera, normal), offsetof(Camera, lookAt), 0.0f, offsetof(Camera, normal), glm::vec3(0.0f, 0.0f, 0.0f));
 
-  const MovementPolicy FIRST_PERSON_MOVEMENT = MovementPolicy(offsetof(Camera, lookAt), 1.0f, offsetof(Camera, cross), 1.0f, offsetof(Camera, normal), 1.0f);
+  const MovementPolicy FIRST_PERSON_MOVEMENT = MovementPolicy(offsetof(Camera, lookAt), 1.0f, offsetof(Camera, cross), 1.0f, offsetof(Camera, normal), 1.0f, 20.0f);
   const Frustum FIRST_PERSON_FRUSTUM = Frustum(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, -1.0), 70.0f, 1600.0f, 850.0f, 1.0f, 1000.0f);
   const LookPolicy FIRST_PERSON_LOOK = LookPolicy(offsetof(Camera, lookAt), offsetof(Camera, mode) + offsetof(CameraMode, frustum) + offsetof(Frustum, up), 1.0f, offsetof(Camera, lookAt), offsetof(Camera, cross), 1.0f, offsetof(Camera, mode) + offsetof(CameraMode, frustum) + offsetof(Frustum, up), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
   const size_t CAMERA_MODE_COUNT = 2;
