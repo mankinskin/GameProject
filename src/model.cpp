@@ -35,14 +35,14 @@ void model::setupModels()
 {
   using namespace mesh;
   srand(time(NULL));
-  unsigned int nodes_to_generate = 100;
+  unsigned int nodes_to_generate = 1024;
   std::vector<nodes::NodeID> generated_nodes(nodes_to_generate);
   nodes::Node::reserve(nodes_to_generate);
 
-  unsigned int grid_width = 10;
+  unsigned int grid_width = ceil(pow(nodes_to_generate, 1/3))*100;
 
   for (size_t n = 0; n < generated_nodes.size(); ++n) {
-	nodes::NodeID& node = generated_nodes[n];
+    nodes::NodeID& node = generated_nodes[n];
     node = nodes::Node::create();
     node->setPos(glm::vec3((float)((rand() + n)%grid_width)- (float)(grid_width/2), (float)((rand()+n) % 10) - (float)(10 / 2), (float)((rand() + n) % grid_width) - (float)(grid_width / 2)));
     node->setScale(glm::vec3(0.001f, 0.001f, 0.001f));
