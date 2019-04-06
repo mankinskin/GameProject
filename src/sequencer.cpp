@@ -16,7 +16,7 @@
 #include "quad.h"
 #include "quadcolors.h"
 #include "font.h"
-#include "text.h"
+#include "textbox.h"
 #include "functor.h"
 #include "signal.h"
 #include "simtime.h"
@@ -100,6 +100,8 @@ void sequencer::initializeVAOs()
   puts("Fonts...");
   text::initFontVAO();
 
+  puts("Text...");
+  text::setupTextboxes();
   nodes::initNodeBuffers();
 
   gui::initQuadBuffer();
@@ -158,13 +160,8 @@ void sequencer::gameloop()
   puts("Entering gameloop");
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-  text::Textbox::ID term_box1 = text::Textbox::all.makeID(text::Textbox(glm::vec2(-1.0f, 0.0f), glm::vec2(0.5f, 1.0f)));
-  term_box1->getText() = "1.\tfirst item\n2.\tsecond item\n3.\tthird item\n...\n10.\ttenth item";
-  text::Textbox::ID term_box2 = text::Textbox::all.makeID(text::Textbox(glm::vec2(0.0f, 0.0f), glm::vec2(0.2f, 0.5f)));
-  term_box2->getText() = "A textbox\n\nYo sup";
-  //term_box2->setFont(1);
   while (app::state == app::Running) {
-	frame();
+    frame();
   }
   signals::clearSignals();
   signals::clearFunctors();

@@ -90,6 +90,36 @@ void text::setupFontShader()
   Font::fontShader.build();
 }
 
+void text::loadFonts()
+{
+  initFreeType();
+
+  FontFile::setLoadPadding(1);
+  puts("Font terminus");
+  Font::all.makeID(Font(FontFile("Terminus.ttf", 12)));
+  puts("Font liberation");
+  Font::all.makeID(Font(FontFile("LiberationMono-Regular.ttf", 16)));
+
+}
+
+void text::updateTexts()
+{
+  for (Font& font : Font::all) {
+    font.update();
+  }
+}
+
+void text::renderTexts()
+{
+  for (const Font& font : Font::all) {
+    font.render();
+  }
+}
+////
+//
+
+// utility
+
 size_t text::Font::makeText(glm::vec4 box)
 {
   puts("Making text.");
@@ -124,17 +154,6 @@ void text::Font::pushCharPos(const glm::vec2 p)
   positions.push_back(p);
 }
 
-void text::loadFonts()
-{
-  initFreeType();
-
-  FontFile::setLoadPadding(1);
-  puts("Font terminus");
-  Font::all.makeID(Font(FontFile("Terminus.ttf", 12)));
-  puts("Font liberation");
-  Font::all.makeID(Font(FontFile("LiberationMono-Regular.ttf", 16)));
-}
-
 void text::Font::use() const
 {
   fontShader.bindUniformBuffer(posBuffer, "PosBuffer");
@@ -146,20 +165,6 @@ void text::Font::clearTexts()
 {
   chars.clear();
   positions.clear();
-}
-
-void text::updateTexts()
-{
-  for (Font& font : Font::all) {
-    font.update();
-  }
-}
-
-void text::renderTexts()
-{
-  for (const Font& font : Font::all) {
-    font.render();
-  }
 }
 
 void text::Font::render() const

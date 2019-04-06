@@ -46,4 +46,5 @@ namespace text
         return font->texts[textIndex];
       }
   };
+  void setupTextboxes();
 }
