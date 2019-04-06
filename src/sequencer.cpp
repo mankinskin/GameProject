@@ -16,7 +16,7 @@
 #include "quad.h"
 #include "quadcolors.h"
 #include "font.h"
-#include "text.h"
+#include "textbox.h"
 #include "functor.h"
 #include "signal.h"
 #include "simtime.h"
