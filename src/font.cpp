@@ -13,61 +13,7 @@ shader::Program text::Font::fontShader;
 typename text::Font::Container text::Font::all;
 size_t text::tabsize = 4;
 
-
-const text::Font::Metric& text::Font::getMetric(const size_t i) const
-{
-  return metrics[i];
-}
-
-void text::Font::loadFontFile(const FontFile& fontfile)
-{
-  name = fontfile.name;
-  atlasTexture = texture::Texture2D(fontfile.atlas);
-  texture::setTextureWrapping(atlasTexture, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
-  texture::setTextureFilter(atlasTexture, GL_NEAREST, GL_NEAREST);
-
-  // load glyph UVs
-  std::vector<glm::vec4> glyphuvs(fontfile.glyphs.quads.size());
-  for (size_t g = 0; g < fontfile.glyphs.quads.size(); ++g) {
-    glm::uvec4 quad = fontfile.glyphs.quads[ g ];
-    glyphuvs[g] = glm::vec4((float)quad.x / (float)fontfile.atlas.width,
-        (float)quad.y / (float)fontfile.atlas.height,
-        (float)quad.z / (float)fontfile.atlas.width,
-        (float)quad.w / (float)fontfile.atlas.height);
-  }
-
-  //load glyph sizes
-  std::vector<glm::vec2> sizes(fontfile.glyphs.quads.size());
-  for (size_t g = 0; g < sizes.size(); ++g) {
-    glm::uvec4 quad = fontfile.glyphs.quads[ g ];
-    sizes[g] = glm::vec2((float)(quad.z) * gl::pixel_size().x,
-        (float)(quad.w) * gl::pixel_size().y);
-  }
-  // load glyph metrics
-  metrics.resize(fontfile.glyphs.metrics.size());
-  for (size_t g = 0; g < metrics.size(); ++g) {
-    const FontFile::Glyphs::Metric& met = fontfile.glyphs.metrics[ g ];
-    metrics[g] = Metric(
-        (float)met.advance * gl::pixel_size().x,
-        (float)met.bearingx * gl::pixel_size().x,
-        (float)met.bearingy * gl::pixel_size().y);
-  }
-
-  linegap = (float)fontfile.linegap * gl::pixel_size().y;
-
-  uvBuffer = gl::Storage<glm::vec4>("UVBuffer", glyphuvs.size(), 0, &glyphuvs[0]);
-  uvBuffer.setTarget(GL_UNIFORM_BUFFER);
-
-  sizeBuffer = gl::Storage<glm::vec2>("SizeBuffer", sizes.size(), 0, &sizes[0]);
-  sizeBuffer.setTarget(GL_UNIFORM_BUFFER);
-
-  posBuffer = gl::StreamStorage<glm::vec2>("PosBuffer", 1000, GL_MAP_WRITE_BIT);
-  posBuffer.setTarget(GL_UNIFORM_BUFFER);
-
-  charBuffer = gl::StreamStorage<unsigned int>("CharBuffer", 1000, GL_MAP_WRITE_BIT);
-  charBuffer.setTarget(GL_UNIFORM_BUFFER);
-}
-
+// external API
 void text::initFontVAO()
 {
   Font::fontVAO = gl::VAO("FontVAO");
@@ -99,7 +45,6 @@ void text::loadFonts()
   Font::all.makeID(Font(FontFile("Terminus.ttf", 12)));
   puts("Font liberation");
   Font::all.makeID(Font(FontFile("LiberationMono-Regular.ttf", 16)));
-
 }
 
 void text::updateTexts()
@@ -119,13 +64,13 @@ void text::renderTexts()
 //
 
 // utility
-
 size_t text::Font::makeText(glm::vec4 box)
 {
   puts("Making text.");
   texts.push_back(Text(box));
   return texts.size() -1;
 }
+
 void text::Font::reserveChars(const size_t n)
 {
   chars.reserve(n);
@@ -161,6 +106,7 @@ void text::Font::use() const
   fontShader.bindUniformBuffer(uvBuffer, "UVBuffer");
   fontShader.bindUniformBuffer(sizeBuffer, "SizeBuffer");
 }
+
 void text::Font::clearTexts()
 {
   chars.clear();
@@ -309,4 +255,58 @@ void text::Font::writeText(Text& text)
 
   text.line = 0;
   text.cursor = 0.0f;
+}
+
+const text::FontData::Metric& text::FontData::getMetric(const size_t i) const
+{
+  return metrics[i];
+}
+
+text::FontData::FontData(const FontFile& fontfile)
+{
+  name = fontfile.name;
+  atlasTexture = texture::Texture2D(fontfile.atlas);
+  texture::setTextureWrapping(atlasTexture, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+  texture::setTextureFilter(atlasTexture, GL_NEAREST, GL_NEAREST);
+
+  // load glyph UVs
+  std::vector<glm::vec4> glyphuvs(fontfile.glyphs.quads.size());
+  for (size_t g = 0; g < fontfile.glyphs.quads.size(); ++g) {
+    glm::uvec4 quad = fontfile.glyphs.quads[ g ];
+    glyphuvs[g] = glm::vec4((float)quad.x / (float)fontfile.atlas.width,
+        (float)quad.y / (float)fontfile.atlas.height,
+        (float)quad.z / (float)fontfile.atlas.width,
+        (float)quad.w / (float)fontfile.atlas.height);
+  }
+
+  //load glyph sizes
+  std::vector<glm::vec2> sizes(fontfile.glyphs.quads.size());
+  for (size_t g = 0; g < sizes.size(); ++g) {
+    glm::uvec4 quad = fontfile.glyphs.quads[ g ];
+    sizes[g] = glm::vec2((float)(quad.z) * gl::pixel_size().x,
+        (float)(quad.w) * gl::pixel_size().y);
+  }
+  // load glyph metrics
+  metrics.resize(fontfile.glyphs.metrics.size());
+  for (size_t g = 0; g < metrics.size(); ++g) {
+    const FontFile::Glyphs::Metric& met = fontfile.glyphs.metrics[ g ];
+    metrics[g] = Metric(
+        (float)met.advance * gl::pixel_size().x,
+        (float)met.bearingx * gl::pixel_size().x,
+        (float)met.bearingy * gl::pixel_size().y);
+  }
+
+  linegap = (float)fontfile.linegap * gl::pixel_size().y;
+
+  uvBuffer = gl::Storage<glm::vec4>("UVBuffer", glyphuvs.size(), 0, &glyphuvs[0]);
+  uvBuffer.setTarget(GL_UNIFORM_BUFFER);
+
+  sizeBuffer = gl::Storage<glm::vec2>("SizeBuffer", sizes.size(), 0, &sizes[0]);
+  sizeBuffer.setTarget(GL_UNIFORM_BUFFER);
+
+  posBuffer = gl::StreamStorage<glm::vec2>("PosBuffer", 1000, GL_MAP_WRITE_BIT);
+  posBuffer.setTarget(GL_UNIFORM_BUFFER);
+
+  charBuffer = gl::StreamStorage<unsigned int>("CharBuffer", 1000, GL_MAP_WRITE_BIT);
+  charBuffer.setTarget(GL_UNIFORM_BUFFER);
 }

@@ -8,7 +8,33 @@
 
 namespace text
 {
-  struct Font
+  struct FontData
+  {
+    struct Metric
+    {
+      Metric()
+      {}
+      Metric(float adv, float bx, float by)
+        : advance(adv)
+          , bearing(glm::vec2(bx, by))
+      {}
+      float advance;
+      glm::vec2 bearing;
+    };
+    FontData(const FontFile& fontfile);
+    const FontData::Metric& getMetric(const size_t i) const;
+
+    std::string name;
+    float linegap;
+    gl::Storage<glm::vec4> uvBuffer;  // uv coordinates of glyphs in the atlas
+    gl::Storage<glm::vec2> sizeBuffer; //
+    std::vector<Metric> metrics;
+    texture::Texture2D atlasTexture;  // contains all glyph textures
+    gl::StreamStorage<unsigned int> charBuffer;	// codes of all characters to be drawn
+    gl::StreamStorage<glm::vec2> posBuffer;	// char position buffer
+  };
+
+  struct Font : public FontData
   {
     using Container = utils::Container<Font>;
     static Container all;
@@ -23,33 +49,10 @@ namespace text
       {}
     };
 
-    Font()
+    Font(const FontFile& fontfile)
+      : FontData(fontfile)
     {}
 
-    Font(const FontFile& fontfile)
-    {
-      loadFontFile(fontfile);
-    }
-
-    struct Metric
-    {
-      Metric()
-      {}
-      Metric(float adv, float bx, float by)
-        : advance(adv)
-          , bearing(glm::vec2(bx, by))
-      {}
-      float advance;
-      glm::vec2 bearing;
-    };
-
-    struct TextCache
-    {
-      std::string str;
-    };
-
-    void loadFontFile(const FontFile& fontfile);
-    const Metric& getMetric(const size_t i) const;
     void setCharCode(const size_t, const size_t);
     void setCharPos(const size_t, glm::vec2);
     void pushCharCode(const size_t);
@@ -65,23 +68,14 @@ namespace text
     void updateText(Text&);
     size_t makeText(glm::vec4);
 
-    std::string name;
-    float linegap;
-
+    // OpenGL
     static gl::VAO fontVAO;
     static shader::Program fontShader;
 
-    gl::Storage<glm::vec4> uvBuffer;  // uv coordinates of glyphs in the atlas
-    gl::Storage<glm::vec2> sizeBuffer; //
-    std::vector<Metric> metrics;
-    texture::Texture2D atlasTexture;  // contains all glyph textures
-
+    // Management
     std::vector<Text> texts;
-    std::vector<TextCache> textCaches;
     std::vector<glm::vec2> positions;
     std::vector<unsigned int> chars;
-    gl::StreamStorage<unsigned int> charBuffer;	// codes of all characters to be drawn
-    gl::StreamStorage<glm::vec2> posBuffer;	// char position buffer
     size_t charCount = 0;
   };
 
