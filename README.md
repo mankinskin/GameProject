@@ -9,4 +9,4 @@ cd GameProject
 make run -j
 ```
 to run.
-You can see find the dependencies at the top of the Makefile
+You can find the dependencies at the top of the Makefile
